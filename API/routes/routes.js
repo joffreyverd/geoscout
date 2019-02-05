@@ -1,5 +1,5 @@
 
-const test = require('../controlers/testControleur')
+const test = require('../controlers/testController')
 module.exports=function(app)
 {
 	app.route('/test')
