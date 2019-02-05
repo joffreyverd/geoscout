@@ -4,23 +4,18 @@
   "description": "Application Web",
   "main": "serveur.js",
   "bin": "serveur.js",
-  "scripts": 
-  {
+  "scripts": {
     "compiler": "pkg package.json",
-    "start" : "node serveur.js"
+    "start": "node serveur.js"
   },
-  "pkg": 
-  {
-    "assets": 
-    [
+  "pkg": {
+    "assets": [
       "models/**/*"
     ],
-    "targets": 
-    [
+    "targets": [
       "node10"
     ]
   },
-
   "author": "ANTONY Quentin",
   "license": "IUT",
   "dependencies": {

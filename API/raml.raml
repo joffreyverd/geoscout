@@ -1,0 +1,57 @@
+#%RAML 1.0
+title: 
+    value: Description des routes du projet akrobat
+baseUri: 
+    value: "https://149.91.91.144"
+mediaType: "*/*"
+version: 
+    value: 1.0
+types: 
+    Response: 
+        type: object
+        displayName: 
+            value: Response
+    JSONObject: 
+        type: object
+        properties: 
+            serialVersionUID: 
+                format: int64
+                type: integer
+                displayName: 
+                    value: serialVersionUID
+        displayName: 
+            value: JSONObject
+    List: 
+        type: object
+        displayName: 
+            value: List
+/:
+    /signin:
+        post:
+            description: Connexion de l'utilisateur
+            responses:
+                200:
+                    body:
+                        application/json:
+                            example: |
+                                {
+                                    "data": {
+                                        "id": "1",
+                                        "login": "Stevy",
+                                    },
+                                    "success": true,
+                                    "status": 200
+                                }
+            queryParameters:
+                login:
+                    displayName: login
+                    type: string
+                    description: login of user
+                    example: Denis_50
+                    required: true
+                password:
+                    displayName: password
+                    type: string
+                    description: Password of user
+                    example: d14Z87-i7_
+                    required: true
