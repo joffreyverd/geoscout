@@ -19,6 +19,10 @@ module.exports = (sequelize,DataTypes) =>
             type_of : {
                 type : DataTypes.ENUM('0', '1', '2', '3'),
                 allowNull : true
+            },
+            points : {
+                type : DataTypes.INTEGER,
+                allowNull : true
             }
         },
         {
