@@ -11,13 +11,17 @@
   color: black;
 }
 
-/*
 .App-link {
   color: #61dafb;
 }
 */
 
-/************************** LOGO **************************/
+/************************** MENU **************************/
+
+.menu-wrapper {
+  display: flex;
+  width: 80%;
+}
 
 .logo {
   position: absolute;
@@ -33,6 +37,26 @@
 .logo > img {
   width: 60px;
   height: 60px;
+}
+
+.menu-items {
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  white-space: nowrap;
+}
+
+.menu-items > p {
+  width: 25%;
+  text-align: center;
+  margin: auto;
+}
+
+.menu-options {
+  position: absolute;
+  top: 20px;
+  right: 20px;
 }
 
 /************************** LANDING PAGE **************************/

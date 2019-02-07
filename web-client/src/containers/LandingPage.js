@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Logo from '../components/Logo';
+import Menu from '../components/Menu';
 import '../css/app.css';
 
 export default class LandingPage extends Component {
@@ -15,9 +15,9 @@ export default class LandingPage extends Component {
         return (
 
             <div className='body-wrapper'>
-                <Logo/>
+                <Menu/>
             </div>
-            
+
         );
     }
 }
