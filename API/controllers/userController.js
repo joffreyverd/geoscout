@@ -31,7 +31,7 @@ module.exports =
         db.User.findOne(
         {
             where : {
-                id_user: req.body.user_id
+                id_user: req.body.id_user
             },
         })
         .then(user =>
@@ -45,25 +45,25 @@ module.exports =
     {
         db.User.findOne({
             where : {
-                id_user : req.body.ami_id
+                id_user : req.body.friend
             }
         })
-        .then(ami =>
+        .then(friend =>
         {
             db.User.findOne({
                 where : {
-                    id_user : req.body.user_id
+                    id_user : req.body.id_user
                 }
             })
             .then(user =>
             {
-                user.askRelation(ami,{
+                user.addRelation(friend,{
                     through : {
                         status : '1'
                     }
                 });
             });
         })
-        .then((user) => res.json(user));
+        .then(() => res.sendStatus(200));
     }
 }
