@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Logo from '../components/Logo';
+import '../css/app.css';
 
 export default class LandingPage extends Component {
     state = {
@@ -11,9 +13,11 @@ export default class LandingPage extends Component {
 
     render() {
         return (
-            <>
-                <h1>Landing Page</h1>
-            </>
+
+            <div className='body-wrapper'>
+                <Logo/>
+            </div>
+            
         );
     }
 }
