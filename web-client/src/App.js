@@ -1,20 +1,27 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './css/app.css';
+import {Route, withRouter} from 'react-router-dom';
+
+import Home from './containers/LandingPage';
+
+const AppRoute = ({component: Component, ...props}) => {
+    return (
+      <Route {...props} render={props => (
+        <div className='App'>
+        <Component {...props} />
+        </div>
+      )} />
+    );
+  }
 
 class App extends Component {
     render() {
         return (
-            <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <p>
-                        Client Web React du projet Akrobat
-                    </p>
-                </header>
-            </div>
+            <>
+                <Route exact path='/' component={Home} />
+            </>
         );
     }
 }
 
-export default App;
+export default withRouter(App);
