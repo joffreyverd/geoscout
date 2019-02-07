@@ -6,7 +6,8 @@ module.exports = (sequelize,DataTypes) =>
             id_user : {
                 type : DataTypes.INTEGER,
                 allowNull : false,
-                primaryKey : true
+                primaryKey : true,
+                autoIncrement : true,
             },
             firstname : {
                 type : DataTypes.STRING,
@@ -34,5 +35,15 @@ module.exports = (sequelize,DataTypes) =>
             updatedAt: false
         }
     );
+
+    User.associate = (db) =>
+    {
+        User.belongsToMany( db.User, {
+                through: db.Relation,
+                as :'Relations'
+            }
+        );
+    }
+
     return User;
 }
