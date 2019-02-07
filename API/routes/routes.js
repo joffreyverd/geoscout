@@ -9,7 +9,7 @@ module.exports = function(app)
 	app.route('/user').get(user.listUser);
 	app.route('/friends').get(user.listRelations);
     app.route('/create-user').post(user.createUser);
-    app.route('/add-relation').put(user.askRelation);
+    app.route('/ask-relation').put(user.askRelation);
     app.route('/circuit').get(circuit.circuit);
     app.route('/step').get(step.step);
     app.route('/transit').get(transit.transit);
