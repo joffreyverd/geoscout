@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactMapGL, {Marker} from 'react-map-gl';
 
+import Pin from '../components/Pin';
 import MAP_STYLE from '../utils/map-style-basic.json';
 
 export default class Map extends React.Component {
@@ -22,7 +23,7 @@ export default class Map extends React.Component {
                     mapStyle={MAP_STYLE}
                     onViewportChange={(viewport) => this.setState({viewport})}
                 >
-                    <Marker latitude={48.530379} longitude={7.736656}>Test</Marker>
+                    <Marker latitude={48.530379} longitude={7.736656}><Pin /></Marker>
                 </ReactMapGL>
             </div>
         )
