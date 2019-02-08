@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import './css/app.css';
+import Menu from './components/NavBar';
 import {Route, withRouter} from 'react-router-dom';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faIgloo, faCoffee, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser } from '@fortawesome/free-solid-svg-icons'
 
-import LandingPage from './containers/LandingPage';
-import Home from './containers/LandingPage';
+import Home from './containers/Home';
+import CreatedCircuit from './containers/CreatedCircuit';
+import AchievedCircuits from './containers/AchievedCircuit';
 
-library.add(faIgloo, faCoffee, faUser)
+library.add(faUser)
 
 const AppRoute = ({component : Component, ...props}) => {
     return (
@@ -24,9 +26,15 @@ class App extends Component {
     render() {
         return (
             <>
-                <Route exact path = '/' component = {LandingPage} />
+
+                <div className='body-wrapper'>
+                    <Menu/>
+                </div>
+
+                <Route exact path = '/' component = {Home} />
                 <AppRoute exact path = '/home' component = {Home} />
-                <AppRoute exact path = '/my-account' component = {LandingPage} />
+                <AppRoute exact path = '/circuits' component = {CreatedCircuit} />
+                <AppRoute exact path = '/achieved-circuits' component = {AchievedCircuits} />
             </>
         );
     }
