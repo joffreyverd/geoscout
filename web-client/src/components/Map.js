@@ -1,21 +1,30 @@
 import React from 'react';
-import ReactMapGL from 'react-map-gl';
+import ReactMapGL, {Marker} from 'react-map-gl';
+
+import MAP_STYLE from '../utils/map-style-basic.json';
 
 export default class Map extends React.Component {
     state= {
         viewport: {
             width: 400,
-            heigth: 400,
-            latitude: 37.7577,
-            longitude: -122.4376,
+            height: 400,
+            latitude: 48.530379,
+            longitude: 7.736656,
             zoom: 8
         }
     }
     render() {
-        return <ReactMapGL
-            mapboxApiAccessToken={'pk.eyJ1IjoidHVudGVyZmluZ2VyIiwiYSI6ImNqcncxOTkwdDA3YW00M3BrY3A0MTAyd3kifQ.Mby6nOzqK6Tkzm1CwRfdDw'}
-            {...this.state.viewport}
-            onViewportChange={(viewport) => this.setState({viewport})}
-        />
+        return (
+            <div className='map'>
+                <ReactMapGL
+                    mapboxApiAccessToken={'pk.eyJ1IjoidHVudGVyZmluZ2VyIiwiYSI6ImNqcncxOTkwdDA3YW00M3BrY3A0MTAyd3kifQ.Mby6nOzqK6Tkzm1CwRfdDw'}
+                    {...this.state.viewport}
+                    mapStyle={MAP_STYLE}
+                    onViewportChange={(viewport) => this.setState({viewport})}
+                >
+                    <Marker latitude={48.530379} longitude={7.736656}>Test</Marker>
+                </ReactMapGL>
+            </div>
+        )
     }
 }
