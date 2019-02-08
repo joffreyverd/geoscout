@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Menu from '../components/Menu';
+import Map from '../components/Map';
 import '../css/app.css';
 
 export default class LandingPage extends Component {
@@ -13,11 +14,11 @@ export default class LandingPage extends Component {
 
     render() {
         return (
-
             <div className='body-wrapper'>
                 <Menu/>
+                <Map />
             </div>
-
+            
         );
     }
 }
