@@ -7,13 +7,26 @@ import MAP_STYLE from '../utils/map-style-basic.json';
 export default class Map extends React.Component {
     state= {
         viewport: {
-            width: 400,
-            height: 400,
-            latitude: 48.530379,
-            longitude: 7.736656,
-            zoom: 8
+            width: '80%',
+            height: 600,
+            latitude: 48.582651,
+            longitude: 7.749534,
+            zoom: 12
         }
     }
+    
+    componentDidMount() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition((data) => {
+                let viewport = this.state.viewport
+                viewport.latitude = data.coords.latitude
+                viewport.longitude = data.coords.longitude
+
+                this.setState({ viewport: viewport, userPosition: data.coords })
+            })
+        }
+    }
+
     render() {
         return (
             <div className='map'>
@@ -22,8 +35,13 @@ export default class Map extends React.Component {
                     {...this.state.viewport}
                     mapStyle={MAP_STYLE}
                     onViewportChange={(viewport) => this.setState({viewport})}
-                >
-                    <Marker latitude={48.530379} longitude={7.736656}><Pin /></Marker>
+                    >
+                    {this.state.userPosition &&
+                        <Marker latitude={this.state.userPosition.latitude} 
+                            longitude={this.state.userPosition.longitude}>
+                            <Pin />
+                        </Marker>
+                    }
                 </ReactMapGL>
             </div>
         )
