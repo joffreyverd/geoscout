@@ -3,13 +3,15 @@ const db = require('../models')
 
 module.exports = 
 {
-    //********************** USER **********************//
-
+    //////////////////////////////////////////////////////////
+    
     listUser : (req,res,next) => 
     {
         db.User.findAll()
         .then((user) => res.json(user));
     },
+
+    //////////////////////////////////////////////////////////
 
     createUser : (req,res,next) => 
     {
@@ -24,15 +26,13 @@ module.exports =
         .then((user) => res.json(user));
     },
 
-    //********************** RELATION **********************//
+    //////////////////////////////////////////////////////////
 
     listRelations : (req,res,next) => 
     {
         db.User.findOne(
         {
-            where : {
-                id_user: req.body.id_user
-            },
+            where : {id_user: req.body.id_user},
         })
         .then(user =>
         {
@@ -41,28 +41,15 @@ module.exports =
         .then((relations) => res.json(relations));
     },
 
+    //////////////////////////////////////////////////////////
+
     askRelation : (req,res,next) => 
     {
-        db.User.findOne({
-            where : {
-                id_user : req.body.friend
-            }
-        })
+        db.User.findOne({where : {id_user : req.body.friend}})
         .then(friend =>
         {
-            db.User.findOne({
-                where : {
-                    id_user : req.body.id_user
-                }
-            })
-            .then(user =>
-            {
-                user.addRelation(friend,{
-                    through : {
-                        status : '1'
-                    }
-                });
-            });
+            db.User.findOne({where : {id_user : req.body.id_user}})
+            .then(user => {user.addRelation(friend,{through : {status : '1'}})});
         })
         .then(() => res.sendStatus(200));
     }

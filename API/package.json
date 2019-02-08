@@ -10,7 +10,8 @@
   },
   "pkg": {
     "assets": [
-      "models/**/*"
+      "models/**/*",
+      "routes/**/*"
     ],
     "targets": [
       "node10"
