@@ -1,14 +1,13 @@
 import React from 'react';
-import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
+import { 
+    Collapse, 
+    Navbar, 
+    NavbarToggler, 
+    Nav, 
     NavItem,
-    NavLink } from 'reactstrap';
+} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Authentification from './authentification/Authentification';
 
 export default class Menu extends React.Component {
 
@@ -16,17 +15,17 @@ export default class Menu extends React.Component {
         super(props);
         this.state = {
             isConnected : true,
-            isOpen : false
+            responsiveNavBarMode : false,
         };
       }
       toggle = () => {
         this.setState((previousState) => ({
-            isOpen : !previousState.isOpen
+            responsiveNavBarMode : !previousState.responsiveNavBarMode
         }));
       }
 
     render() {
-        const { isConnected, isOpen } = this.state;
+        const {isConnected, responsiveNavBarMode} = this.state;
 
         return(
             <div>
@@ -38,7 +37,7 @@ export default class Menu extends React.Component {
                     <NavbarToggler onClick={this.toggle}/>
 
                     {isConnected && 
-                    <Collapse isOpen={isOpen} navbar>
+                    <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
                         <Nav className='ml-auto' navbar>
                             <NavItem>
                                 <Link to='/circuits'>Mes circuits</Link>
@@ -51,12 +50,9 @@ export default class Menu extends React.Component {
                             </NavItem>
                         </Nav>
                     </Collapse>
+
                     }
-
-                    <Link to='/informations'>
-                        <FontAwesomeIcon icon='user' className='user-icon'/>
-                    </Link>
-
+                    <Authentification isConnected={isConnected}/>
                 </Navbar>
             </div>
         );

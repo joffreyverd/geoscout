@@ -16,6 +16,10 @@
 }
 */
 
+h1 {
+  margin: 30px;
+}
+
 /************************** NAVBAR **************************/
 
 .navbar {
@@ -33,17 +37,17 @@
 }
 
 .logo {
-  position: absolute;
   width: 30px;
-  top: 13px;
-  left: 25px;
+  margin-left: 20px;
 }
 
 .user-icon {
-  position: absolute;
-  top: 13px;
-  right: 25px;
+  margin-right: 20px;
   color: white;
+}
+
+.user-icon:hover {
+  cursor: pointer;
 }
 
 .nav-item > a {
