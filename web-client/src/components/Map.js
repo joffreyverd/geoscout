@@ -7,7 +7,7 @@ import MAP_STYLE from '../utils/map-style-basic.json';
 export default class Map extends React.Component {
     state= {
         viewport: {
-            width: '80%',
+            width: '70%',
             height: 600,
             latitude: 48.582651,
             longitude: 7.749534,
@@ -22,7 +22,10 @@ export default class Map extends React.Component {
                 viewport.latitude = data.coords.latitude
                 viewport.longitude = data.coords.longitude
 
-                this.setState({ viewport: viewport, userPosition: data.coords })
+                this.setState({
+                    viewport: viewport,
+                    userPosition: data.coords
+                })
             })
         }
     }

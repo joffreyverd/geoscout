@@ -10,7 +10,7 @@ export default class Authentification extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            modal : false,
+            modal: false,
             register: true,
             isConnected : props.isConnected
         };

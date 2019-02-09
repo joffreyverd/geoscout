@@ -4,7 +4,7 @@ import Menu from './components/NavBar';
 import {Route, withRouter} from 'react-router-dom';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 
 import Home from './containers/Home';
 import Account from './containers/Account';
@@ -12,7 +12,7 @@ import Authentification from './components/authentification/Authentification';
 import CreatedCircuit from './containers/CreatedCircuit';
 import Achievement from './containers/Achievement';
 
-library.add(faUser)
+library.add(faUser, faPlusCircle)
 
 const AppRoute = ({component : Component, ...props}) => {
     return (

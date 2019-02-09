@@ -1,5 +1,7 @@
 h1 {
-  margin: 30px;
+  margin: 30px 20px 10px 20px;
+  font-size: 2em;
+  color: grey;
 }
 
 /************************** NAVBAR **************************/
@@ -43,6 +45,10 @@ h1 {
   color: white;
 }
 
+.nav-item > a:hover {
+  text-decoration: none;
+}
+
 /************************** AUTHENTIFICATION **************************/
 
 .modal-header {
@@ -66,4 +72,49 @@ h1 {
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
+}
+
+/************************** CIRCUIT **************************/
+
+.my-circuits-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-dropdown {
+  height: 40px;
+  display: block;
+  margin: 30px 20px 10px 20px;
+}
+
+.item-wrapper {
+  padding: 0px;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.list-item {
+  background-color: rgb(223, 229, 255);
+  border-radius: 5px;
+  width: 46%;
+  height: 400px;
+  margin: 20px;
+  padding: 30px;
+  color: grey;
+  transition: 0.2s;
+}
+
+.list-item:hover {
+  cursor: pointer;
+  background-color: rgb(191, 203, 255);
+  color: white;
+  transition: 0.2s;
+}
+
+.add-circuit {
+ position: fixed;
+ bottom: 20px;
+ right: 20px;
 }
