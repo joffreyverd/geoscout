@@ -7,9 +7,10 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
 
 import Home from './containers/Home';
+import Account from './containers/Account';
 import Authentification from './components/authentification/Authentification';
 import CreatedCircuit from './containers/CreatedCircuit';
-import AchievedCircuits from './containers/AchievedCircuit';
+import Achievement from './containers/Achievement';
 
 library.add(faUser)
 
@@ -33,9 +34,10 @@ class App extends Component {
                 </div>
 
                 <Route exact path = '/' component = {Home} />
+                <Route exact path = '/account' component = {Account} />
                 <AppRoute exact path = '/authentification' component = {Authentification} />
                 <AppRoute exact path = '/circuits' component = {CreatedCircuit} />
-                <AppRoute exact path = '/achieved-circuits' component = {AchievedCircuits} />
+                <AppRoute exact path = '/achievements' component = {Achievement} />
             </>
         );
     }

@@ -1,11 +1,5 @@
 import React from 'react';
-import { 
-    Collapse, 
-    Navbar, 
-    NavbarToggler, 
-    Nav, 
-    NavItem,
-} from 'reactstrap';
+import {Collapse, Navbar, NavbarToggler, Nav, NavItem} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import Authentification from './authentification/Authentification';
 
@@ -36,23 +30,34 @@ export default class Menu extends React.Component {
                     </Link>
                     <NavbarToggler onClick={this.toggle}/>
 
-                    {isConnected && 
+                    {isConnected ? 
                     <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
                         <Nav className='ml-auto' navbar>
                             <NavItem>
                                 <Link to='/circuits'>Mes circuits</Link>
                             </NavItem>
                             <NavItem>
-                                <Link to='/achieved-circuits'>Accomplissements</Link>
+                                <Link to='/achievements'>Accomplissements</Link>
                             </NavItem>
                             <NavItem>
-                                <Link to='/'>Se déconnecter</Link>
+                                <Link to='/' onClick={() => this.setState({isConnected: false})}>Déconnexion</Link>
+                            </NavItem>
+                            <NavItem>
+                                <Authentification isConnected={isConnected}/>
                             </NavItem>
                         </Nav>
                     </Collapse>
 
+                    :
+                    <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
+                        <Nav className='flex-end' navbar>
+                            <NavItem>
+                                <Authentification isConnected={isConnected}/>
+                            </NavItem>
+                        </Nav>
+                    </Collapse>
                     }
-                    <Authentification isConnected={isConnected}/>
+                    
                 </Navbar>
             </div>
         );

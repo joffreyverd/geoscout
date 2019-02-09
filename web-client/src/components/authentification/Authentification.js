@@ -1,15 +1,19 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import {Link} from 'react-router-dom';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {Modal, ModalHeader} from 'reactstrap';
+
+import Connect from './Connect';
+import Register from './Register';
 
 export default class Authentification extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            authentificationModal : true,
+            modal : false,
+            register: true,
             isConnected : props.isConnected
         };
-
         this.displayModal = this.displayModal.bind(this);
       }
 
@@ -20,35 +24,42 @@ export default class Authentification extends React.Component {
       }
 
   render() {
-    return (
-        <>
-        
-            <FontAwesomeIcon onClick={this.displayModal} icon='user' className='user-icon'/>
+      const {register} = this.state;
 
-            <Modal isOpen={this.state.modal} fade={false} toggle={this.displayModal}>
-                <ModalHeader toggle={this.displayModal}>Bienvenue :)</ModalHeader>
+      return (
+          <>
 
-                <ModalBody>
-                    Lorem ipsum dolor sit amet,
-                    consectetur adipisicing elit,
-                    sed do eiusmod tempor incididunt ut
-                    labore et dolore magna aliqua.
-                    Ut enim ad minim veniam, quis nostrud
-                    exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor
-                    in reprehenderit in voluptate velit esse cillum
-                    dolore eu fugiat nulla pariatur. Excepteur sint
-                    occaecat cupidatat non proident, sunt in culpa
-                    qui officia deserunt mollit anim id est laborum.
-                </ModalBody>
+            {this.state.isConnected ?
+                <Link to='/account'>
+                    <FontAwesomeIcon icon='user' className='user-icon'/>
+                </Link>
+            :
+              <>
+                <FontAwesomeIcon onClick={this.displayModal} icon='user' className='user-icon'/>
 
-                <ModalFooter>
-                    <Button color="primary" onClick={this.displayModal}>S'inscrire</Button>{' '}
-                    <Button color="secondary" onClick={this.displayModal}>Annuler</Button>
-                </ModalFooter>
-            </Modal>
+                  <Modal isOpen={this.state.modal} fade={false} toggle={this.displayModal}>
 
-        </>
-    );
+                      <div className='modal-header'>
+                          <ModalHeader
+                              className={register === true ? 'active' : ''} 
+                              onClick={() => this.setState({register: true})}
+                          >Inscription</ModalHeader>
+                          <ModalHeader
+                              className={register === true ? '' : 'active'} 
+                              onClick={() => this.setState({register: false})}
+                          >Connexion</ModalHeader>
+                      </div>
+
+                      {this.state.register ?
+                          <Register displayModal={this.displayModal} modal={this.state.modal}/> 
+                      : 
+                          <Connect displayModal={this.displayModal} modal={this.state.modal}/> 
+                      }
+                  </Modal>
+              </>
+            }
+            
+          </>
+      );
   }
 }

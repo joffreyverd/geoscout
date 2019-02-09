@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import '../css/app.css';
 
-export default class AchievedCircuit extends Component {
+export default class Achievement extends Component {
 
     render() {
         return (
