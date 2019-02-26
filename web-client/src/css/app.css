@@ -118,3 +118,7 @@ h1 {
  bottom: 20px;
  right: 20px;
 }
+
+.add-circuit:hover {
+  cursor: pointer;
+}

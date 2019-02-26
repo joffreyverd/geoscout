@@ -7,6 +7,7 @@ import Connect from './Connect';
 import Register from './Register';
 
 export default class Authentification extends React.Component {
+    
     constructor(props) {
         super(props);
         this.state = {

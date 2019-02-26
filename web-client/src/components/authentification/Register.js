@@ -3,6 +3,7 @@ import {Button, ModalBody, ModalFooter, Form, FormGroup, Label, Input} from 'rea
 import {withRouter} from 'react-router-dom';
 
 class Register extends Component {
+    
     constructor(props) {
         super(props);
         this.state = {
