@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import '../css/app.css';
-import {Link} from 'react-router-dom';
 import {ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem} from 'reactstrap';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 
 import CreatedCircuitList from '../components/circuit/CreatedCircuitList';
+import CreateCircuitModal from '../components/circuit/CreateCircuitModal';
 
 const Circuits = [{
     idCircuit: 1,idUser: 3,name: 'Les Vosges',description: 'C\'est une super randonnée !',
@@ -21,22 +21,26 @@ const Circuits = [{
 ];
 
 export default class CreatedCircuit extends Component {
-    constructor(props) {
-        super(props);
+    state = {
+        dropdownOpen: false,
+        modal: false
+    };
     
-        this.toggle = this.toggle.bind(this);
-        this.state = {
-          dropdownOpen: false
-        };
-      }
-    
-    toggle() {
+    toggle = () => {
         this.setState({
             dropdownOpen: !this.state.dropdownOpen
         });
     }
 
+    displayModal = () => {
+        this.setState((previousState) => ({
+          modal : !previousState.modal
+        }));
+    }
+
     render() {
+        const {modal, dropdownOpen} = this.state;
+
         return (
             <>
                 <div className='my-circuits-header'>
@@ -46,7 +50,7 @@ export default class CreatedCircuit extends Component {
                     <ButtonDropdown
                         direction="left"
                         className='button-dropdown'
-                        isOpen={this.state.dropdownOpen}
+                        isOpen={dropdownOpen}
                         toggle={this.toggle}>
                         <DropdownToggle caret>Recherche avancée</DropdownToggle>
                         <DropdownMenu>
@@ -61,9 +65,15 @@ export default class CreatedCircuit extends Component {
                 <CreatedCircuitList
                     items={Circuits}/>
 
-                <Link to='/new-circuit' className='add-circuit'>
-                    <FontAwesomeIcon icon='plus-circle' size='3x' color='#3B62FF'/>
-                </Link>
+                <FontAwesomeIcon
+                    className='add-circuit'
+                    onClick={this.displayModal} 
+                    icon='plus-circle' size='3x' 
+                    color='#3B62FF'/>
+
+                <CreateCircuitModal
+                    displayModal={this.displayModal}
+                    modal={modal}/>
             </>
         );
     }

@@ -1,9 +1,7 @@
 import React from 'react';
 
 export default ({
-    name, 
-    idCircuit, 
-    idUser, 
+    name,
     description, 
     length, 
     duration, 
