@@ -12,7 +12,8 @@ export default class Map extends React.Component {
             latitude: 48.582651,
             longitude: 7.749534,
             zoom: 12
-        }
+        },
+        circuits: []
     }
     
     componentDidMount() {
@@ -30,6 +31,12 @@ export default class Map extends React.Component {
         }
     }
 
+    handleClick = (event) => {
+        let circuits = this.state.circuits
+        circuits.push({ longitude: event.lngLat[0], latitude: event.lngLat[1]})
+        this.setState({ circuits: circuits})
+    }
+
     render() {
         return (
             <div className='map'>
@@ -38,13 +45,20 @@ export default class Map extends React.Component {
                     {...this.state.viewport}
                     mapStyle={MAP_STYLE}
                     onViewportChange={(viewport) => this.setState({viewport})}
+                    onClick={this.handleClick}
                     >
                     {this.state.userPosition &&
                         <Marker latitude={this.state.userPosition.latitude} 
                             longitude={this.state.userPosition.longitude}>
-                            <Pin />
+                            <Pin color='red'/>
                         </Marker>
                     }
+                    {this.state.circuits && this.state.circuits.map((c) => 
+                        <Marker latitude={c.latitude} 
+                            longitude={c.longitude}>
+                            <Pin color='blue'/>
+                        </Marker>
+                    )}
                 </ReactMapGL>
             </div>
         )
