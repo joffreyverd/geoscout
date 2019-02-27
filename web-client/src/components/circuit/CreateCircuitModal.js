@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {Button, ModalBody, ModalFooter, Form, FormGroup,
     Label, Input, Modal, ModalHeader} from 'reactstrap';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
 
 class CreateCircuitModal extends Component {
     state = {
-        name: '',
-        description: '',
+        name: ''
     };
 
     render() {
@@ -22,25 +21,21 @@ class CreateCircuitModal extends Component {
                             <FormGroup>
                                 <Label>Nom</Label>
                                 <Input 
-                                    type="text" 
-                                    name="text"/>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label>Description</Label>
-                                <Input 
-                                    type="text" 
+                                    type="text"
                                     name="text"/>
                             </FormGroup>
                         </Form>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button 
-                            color="primary" 
-                            onClick={this.displayModal}>Créer</Button>
+                        <Link to={{pathname:'/new-circuit', state:{name:this.state.name}}}>
+                            <Button 
+                                color="primary" 
+                                onClick={this.displayModal}>Créer</Button>
+                        </Link>
                         <Button 
                             color="secondary" 
-                            onClick={this.displayModal}>Annuler</Button>
+                            onClick={this.props.displayModal}>Annuler</Button>
                     </ModalFooter>
                 </Modal>
             </>

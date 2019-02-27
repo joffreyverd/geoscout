@@ -10,6 +10,7 @@ import Home from './containers/Home';
 import Account from './containers/Account';
 import Authentification from './components/authentification/Authentification';
 import CreatedCircuit from './containers/CreatedCircuit';
+import NewCircuit from './containers/NewCircuit';
 import Achievement from './containers/Achievement';
 
 library.add(faUser, faPlusCircle)
@@ -37,6 +38,7 @@ class App extends Component {
                 <Route exact path = '/account' component = {Account} />
                 <AppRoute exact path = '/authentification' component = {Authentification} />
                 <AppRoute exact path = '/circuits' component = {CreatedCircuit} />
+                <AppRoute exact path = '/new-circuit' component = {NewCircuit} />
                 <AppRoute exact path = '/achievements' component = {Achievement} />
             </>
         );
