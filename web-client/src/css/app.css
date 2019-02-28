@@ -1,74 +1,124 @@
-/*
-.App {
+h1 {
+  margin: 30px 20px 10px 20px;
+  font-size: 2em;
+  color: grey;
+}
+
+/************************** NAVBAR **************************/
+
+.navbar {
   background-color: #3B62FF;
-  background-size: 100%;
-  min-height: 100vh;
+  padding: 0px;
+  height: 50px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: black;
+  justify-content: space-between;
 }
 
-.App-link {
-  color: #61dafb;
-}
-*/
-
-/************************** MENU **************************/
-
-.menu-wrapper {
+.ml-auto {
   display: flex;
-  width: 80%;
+  justify-content: space-between;
+  width: 90%;
+  font-size: .7em;
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .logo {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  display: flex;
-  flex-direction: column;
-  font-size: .6em;
-  font-weight: bold;
+  width: 30px;
+  margin-left: 20px;
+}
+
+.user-icon {
+  margin-right: 20px;
   color: white;
 }
 
-.logo > img {
-  width: 60px;
-  height: 60px;
+.user-icon:hover {
+  cursor: pointer;
 }
 
-.menu-items {
+.nav-item > a {
   color: white;
+}
+
+.nav-item > a:hover {
+  text-decoration: none;
+}
+
+/************************** AUTHENTIFICATION **************************/
+
+.modal-header {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
-  white-space: nowrap;
+  justify-content: space-around;
 }
 
-.menu-items > p {
-  width: 25%;
-  text-align: center;
-  margin: auto;
+.modal-header:hover {
+  cursor: pointer;
 }
 
-.menu-options {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+.active {
+  color: #3B62FF;
 }
 
-/************************** LANDING PAGE **************************/
+/************************** HOME **************************/
 
 .body-wrapper {
-  background-color: #3B62FF;
-  background-size: 100%;
-  min-height: 100vh;
-  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
+}
+
+/************************** CIRCUIT **************************/
+
+.my-circuits-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.button-dropdown {
+  height: 40px;
+  display: block;
+  margin: 30px 20px 10px 20px;
+}
+
+.item-wrapper {
+  padding: 0px;
+  list-style-type: none;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.list-item {
+  background-color: rgb(223, 229, 255);
+  border-radius: 5px;
+  width: 46%;
+  height: 400px;
+  margin: 20px;
+  padding: 30px;
+  color: grey;
+  transition: 0.2s;
+}
+
+.list-item:hover {
+  cursor: pointer;
+  background-color: rgb(191, 203, 255);
+  color: white;
+  transition: 0.2s;
+}
+
+.add-circuit {
+ position: fixed;
+ bottom: 20px;
+ right: 20px;
+}
+
+.add-circuit:hover {
+  cursor: pointer;
 }
