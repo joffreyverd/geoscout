@@ -14,7 +14,7 @@ export default class NewMap extends React.Component {
             longitude: 7.749534,
             zoom: 12
         },
-        steps: []
+        steps: this.props.steps ? this.props.steps : []
     }
     
     componentDidMount() {
@@ -48,7 +48,7 @@ export default class NewMap extends React.Component {
 
     render() {
         return (
-            <div className='map'>
+            <div className='new-map'>
                 <ReactMapGL
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                     {...this.state.viewport}
@@ -64,10 +64,10 @@ export default class NewMap extends React.Component {
                             <Pin color='red'/>
                         </Marker>
                     }
-                    {this.state.steps && this.state.steps.map((c, idx) => 
+                    {this.state.steps && this.state.steps.map((s, idx) => 
                         <Marker key={idx}
-                            latitude={c.latitude} 
-                            longitude={c.longitude}
+                            latitude={s.latitude} 
+                            longitude={s.longitude}
                             offsetLeft={-11}
                             offsetTop={-25}>
                             <Pin color='blue' onClick={() => this.removeMarker(idx)}/>

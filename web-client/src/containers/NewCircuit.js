@@ -5,7 +5,7 @@ import NewMap from '../components/NewMap';
 export default class NewCircuit extends Component {
 
     render() {
-        console.log(this.state);
+        
         return (
             <>
                 {this.props.location.state &&
