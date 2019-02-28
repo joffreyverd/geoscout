@@ -9,7 +9,8 @@ module.exports = (sequelize,DataTypes) =>
             longitude : {type : DataTypes.FLOAT, allowNull : true},
             description : {type : DataTypes.TEXT, allowNull : true},
             order : {type : DataTypes.INTEGER, allowNull : true},
-            instruction : {type : DataTypes.STRING, allowNull : true}
+            instruction : {type : DataTypes.STRING, allowNull : true},
+            validation : {type : DataTypes.STRING, allowNull : true}
         },
         {createdAt: false, updatedAt: false}
     );
