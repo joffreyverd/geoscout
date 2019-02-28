@@ -6,7 +6,7 @@ module.exports = (sequelize,DataTypes) =>
             id_question : {type : DataTypes.INTEGER,autoIncrement : true, allowNull : false, primaryKey : true},
             wording : {type : DataTypes.TEXT, allowNull : true},
             response : {type : DataTypes.TEXT,allowNull : true},
-            type_of : {type : DataTypes.ENUM('0', '1', '2', '3'),allowNull : true},
+            type_of : {type : DataTypes.TINYINT, allowNull : true},
             points : {type : DataTypes.INTEGER, allowNull : true},
         },
         {
