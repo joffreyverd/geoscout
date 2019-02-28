@@ -32,12 +32,6 @@ export default class HomeMap extends React.Component {
         }
     }
 
-    handleClick = (event) => {
-        let circuits = this.state.circuits
-        circuits.push({ longitude: event.lngLat[0], latitude: event.lngLat[1]})
-        this.setState({ circuits: circuits})
-    }
-
 
     render() {
         return (
@@ -47,7 +41,6 @@ export default class HomeMap extends React.Component {
                     {...this.state.viewport}
                     mapStyle={MAP_STYLE}
                     onViewportChange={(viewport) => this.setState({viewport})}
-                    onClick={this.handleClick}
                     >
                     {this.state.userPosition &&
                         <Marker latitude={this.state.userPosition.latitude} 
