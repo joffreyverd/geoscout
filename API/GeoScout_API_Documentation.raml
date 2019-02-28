@@ -1,0 +1,95 @@
+#%RAML 1.0
+title: 
+    value: Akrobat
+description: 
+    value: Description des routes de GeoScout
+baseUri: 
+    value: "https://149.91.91.144:5555/api"
+types: 
+    Response: 
+        type: object
+        displayName: 
+            value: Response
+    JSONObject: 
+        type: object
+        displayName: 
+            value: JSONObject
+    UserPicture:
+        type: file
+        fileTypes: ['image/jpeg', 'image/png']
+        maxLength: 307200
+    Image:
+        type: file
+        fileTypes: ['image/jpeg', 'image/png']
+    File: UserPicture | Image 
+
+/signin:
+    post:
+        description: Connexion d'un utilisateur
+        responses:
+            200:
+                body:
+                    application/json:
+                        type: JSONObject
+                        example: |
+                            [
+                                {
+                                    "id_user": "1",
+                                    "mail": "Denis.Monfort@mail.com",
+                                    "firstname": "Denis",
+                                    "lastname": "Monfort",
+                                    "picture": "image.jpeg",
+                                    "token": "dzalencfubciuqkbferviuezivgeycguizehafoqcgz58fec5q8d6sez46e4fqc8f48gr4c6e..."
+                                }
+                            ]
+        body:
+            application/json:
+                type: JSONObject
+                example: |
+                    [
+                        {
+                            "mail": "Denis.Monfort@mail.com",
+                            "password": "d14Z87-i7_"
+                        }
+                    ]
+/signup:
+    post:
+        description: Inscription d'un utilisateur
+        responses:
+            200:
+                body:
+                    application/json:
+                        type: JSONObject
+                        example: |
+                            []
+        body:
+            application/json:
+                type: JSONObject
+                example: |
+                    [
+                        {
+                            "mail": "Denis.Monfort@mail.com",
+                            "password": "d14Z87-i7_",
+                            "firstname": "Denis",
+                            "lastname": "Monfort",
+                            "picture": "image.jpeg"
+                        }
+                    ]
+/user:
+    put:
+    delete:
+
+/circuit:
+    post:
+    put:
+    delete:
+
+/step:
+    post:
+    put:
+    delete:
+
+/question:
+    post:
+    put:
+    delete:
