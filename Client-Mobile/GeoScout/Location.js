@@ -5,6 +5,7 @@ import {
     Dimensions
 } from 'react-native';
 import MapView from 'react-native-maps';
+import {mapStyle} from './style/mapStyle';
 
 const {width,height} = Dimensions.get('window')
 const ASPECT_RATIO = width/height
