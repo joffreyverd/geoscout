@@ -2,7 +2,7 @@
     "development": 
     {
       "username": "root",
-      "password": "admin68",
+      "password": "",
       "database": "akrobat",
       "host": "localhost",
       "dialect": "mysql",

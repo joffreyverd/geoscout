@@ -3,13 +3,12 @@ module.exports = (sequelize,DataTypes) =>
     const AchievedCircuit = sequelize.define(
         'AchievedCircuit',
         {
+            id_route : {type : DataTypes.INTEGER, allowNull : false, primaryKey : true, autoIncrement : true},
             score : {type : DataTypes.INTEGER, allowNull : true},
-            statut_circuit : {type : DataTypes.ENUM('0','1','2'), allowNull : true},
-            last_step : {type : DataTypes.TINYINT, allowNull : true},           
-            date : {type : DataTypes.DATE, allowNull : true},
+            max_score : {type : DataTypes.INTEGER, allowNull : true}, 
+            statut_circuit : {type : DataTypes.ENUM('0','1','2'), allowNull : true},      
             version : {type : DataTypes.TINYINT, allowNull : true},
-            score : {type : DataTypes.INTEGER, allowNull : true},
-            scoreTotal : {type : DataTypes.INTEGER, allowNull : true},         
+            achievedDate : {type : DataTypes.DATE, allowNull : true}
         },
 
         {createdAt: false, updatedAt: false}
@@ -17,8 +16,9 @@ module.exports = (sequelize,DataTypes) =>
 
     AchievedCircuit.associate = (db) =>
     {
-        AchievedCircuit.belongsTo(db.User);    
-        AchievedCircuit.belongsTo(db.Circuit);
+        AchievedCircuit.belongsTo(db.User,{foreignKey : 'id_user'});    
+        AchievedCircuit.belongsTo(db.Circuit,{foreignKey : 'id_circuit'});
+        AchievedCircuit.belongsTo(db.Step,{foreignKey : 'id_step'});
     }
 
     return AchievedCircuit;

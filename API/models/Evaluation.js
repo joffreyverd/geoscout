@@ -10,8 +10,8 @@ module.exports = (sequelize,DataTypes) =>
 
     Evaluation.associate = (db) =>
     {
-        Evaluation.belongsTo(db.User);    
-        Evaluation.belongsTo(db.Circuit);
+        Evaluation.belongsTo(db.User,{foreignKey : 'id_user'});    
+        Evaluation.belongsTo(db.Circuit,{foreignKey : 'id_circuit'});
     }
 
     return Evaluation;
