@@ -37,6 +37,14 @@ export default class Map extends React.Component {
         this.setState({ circuits: circuits})
     }
 
+    removeMarker = (idx) => {
+        // Suppression du circuit dans la liste
+        this.setState((prev) => {
+            prev.circuits.splice(idx,1)
+            return { circuits: prev.circuits}
+        })
+    }
+
     render() {
         return (
             <div className='map'>
@@ -49,14 +57,21 @@ export default class Map extends React.Component {
                     >
                     {this.state.userPosition &&
                         <Marker latitude={this.state.userPosition.latitude} 
-                            longitude={this.state.userPosition.longitude}>
+                            longitude={this.state.userPosition.longitude}
+                            offsetLeft={-10}
+                            offsetTop={-20}>
                             <Pin color='red'/>
                         </Marker>
                     }
-                    {this.state.circuits && this.state.circuits.map((c) => 
-                        <Marker latitude={c.latitude} 
-                            longitude={c.longitude}>
-                            <Pin color='blue'/>
+                    {this.state.circuits && this.state.circuits.map((c, idx) => 
+                        <Marker key={idx}
+                            latitude={c.latitude} 
+                            longitude={c.longitude}
+                            offsetLeft={-11}
+                            offsetTop={-25}
+                            
+                            >
+                            <Pin color='blue' onClick={() => this.removeMarker(idx)}/>
                         </Marker>
                     )}
                 </ReactMapGL>
