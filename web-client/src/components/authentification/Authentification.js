@@ -8,24 +8,20 @@ import Register from './Register';
 
 export default class Authentification extends React.Component {
     
-    constructor(props) {
-        super(props);
-        this.state = {
-            modal: false,
-            register: true,
-            isConnected : props.isConnected
-        };
-        this.displayModal = this.displayModal.bind(this);
-      }
+    state = {
+        modal: false,
+        register: true,
+        isConnected : this.props.isConnected
+    };
 
-    displayModal() {
+    displayModal = () => {
         this.setState((previousState) => ({
           modal : !previousState.modal
         }));
       }
 
   render() {
-      const {register} = this.state;
+      const {register} = this.props;
 
       return (
           <>

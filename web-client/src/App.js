@@ -38,7 +38,7 @@ class App extends Component {
                 <Route exact path = '/account' component = {Account} />
                 <AppRoute exact path = '/authentification' component = {Authentification} />
                 <AppRoute exact path = '/circuits' component = {CreatedCircuit} />
-                <AppRoute exact path = '/new-circuit' component = {NewCircuit} />
+                <AppRoute exact path = '/circuit' component = {NewCircuit} />
                 <AppRoute exact path = '/achievements' component = {Achievement} />
             </>
         );

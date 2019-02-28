@@ -23,6 +23,7 @@ const Circuits = [{
 export default class CreatedCircuit extends Component {
     state = {
         dropdownOpen: false,
+        filter: 'all',
         modal: false
     };
     
@@ -38,8 +39,16 @@ export default class CreatedCircuit extends Component {
         }));
     }
 
+    onFilterClick = (event) => {
+        this.setState({filter: event.target.name});
+    }
+
     render() {
-        const {modal, dropdownOpen} = this.state;
+        const {dropdownOpen, modal, filter} = this.state;
+
+        if(filter !== 'all') {
+            var newFilter = filter === 'published' ? true : false;
+        }
 
         return (
             <>
@@ -48,22 +57,33 @@ export default class CreatedCircuit extends Component {
                     <h1>Circuits crées</h1>
 
                     <ButtonDropdown
-                        direction="left"
+                        direction='left'
                         className='button-dropdown'
                         isOpen={dropdownOpen}
                         toggle={this.toggle}>
                         <DropdownToggle caret>Recherche avancée</DropdownToggle>
                         <DropdownMenu>
-                            <DropdownItem>Tous</DropdownItem>
-                            <DropdownItem>Circuits publiés</DropdownItem>
-                            <DropdownItem>Circuits non-publiés</DropdownItem>
+                            <DropdownItem
+                                name='all'
+                                onClick={this.onFilterClick}>Tous</DropdownItem>
+                            <DropdownItem
+                                name='published'
+                                onClick={this.onFilterClick}>Circuits publiés</DropdownItem>
+                            <DropdownItem
+                                name='unpublished'
+                                onClick={this.onFilterClick}>Circuits non-publiés</DropdownItem>
                         </DropdownMenu>
                     </ButtonDropdown>
-
+                
                 </div>
-
-                <CreatedCircuitList
+                { filter === 'all' ?
+                    <CreatedCircuitList
                     items={Circuits}/>
+                :
+                    <CreatedCircuitList
+                        items={Circuits.filter(element => element.published === (newFilter))}/>
+                }
+
 
                 <FontAwesomeIcon
                     className='add-circuit'
