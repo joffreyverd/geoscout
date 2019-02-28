@@ -1,10 +1,11 @@
 import React from 'react';
 import ReactMapGL, {Marker} from 'react-map-gl';
 
-import Pin from '../components/Pin';
+import Pin from './Pin';
 import MAP_STYLE from '../utils/map-style-basic.json';
 
-export default class Map extends React.Component {
+/* Map de création de circuits */
+export default class NewMap extends React.Component {
     state= {
         viewport: {
             width: '70%',
@@ -13,7 +14,7 @@ export default class Map extends React.Component {
             longitude: 7.749534,
             zoom: 12
         },
-        circuits: []
+        steps: []
     }
     
     componentDidMount() {
@@ -32,16 +33,16 @@ export default class Map extends React.Component {
     }
 
     handleClick = (event) => {
-        let circuits = this.state.circuits
-        circuits.push({ longitude: event.lngLat[0], latitude: event.lngLat[1]})
-        this.setState({ circuits: circuits})
+        let steps = this.state.steps
+        steps.push({ longitude: event.lngLat[0], latitude: event.lngLat[1]})
+        this.setState({ steps: steps})
     }
 
     removeMarker = (idx) => {
-        // Suppression du circuit dans la liste
+        // Suppression de l'étape dans la liste
         this.setState((prev) => {
-            prev.circuits.splice(idx,1)
-            return { circuits: prev.circuits}
+            prev.steps.splice(idx,1)
+            return { steps: prev.steps}
         })
     }
 
@@ -63,14 +64,12 @@ export default class Map extends React.Component {
                             <Pin color='red'/>
                         </Marker>
                     }
-                    {this.state.circuits && this.state.circuits.map((c, idx) => 
+                    {this.state.steps && this.state.steps.map((c, idx) => 
                         <Marker key={idx}
                             latitude={c.latitude} 
                             longitude={c.longitude}
                             offsetLeft={-11}
-                            offsetTop={-25}
-                            
-                            >
+                            offsetTop={-25}>
                             <Pin color='blue' onClick={() => this.removeMarker(idx)}/>
                         </Marker>
                     )}
