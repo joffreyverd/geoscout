@@ -122,3 +122,30 @@ h1 {
 .add-circuit:hover {
   cursor: pointer;
 }
+
+/************************** NEW-CIRCUIT **************************/
+.div-wrapper {
+  display: flex;
+}
+
+.new-map {
+  width: 70%;
+}
+
+.scroll-menu {
+  overflow: scroll;
+  width: 30%;
+}
+
+.circuit-title {
+  color: grey;
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+}
+
+.step-wrapper {
+  width: 100%;
+  height : 100px;
+  background-color: red;
+}

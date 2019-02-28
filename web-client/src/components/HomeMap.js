@@ -9,7 +9,7 @@ export default class HomeMap extends React.Component {
     state= {
         viewport: {
             width: '100%',
-            height: '100vh',
+            height: window.innerHeight -50,
             latitude: 48.582651,
             longitude: 7.749534,
             zoom: 12

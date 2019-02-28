@@ -5,14 +5,27 @@ import NewMap from '../components/NewMap';
 export default class NewCircuit extends Component {
 
     render() {
-        console.log(this.state);
         return (
             <>
                 {this.props.location.state &&
-                    <p>{this.props.location.state.name}</p>
-                }
+                    <div className='div-wrapper'>
+                        <NewMap/>
 
-                <NewMap />
+                        <div className='scroll-menu'>
+    
+                            <h3 className='circuit-title'>{this.props.location.state.name}</h3>
+
+                            <div className='step-wrapper'>
+                                etape 1
+                            </div>
+
+                            <div className='step-wrapper'>
+                                etape 2
+                            </div>
+
+                        </div>
+                    </div>
+                }
             </>
         );
     }

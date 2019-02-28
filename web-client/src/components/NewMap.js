@@ -8,8 +8,8 @@ import MAP_STYLE from '../utils/map-style-basic.json';
 export default class NewMap extends React.Component {
     state= {
         viewport: {
-            width: '70%',
-            height: 600,
+            width: '100%',
+            height: window.innerHeight -50,
             latitude: 48.582651,
             longitude: 7.749534,
             zoom: 12
@@ -48,7 +48,7 @@ export default class NewMap extends React.Component {
 
     render() {
         return (
-            <div className='map'>
+            <div className='new-map'>
                 <ReactMapGL
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                     {...this.state.viewport}
