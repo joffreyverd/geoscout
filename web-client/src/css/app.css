@@ -124,8 +124,9 @@ h1 {
 }
 
 /************************** NEW-CIRCUIT **************************/
-.div-wrapper {
+.view-wrapper {
   display: flex;
+  height: 100vh;
 }
 
 .new-map {
@@ -133,7 +134,7 @@ h1 {
 }
 
 .scroll-menu {
-  overflow: scroll;
+  height: 100%;
   width: 30%;
 }
 
@@ -142,10 +143,22 @@ h1 {
   width: 100%;
   text-align: center;
   padding: 10px;
+  margin: 0px;
 }
 
 .step-wrapper {
+  height: 100%;
+  overflow: scroll;
+  padding: 0px;
+  margin: 0px;
+}
+
+.step-wrapper-item {
   width: 100%;
   height : 100px;
-  background-color: red;
+  list-style: none;
+}
+
+.step-wrapper-item:nth-child(odd) {
+  background-color: #D4E3FF;
 }

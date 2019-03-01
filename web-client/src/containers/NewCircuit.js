@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
-import '../css/app.css';
 import Map from '../components/Map';
+import '../css/app.css';
+import StepList from '../components/step/StepList';
+
+const Steps = [{name: 'étape 1'}, {name: 'étape 2'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}];
 
 export default class NewCircuit extends Component {
     state = {
@@ -46,13 +49,8 @@ export default class NewCircuit extends Component {
     
                             <h3 className='circuit-title'>{this.props.location.state.name}</h3>
 
-                            <div className='step-wrapper'>
-                                etape 1
-                            </div>
-
-                            <div className='step-wrapper'>
-                                etape 2
-                            </div>
+                            <StepList
+                                items={Steps}/>
 
                         </div>
                     </div>
