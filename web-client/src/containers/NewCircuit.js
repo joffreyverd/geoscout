@@ -9,11 +9,11 @@ export default class NewCircuit extends Component {
 
     handleClickMap = (event) => {
         let steps = this.state.steps
-        steps.push({ longitude: event.lngLat[0], latitude: event.lngLat[1]})
+        steps.push({ longitude: event.lngLat[0], latitude: event.lngLat[1] })
         this.setState({ steps: steps})
     }
 
-    removeMarker = (idx) => {
+    removeStep = (idx) => {
         // Suppression de l'étape dans la liste
         this.setState((prev) => {
             prev.steps.splice(idx,1)
@@ -21,6 +21,14 @@ export default class NewCircuit extends Component {
         })
     }
 
+    changeStepOrder = (prevIdx, newIdx) => {
+        this.setState((prev) => {
+            let step = prev.step.splice(prevIdx, 1)[0]
+            // inserts at newIdx position
+            prev.steps.splice(newIdx, 0, step)
+            return { steps: prev.steps}
+        })
+    }
 
     render() {
         const {steps} = this.state;
@@ -32,7 +40,7 @@ export default class NewCircuit extends Component {
                             class='new-map'
                             steps={steps}
                             handleClick={this.handleClickMap}
-                            removeMarker={this.removeMarker} />
+                            removeMarker={this.removeStep} />
 
                         <div className='scroll-menu'>
     

@@ -8,22 +8,34 @@ const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,
 export default class Pin extends PureComponent {
 
     render() {
-        const { onClick } = this.props;
+        const { onClick, index } = this.props;
+        let x = 8;
 
         const pinStyle = {
             cursor: 'pointer',
             fill: this.props.color,
             stroke: 'none'
         };
+        
+        if (index === 11){
+            x = 6;
+        }
+        else if (index > 9){
+            x = 5;
+        } else if (index === 1 || index === 7) {
+            x = 9;
+        }
 
         return (
             <svg
-                height={20}
+                height={25}
                 viewBox="0 0 24 24"
                 style={{ ...pinStyle}}
                 onClick={onClick}
             >
                 <path d={ICON} />
+                <text x={x} y={15} fill="white" fontSize={13}>{index}</text>
+                
             </svg>
         );
     }
