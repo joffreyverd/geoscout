@@ -1,10 +1,10 @@
 {
     "development": 
     {
-      "username": "root",
-      "password": "",
+      "username": "rusty",
+      "password": "admin",
       "database": "akrobat",
-      "host": "localhost",
+      "host": "154.49.211.218",
       "dialect": "mysql",
       "timezone": "+02:00"
     },
