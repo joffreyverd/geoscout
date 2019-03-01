@@ -31,14 +31,6 @@ export default class NewMap extends React.Component {
         }
     }
 
-    removeMarker = (idx) => {
-        // Suppression de l'étape dans la liste
-        this.setState((prev) => {
-            prev.steps.splice(idx,1)
-            return { steps: prev.steps}
-        })
-    }
-
     render() {
         return (
             <div className='new-map'>
