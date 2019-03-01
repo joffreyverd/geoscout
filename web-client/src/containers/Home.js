@@ -1,14 +1,16 @@
 import React, {Component} from 'react';
 import '../css/app.css';
 
-import HomeMap from '../components/HomeMap'
+import Map from '../components/Map'
 
 export default class Home extends Component {
-
+    state = {
+        circuits: []
+    }
     render() {
         return (
             <>
-                <HomeMap/>           
+                <Map class='map' circuits={this.state.circuits}/>           
             </>
         );
     }
