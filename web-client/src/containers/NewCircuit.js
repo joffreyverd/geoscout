@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import '../css/app.css';
-import NewMap from '../components/NewMap';
+import Map from '../components/Map';
 
 export default class NewCircuit extends Component {
     state = {
@@ -23,12 +23,13 @@ export default class NewCircuit extends Component {
 
 
     render() {
-        const {steps} = this.state
+        const {steps} = this.state;
         return (
             <>
                 {this.props.location.state &&
                     <div className='div-wrapper'>
-                        <NewMap 
+                        <Map 
+                            class='new-map'
                             steps={steps}
                             handleClick={this.handleClickMap}
                             removeMarker={this.removeMarker} />
