@@ -1,4 +1,4 @@
-const API_HOST = 'http://jsonplaceholder.typicode.com';
+const API_HOST = process.env.REACT_APP_API_URL;
 
 function request(route, method, body) {
     let options = {

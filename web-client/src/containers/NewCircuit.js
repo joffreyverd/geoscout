@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Map from '../components/Map';
 import '../css/app.css';
 import StepList from '../components/step/StepList';
+import api from '../utils/httpMethods';
 
 const Steps = [{name: 'étape 1'}, {name: 'étape 2'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}, {name: 'étape 3'}];
 
@@ -11,9 +12,21 @@ export default class NewCircuit extends Component {
     }
 
     handleClickMap = (event) => {
-        let steps = this.state.steps
-        steps.push({ longitude: event.lngLat[0], latitude: event.lngLat[1] })
-        this.setState({ steps: steps})
+        let step = { longitude: event.lngLat[0], latitude: event.lngLat[1] }
+
+        // Supprimer ce setState lors de la connexion
+        this.setState((prev) => {
+            prev.steps.push(step)
+            return { steps: prev.steps}
+        })
+        
+        // api.post('step',step).then((data) => {
+        //     this.setState((prev) => {
+        //         prev.steps.push(step)
+        //         return { steps: prev.steps}
+        //     })
+        // }).catch((error) => console.log(error.text))
+        
     }
 
     removeStep = (idx) => {
@@ -22,6 +35,15 @@ export default class NewCircuit extends Component {
             prev.steps.splice(idx,1)
             return { steps: prev.steps}
         })
+
+        // let step = this.state.steps[idx];
+        // api.delete(`step/${step.id}`).then(() => {
+        //     // Suppression de l'étape dans la liste
+        //     this.setState((prev) => {
+        //         prev.steps.splice(idx,1)
+        //         return { steps: prev.steps}
+        //     })
+        // }).catch((error) => console.log(error.text))
     }
 
     changeStepOrder = (prevIdx, newIdx) => {
