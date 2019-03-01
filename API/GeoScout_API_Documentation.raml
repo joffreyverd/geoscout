@@ -14,6 +14,8 @@ types:
         type: object
         displayName: 
             value: JSONObject
+    JsonWebToken:
+        bearer: object
     UserPicture:
         type: file
         fileTypes: ['image/jpeg', 'image/png']
@@ -21,35 +23,50 @@ types:
     Image:
         type: file
         fileTypes: ['image/jpeg', 'image/png']
-    File: UserPicture | Image 
+    File: UserPicture | Image
 
+traits: 
+  Auth: 
+    headers: 
+      Authorization: 
+        displayName: JWT
+        description: Authentification avec un JWT (JSON Web Token)
+        type: Bearer Token
+        example: |
+            [
+                {
+                    "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoxLCJpYXQiOjE1NTEzNjAwNjEsImV4cCI6MTU1MTQ0NjQ2MX0.pvwpRagA--Mta6sXu3vKnEcg28UreoUDf_mtfbFVfww",
+                }
+            ]
+        required: true
 /signin:
     post:
         description: Connexion d'un utilisateur
         responses:
             200:
                 body:
+                    description: "OK : L'utilisateur est bien connecté, il reçoit son token"
                     application/json:
                         type: JSONObject
                         example: |
                             [
                                 {
-                                    "id_user": "1",
-                                    "mail": "Denis.Monfort@mail.com",
-                                    "firstname": "Denis",
-                                    "lastname": "Monfort",
-                                    "picture": "image.jpeg",
+                                    "auth" : true,
                                     "token": "dzalencfubciuqkbferviuezivgeycguizehafoqcgz58fec5q8d6sez46e4fqc8f48gr4c6e..."
                                 }
                             ]
+            401:
+                description: "UNAUTHORIZED : L'utilisateur n'as pas fourni d'identifiants valide"
+            500:
+                description: "INTERNAL_ERROR : Une erreur interne est survenue"
         body:
             application/json:
                 type: JSONObject
                 example: |
                     [
                         {
-                            "mail": "Denis.Monfort@mail.com",
-                            "password": "d14Z87-i7_"
+                            "email": "Denis.Monfort@mail.com",
+                            "password": "d14Z87-i7_",    
                         }
                     ]
 /signup:
@@ -57,30 +74,131 @@ types:
         description: Inscription d'un utilisateur
         responses:
             200:
-                body:
-                    application/json:
-                        type: JSONObject
-                        example: |
-                            []
+                description: "OK : L'utilisateur à bien été créé"
+            500:
+                description: "INTERNAL_ERROR : Une erreur interne est survenue"
         body:
             application/json:
                 type: JSONObject
                 example: |
                     [
                         {
-                            "mail": "Denis.Monfort@mail.com",
+                            "email": "Denis.Monfort@mail.com",
                             "password": "d14Z87-i7_",
                             "firstname": "Denis",
                             "lastname": "Monfort",
                             "picture": "image.jpeg"
                         }
                     ]
-/user:
+
+/whoami:
+    get:
+        is: ["Auth"]
+        description: Verification de la validité de la session utilisateur
+        responses:
+            200:
+                description: "OK : La session est valide"
+            401:
+                description: "UNAUTHORIZED : L'utilisateur n'as plus de session valide"
+            500:
+                description: "INTERNAL_ERROR : Une erreur interne est survenue"
+                    
+/relations:
+    get: 
+        is: ["Auth"]
+        description: Liste d'amis d'un utilisateur
+        responses:
+            200:
+                description: "OK : Retourne la liste des amis de l'utilisateur"
+                body:
+                    application/json:
+                        type: JSONObject
+                        example: |
+                            [
+                                {
+                                    "email": "Denis.Monfort@mail.com",
+                                    "password": "d14Z87-i7_",
+                                    "firstname": "Denis",
+                                    "lastname": "Monfort",
+                                    "picture": "image.jpeg"
+                                },
+                                {
+                                    "email": "JeanKlaude@mail.com",
+                                    "password": "d14Z87-i7_",
+                                    "firstname": "Jean",
+                                    "lastname": "Klaude",
+                                    "picture": "image.jpeg"
+                                }
+                            ]
+            401:
+                description: "UNAUTHORIZED : L'utilisateur n'as plus de session valide"
+            500:
+                description: "INTERNAL_ERROR : Une erreur interne est survenue"
+           
     put:
+        is: ["Auth"]
+        description: Ajout un utilisateur à la liste d'amis de l'utilisateur
+        responses:
+            200:
+                description: "OK : L'ami à bien été ajouté dans la liste"
+            401:
+                description: "UNAUTHORIZED : L'utilisateur n'as plus de session valide"
+            500:
+                description: "INTERNAL_ERROR : Une erreur interne est survenue"
+        body:
+            application/json:
+                type: JSONObject
+                example: |
+                    [
+                        {
+                            "friend" : "id de l'ami à ajouter"
+                        }
+                    ]
     delete:
+        is: ["Auth"]
+        description: Supprime un utilisateur de la liste d'amis de l'utilisateur
+        responses:
+            200:
+                description: "OK : L'ami à bien été enlevé de la liste"
+            401:
+                description: "UNAUTHORIZED : L'utilisateur n'as plus de session valide"
+            500:
+                description: "INTERNAL_ERROR : Une erreur interne est survenue"
+        body:
+            application/json:
+                type: JSONObject
+                example: |
+                    [
+                        {
+                            "friend" : "id de l'ami à supprimer"
+                        }
+                    ]
 
 /circuit:
     post:
+        is: ["Auth"]
+        description: Création d'un circuit
+        responses:
+            200:
+                description: "OK : Le circuit à bien été crée"  
+            401:
+                description: "UNAUTHORIZED : L'utilisateur n'as pas fourni d'identifiants valide"
+            500:
+                description: "INTERNAL_ERROR : Une erreur interne est survenue"
+        body:
+            application/json:
+                type: JSONObject
+                example: |
+                    [
+                        {
+                            "name" : "Super circuit",
+                            "description" : "Ceci est un circuit",
+                            "length" : 64,
+                            "duration" : "08-02-2018 12:00:00",
+                            "need_internet" : 0,
+                            "level" : "1"
+                        }
+                    ]
     put:
     delete:
 
