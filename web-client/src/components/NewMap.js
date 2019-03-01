@@ -13,8 +13,7 @@ export default class NewMap extends React.Component {
             latitude: 48.582651,
             longitude: 7.749534,
             zoom: 12
-        },
-        steps: this.props.steps ? this.props.steps : []
+        }
     }
     
     componentDidMount() {
@@ -30,12 +29,6 @@ export default class NewMap extends React.Component {
                 })
             })
         }
-    }
-
-    handleClick = (event) => {
-        let steps = this.state.steps
-        steps.push({ longitude: event.lngLat[0], latitude: event.lngLat[1]})
-        this.setState({ steps: steps})
     }
 
     removeMarker = (idx) => {
@@ -54,7 +47,7 @@ export default class NewMap extends React.Component {
                     {...this.state.viewport}
                     mapStyle={MAP_STYLE}
                     onViewportChange={(viewport) => this.setState({viewport})}
-                    onClick={this.handleClick}
+                    onClick={this.props.handleClick}
                     >
                     {this.state.userPosition &&
                         <Marker latitude={this.state.userPosition.latitude} 
@@ -64,13 +57,13 @@ export default class NewMap extends React.Component {
                             <Pin color='red'/>
                         </Marker>
                     }
-                    {this.state.steps && this.state.steps.map((s, idx) => 
+                    {this.props.steps && this.props.steps.map((s, idx) => 
                         <Marker key={idx}
                             latitude={s.latitude} 
                             longitude={s.longitude}
                             offsetLeft={-11}
                             offsetTop={-25}>
-                            <Pin color='blue' onClick={() => this.removeMarker(idx)}/>
+                            <Pin color='blue' onClick={() => this.props.removeMarker(idx)}/>
                         </Marker>
                     )}
                 </ReactMapGL>
