@@ -1,4 +1,4 @@
-const API_HOST = 'http://jsonplaceholder.typicode.com';
+const API_HOST = process.env.REACT_APP_API_URL;
 
 function request(route, method, body) {
     let options = {
@@ -11,27 +11,14 @@ function request(route, method, body) {
     }
 
     return fetch(API_HOST + route, options)
-        .then((result) => {
-            return checkStatus(result)
-                .then((res) => {
-                    return res.json();
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-        })
-        .catch(error => {
-            console.log(error);
-        })
+        .then(checkStatus)
 }
 
 function checkStatus(response) {
-    return new Promise((resolve, reject) => {
-        if (response.status >= 200 && response.status < 300) {
-            return resolve(response);
-        }
-        return reject(response.text());
-    });
+    if (response.status >= 200 && response.status < 300)
+        return Promise.resolve(response.json());
+
+    return Promise.reject({ code: response.status, text: response.text });
 }
 
 export default {

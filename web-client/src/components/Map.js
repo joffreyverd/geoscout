@@ -59,7 +59,7 @@ export default class Map extends React.Component {
                             longitude={s.longitude}
                             offsetLeft={-11}
                             offsetTop={-25}>
-                            <Pin color='#1f7a1f' onClick={() => this.props.removeMarker(idx)} />
+                            <Pin color='#1f7a1f' index={idx} onClick={() => this.props.removeMarker(idx)} />
                         </Marker>
                     )}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}

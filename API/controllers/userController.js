@@ -3,7 +3,7 @@ const db = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('./configUser');
-
+const utils = require('./utils')
 module.exports = 
 {
     //////////////////////////////////////////////////////////
@@ -21,18 +21,18 @@ module.exports =
         let hashedPassword = bcrypt.hashSync(req.body.password, 12);
         db.User.create(
         {
-            "email" : req.body.email,
-            "password" : hashedPassword,
-            "firstname" : req.body.firstname,
-            "lastname" : req.body.lastname,
-            "picture" : req.body.picture
+            'email' : req.body.email,
+            'password' : hashedPassword,
+            'firstname' : req.body.firstname,
+            'lastname' : req.body.lastname,
+            'picture' : req.body.picture
         })
         .then((user) =>
         {
             return  token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
         })
-        .then(token => res.status(200).send({ auth: true, token: token }))
-        .catch(err => res.status(500).send({message : "Une erreur est survenue lors de la création de votre compte"}))
+        .then(token => res.sendStatus(200))
+        .catch(err => res.status(500).send({message : 'Une erreur est survenue lors de la création de votre compte'}))
     },
 
     login : (req,res,next) =>
@@ -55,7 +55,7 @@ module.exports =
                     res.status(401).send({auth : false,message:'Mot de passe incorrect'})
             })
         })
-        .catch(err => res.status(401).send({message : "Identifiant incorrect"}))
+        .catch(err => res.status(500).send({message : 'Une erreur interne est survenue'}))
     },
 
     whoami : (req,res,next) =>
@@ -74,27 +74,65 @@ module.exports =
 
     listRelations : (req,res,next) => 
     {
-        db.User.findOne(
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
         {
-            where : {id_user: req.body.id_user},
-        })
-        .then(user =>
-        {
-            return user.getRelations()
-        })
-        .then((relations) => res.json(relations));
+            console.log(id_user)
+            db.User.findOne(
+            {
+                where : {id_user: id_user},
+            })
+            .then(user =>
+            {
+                return user.getRelations({attributes : ['id_user','firstname','lastname']})
+            })
+            .then((relations) => res.status(200).json(relations))
+            .catch((err) => {if(err) res.sendStatus(500)});
+        }
+
+        else
+            res.sendStatus(401);
+        
     },
 
     //////////////////////////////////////////////////////////
 
     askRelation : (req,res,next) => 
     {
-        db.User.findOne({where : {id_user : req.body.friend}})
-        .then(friend =>
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
         {
-            db.User.findOne({where : {id_user : req.body.id_user}})
-            .then(user => {user.addRelation(friend,{through : {status : '1'}})});
-        })
-        .then(() => res.sendStatus(200));
+            db.User.findByPk(req.body.friend)
+            .then(friend =>
+            {
+                if(!friend)
+                    throw 'Error'
+                db.User.findByPk(id_user).then(user => {user.addRelation(friend,{through : {status : '0'}}); return user})
+                .then(user => friend.addRelation(user,{through : {status : '0'}}))
+            })
+            .then(() => res.sendStatus(200))
+            .catch((err) => {if(err) res.sendStatus(500)});
+        }
+        else
+            res.sendStatus(401);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    answerRelation : (req,res,next) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            db.User.findByPk(id_user)
+            .then(user =>
+            {
+                db.user.getRelations()
+            })
+            .then(() => res.sendStatus(200))
+            .catch((err) => {if(err) res.sendStatus(500)});
+        }
+        else
+            res.sendStatus(401);
     }
 }
