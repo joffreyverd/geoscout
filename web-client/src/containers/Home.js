@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import '../css/app.css';
 
 import Map from '../components/Map'
@@ -8,10 +8,10 @@ export default class Home extends Component {
         circuits: []
     }
     render() {
+        const { circuits } = this.state;
+
         return (
-            <>
-                <Map class='map' circuits={this.state.circuits}/>           
-            </>
+            <Map class='map' circuits={circuits} />
         );
     }
 }

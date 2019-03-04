@@ -3,7 +3,7 @@ const API_HOST = 'http://jsonplaceholder.typicode.com';
 function request(route, method, body) {
     let options = {
         method: method,
-        headers: {'Content-Type': 'application/json'}
+        headers: { 'Content-Type': 'application/json' }
     };
 
     if (body) {
@@ -13,12 +13,12 @@ function request(route, method, body) {
     return fetch(API_HOST + route, options)
         .then((result) => {
             return checkStatus(result)
-            .then((res) => {
-                return res.json();
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+                .then((res) => {
+                    return res.json();
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
         })
         .catch(error => {
             console.log(error);

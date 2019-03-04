@@ -49,7 +49,7 @@ h1 {
   text-decoration: none;
 }
 
-/************************** AUTHENTIFICATION **************************/
+/************************** authentication **************************/
 
 .modal-header {
   display: flex;
@@ -66,7 +66,7 @@ h1 {
 
 /************************** HOME **************************/
 
-.body-wrapper {
+.menu-wrapper {
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -134,7 +134,7 @@ h1 {
 }
 
 .scroll-menu {
-  height: 100%;
+  height: 100vh;
   width: 30%;
 }
 
@@ -154,11 +154,25 @@ h1 {
 }
 
 .step-wrapper-item {
+  display: flex;
+  padding: 10px;
+  flex-direction: column;
   width: 100%;
   height : 100px;
   list-style: none;
+  position: relative;
 }
 
 .step-wrapper-item:nth-child(odd) {
   background-color: #D4E3FF;
+}
+
+.step-name {
+  font-weight: bold;
+}
+
+.order-item {
+  position: absolute;
+  top: 5px;
+  right: 25px;
 }

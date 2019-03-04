@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {HashRouter} from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import './css/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <>
-        <HashRouter>
-            <App/>
-        </HashRouter>
-    </>
+
+    <HashRouter>
+        <App />
+    </HashRouter>
+
     , document.getElementById('root'));
 
 serviceWorker.unregister();

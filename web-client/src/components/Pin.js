@@ -20,7 +20,7 @@ export default class Pin extends PureComponent {
             <svg
                 height={20}
                 viewBox="0 0 24 24"
-                style={{ ...pinStyle}}
+                style={{ ...pinStyle }}
                 onClick={onClick}
             >
                 <path d={ICON} />
