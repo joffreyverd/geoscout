@@ -1,6 +1,7 @@
 import React from 'react';
 import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
+
 import Authentication from './authentication/Authentication';
 
 export default class Menu extends React.Component {
