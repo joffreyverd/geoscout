@@ -3,6 +3,7 @@ import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reac
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import '../css/app.css';
+//import api from '../../utils/httpMethods';
 import CreatedCircuitList from '../components/circuit/CreatedCircuitList';
 import CreateCircuitModal from '../components/circuit/CreateCircuitModal';
 
@@ -24,7 +25,8 @@ export default class CreatedCircuit extends Component {
     state = {
         dropdownOpen: false,
         filter: 'all',
-        modal: false
+        modal: false,
+        userId: ''
     };
 
     toggle = () => {
@@ -42,6 +44,16 @@ export default class CreatedCircuit extends Component {
     onFilterClick = (event) => {
         this.setState({ filter: event.target.name });
     }
+
+    /*
+    componentDidMount = () => {
+        api.get('circuits', this.state.userId).then(name => {
+
+        }).catch(error =>
+            console.log(error)
+        );
+    }
+    */
 
     render() {
         const { dropdownOpen, modal, filter } = this.state;
