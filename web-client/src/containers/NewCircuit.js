@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import Map from '../components/Map';
-
-import '../css/app.css';
 import StepList from '../components/step/StepList';
-//import api from '../utils/httpMethods';
+import api from '../utils/httpMethods';
 
 const Steps = [
     { name: 'étape 1', description: 'ceci est une étape', order: 1 },
@@ -20,6 +18,12 @@ const Steps = [
 export default class NewCircuit extends Component {
     state = {
         steps: []
+    }
+
+    componentDidMount() {
+        if (this.props.match.params.id) {
+            api.get('circuits')
+        }
     }
 
     handleClickMap = (event) => {
@@ -69,6 +73,7 @@ export default class NewCircuit extends Component {
     render() {
         const { steps } = this.state;
         const { match: { params: { name } } } = this.props;
+        console.log(this.props)
 
         return (
             <div className='view-wrapper'>

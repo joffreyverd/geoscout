@@ -3,7 +3,10 @@ const API_HOST = process.env.REACT_APP_API_URL;
 function request(route, method, body) {
     let options = {
         method: method,
-        headers: { 'Content-Type': 'application/json' }
+        headers: {
+            'Content-Type': 'application/json',
+            'authorization': localStorage.getItem('token')
+        }
     };
 
     if (body) {
