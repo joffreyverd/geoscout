@@ -1,6 +1,6 @@
-export async function askLocation() {
+export function askLocation() {
     const { Location, Permissions } = Expo;
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
+    const { status } = Permissions.askAsync(Permissions.LOCATION);
     if (status === 'granted') {
       return true;
     }else{

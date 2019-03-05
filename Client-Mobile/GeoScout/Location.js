@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {
+    ActivityIndicator,
+    Text,
     StyleSheet,
     View,
     Dimensions
 } from 'react-native';
 import MapView from 'react-native-maps';
 import {mapStyle} from './style/mapStyle';
-import {askLocation} from './utils/askLocation';
 
 const {width,height} = Dimensions.get('window')
 const ASPECT_RATIO = width/height
@@ -32,26 +33,17 @@ export default class GeoLocation extends React.Component{
     }
 
     componentDidMount() {
-        askLocation();
-        navigator.geolocation.getCurrentPosition((position) => {
-            var lat = parseFloat(position.coords.latitude)
-            var long = parseFloat(position.coords.longitude)
+        let geoOptions = {
+            enableHighAccuracy: true,
+            timeOut: 20000,
+            maximumAge: 60 * 60 * 24
+        };
 
-            var initialRegion = {
-                latitude: lat,
-                longitude: long,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
-            }
-
-            this.setState({initialPosition: initialRegion})
-            this.setState({markerPosition: initialRegion})
-
-        },
-        (error) => alert(JSON.stringify(error)),
-        {
-            enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
-        })
+        navigator.geolocation.getCurrentPosition( 
+            this.geoSuccess, 
+            this.geoFailure,
+            geoOptions
+        );
 
         this.watchID = navigator.geolocation.watchPosition((position) => {
             var lat = parseFloat(position.coords.latitude)
@@ -67,6 +59,28 @@ export default class GeoLocation extends React.Component{
         })
     }
 
+    geoSuccess = (position) => {
+        console.log(parseFloat(position.coords.latitude) + parseFloat(position.coords.longitude));
+        
+        var initialRegion = {
+            latitude: parseFloat(position.coords.latitude),
+            longitude: parseFloat(position.coords.longitude),
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA
+        }
+
+        this.setState({
+            ready: true,
+            error: null,
+            initialPosition: initialRegion,
+            markerPosition: initialRegion
+        })
+    }
+
+    geoFailure = (error) => {
+        this.setState({error: error.message});
+    }    
+
     componentWillUnmount() {
         navigator.geolocation.clearWatch(this.state)
     }
@@ -74,18 +88,32 @@ export default class GeoLocation extends React.Component{
     render() {
         return (
             <View style={styles.container}>
-                <MapView 
-                style={styles.map}
-                region={this.state.initialPosition}
-                customMapStyle={mapStyle}>
-                    <MapView.Marker
-                    coordinate={this.state.markerPosition}>
-                        <View style={styles.radius}>
-                            <View style={styles.marker}>
-                            </View>
-                        </View>
-                    </MapView.Marker>
-                </MapView>
+                {
+                    !this.state.ready && (
+                        <>
+                        <Text style={styles.big}>Bienvenue à toi GeoScouter !</Text>
+                        <ActivityIndicator style={styles.loaderMargin} size='large' color='#2c3e50' />
+                        </>
+                )}
+                {
+                   !this.state.ready && (
+                        <Text style={styles.errorText}>{this.state.error}</Text>
+                )}
+                {
+                    this.state.ready && (
+                        <MapView 
+                        style={styles.map}
+                        region={this.state.initialPosition}
+                        customMapStyle={mapStyle}>
+                            <MapView.Marker
+                            coordinate={this.state.markerPosition}>
+                                <View style={styles.radius}>
+                                    <View style={styles.marker}>
+                                    </View>
+                                </View>
+                            </MapView.Marker>
+                        </MapView>
+                )}
             </View>
         );
     }
@@ -124,5 +152,18 @@ const styles = StyleSheet.create({
         top: 0,
         bottom: 0,
         position: 'absolute'
+    },
+    big: {
+        color: '#8e44ad',
+        textAlign: 'center',
+        fontSize: 36
+    },
+    loaderMargin: {
+        marginTop: 70
+    },
+    errorText: {
+        fontSize: 24,
+        textAlign: 'center',
+        color: '#2c3e50'
     }
 });
