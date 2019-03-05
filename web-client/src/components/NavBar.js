@@ -1,63 +1,64 @@
 import React from 'react';
-import {Collapse, Navbar, NavbarToggler, Nav, NavItem} from 'reactstrap';
-import {Link} from 'react-router-dom';
-import Authentification from './authentification/Authentification';
+import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from 'reactstrap';
+import { Link } from 'react-router-dom';
+
+import Authentication from './authentication/Authentication';
 
 export default class Menu extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isConnected : true,
-            responsiveNavBarMode : false,
+            isConnected: true,
+            responsiveNavBarMode: false,
         };
-      }
-      toggle = () => {
+    }
+    toggle = () => {
         this.setState((previousState) => ({
-            responsiveNavBarMode : !previousState.responsiveNavBarMode
+            responsiveNavBarMode: !previousState.responsiveNavBarMode
         }));
-      }
+    }
 
     render() {
-        const {isConnected, responsiveNavBarMode} = this.state;
+        const { isConnected, responsiveNavBarMode } = this.state;
 
-        return(
+        return (
             <div>
                 <Navbar expand='md'>
 
                     <Link to='/'>
-                        <img src='/img/logo.png' className='logo' alt='GeoScout'/>
+                        <img src='/img/logo.png' className='logo' alt='GeoScout' />
                     </Link>
-                    <NavbarToggler onClick={this.toggle}/>
+                    <NavbarToggler onClick={this.toggle} />
 
-                    {isConnected ? 
-                    <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
-                        <Nav className='ml-auto' navbar>
-                            <NavItem>
-                                <Link to='/circuits'>Mes circuits</Link>
-                            </NavItem>
-                            <NavItem>
-                                <Link to='/achievements'>Accomplissements</Link>
-                            </NavItem>
-                            <NavItem>
-                                <Link to='/' onClick={() => this.setState({isConnected: false})}>Déconnexion</Link>
-                            </NavItem>
-                            <NavItem>
-                                <Authentification isConnected={isConnected}/>
-                            </NavItem>
-                        </Nav>
-                    </Collapse>
+                    {isConnected ?
+                        <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
+                            <Nav className='ml-auto' navbar>
+                                <NavItem>
+                                    <Link to='/circuits'>Mes circuits</Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link to='/achievements'>Accomplissements</Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Link to='/' onClick={() => this.setState({ isConnected: false })}>Déconnexion</Link>
+                                </NavItem>
+                                <NavItem>
+                                    <Authentication isConnected={isConnected} />
+                                </NavItem>
+                            </Nav>
+                        </Collapse>
 
-                    :
-                    <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
-                        <Nav className='flex-end' navbar>
-                            <NavItem>
-                                <Authentification isConnected={isConnected}/>
-                            </NavItem>
-                        </Nav>
-                    </Collapse>
+                        :
+                        <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
+                            <Nav className='flex-end' navbar>
+                                <NavItem>
+                                    <Authentication isConnected={isConnected} />
+                                </NavItem>
+                            </Nav>
+                        </Collapse>
                     }
-                    
+
                 </Navbar>
             </div>
         );

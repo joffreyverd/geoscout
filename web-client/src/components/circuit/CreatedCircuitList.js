@@ -1,10 +1,10 @@
 import React from 'react';
-import CreatedCircuitListItems from './CreatedCircuitListItem';
+import CreatedCircuitListItem from './CreatedCircuitListItem';
 
 export default ({ items = [] }) => (
 
     <ul className='item-wrapper'>
-        {items.map(item => <CreatedCircuitListItems {...item}/>)}
+        {items.map(item => <CreatedCircuitListItem key={item.idCircuit} {...item} />)}
     </ul>
-    
+
 );

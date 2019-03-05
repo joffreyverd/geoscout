@@ -1,15 +1,17 @@
-import React, {Component} from 'react';
-import '../css/app.css';
+import React, { Component } from 'react';
 
-import HomeMap from '../components/HomeMap'
+import '../css/app.css';
+import Map from '../components/Map'
 
 export default class Home extends Component {
-
+    state = {
+        circuits: []
+    }
     render() {
+        const { circuits } = this.state;
+
         return (
-            <>
-                <HomeMap/>           
-            </>
+            <Map class='map' circuits={circuits} />
         );
     }
 }

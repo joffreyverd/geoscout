@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
-import {Button, ModalBody, ModalFooter, Form, FormGroup,
-    Label, Input, Modal, ModalHeader} from 'reactstrap';
-import {withRouter, Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import {
+    Button, ModalBody, ModalFooter, Form, FormGroup,
+    Label, Input, Modal, ModalHeader
+} from 'reactstrap';
+import { withRouter, Link } from 'react-router-dom';
 
 class CreateCircuitModal extends Component {
     state = {
@@ -9,15 +11,15 @@ class CreateCircuitModal extends Component {
     };
 
     handleChange = (event) => {
-        this.setState({[event.target.name]: event.target.value});
+        this.setState({ [event.target.name]: event.target.value });
     }
 
     render() {
-        const {name} = this.state;
+        const { name } = this.state;
 
         return (
             <>
-                <Modal 
+                <Modal
                     isOpen={this.props.modal}
                     fade={false}
                     toggle={this.props.displayModal}>
@@ -26,23 +28,23 @@ class CreateCircuitModal extends Component {
                         <Form>
                             <FormGroup>
                                 <Label>Nom</Label>
-                                <Input 
+                                <Input
                                     type='text'
                                     name='name'
                                     value={name}
-                                    onChange={this.handleChange}/>
+                                    onChange={this.handleChange} />
                             </FormGroup>
                         </Form>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Link to={{pathname:'/circuit', state:{name:this.state.name}}}>
-                            <Button 
-                                color="primary" 
+                        <Link to={{ pathname: `/circuit/${this.state.name}` }}>
+                            <Button
+                                color="primary"
                                 onClick={this.displayModal}>Créer</Button>
                         </Link>
-                        <Button 
-                            color="secondary" 
+                        <Button
+                            color="secondary"
                             onClick={this.props.displayModal}>Annuler</Button>
                     </ModalFooter>
                 </Modal>
