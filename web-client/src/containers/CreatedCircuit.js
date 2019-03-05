@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import '../css/app.css';
 import CreatedCircuitList from '../components/circuit/CreatedCircuitList';
 import CreateCircuitModal from '../components/circuit/CreateCircuitModal';
 
