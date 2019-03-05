@@ -7,7 +7,9 @@ const evaluation = require('../controllers/evaluationController');
 module.exports = function(app)
 {
 	app.route('/user').get(user.listUser);
-	app.route('/create-user').post(user.createUser);
+	app.route('/signup').post(user.createUser);
+	app.route('/signin').post(user.login)
+	app.route('/whoami').get(user.whoami)
 	app.route('/relations').get(user.listRelations);
 	app.route('/ask-relation').post(user.askRelation);
 	app.route('/evaluations-circuit').post(evaluation.evaluationsCircuit);

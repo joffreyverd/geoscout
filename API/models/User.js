@@ -7,7 +7,7 @@ module.exports = (sequelize,DataTypes) =>
             firstname : {type : DataTypes.STRING, allowNull : true},
             lastname : {type : DataTypes.STRING, allowNull : true},
             picture : {type : DataTypes.STRING, allowNull : true},
-            email : {type : DataTypes.STRING, allowNull : true},
+            email : {type : DataTypes.STRING, allowNull : true,unique: true},
             password : {type : DataTypes.STRING, allowNull : true}
         },
 
@@ -17,8 +17,8 @@ module.exports = (sequelize,DataTypes) =>
     User.associate = (db) =>
     {
         User.belongsToMany( db.User, {through: db.Relation, as :'Relations'});
-        User.hasMany(db.Evaluation);
-        User.hasMany(db.AchievedCircuit)
+        User.hasMany(db.Evaluation,{foreignKey : 'id_user'});
+        User.hasMany(db.AchievedCircuit,{foreignKey : 'id_user'});
     }
 
     return User;

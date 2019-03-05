@@ -8,7 +8,13 @@ class CreateCircuitModal extends Component {
         name: ''
     };
 
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value});
+    }
+
     render() {
+        const {name} = this.state;
+
         return (
             <>
                 <Modal 
@@ -21,14 +27,16 @@ class CreateCircuitModal extends Component {
                             <FormGroup>
                                 <Label>Nom</Label>
                                 <Input 
-                                    type="text"
-                                    name="text"/>
+                                    type='text'
+                                    name='name'
+                                    value={name}
+                                    onChange={this.handleChange}/>
                             </FormGroup>
                         </Form>
                     </ModalBody>
 
                     <ModalFooter>
-                        <Link to={{pathname:'/new-circuit', state:{name:this.state.name}}}>
+                        <Link to={{pathname:'/circuit', state:{name:this.state.name}}}>
                             <Button 
                                 color="primary" 
                                 onClick={this.displayModal}>Créer</Button>

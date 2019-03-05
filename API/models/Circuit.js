@@ -3,7 +3,7 @@ module.exports = (sequelize,DataTypes) =>
     const Circuit = sequelize.define(
         'Circuit',
         {
-            id_circuit : {type : DataTypes.INTEGER,autoIncrement : true, allowNull : false,primaryKey : true},
+            id_circuit : {type : DataTypes.INTEGER, autoIncrement : true, allowNull : false, primaryKey : true},
             name : {type : DataTypes.STRING, allowNull : true},
             description : {type : DataTypes.STRING, allowNull : true},
             length : {type : DataTypes.FLOAT, allowNull : true},
@@ -17,10 +17,10 @@ module.exports = (sequelize,DataTypes) =>
 
     Circuit.associate = (db) =>
     {
-        Circuit.hasMany(db.Evaluation);
-        Circuit.hasMany(db.AchievedCircuit);
-        Circuit.hasMany(db.Step,{ onDelete: 'CASCADE' });
-        Circuit.belongsTo(db.User,{foreignKey : 'author_id',targetKey:'id_user'})
+        Circuit.hasMany(db.Evaluation,{foreignKey : 'id_circuit'});
+        Circuit.hasMany(db.AchievedCircuit,{foreignKey : 'id_circuit'});
+        Circuit.hasMany(db.Step,{foreignKey : 'id_circuit', onDelete: 'CASCADE' });
+        Circuit.belongsTo(db.User,{foreignKey : 'id_user',targetKey:'id_user'})
     }
     
     return Circuit;
