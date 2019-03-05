@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import MapView from 'react-native-maps';
 import {mapStyle} from './style/mapStyle';
+import {askLocation} from './utils/askLocation';
 
 const {width,height} = Dimensions.get('window')
 const ASPECT_RATIO = width/height
@@ -31,6 +32,7 @@ export default class GeoLocation extends React.Component{
     }
 
     componentDidMount() {
+        askLocation();
         navigator.geolocation.getCurrentPosition((position) => {
             var lat = parseFloat(position.coords.latitude)
             var long = parseFloat(position.coords.longitude)
@@ -74,7 +76,8 @@ export default class GeoLocation extends React.Component{
             <View style={styles.container}>
                 <MapView 
                 style={styles.map}
-                region={this.state.initialPosition}>
+                region={this.state.initialPosition}
+                customMapStyle={mapStyle}>
                     <MapView.Marker
                     coordinate={this.state.markerPosition}>
                         <View style={styles.radius}>

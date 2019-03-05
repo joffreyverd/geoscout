@@ -1,4 +1,5 @@
-export var mapStyle = [
+export var mapStyle = 
+    [
         {
             "featureType": "landscape",
             "elementType": "geometry",
