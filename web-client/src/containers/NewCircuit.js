@@ -76,7 +76,7 @@ export default class NewCircuit extends Component {
                     class='new-map'
                     steps={steps}
                     handleClick={this.handleClickMap}
-                    removeMarker={this.removeMarker} />
+                    removeMarker={this.removeStep} />
 
                 <div className='scroll-menu'>
 
