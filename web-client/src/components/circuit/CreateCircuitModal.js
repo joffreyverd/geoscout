@@ -3,7 +3,9 @@ import {
     Button, ModalBody, ModalFooter, Form, FormGroup,
     Label, Input, Modal, ModalHeader
 } from 'reactstrap';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+
+import api from '../../utils/httpMethods';
 
 class CreateCircuitModal extends Component {
     state = {
@@ -12,6 +14,18 @@ class CreateCircuitModal extends Component {
 
     handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
+    }
+
+    handleSubmit = () => {
+        api.post('circuit', {
+            name: this.state.name
+        }).then(circuit => {
+            this.props.displayModal();
+            const { history } = this.props;
+            history.push(`/circuit/${this.state.name}`);
+        }).catch(error =>
+            console.log(error)
+        );
     }
 
     render() {
@@ -38,13 +52,10 @@ class CreateCircuitModal extends Component {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Link to={{ pathname: `/circuit/${this.state.name}` }}>
-                            <Button
-                                color="primary"
-                                onClick={this.displayModal}>Créer</Button>
-                        </Link>
                         <Button
-                            color="secondary"
+                            color='primary' onClick={this.handleSubmit}>Créer</Button>
+                        <Button
+                            color='secondary'
                             onClick={this.props.displayModal}>Annuler</Button>
                     </ModalFooter>
                 </Modal>
