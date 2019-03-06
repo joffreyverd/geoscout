@@ -1,6 +1,6 @@
-# Akrobatt
+# Projet Akrobatt
 
-Repo Git du projet Acrobatt de l'équipe 5 composé de :
+Repo Git de l'équipe 5 composé de :
 
 - Antony Quentin
 - Quirin Quentin
@@ -8,6 +8,21 @@ Repo Git du projet Acrobatt de l'équipe 5 composé de :
 - Unterfinger Thomas
 - Verd Joffrey
 
+# Sujet
+
+Le but de se projet est de créer une application mobile de circuits touristiques / courses d'orientations.
+L'application mobile permet de jouer aux circuits créés et publiés par des utilisateurs sur l'application web.
+
 ------
 
-## Outils utilisés
+## Technologies utilisés
+
+ - API
+    - NodeJs
+    - Sequelize
+ - Base de données
+    - MySql
+ - Client Web
+    - ReactJs
+ - Client Mobile
+    - React-native
