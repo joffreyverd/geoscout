@@ -4,18 +4,36 @@ const utils = require('./utils');
 
 module.exports = 
 {
-    step : (req,res,next) => 
+    stepCircuit : (req,res,next) => 
     {
-        db.Step.findAll({where : {CircuitIdCircuit : req.body.id_circuit}})
-        .then((step) => res.json(step));
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            db.Step.findAll({where : {id_circuit : req.params.id_circuit}})
+            .then((step) => res.json(step));
+        }
+        else
+            res.sendStatus(401);    
+    },
+
+    //////////////////////////////////////////////////////////
+
+    step: (req,res,next) => 
+    {
+        if(utils.verifToken(req.headers['authorization']))
+        {
+            db.Step.findByPk(req.params.id_step)
+            .then((step) => res.json(step));
+        }
+        else
+            res.sendStatus(401);
     },
 
     //////////////////////////////////////////////////////////
 
     createStep : (req,res,next) =>
     {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
+        if(utils.verifToken(req.headers['authorization']))
         {
             db.Step.count({where : {id_circuit : req.body.id_circuit}})
             .then(count =>
@@ -27,24 +45,30 @@ module.exports =
                     latitude : req.body.latitude,
                     longitude : req.body.longitude,
                     description : req.body.description,
-                    order : count +1,
+                    order : count + 1,
                     instruction : req.body.instruction,
                     id_circuit : req.body.id_circuit
-                })
-                .then(res.sendStatus(201))
-            })
-            .catch((err) => {if(err) res.sendStatus(500)})
+                }).then(res.sendStatus(201));
+            }).catch((err) => {if(err) res.sendStatus(500)});
         }
         else
-            res.sendStatus(401)
+            res.sendStatus(401);
     },
+
+    //////////////////////////////////////////////////////////
+
+    changeOrder : (req,res,next) =>
+    {
+
+    },
+
+    //////////////////////////////////////////////////////////
 
     addQuestionToStep : (req,res,next) =>
     {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
+        if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.findByPk(req.body.step)
+            db.Step.findByPk(req.body.id_step)
             .then(step =>
             {
                 if(step)
@@ -62,38 +86,43 @@ module.exports =
                 else
                     throw 'err'
                 
-            })
-            .catch((err) => {if(err) res.sendStatus(500)})
+            }).catch((err) => {if(err) res.sendStatus(500)})
         }
         else
-            res.sendStatus(401)
+            res.sendStatus(401);
     },
+
+    //////////////////////////////////////////////////////////
 
     questionOfStep : (req,res,next) =>
     {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
+        if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.findByPk(req.body.step)
-            .then(step =>
-            {
-                if(step)
-                {
-                    db.Question.findAll(
-                    {
-                        where : {id_step : step.id_step},
-                        attributes : ['id_question','wording','points']
-                    })
-                    .then(questions => res.status(200).json(questions))
-                }
-                else
-                    throw 'err'
-                
-            })
+            db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points']})
+            
+            .then(questions => res.status(200).json(questions))
             .catch((err) => {if(err) {console.log(err);res.sendStatus(500)}})
         }
         else
-            res.sendStatus(401)
+            res.sendStatus(401);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    questionsOfStep : (req,res,next) =>
+    {
+        if(utils.verifToken(req.headers['authorization']))
+        {
+            db.Question.findAll(
+            {
+                where : {id_step : req.params.id_step},
+                attributes : ['id_question','wording','points']
+            })
+            .then(questions => res.status(200).json(questions))
+            .catch((err) => {if(err) {console.log(err);res.sendStatus(500)}})
+        }
+        else
+            res.sendStatus(401);
     }
 
 
