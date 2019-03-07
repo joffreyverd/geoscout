@@ -9,15 +9,17 @@ export default class Home extends Component {
         circuits: [],
     }
 
+    /*
     componentDidMount() {
-        api.get('circuit').then((data) => {
+        api.get('circuits').then((data) => {
             this.setState({
                 circuits: data,
             });
-        }).catch(error => {
+        }).catch((error) => {
             console.log(error);
-        })
+        });
     }
+    */
 
     render() {
         const { circuits } = this.state;

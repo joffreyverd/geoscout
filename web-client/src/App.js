@@ -8,7 +8,6 @@ import Menu from './components/Menu';
 
 import Home from './views/Home';
 import Account from './views/Account';
-import Authentication from './components/authentication/Authentication';
 import CreatedCircuit from './views/CreatedCircuit';
 import NewCircuit from './views/NewCircuit';
 import Achievement from './views/Achievement';
@@ -18,9 +17,10 @@ import api from './utils/httpMethods';
 library.add(faUser, faPlusCircle);
 
 class App extends Component {
+
     state = {
         isConnected: false,
-        user: {}
+        user: {},
     }
 
     componentDidMount() {
@@ -30,26 +30,24 @@ class App extends Component {
             }).catch((error) => {
                 console.log(error);
                 localStorage.removeItem('token');
-            })
+            });
         }
     }
 
-    login = (route, credentials) => {
-        return api.post(route, credentials).then((data) => {
-            localStorage.setItem('token', data.token)
-            this.setState({
-                isConnected: true,
-                user: data.user
-            })
-        })
-    }
+    login = (route, credentials) => api.post(route, credentials).then((data) => {
+        localStorage.setItem('token', data.token);
+        this.setState({
+            isConnected: true,
+            user: data.user,
+        });
+    })
 
     logout = () => {
         localStorage.removeItem('token');
         this.setState({
             isConnected: false,
-            user: {}
-        })
+            user: {},
+        });
     }
 
     render() {
@@ -63,7 +61,7 @@ class App extends Component {
                 <Route exact path='/' component={Home} />
                 {isConnected ?
                     <>
-                        <Route exact path='/account' render={(props) => <Account {...props} user={user} />} />
+                        <Route exact path='/account' render={props => <Account {...props} user={user} />} />
                         <Route exact path='/circuits' component={CreatedCircuit} />
                         <Route exact path='/circuit/:name' component={NewCircuit} />
                         <Route exact path='/achievements' component={Achievement} />
