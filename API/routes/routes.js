@@ -27,7 +27,7 @@ module.exports = function(app)
 	app.route('/circuits').get(circuit.circuits);
 	app.route('/circuit').post(circuit.createCircuit);
 	app.route('/publish-circuit').put(circuit.publicationCircuit);
-	app.route('/circuit/:id').put(circuit.updateCircuit);
+	app.route('/circuit/:id_circuit').put(circuit.updateCircuit);
 	app.route('/circuit').delete(circuit.deleteCircuit);
 
 	app.route('/question/:id_question').get(question.getQuestion);

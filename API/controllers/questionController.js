@@ -57,11 +57,9 @@ module.exports =
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Question.findByPk(req.params.id).then(circuit => {
-                if(question.id_user === id_user) {
-                    question.update(req.body);
-                }
-            })
+            db.Question.findByPk(req.params.id).then(question => {
+                question.update(req.body).then(() => res.status(200).send(question));
+            }).catch(() => {res.sendStatus(500)})
         }
         else
             res.sendStatus(401);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPlusCircle, faPen } from '@fortawesome/free-solid-svg-icons';
 
 import './css/app.css';
 import Menu from './components/Menu';
@@ -14,7 +14,7 @@ import Achievement from './views/Achievement';
 
 import api from './utils/httpMethods';
 
-library.add(faUser, faPlusCircle);
+library.add(faUser, faPlusCircle, faPen);
 
 class App extends Component {
 
