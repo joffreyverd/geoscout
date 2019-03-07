@@ -14,8 +14,14 @@ class UpdateStepModal extends Component {
     };
 
     componentDidUpdate(prevProps) {
-        if (prevProps.step !== this.props.step) {
-            this.setState(this.props.step)
+        const { step } = this.props
+        if (prevProps.step !== step) {
+            if (step) {
+                this.setState(Object.assign({}, step, {
+                    description: step.description || '',
+                    instruction: step.instruction || ''
+                }))
+            }
         }
     }
 
@@ -56,7 +62,7 @@ class UpdateStepModal extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>Description</Label>
+                                <Label>Description de l'étape</Label>
                                 <Input
                                     type='text'
                                     name='description'
@@ -66,7 +72,7 @@ class UpdateStepModal extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>Instruction</Label>
+                                <Label>Instruction de direction</Label>
                                 <Input
                                     type='text'
                                     name='instruction'

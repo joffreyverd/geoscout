@@ -61,7 +61,7 @@ export default class NewCircuit extends Component {
 
     removeStep = (idx) => {
         const step = this.state.steps[idx];
-        api.delete(`step/${step.id}`).then(() => {
+        api.delete(`step/${step.id_step}`).then(() => {
             // Suppression de l'étape dans la liste
             this.setState((prev) => {
                 prev.steps.splice(idx, 1);

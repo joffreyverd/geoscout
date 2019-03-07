@@ -25,7 +25,7 @@ class CreateCircuitModal extends Component {
         }).then((data) => {
             displayModal();
             const { history } = this.props;
-            history.push(`/circuit/${data.id}`);
+            history.push(`/circuit/${data.id_circuit}`);
         }).catch(error => console.log(error));
     }
 
