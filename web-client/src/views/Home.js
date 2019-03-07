@@ -11,13 +11,13 @@ export default class Home extends Component {
 
     /*
     componentDidMount() {
-        api.get('circuits').then((data) => {
-            this.setState({
-                circuits: data,
-            });
-        }).catch((error) => {
-            console.log(error);
-        });
+        // api.get('circuits').then((data) => {
+        //     this.setState({
+        //         circuits: data,
+        //     });
+        // }).catch(error => {
+        //     console.log(error);
+        // })
     }
     */
 

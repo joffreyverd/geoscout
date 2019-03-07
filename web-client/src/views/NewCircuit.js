@@ -6,33 +6,44 @@ import api from '../utils/httpMethods';
 export default class NewCircuit extends Component {
 
     state = {
+        circuit: {},
         steps: [],
     }
 
     componentDidMount() {
         const { id } = this.props.match.params;
         if (id) {
-            api.get('circuits');
+            api.get(`circuit/${id}`).then((circuit) => {
+                api.get(`steps/${id}`).then((steps) => {
+                    this.setState({
+                        circuit: circuit,
+                        steps: steps
+                    });
+                });
+            }).catch((error) => {
+                console.log(error)
+            })
         }
     }
 
+    // Création d'une étape dans la base
     handleClickMap = (event) => {
-        const { steps } = this.state;
+        const { steps, circuit } = this.state;
         const index = steps.length;
         const step = {
             name: `Etape ${index}`,
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
             order: index,
+            id_circuit: circuit.id
         };
 
         api.post('step', step).then((data) => {
             this.setState((prev) => {
-                prev.steps.push(step);
+                prev.steps.push(data);
                 return { steps: prev.steps };
-            });
-        }).catch(error => console.log(error.text));
-
+            })
+        }).catch((error) => console.log(error.text))
     }
 
     removeStep = (idx) => {
@@ -56,8 +67,7 @@ export default class NewCircuit extends Component {
     }
 
     render() {
-        const { steps } = this.state;
-        const { match: { params: { name } } } = this.props;
+        const { steps, circuit } = this.state;
 
         return (
             <div className='view-wrapper'>
@@ -70,7 +80,7 @@ export default class NewCircuit extends Component {
 
                 <div className='scroll-menu'>
 
-                    <h3 className='circuit-title'>{name}</h3>
+                    <h3 className='circuit-title'>{circuit.name}</h3>
 
                     <StepList
                         items={steps}
