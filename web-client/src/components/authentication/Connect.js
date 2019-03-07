@@ -13,6 +13,7 @@ class Connect extends Component {
             email: '',
             password: '',
         };
+        ({ displayModal } = this.props);
     }
 
 

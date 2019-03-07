@@ -4,14 +4,14 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUser, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import './css/app.css';
-import Menu from './components/NavBar';
+import Menu from './components/Menu';
 
-import Home from './containers/Home';
-import Account from './containers/Account';
+import Home from './views/Home';
+import Account from './views/Account';
 import Authentication from './components/authentication/Authentication';
-import CreatedCircuit from './containers/CreatedCircuit';
-import NewCircuit from './containers/NewCircuit';
-import Achievement from './containers/Achievement';
+import CreatedCircuit from './views/CreatedCircuit';
+import NewCircuit from './views/NewCircuit';
+import Achievement from './views/Achievement';
 
 library.add(faUser, faPlusCircle);
 
