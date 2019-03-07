@@ -4,10 +4,12 @@ function request(route, method, body) {
     const options = {
         method: method,
         headers: {
-            'Content-Type': 'application/json',
-            authorization: localStorage.getItem('token'),
+            'Content-Type': 'application/json'
         },
     };
+    if (localStorage.getItem('token')) {
+        options.headers.authorization = 'Bearer ' + localStorage.getItem('token');
+    }
 
     if (body) {
         options.body = JSON.stringify(body);

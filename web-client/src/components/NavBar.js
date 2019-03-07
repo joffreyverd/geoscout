@@ -7,8 +7,7 @@ import Authentication from './authentication/Authentication';
 export default class Menu extends React.Component {
 
     state = {
-        isConnected: true,
-        responsiveNavBarMode: false,
+        responsiveNavBarMode: false
     }
 
     toggle = () => {
@@ -18,7 +17,8 @@ export default class Menu extends React.Component {
     }
 
     render() {
-        const { isConnected, responsiveNavBarMode } = this.state;
+        const { responsiveNavBarMode } = this.state;
+        const { isConnected, login, logout } = this.props;
 
         return (
             <div>
@@ -39,7 +39,7 @@ export default class Menu extends React.Component {
                                     <Link to='/achievements'>Accomplissements</Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link to='/' onClick={() => this.setState({ isConnected: false })}>Déconnexion</Link>
+                                    <Link to='/' onClick={logout}>Déconnexion</Link>
                                 </NavItem>
                                 <NavItem>
                                     <Authentication isConnected={isConnected} />
@@ -51,7 +51,7 @@ export default class Menu extends React.Component {
                         <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
                             <Nav className='flex-end' navbar>
                                 <NavItem>
-                                    <Authentication isConnected={isConnected} />
+                                    <Authentication isConnected={isConnected} login={login} />
                                 </NavItem>
                             </Nav>
                         </Collapse>
