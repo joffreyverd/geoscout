@@ -144,6 +144,7 @@ h1 {
   text-align: center;
   padding: 10px;
   margin: 0px;
+  position: relative;
 }
 
 .step-wrapper {
@@ -184,3 +185,13 @@ h1 {
   top: 5px;
   right: 25px;
 }
+
+.update-circuit {
+  position: absolute;
+  bottom: 30px;
+  right: 20px;
+}
+ 
+ .update-circuit:hover {
+   cursor: pointer;
+ }

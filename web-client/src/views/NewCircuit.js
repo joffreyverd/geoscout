@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Map from '../components/Map';
 import StepList from '../components/step/StepList';
 import UpdateStepModal from '../components/step/UpdateStepModal';
+import UpdateCircuitModal from '../components/circuit/UpdateCircuitModal';
+
 import api from '../utils/httpMethods';
 
 export default class NewCircuit extends Component {
@@ -9,7 +12,8 @@ export default class NewCircuit extends Component {
     state = {
         circuit: {},
         steps: [],
-        modalOpen: false
+        modalOpen: false,
+        updateCircuitModalOpen: false,
     }
 
     componentDidMount() {
@@ -19,18 +23,24 @@ export default class NewCircuit extends Component {
                 api.get(`steps/${id}`).then((steps) => {
                     this.setState({
                         circuit: circuit,
-                        steps: steps
+                        steps: steps,
                     });
                 });
             }).catch((error) => {
-                console.log(error)
-            })
+                console.log(error);
+            });
         }
     }
 
     displayModal = () => {
         this.setState(previousState => ({
             modalOpen: !previousState.modalOpen,
+        }));
+    }
+
+    displayUpdateCircuitModal = () => {
+        this.setState(previousState => ({
+            updateCircuitModalOpen: !previousState.updateCircuitModalOpen,
         }));
     }
 
@@ -48,15 +58,15 @@ export default class NewCircuit extends Component {
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
             order: index,
-            id_circuit: circuit.id_circuit
+            id_circuit: circuit.id_circuit,
         };
 
         api.post('step', step).then((data) => {
             this.setState((prev) => {
                 prev.steps.push(data);
                 return { steps: prev.steps };
-            })
-        }).catch((error) => console.log(error.text))
+            });
+        }).catch(error => console.log(error.text));
     }
 
     removeStep = (idx) => {
@@ -70,13 +80,17 @@ export default class NewCircuit extends Component {
         }).catch(error => console.log(error.text));
     }
 
-    updateStep = (step) => {
-        return api.put(`step/${step.id_step}`, step).then(() => {
-            this.setState((prev) => {
-                prev.steps.splice(step.order, 1, step);
-            })
-        })
-    }
+    updateStep = step => api.put(`step/${step.id_step}`, step).then(() => {
+        this.setState((prev) => {
+            prev.steps.splice(step.order, 1, step);
+        });
+    })
+
+    updateCircuit = circuit => api.put(`circuit/${circuit.id_circuit}`, circuit).then(() => {
+        this.setState((prev) => {
+            prev.circuit.splice(circuit.order, 1, circuit);
+        });
+    })
 
     changeStepOrder = (prevIdx, newIdx) => {
         this.setState((prev) => {
@@ -88,7 +102,7 @@ export default class NewCircuit extends Component {
     }
 
     render() {
-        const { steps, circuit, stepFocus, modalOpen } = this.state;
+        const { steps, circuit, stepFocus, modalOpen, updateCircuitModalOpen } = this.state;
 
         return (
             <div className='view-wrapper'>
@@ -101,7 +115,16 @@ export default class NewCircuit extends Component {
 
                 <div className='scroll-menu'>
 
-                    <h3 className='circuit-title'>{circuit.name}</h3>
+                    <div className='circuit-title'>
+                        <h3>{circuit.name}</h3>
+                        <FontAwesomeIcon
+                            className='update-circuit'
+                            onClick={this.displayUpdateCircuitModal}
+                            icon='pen'
+                            size='1x'
+                            color='#3B62FF'
+                        />
+                    </div>
 
                     <StepList
                         items={steps}
@@ -109,11 +132,20 @@ export default class NewCircuit extends Component {
                     />
 
                 </div>
-                <UpdateStepModal step={stepFocus}
+                <UpdateStepModal
+                    step={stepFocus}
                     open={modalOpen}
                     displayModal={this.displayModal}
                     updateStep={this.updateStep}
                 />
+
+                <UpdateCircuitModal
+                    step={stepFocus}
+                    open={updateCircuitModalOpen}
+                    displayModal={this.displayUpdateCircuitModal}
+                    updateStep={this.updateCircuit}
+                />
+
             </div>
         );
     }
