@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faUser, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUser, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import './css/app.css';
 import Menu from './components/NavBar';
@@ -16,6 +16,7 @@ import Achievement from './containers/Achievement';
 library.add(faUser, faPlusCircle);
 
 class App extends Component {
+
     render() {
         return (
             <>
@@ -32,6 +33,7 @@ class App extends Component {
             </>
         );
     }
+
 }
 
 export default withRouter(App);

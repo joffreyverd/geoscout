@@ -12,28 +12,29 @@ const Steps = [
     { name: 'étape 6', description: 'ceci est une étape', order: 6 },
     { name: 'étape 7', description: 'ceci est une étape', order: 7 },
     { name: 'étape 8', description: 'ceci est une étape', order: 8 },
-    { name: 'étape 9', description: 'ceci est une étape', order: 9 }
+    { name: 'étape 9', description: 'ceci est une étape', order: 9 },
 ];
 
 export default class NewCircuit extends Component {
+
     state = {
-        steps: []
+        steps: [],
     }
 
     componentDidMount() {
-        if (this.props.match.params.id) {
-            api.get('circuits')
+        const { id } = this.props.match.params;
+        if (id) {
+            api.get('circuits');
         }
     }
 
     handleClickMap = (event) => {
-        let step = { longitude: event.lngLat[0], latitude: event.lngLat[1] }
-
+        const step = { longitude: event.lngLat[0], latitude: event.lngLat[1] };
         // Supprimer ce setState lors de la connexion
         this.setState((prev) => {
-            prev.steps.push(step)
-            return { steps: prev.steps }
-        })
+            prev.steps.push(step);
+            return { steps: prev.steps };
+        });
 
         // api.post('step',step).then((data) => {
         //     this.setState((prev) => {
@@ -47,9 +48,9 @@ export default class NewCircuit extends Component {
     removeStep = (idx) => {
         // Suppression de l'étape dans la liste
         this.setState((prev) => {
-            prev.steps.splice(idx, 1)
-            return { steps: prev.steps }
-        })
+            prev.steps.splice(idx, 1);
+            return { steps: prev.steps };
+        });
 
         // let step = this.state.steps[idx];
         // api.delete(`step/${step.id}`).then(() => {
@@ -63,17 +64,17 @@ export default class NewCircuit extends Component {
 
     changeStepOrder = (prevIdx, newIdx) => {
         this.setState((prev) => {
-            let step = prev.step.splice(prevIdx, 1)[0]
+            const step = prev.step.splice(prevIdx, 1)[0];
             // inserts at newIdx position
-            prev.steps.splice(newIdx, 0, step)
-            return { steps: prev.steps }
-        })
+            prev.steps.splice(newIdx, 0, step);
+            return { steps: prev.steps };
+        });
     }
 
     render() {
         const { steps } = this.state;
         const { match: { params: { name } } } = this.props;
-        console.log(this.props)
+        console.log(this.props);
 
         return (
             <div className='view-wrapper'>
@@ -81,17 +82,20 @@ export default class NewCircuit extends Component {
                     class='new-map'
                     steps={steps}
                     handleClick={this.handleClickMap}
-                    removeMarker={this.removeStep} />
+                    removeMarker={this.removeStep}
+                />
 
                 <div className='scroll-menu'>
 
                     <h3 className='circuit-title'>{name}</h3>
 
                     <StepList
-                        items={Steps} />
+                        items={Steps}
+                    />
 
                 </div>
             </div>
         );
     }
+
 }

@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 
-import Map from '../components/Map'
+import Map from '../components/Map';
 import api from '../utils/httpMethods';
 
 export default class Home extends Component {
+
     state = {
-        circuits: []
+        circuits: [],
     }
 
     componentDidMount() {
         api.get('circuit').then((data) => {
             this.setState({
-                circuits: data
-            })
-        })
+                circuits: data,
+            });
+        });
     }
 
     render() {
@@ -23,4 +24,5 @@ export default class Home extends Component {
             <Map class='map' circuits={circuits} />
         );
     }
+
 }

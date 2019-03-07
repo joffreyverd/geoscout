@@ -6,16 +6,14 @@ import Authentication from './authentication/Authentication';
 
 export default class Menu extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            isConnected: true,
-            responsiveNavBarMode: false,
-        };
+    state = {
+        isConnected: true,
+        responsiveNavBarMode: false,
     }
+
     toggle = () => {
-        this.setState((previousState) => ({
-            responsiveNavBarMode: !previousState.responsiveNavBarMode
+        this.setState(previousState => ({
+            responsiveNavBarMode: !previousState.responsiveNavBarMode,
         }));
     }
 
@@ -63,4 +61,5 @@ export default class Menu extends React.Component {
             </div>
         );
     }
+
 }

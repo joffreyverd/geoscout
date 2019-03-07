@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
 import {
     Button, ModalBody, ModalFooter, Form, FormGroup,
-    Label, Input, Modal, ModalHeader
+    Label, Input, Modal, ModalHeader,
 } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
 import api from '../../utils/httpMethods';
 
 class CreateCircuitModal extends Component {
+
     state = {
-        name: ''
+        name: '',
     };
 
     handleChange = (event) => {
@@ -17,26 +18,27 @@ class CreateCircuitModal extends Component {
     }
 
     handleSubmit = () => {
+        const { name } = this.state;
         api.post('circuit', {
-            name: this.state.name
-        }).then(circuit => {
+            name: name,
+        }).then((circuit) => {
             this.props.displayModal();
             const { history } = this.props;
-            history.push(`/circuit/${this.state.name}`);
-        }).catch(error =>
-            console.log(error)
-        );
+            history.push(`/circuit/${name}`);
+        }).catch(error => console.log(error));
     }
 
     render() {
         const { name } = this.state;
+        const { modal, displayModal } = this.props;
 
         return (
             <>
                 <Modal
-                    isOpen={this.props.modal}
+                    isOpen={modal}
                     fade={false}
-                    toggle={this.props.displayModal}>
+                    toggle={displayModal}
+                >
                     <ModalHeader>Nouveau circuit</ModalHeader>
                     <ModalBody>
                         <Form>
@@ -46,22 +48,29 @@ class CreateCircuitModal extends Component {
                                     type='text'
                                     name='name'
                                     value={name}
-                                    onChange={this.handleChange} />
+                                    onChange={this.handleChange}
+                                />
                             </FormGroup>
                         </Form>
                     </ModalBody>
 
                     <ModalFooter>
                         <Button
-                            color='primary' onClick={this.handleSubmit}>Créer</Button>
+                            color='primary'
+                            onClick={this.handleSubmit}
+                        >Créer
+                        </Button>
                         <Button
                             color='secondary'
-                            onClick={this.props.displayModal}>Annuler</Button>
+                            onClick={displayModal}
+                        >Annuler
+                        </Button>
                     </ModalFooter>
                 </Modal>
             </>
         );
     }
+
 }
 
 export default withRouter(CreateCircuitModal);

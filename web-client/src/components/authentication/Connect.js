@@ -6,15 +6,17 @@ class Connect extends Component {
 
     constructor(props) {
         super(props);
+
         this.state = {
             email: '',
             password: '',
-            modal: props.modal,
-            displayModal: props.displayModal
         };
     }
 
     render() {
+
+        const { displayModal } = this.props;
+
         return (
             <>
                 <ModalBody>
@@ -22,31 +24,38 @@ class Connect extends Component {
                         <FormGroup>
                             <Label>Email</Label>
                             <Input
-                                type="email"
-                                name="email"
-                                placeholder="Saisissez votre email" />
+                                type='email'
+                                name='email'
+                                placeholder='Saisissez votre email'
+                            />
                         </FormGroup>
                         <FormGroup>
                             <Label>Mot de passe</Label>
                             <Input
-                                type="password"
-                                name="password"
-                                placeholder="Saisissez votre mot de passe" />
+                                type='password'
+                                name='password'
+                                placeholder='Saisissez votre mot de passe'
+                            />
                         </FormGroup>
                     </Form>
                 </ModalBody>
 
                 <ModalFooter>
                     <Button
-                        color="primary"
-                        onClick={this.displayModal}>Connexion</Button>
+                        color='primary'
+                        onClick={this.displayModal}
+                    >Connexion
+                    </Button>
                     <Button
-                        color="secondary"
-                        onClick={this.displayModal}>Annuler</Button>
+                        color='secondary'
+                        onClick={this.displayModal}
+                    >Annuler
+                    </Button>
                 </ModalFooter>
             </>
         );
     }
+
 }
 
 export default withRouter(Connect);
