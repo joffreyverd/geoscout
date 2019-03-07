@@ -91,7 +91,7 @@ export default class CreatedCircuit extends Component {
                     onClick={this.displayModal}
                     icon='plus-circle'
                     size='3x'
-                    color='#3B62FF'
+                    color='#2c3e50'
                 />
 
                 <CreateCircuitModal
