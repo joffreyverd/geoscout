@@ -16,29 +16,29 @@ class Register extends Component {
             repeatPassword: ''
         };
     }
-    
+
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value
         });
     }
-    
+
     handleSubmit = () => {
         // Copie du state dans un nouvel objet pour pouvoir supprimer des propriétés
         let user = Object.assign({}, this.state);
         delete user.repeatPassword;
-        
+
         api.post('signup', user).then((data) => {
             //success
         }).catch((error) => {
             //error
         });
-        
+
     }
 
     render() {
         const { firstname, lastname, email, password, repeatPassword } = this.state;
-        
+
         return (
             <>
                 <ModalBody>
@@ -48,24 +48,24 @@ class Register extends Component {
                             <Input
                                 type="text"
                                 name="lastname"
-                                onChange={ this.handleChange }
-                                value={ lastname } />
+                                onChange={this.handleChange}
+                                value={lastname} />
                         </FormGroup>
                         <FormGroup>
                             <Label>Prénom</Label>
                             <Input
                                 type="text"
                                 name="firstname"
-                                onChange={ this.handleChange }
-                                value={ firstname } />
+                                onChange={this.handleChange}
+                                value={firstname} />
                         </FormGroup>
                         <FormGroup>
                             <Label>Email</Label>
                             <Input
                                 type="email"
                                 name="email"
-                                onChange={ this.handleChange }
-                                value={ email } />
+                                onChange={this.handleChange}
+                                value={email} />
                         </FormGroup>
 
                         <Label>Mot de passe</Label>
@@ -74,16 +74,16 @@ class Register extends Component {
                                 type="password"
                                 name="password"
                                 placeholder="Plus de 8 caractères"
-                                onChange={ this.handleChange }
-                                value={ password } />
+                                onChange={this.handleChange}
+                                value={password} />
                         </FormGroup>
                         <FormGroup>
                             <Input
                                 type="password"
                                 name="repeatPassword"
                                 placeholder="Répétez votre mot de passe"
-                                onChange={ this.handleChange }
-                                value={ repeatPassword } />
+                                onChange={this.handleChange}
+                                value={repeatPassword} />
                         </FormGroup>
                     </Form>
                 </ModalBody>
