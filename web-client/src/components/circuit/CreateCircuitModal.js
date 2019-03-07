@@ -19,10 +19,11 @@ class CreateCircuitModal extends Component {
 
     handleSubmit = () => {
         const { name } = this.state;
+        const { displayModal } = this.props;
         api.post('circuit', {
             name: name,
-        }).then((circuit) => {
-            this.props.displayModal();
+        }).then(() => {
+            displayModal();
             const { history } = this.props;
             history.push(`/circuit/${name}`);
         }).catch(error => console.log(error));

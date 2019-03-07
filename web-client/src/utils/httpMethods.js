@@ -4,11 +4,11 @@ function request(route, method, body) {
     const options = {
         method: method,
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
         },
     };
     if (localStorage.getItem('token')) {
-        options.headers.authorization = 'Bearer ' + localStorage.getItem('token');
+        options.headers.authorization = `Bearer ${localStorage.getItem('token')}`;
     }
 
     if (body) {
@@ -22,7 +22,9 @@ function request(route, method, body) {
 function checkStatus(response) {
     if (response.status === 201)
         return Promise.resolve();
-    if (response.status >= 200 && response.status < 300) { return Promise.resolve(response.json()); }
+
+    if (response.ok)
+        return Promise.resolve(response.json());
 
     return Promise.reject({ code: response.status, text: response.text });
 }
