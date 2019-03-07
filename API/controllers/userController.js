@@ -7,22 +7,13 @@ const utils = require('./utils')
 module.exports = 
 {
     //////////////////////////////////////////////////////////
-    
-    listUser : (req,res,next) => 
-    {
-        db.User.findAll()
-        .then((user) => res.json(user));
-    },
-
-    //////////////////////////////////////////////////////////
 
     createUser : (req,res,next) => 
     {
-        let hashedPassword = bcrypt.hashSync(req.body.password, 12);
         db.User.create(
         {
             'email' : req.body.email,
-            'password' : hashedPassword,
+            'password' : bcrypt.hashSync(req.body.password, 12),
             'firstname' : req.body.firstname,
             'lastname' : req.body.lastname,
             'picture' : req.body.picture
@@ -31,7 +22,7 @@ module.exports =
         {
             return  token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
         })
-        .then(token => res.sendStatus(200))
+        res.status(201).send({ auth: true, token: token,User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}})
         .catch(err => res.status(500).send({message : 'Une erreur est survenue lors de la création de votre compte'}))
     },
 
@@ -48,7 +39,7 @@ module.exports =
                 if(obj)
                 {
                     token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
-                    res.status(200).send({ auth: true, token: token });
+                    res.status(200).send({ auth: true, token: token,User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}});
                 }
                     
                 else
@@ -66,7 +57,11 @@ module.exports =
         let id = jwt.verify(token.split(' ')[1], config.secret, (err, decoded) =>
         {
             if (err) return res.status(401).send({ auth: false, message: 'Informations' });
-            else return res.sendStatus(200)
+            else
+            {
+                db.User.findByPk(decoded.id_user,{attributes : ['firstname','lastname','id_user']})
+                .then(User => res.status(200).send(User))
+            }
         });
     },
 
@@ -110,7 +105,7 @@ module.exports =
                 db.User.findByPk(id_user).then(user => {user.addRelation(friend,{through : {status : '0'}}); return user})
                 .then(user => friend.addRelation(user,{through : {status : '0'}}))
             })
-            .then(() => res.sendStatus(200))
+            .then(() => res.status(201).send(friend))
             .catch((err) => {if(err) res.sendStatus(500)});
         }
         else

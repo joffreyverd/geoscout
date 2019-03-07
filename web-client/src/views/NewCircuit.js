@@ -31,7 +31,7 @@ export default class NewCircuit extends Component {
         const { steps, circuit } = this.state;
         const index = steps.length;
         const step = {
-            name: 'Etape ' + index,
+            name: `Etape ${index}`,
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
             order: index,
@@ -47,14 +47,14 @@ export default class NewCircuit extends Component {
     }
 
     removeStep = (idx) => {
-        let step = this.state.steps[idx];
+        const step = this.state.steps[idx];
         api.delete(`step/${step.id}`).then(() => {
             // Suppression de l'étape dans la liste
             this.setState((prev) => {
-                prev.steps.splice(idx, 1)
-                return { steps: prev.steps }
-            })
-        }).catch((error) => console.log(error.text))
+                prev.steps.splice(idx, 1);
+                return { steps: prev.steps };
+            });
+        }).catch(error => console.log(error.text));
     }
 
     changeStepOrder = (prevIdx, newIdx) => {
