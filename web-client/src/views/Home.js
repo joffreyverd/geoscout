@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import Map from '../components/Map';
-import api from '../utils/httpMethods';
+// import api from '../utils/httpMethods';
 
 export default class Home extends Component {
 
