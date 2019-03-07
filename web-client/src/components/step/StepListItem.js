@@ -1,17 +1,17 @@
 import React from 'react';
 
-export default ({ name, description, order }) => (
-    <li className='step-wrapper-item'>
+export default ({ step, onClickItem }) => (
+    <li className='step-wrapper-item' onClick={() => onClickItem(step)}>
 
         <div>
-            <span className='step-name'>{name}</span>
+            <span className='step-name'>{step.name}</span>
         </div>
 
         <div>
-            <span>{description}</span>
+            <span>{step.description}</span>
         </div>
 
-        <span className='order-item'>{order}</span>
+        <span className='order-item'>{step.order}</span>
 
     </li>
 );

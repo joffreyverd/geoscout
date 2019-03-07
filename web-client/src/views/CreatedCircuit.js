@@ -34,7 +34,7 @@ export default class CreatedCircuit extends Component {
     }
 
     componentDidMount = () => {
-        api.get('myCircuits').then((data) => {
+        api.get('my-circuits').then((data) => {
             this.setState({ circuits: data });
         }).catch(error => console.log(error));
     }

@@ -154,6 +154,7 @@ h1 {
 }
 
 .step-wrapper-item {
+  cursor: pointer;
   display: flex;
   padding: 10px;
   flex-direction: column;
@@ -161,10 +162,17 @@ h1 {
   height : 100px;
   list-style: none;
   position: relative;
+  transition: .2s;
 }
 
 .step-wrapper-item:nth-child(odd) {
   background-color: #D4E3FF;
+}
+
+.step-wrapper-item:hover{
+  color: white;
+  background-color: #3B62FF;
+  transition: .2s;
 }
 
 .step-name {

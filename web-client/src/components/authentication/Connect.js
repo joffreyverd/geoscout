@@ -7,7 +7,7 @@ class Connect extends Component {
 
     constructor(props) {
         super(props);
-        const { login } = this.props;
+
         this.state = {
             email: '',
             password: '',

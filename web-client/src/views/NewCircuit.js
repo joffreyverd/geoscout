@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Map from '../components/Map';
 import StepList from '../components/step/StepList';
+import UpdateStepModal from '../components/step/UpdateStepModal';
 import api from '../utils/httpMethods';
 
 export default class NewCircuit extends Component {
@@ -8,6 +9,7 @@ export default class NewCircuit extends Component {
     state = {
         circuit: {},
         steps: [],
+        modalOpen: false
     }
 
     componentDidMount() {
@@ -26,6 +28,17 @@ export default class NewCircuit extends Component {
         }
     }
 
+    displayModal = () => {
+        this.setState(previousState => ({
+            modalOpen: !previousState.modalOpen,
+        }));
+    }
+
+    onClickItem = (step) => {
+        this.setState({ stepFocus: step });
+        this.displayModal();
+    }
+
     // Création d'une étape dans la base
     handleClickMap = (event) => {
         const { steps, circuit } = this.state;
@@ -35,7 +48,7 @@ export default class NewCircuit extends Component {
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
             order: index,
-            id_circuit: circuit.id
+            id_circuit: circuit.id_circuit
         };
 
         api.post('step', step).then((data) => {
@@ -58,9 +71,9 @@ export default class NewCircuit extends Component {
     }
 
     updateStep = (step) => {
-        api.put(`step/${step.id}`, step).then(() => {
+        return api.put(`step/${step.id_step}`, step).then(() => {
             this.setState((prev) => {
-                // modification de l'array steps
+                prev.steps.splice(step.order, 1, step);
             })
         })
     }
@@ -75,7 +88,7 @@ export default class NewCircuit extends Component {
     }
 
     render() {
-        const { steps, circuit } = this.state;
+        const { steps, circuit, stepFocus, modalOpen } = this.state;
 
         return (
             <div className='view-wrapper'>
@@ -92,9 +105,15 @@ export default class NewCircuit extends Component {
 
                     <StepList
                         items={steps}
+                        onClickItem={this.onClickItem}
                     />
 
                 </div>
+                <UpdateStepModal step={stepFocus}
+                    open={modalOpen}
+                    displayModal={this.displayModal}
+                    updateStep={this.updateStep}
+                />
             </div>
         );
     }

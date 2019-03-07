@@ -20,9 +20,6 @@ function request(route, method, body) {
 }
 
 function checkStatus(response) {
-    if (response.status === 201)
-        return Promise.resolve();
-
     if (response.ok)
         return Promise.resolve(response.json());
 
