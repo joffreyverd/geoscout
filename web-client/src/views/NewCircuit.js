@@ -57,6 +57,14 @@ export default class NewCircuit extends Component {
         }).catch(error => console.log(error.text));
     }
 
+    updateStep = (step) => {
+        api.put(`step/${step.id}`, step).then(() => {
+            this.setState((prev) => {
+                // modification de l'array steps
+            })
+        })
+    }
+
     changeStepOrder = (prevIdx, newIdx) => {
         this.setState((prev) => {
             const step = prev.step.splice(prevIdx, 1)[0];
