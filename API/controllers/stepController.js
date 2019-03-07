@@ -148,7 +148,7 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Step.findByPk(Request.params.id_step).then(step => {
+            db.Step.findByPk(req.params.id_step).then(step => {
                 db.Circuit.findByPk(step.id_circuit).then(circuit => {
                     if (circuit.id_user === id_user) {
                         step.destroy().then(() => res.sendStatus(200));
