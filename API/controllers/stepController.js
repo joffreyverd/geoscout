@@ -170,7 +170,7 @@ module.exports =
             db.Step.findByPk(req.params.id_step).then(step => {
                 db.Circuit.findByPk(step.id_circuit).then(circuit => {
                     if(circuit.id_user === id_user) {
-                        step.update(req.body).then(() => res.sendStatus(200).send(step));
+                        step.update(req.body).then(() => res.status(200).send(step));
                     }
                 })
             }).catch(() => res.sendStatus(500));

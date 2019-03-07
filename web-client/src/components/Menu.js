@@ -23,7 +23,6 @@ export default class Menu extends React.Component {
         return (
             <div>
                 <Navbar expand='md'>
-
                     <Link to='/'>
                         <img src='/img/logoGeoScoutWhite.png' className='logo' alt='GeoScout' />
                     </Link>
