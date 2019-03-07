@@ -4,6 +4,7 @@ import {
     Label, Input, Modal, ModalHeader,
 } from 'reactstrap';
 
+import api from '../../utils/httpMethods';
 
 class UpdateStepModal extends Component {
 
@@ -23,6 +24,12 @@ class UpdateStepModal extends Component {
                 }))
             }
         }
+    }
+
+    fetchQuestion = (id_step) => {
+        api.get(`step/${id_step}/questions`).then((data) => {
+            this.setState({ questions: data })
+        })
     }
 
     handleChange = (event) => {

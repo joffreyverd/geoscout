@@ -20,9 +20,11 @@ function request(route, method, body) {
 }
 
 function checkStatus(response) {
-    if (response.ok)
+    if (response.ok) {
+        if (response.status === 204)
+            return Promise.resolve();
         return Promise.resolve(response.json());
-
+    }
     return Promise.reject({ code: response.status, text: response.text });
 }
 
