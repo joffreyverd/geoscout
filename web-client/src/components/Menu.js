@@ -25,7 +25,7 @@ export default class Menu extends React.Component {
                 <Navbar expand='md'>
 
                     <Link to='/'>
-                        <img src='/img/logo.png' className='logo' alt='GeoScout' />
+                        <img src='/img/logoGeoScoutWhite.png' className='logo' alt='GeoScout' />
                     </Link>
                     <NavbarToggler onClick={this.toggle} />
 
