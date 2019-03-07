@@ -4,7 +4,8 @@ import {
     Text,
     StyleSheet,
     View,
-    Dimensions
+    Dimensions,
+    Image
 } from 'react-native';
 import MapView from 'react-native-maps';
 import {mapStyle} from './style/mapStyle';
@@ -91,7 +92,10 @@ export default class GeoLocation extends React.Component{
                 {
                     !this.state.ready && (
                         <>
-                        <Text style={styles.big}>Bienvenue à toi GeoScouter !</Text>
+                        <Image
+                        style={{width: (width*0.8), height: (height*0.1)}}
+                        source={require('./img/logoGeoScout.png')}
+                        />
                         <ActivityIndicator style={styles.loaderMargin} size='large' color='#2c3e50' />
                         </>
                 )}
