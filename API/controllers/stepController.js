@@ -151,8 +151,7 @@ module.exports =
             db.Step.findByPk(Request.params.id_step).then(step => {
                 db.Circuit.findByPk(step.id_circuit).then(circuit => {
                     if (circuit.id_user === id_user) {
-                        db.Step.destroy({where : {id_step : req.params.id_step}})
-                        .then(() => res.sendStatus(200));
+                        step.destroy().then(() => res.sendStatus(200));
                     }
                 })
             }).catch(() => res.sendStatus(500));
