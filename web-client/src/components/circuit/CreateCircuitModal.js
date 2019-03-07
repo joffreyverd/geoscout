@@ -22,10 +22,10 @@ class CreateCircuitModal extends Component {
         const { displayModal } = this.props;
         api.post('circuit', {
             name: name,
-        }).then(() => {
+        }).then((data) => {
             displayModal();
             const { history } = this.props;
-            history.push(`/circuit/${name}`);
+            history.push(`/circuit/${data.id}`);
         }).catch(error => console.log(error));
     }
 

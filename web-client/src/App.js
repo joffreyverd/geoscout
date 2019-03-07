@@ -65,7 +65,7 @@ class App extends Component {
                     <>
                         <Route exact path='/account' render={(props) => <Account {...props} user={user} />} />
                         <Route exact path='/circuits' component={CreatedCircuit} />
-                        <Route exact path='/circuit/:name' component={NewCircuit} />
+                        <Route exact path='/circuit/:id' component={NewCircuit} />
                         <Route exact path='/achievements' component={Achievement} />
                     </>
                     : null}
