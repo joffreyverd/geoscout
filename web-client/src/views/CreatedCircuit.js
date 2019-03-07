@@ -3,41 +3,29 @@ import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reac
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import '../css/app.css';
-//import api from '../../utils/httpMethods';
 import CreatedCircuitList from '../components/circuit/CreatedCircuitList';
 import CreateCircuitModal from '../components/circuit/CreateCircuitModal';
 
-const Circuits = [{
-    idCircuit: 1, idUser: 3, name: 'Les Vosges', description: 'C\'est une super randonnée !',
-    length: '21km', duration: '8 heures', needInternet: false, published: true, version: 3, level: 'intermédiaire'
-},
-{
-    idCircuit: 2, idUser: 3, name: 'Les Alpes', description: 'C\'est une super randonnée encore mieux !',
-    length: '17km', duration: '11 heures', needInternet: false, published: false, version: 1, level: 'avancé'
-},
-{
-    idCircuit: 3, idUser: 3, name: 'Les Alpes', description: 'C\'est une super randonnée encore mieux !',
-    length: '17km', duration: '11 heures', needInternet: false, published: false, version: 1, level: 'avancé'
-}
-];
+import api from '../utils/httpMethods';
 
 export default class CreatedCircuit extends Component {
+
     state = {
         dropdownOpen: false,
         filter: 'all',
         modal: false,
-        userId: ''
+        circuits: [],
     };
 
     toggle = () => {
         this.setState({
-            dropdownOpen: !this.state.dropdownOpen
+            dropdownOpen: !this.state.dropdownOpen,
         });
     }
 
     displayModal = () => {
-        this.setState((previousState) => ({
-            modal: !previousState.modal
+        this.setState(previousState => ({
+            modal: !previousState.modal,
         }));
     }
 
@@ -45,18 +33,14 @@ export default class CreatedCircuit extends Component {
         this.setState({ filter: event.target.name });
     }
 
-    /*
     componentDidMount = () => {
-        api.get('circuits', this.state.userId).then(name => {
-
-        }).catch(error =>
-            console.log(error)
-        );
+        api.get('my-circuits').then((data) => {
+            this.setState({ circuits: data });
+        }).catch(error => console.log(error));
     }
-    */
 
     render() {
-        const { dropdownOpen, modal, filter } = this.state;
+        const { dropdownOpen, modal, filter, circuits } = this.state;
         const showPublished = (filter === 'published');
 
         return (
@@ -69,40 +53,53 @@ export default class CreatedCircuit extends Component {
                         direction='left'
                         className='button-dropdown'
                         isOpen={dropdownOpen}
-                        toggle={this.toggle}>
+                        toggle={this.toggle}
+                    >
                         <DropdownToggle caret>Recherche avancée</DropdownToggle>
                         <DropdownMenu>
                             <DropdownItem
                                 name='all'
-                                onClick={this.onFilterClick}>Tous</DropdownItem>
+                                onClick={this.onFilterClick}
+                            >Tous
+                            </DropdownItem>
                             <DropdownItem
                                 name='published'
-                                onClick={this.onFilterClick}>Circuits publiés</DropdownItem>
+                                onClick={this.onFilterClick}
+                            >Circuits publiés
+                            </DropdownItem>
                             <DropdownItem
                                 name='unpublished'
-                                onClick={this.onFilterClick}>Circuits non-publiés</DropdownItem>
+                                onClick={this.onFilterClick}
+                            >Circuits non-publiés
+                            </DropdownItem>
                         </DropdownMenu>
                     </ButtonDropdown>
 
                 </div>
                 {filter === 'all' ?
                     <CreatedCircuitList
-                        items={Circuits} />
+                        items={circuits}
+                    />
                     :
                     <CreatedCircuitList
-                        items={Circuits.filter(element => element.published === (showPublished))} />
+                        items={circuits.filter(element => element.published === (showPublished))}
+                    />
                 }
 
                 <FontAwesomeIcon
                     className='add-circuit'
                     onClick={this.displayModal}
-                    icon='plus-circle' size='3x'
-                    color='#3B62FF' />
+                    icon='plus-circle'
+                    size='3x'
+                    color='#3B62FF'
+                />
 
                 <CreateCircuitModal
                     displayModal={this.displayModal}
-                    modal={modal} />
+                    modal={modal}
+                />
             </>
         );
     }
+
 }
