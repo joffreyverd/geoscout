@@ -11,25 +11,25 @@ class UpdateStepModal extends Component {
     state = {
         name: '',
         description: '',
-        instruction: ''
+        instruction: '',
     };
 
     componentDidUpdate(prevProps) {
-        const { step } = this.props
+        const { step } = this.props;
         if (prevProps.step !== step) {
             if (step) {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
-                    instruction: step.instruction || ''
-                }))
+                    instruction: step.instruction || '',
+                }));
             }
         }
     }
 
     fetchQuestion = (id_step) => {
         api.get(`step/${id_step}/questions`).then((data) => {
-            this.setState({ questions: data })
-        })
+            this.setState({ questions: data });
+        });
     }
 
     handleChange = (event) => {

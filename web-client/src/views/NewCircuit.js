@@ -86,8 +86,8 @@ export default class NewCircuit extends Component {
     })
 
     updateCircuit = circuit => api.put(`circuit/${circuit.id_circuit}`, circuit).then(() => {
-        this.setState((prev) => {
-            prev.circuit.splice(circuit.order, 1, circuit);
+        this.setState({
+            circuit,
         });
     })
 
@@ -139,10 +139,10 @@ export default class NewCircuit extends Component {
                 />
 
                 <UpdateCircuitModal
-                    step={stepFocus}
+                    circuit={circuit}
                     open={updateCircuitModalOpen}
                     displayModal={this.displayUpdateCircuitModal}
-                    updateStep={this.updateCircuit}
+                    updateCircuit={this.updateCircuit}
                 />
 
             </div>

@@ -4,14 +4,13 @@ import {
     Label, Input, Modal, ModalHeader,
 } from 'reactstrap';
 
-import api from '../../utils/httpMethods';
-
 class UpdateCircuitModal extends Component {
 
     state = {
         name: '',
         description: '',
-        instruction: '',
+        length: '',
+        duration: '',
     };
 
     componentDidUpdate(prevProps) {
@@ -21,15 +20,11 @@ class UpdateCircuitModal extends Component {
                 this.setState(Object.assign({}, circuit, {
                     description: circuit.description || '',
                     instruction: circuit.instruction || '',
+                    length: circuit.length || '',
+                    duration: circuit.duration || '',
                 }));
             }
         }
-    }
-
-    fetchQuestion = (id_circuit) => {
-        api.get(`circuit/${id_circuit}`).then((data) => {
-            this.setState({ circuit: data });
-        });
     }
 
     handleChange = (event) => {

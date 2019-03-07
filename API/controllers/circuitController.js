@@ -129,17 +129,15 @@ module.exports =
 
     updateCircuit : (req, res, next) =>
     {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
+        if(utils.verifToken(req.headers['authorization']))
         {
             db.Circuit.findByPk(req.params.id).then(circuit => {
                 if(circuit.id_user === id_user) {
-                    circuit.update(req.body);
+                    circuit.update(req.body).then(() => res.status(200).send(circuit));
                 }
-            })
+            }).catch(() => {res.sendStatus(500)})
         }
         else
             res.sendStatus(401);
     }
-
 }
