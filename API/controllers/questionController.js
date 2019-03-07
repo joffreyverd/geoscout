@@ -58,9 +58,12 @@ module.exports =
         if(utils.verifToken(req.headers['authorization']))
         {
             db.Question.findByPk(req.params.id).then(question => {
-                if (req.body.duration === '' || !req.body.duration)
-                    delete req.body.duration;
-                question.update(req.body).then(() => res.status(200).send(question));
+                let newCircuit = req.body;
+                if (req.body.duration === '' || !req.body.duration) {
+                    newCircuit = Object.assign({}, req.body);
+                    delete newCircuit.duration;
+                }
+                question.update(newCircuit).then(() => res.status(200).send(question));
             }).catch(() => {res.sendStatus(500)})
         }
         else
