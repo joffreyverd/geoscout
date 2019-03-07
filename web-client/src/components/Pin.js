@@ -14,13 +14,12 @@ export default class Pin extends PureComponent {
         const pinStyle = {
             cursor: 'pointer',
             fill: this.props.color,
-            stroke: 'none'
+            stroke: 'none',
         };
-        
-        if (index === 11){
+
+        if (index === 11) {
             x = 6;
-        }
-        else if (index > 9){
+        } else if (index > 9) {
             x = 5;
         } else if (index === 1 || index === 7) {
             x = 9;
@@ -29,14 +28,15 @@ export default class Pin extends PureComponent {
         return (
             <svg
                 height={25}
-                viewBox="0 0 24 24"
+                viewBox='0 0 24 24'
                 style={{ ...pinStyle }}
                 onClick={onClick}
             >
                 <path d={ICON} />
-                <text x={x} y={15} fill="white" fontSize={13}>{index}</text>
-                
+                <text x={x} y={15} fill='white' fontSize={13}>{index}</text>
+
             </svg>
         );
     }
+
 }

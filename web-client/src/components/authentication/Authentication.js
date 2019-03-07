@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Modal, ModalHeader } from 'reactstrap';
 
 import Connect from './Connect';
@@ -8,25 +8,30 @@ import Register from './Register';
 
 export default class Authentication extends React.Component {
 
-    state = {
-        modal: false,
-        register: true,
-        isConnected: this.props.isConnected
-    };
+    constructor(props) {
+        super(props);
+        const { isConnected } = this.props;
+        this.state = {
+            modal: false,
+            registerByDefault: true,
+            isConnected: isConnected,
+        };
+    }
 
     displayModal = () => {
-        this.setState((previousState) => ({
-            modal: !previousState.modal
+        this.setState(previousState => ({
+            modal: !previousState.modal,
         }));
     }
 
     render() {
-        const { register } = this.props;
+        const { isConnected, modal, registerByDefault } = this.state;
+        const { login } = this.props;
 
         return (
             <>
 
-                {this.state.isConnected ?
+                {isConnected ?
                     <Link to='/account'>
                         <FontAwesomeIcon icon='user' className='user-icon' />
                     </Link>
@@ -34,23 +39,27 @@ export default class Authentication extends React.Component {
                     <>
                         <FontAwesomeIcon onClick={this.displayModal} icon='user' className='user-icon' />
 
-                        <Modal isOpen={this.state.modal} fade={false} toggle={this.displayModal}>
+                        <Modal isOpen={modal} fade={false} toggle={this.displayModal}>
 
                             <div className='modal-header'>
                                 <ModalHeader
-                                    className={register === true ? 'active' : ''}
-                                    onClick={() => this.setState({ register: true })}
-                                >Inscription</ModalHeader>
+                                    className={registerByDefault === true ? 'active' : ''}
+                                    onClick={() => this.setState({ registerByDefault: true })}
+                                >Inscription
+                                </ModalHeader>
                                 <ModalHeader
-                                    className={register === true ? '' : 'active'}
-                                    onClick={() => this.setState({ register: false })}
-                                >Connexion</ModalHeader>
+                                    className={registerByDefault === true ? '' : 'active'}
+                                    onClick={() => this.setState({ registerByDefault: false })}
+                                >Connexion
+                                </ModalHeader>
                             </div>
 
-                            {this.state.register ?
-                                <Register displayModal={this.displayModal} modal={this.state.modal} />
+                            {registerByDefault ?
+                                <Register displayModal={this.displayModal}
+                                    modal={modal} login={login} />
                                 :
-                                <Connect displayModal={this.displayModal} modal={this.state.modal} />
+                                <Connect displayModal={this.displayModal}
+                                    modal={modal} login={login} />
                             }
                         </Modal>
                     </>
@@ -59,4 +68,5 @@ export default class Authentication extends React.Component {
             </>
         );
     }
+
 }
