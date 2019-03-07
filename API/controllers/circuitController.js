@@ -136,7 +136,7 @@ module.exports =
                 if(circuit.id_user === id_user) {
                     circuit.update(req.body).then(() => res.status(200).send(circuit));
                 }
-            }).catch(() => {res.sendStatus(500)})
+            }).catch(() => {res.sendStatus(500)});
         }
         else
             res.sendStatus(401);
