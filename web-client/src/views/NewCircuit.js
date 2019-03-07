@@ -47,7 +47,6 @@ export default class NewCircuit extends Component {
             name: `Etape ${index}`,
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
-            order: index,
             id_circuit: circuit.id_circuit
         };
 

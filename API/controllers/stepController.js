@@ -45,7 +45,7 @@ module.exports =
                     latitude : req.body.latitude,
                     longitude : req.body.longitude,
                     description : req.body.description,
-                    order : count + 1,
+                    order : count,
                     instruction : req.body.instruction,
                     id_circuit : req.body.id_circuit
                 }).then(step =>res.status(201).send(step));
