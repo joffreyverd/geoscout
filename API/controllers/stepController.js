@@ -48,7 +48,7 @@ module.exports =
                     order : count + 1,
                     instruction : req.body.instruction,
                     id_circuit : req.body.id_circuit
-                }).then(res.sendStatus(201));
+                }).then(step =>res.status(201).send(step));
             }).catch((err) => {if(err) res.sendStatus(500)});
         }
         else
@@ -59,7 +59,36 @@ module.exports =
 
     changeOrder : (req,res,next) =>
     {
+        if(utils.verifToken(req.headers['authorization']))
+        {
+            db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}})
+            .then((steps) =>
+            {
+                let promise = steps.map((item,i) =>
+                {
+                    if(item.order === req.body.previous)
+                    {
+                        item.order = req.body.new;
+                    }
+                    else if(item.order < req.body.previous && item.order >= req.body.new)
+                    {
+                        item.order += 1;
+                    }
+                    else if (item.order > req.body.previous && item.order <= req.body.new)
+                    {
+                        item.order -= 1;
+                    }
 
+                    item.save();
+                });
+
+                Promise.all(promise)
+                .then(res.sendStatus(200))
+                .catch(res.sendStatus(500))
+            });
+        }
+        else
+            res.sendStatus(401);
     },
 
     //////////////////////////////////////////////////////////
@@ -81,7 +110,7 @@ module.exports =
                         points : req.body.points,
                         id_step :  step.id_step
                     })
-                    .then(res.sendStatus(201))
+                    .then(question => res.status(201).send(question))
                 }
                 else
                     throw 'err'

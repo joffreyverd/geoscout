@@ -20,10 +20,24 @@ module.exports =
 
     circuits : (req,res,next) => 
     {
+        if(utils.verifToken(req.headers['authorization']))
+        {
+            db.Circuit.findAll()
+            .then((circuit) => res.json(circuit))
+            .catch((err) => {if(err) res.sendStatus(500)})
+        }
+        else
+            res.sendStatus(401);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    myCircuits : (req,res,next) => 
+    {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Circuit.findAll()
+            db.Circuit.findAll({where : {id_user : id_user}})
             .then((circuit) => res.json(circuit))
             .catch((err) => {if(err) res.sendStatus(500)})
         }
@@ -53,7 +67,7 @@ module.exports =
             .then((circuit) =>
             {
                 if(circuit)
-                    res.sendStatus(201)
+                    res.status(201).send(circuit)
                 else
                     throw "err"
             })
@@ -79,7 +93,6 @@ module.exports =
         }
         else
             res.sendStatus(401);
-       
     },
 
     //////////////////////////////////////////////////////////
@@ -110,7 +123,5 @@ module.exports =
         }
         else
             res.sendStatus(401);
-        
     }
-
 }
