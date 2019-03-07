@@ -29,6 +29,7 @@ class App extends Component {
                 this.setState({ user: data, isConnected: true });
             }).catch((error) => {
                 console.log(error);
+                localStorage.removeItem('token');
             })
         }
     }

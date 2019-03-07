@@ -29,37 +29,33 @@ export default class NewCircuit extends Component {
     }
 
     handleClickMap = (event) => {
-        const step = { longitude: event.lngLat[0], latitude: event.lngLat[1] };
-        // Supprimer ce setState lors de la connexion
-        this.setState((prev) => {
-            prev.steps.push(step);
-            return { steps: prev.steps };
-        });
+        const { steps } = this.state;
+        const index = steps.length
+        const step = {
+            name: 'Etape ' + index,
+            longitude: event.lngLat[0],
+            latitude: event.lngLat[1],
+            order: index
+        };
 
-        // api.post('step',step).then((data) => {
-        //     this.setState((prev) => {
-        //         prev.steps.push(step)
-        //         return { steps: prev.steps}
-        //     })
-        // }).catch((error) => console.log(error.text))
+        api.post('step', step).then((data) => {
+            this.setState((prev) => {
+                prev.steps.push(step)
+                return { steps: prev.steps }
+            })
+        }).catch((error) => console.log(error.text))
 
     }
 
     removeStep = (idx) => {
-        // Suppression de l'étape dans la liste
-        this.setState((prev) => {
-            prev.steps.splice(idx, 1);
-            return { steps: prev.steps };
-        });
-
-        // let step = this.state.steps[idx];
-        // api.delete(`step/${step.id}`).then(() => {
-        //     // Suppression de l'étape dans la liste
-        //     this.setState((prev) => {
-        //         prev.steps.splice(idx,1)
-        //         return { steps: prev.steps}
-        //     })
-        // }).catch((error) => console.log(error.text))
+        let step = this.state.steps[idx];
+        api.delete(`step/${step.id}`).then(() => {
+            // Suppression de l'étape dans la liste
+            this.setState((prev) => {
+                prev.steps.splice(idx, 1)
+                return { steps: prev.steps }
+            })
+        }).catch((error) => console.log(error.text))
     }
 
     changeStepOrder = (prevIdx, newIdx) => {

@@ -14,7 +14,9 @@ export default class Home extends Component {
             this.setState({
                 circuits: data,
             });
-        });
+        }).catch(error => {
+            console.log(error);
+        })
     }
 
     render() {

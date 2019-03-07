@@ -20,6 +20,8 @@ function request(route, method, body) {
 }
 
 function checkStatus(response) {
+    if (response.status === 201)
+        return Promise.resolve();
     if (response.status >= 200 && response.status < 300) { return Promise.resolve(response.json()); }
 
     return Promise.reject({ code: response.status, text: response.text });
