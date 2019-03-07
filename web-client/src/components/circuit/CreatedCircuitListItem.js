@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 
 export default withRouter(({
-    id,
+    id_circuit,
     name,
     description,
     length,
@@ -13,7 +13,7 @@ export default withRouter(({
     level,
     history
 }) => (
-        <li className='list-item' onClick={() => console.log(history)}>
+        <li className='list-item' onClick={() => history.push(`circuit/${id_circuit}`)}>
 
             <h3 className='item-name'>{name}</h3>
             <span>{description}</span>
