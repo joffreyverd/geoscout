@@ -13,7 +13,7 @@ export default class Authentication extends React.Component {
         const { isConnected } = this.props;
         this.state = {
             modal: false,
-            register: true,
+            registerByDefault: true,
             isConnected: isConnected,
         };
     }
@@ -25,7 +25,8 @@ export default class Authentication extends React.Component {
     }
 
     render() {
-        const { isConnected, modal, register } = this.state;
+        const { isConnected, modal, registerByDefault } = this.state;
+        const { login } = this.props;
 
         return (
             <>
@@ -42,21 +43,23 @@ export default class Authentication extends React.Component {
 
                             <div className='modal-header'>
                                 <ModalHeader
-                                    className={register === true ? 'active' : ''}
-                                    onClick={() => this.setState({ register: true })}
+                                    className={registerByDefault === true ? 'active' : ''}
+                                    onClick={() => this.setState({ registerByDefault: true })}
                                 >Inscription
                                 </ModalHeader>
                                 <ModalHeader
-                                    className={register === true ? '' : 'active'}
-                                    onClick={() => this.setState({ register: false })}
+                                    className={registerByDefault === true ? '' : 'active'}
+                                    onClick={() => this.setState({ registerByDefault: false })}
                                 >Connexion
                                 </ModalHeader>
                             </div>
 
-                            {register ?
-                                <Register displayModal={this.displayModal} modal={modal} />
+                            {registerByDefault ?
+                                <Register displayModal={this.displayModal}
+                                    modal={modal} login={login} />
                                 :
-                                <Connect displayModal={this.displayModal} modal={modal} />
+                                <Connect displayModal={this.displayModal}
+                                    modal={modal} login={login} />
                             }
                         </Modal>
                     </>

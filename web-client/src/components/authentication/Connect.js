@@ -2,20 +2,18 @@ import React, { Component } from 'react';
 import { Button, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
-import api from '../../utils/httpMethods';
 
 class Connect extends Component {
 
     constructor(props) {
         super(props);
-        const { displayModal } = this.props;
+        const { login } = this.props;
         this.state = {
             email: '',
             password: '',
         };
         ({ displayModal } = this.props);
     }
-
 
     handleChange = (event) => {
         this.setState({
@@ -24,11 +22,10 @@ class Connect extends Component {
     }
 
     handleSubmit = () => {
-        api.post('signin', this.state).then((data) => {
-            // gestion du token
+        this.props.login('signin', this.state).then(() => {
             this.displayModal();
         }).catch((error) => {
-            // gestion d'erreur
+            console.log(error);
         });
     }
 
@@ -66,7 +63,7 @@ class Connect extends Component {
                 <ModalFooter>
                     <Button
                         color='primary'
-                        onClick={this.displayModal}
+                        onClick={this.handleSubmit}
                     >Connexion
                     </Button>
                     <Button

@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Button, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
-import api from '../../utils/httpMethods';
-
 class Register extends Component {
 
     state = {
@@ -26,7 +24,7 @@ class Register extends Component {
         const user = Object.assign({}, this.state);
         delete user.repeatPassword;
 
-        api.post('signup', user).then((data) => {
+        this.props.login('signup', user).then((data) => {
             // success
         }).catch((error) => {
             // error
@@ -94,7 +92,7 @@ class Register extends Component {
                 <ModalFooter>
                     <Button
                         color='primary'
-                        onClick={displayModal}
+                        onClick={this.handleSubmit}
                     >Inscription
                     </Button>
                     <Button
