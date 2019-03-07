@@ -94,7 +94,7 @@ export default class GeoLocation extends React.Component{
                         <>
                         <Image
                         style={{width: (width*0.8), height: (height*0.1)}}
-                        source={require('./img/logoGeoScout.png')}
+                        source={require('./img/logoGeoScoutPurple.png')}
                         />
                         <ActivityIndicator style={styles.loaderMargin} size='large' color='#2c3e50' />
                         </>

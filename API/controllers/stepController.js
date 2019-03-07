@@ -148,10 +148,10 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Step.findByPk(Request.params.id_step).then(step => {
+            db.Step.findByPk(req.params.id_step).then(step => {
                 db.Circuit.findByPk(step.id_circuit).then(circuit => {
                     if (circuit.id_user === id_user) {
-                        step.destroy().then(() => res.sendStatus(200));
+                        step.destroy().then(() => res.sendStatus(204));
                     }
                 })
             }).catch(() => res.sendStatus(500));
@@ -170,7 +170,7 @@ module.exports =
             db.Step.findByPk(req.params.id_step).then(step => {
                 db.Circuit.findByPk(step.id_circuit).then(circuit => {
                     if(circuit.id_user === id_user) {
-                        step.update(req.body).then(() => res.sendStatus(200));
+                        step.update(req.body).then(() => res.sendStatus(200).send(step));
                     }
                 })
             }).catch(() => res.sendStatus(500));
