@@ -155,7 +155,7 @@ module.exports =
                         .then(() => res.sendStatus(200));
                     }
                 })
-            }).catch(res.sendStatus(500))
+            }).catch(() => res.sendStatus(500));
         }
         else
             res.sendStatus(401);
@@ -174,7 +174,7 @@ module.exports =
                         step.update(req.body).then(() => res.sendStatus(200));
                     }
                 })
-            }).catch(res.sendStatus(500))
+            }).catch(() => res.sendStatus(500));
         }
         else
             res.sendStatus(401);
