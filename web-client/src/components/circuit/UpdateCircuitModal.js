@@ -32,10 +32,16 @@ class UpdateCircuitModal extends Component {
     }
 
     handleSubmit = () => {
-        const circuit = this.state;
-        const { displayUpdateCircuitModal } = this.props;
+        const { name, description, length, duration } = this.state;
+        let circuit = {
+            name: name || undefined,
+            description: description || description,
+            length: length || undefined,
+            duration: duration || undefined
+        }
+        const { displayModal } = this.props;
         this.props.updateCircuit(circuit)
-            .then(() => displayUpdateCircuitModal())
+            .then(() => displayModal())
             .catch(error => console.log(error));
     }
 
