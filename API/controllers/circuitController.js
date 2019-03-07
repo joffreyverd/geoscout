@@ -132,7 +132,7 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Circuit.findByPk({req.params.id}).then(circuit => {
+            db.Circuit.findByPk(req.params.id).then(circuit => {
                 if(circuit.id_user === id_user) {
                     circuit.update(req.body);
                 }
