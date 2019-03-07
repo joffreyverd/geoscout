@@ -123,5 +123,23 @@ module.exports =
         }
         else
             res.sendStatus(401);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    updateCircuit : (req, res, next) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            db.Circuit.findByPk(req.params.id).then(circuit => {
+                if(circuit.id_user === id_user) {
+                    circuit.update(req.body);
+                }
+            })
+        }
+        else
+            res.sendStatus(401);
     }
+
 }

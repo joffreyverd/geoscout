@@ -9,7 +9,7 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Step.findAll({where : {id_circuit : req.params.id_circuit}})
+            db.Step.findAll({where : {id_circuit : req.params.id_circuit}, order: ['order']})
             .then((step) => res.json(step));
         }
         else
@@ -121,20 +121,6 @@ module.exports =
             res.sendStatus(401);
     },
 
-    //////////////////////////////////////////////////////////
-
-    questionOfStep : (req,res,next) =>
-    {
-        if(utils.verifToken(req.headers['authorization']))
-        {
-            db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points']})
-            
-            .then(questions => res.status(200).json(questions))
-            .catch((err) => {if(err) {console.log(err);res.sendStatus(500)}})
-        }
-        else
-            res.sendStatus(401);
-    },
 
     //////////////////////////////////////////////////////////
 
@@ -152,7 +138,45 @@ module.exports =
         }
         else
             res.sendStatus(401);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    deleteStep : (req, res, next) =>
+    {
+
+        //TODO : Gérer les positions des autres étapes après la suppression
+
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            db.Step.findByPk(Request.params.id_step).then(step => {
+                db.Circuit.findByPk(step.id_circuit).then(circuit => {
+                    if (circuit.id_user === id_user) {
+                        db.Step.destroy({where : {id_step : req.params.id_step}})
+                        .then(a => res.sendStatus(200))
+                    }
+                })
+            }).catch(res.sendStatus(500))
+        }
+        else
+            res.sendStatus(401);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    updateStep : (req, res, next) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            db.Step.findByPk(req.params.id).then(circuit => {
+                if(step.id_user === id_user) {
+                    step.update(req.body);
+                }
+            })
+        }
+        else
+            res.sendStatus(401);
     }
-
-
 }
