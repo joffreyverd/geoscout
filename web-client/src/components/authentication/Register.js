@@ -2,23 +2,41 @@ import React, { Component } from 'react';
 import { Button, ModalBody, ModalFooter, Form, FormGroup, Label, Input } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
+import api from '../../utils/httpMethods';
+
 class Register extends Component {
 
-    constructor(props) {
-        super(props);
-        const { modal, displayModal } = this.props;
-        this.state = {
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: '',
-            repeatPassword: '',
-            modal: modal,
-            displayModal: displayModal,
-        };
+    state = {
+        firstname: '',
+        lastname: '',
+        email: '',
+        password: '',
+        repeatPassword: '',
+    };
+
+
+    handleChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+        });
+    }
+
+    handleSubmit = () => {
+        // Copie du state dans un nouvel objet pour pouvoir supprimer des propriétés
+        const user = Object.assign({}, this.state);
+        delete user.repeatPassword;
+
+        api.post('signup', user).then((data) => {
+            // success
+        }).catch((error) => {
+            // error
+        });
+
     }
 
     render() {
+        const { firstname, lastname, email, password, repeatPassword } = this.state;
+        const { displayModal } = this.props;
         return (
             <>
                 <ModalBody>
@@ -28,6 +46,8 @@ class Register extends Component {
                             <Input
                                 type='text'
                                 name='lastname'
+                                onChange={this.handleChange}
+                                value={lastname}
                             />
                         </FormGroup>
                         <FormGroup>
@@ -35,6 +55,8 @@ class Register extends Component {
                             <Input
                                 type='text'
                                 name='firstname'
+                                onChange={this.handleChange}
+                                value={firstname}
                             />
                         </FormGroup>
                         <FormGroup>
@@ -42,6 +64,8 @@ class Register extends Component {
                             <Input
                                 type='email'
                                 name='email'
+                                onChange={this.handleChange}
+                                value={email}
                             />
                         </FormGroup>
 
@@ -51,13 +75,17 @@ class Register extends Component {
                                 type='password'
                                 name='password'
                                 placeholder='Plus de 8 caractères'
+                                onChange={this.handleChange}
+                                value={password}
                             />
                         </FormGroup>
                         <FormGroup>
                             <Input
                                 type='password'
-                                name='password'
+                                name='repeatPassword'
                                 placeholder='Répétez votre mot de passe'
+                                onChange={this.handleChange}
+                                value={repeatPassword}
                             />
                         </FormGroup>
                     </Form>
@@ -66,12 +94,12 @@ class Register extends Component {
                 <ModalFooter>
                     <Button
                         color='primary'
-                        onClick={this.displayModal}
+                        onClick={displayModal}
                     >Inscription
                     </Button>
                     <Button
                         color='secondary'
-                        onClick={this.displayModal}
+                        onClick={displayModal}
                     >Annuler
                     </Button>
                 </ModalFooter>
