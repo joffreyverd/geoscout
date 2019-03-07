@@ -144,9 +144,7 @@ module.exports =
 
     deleteStep : (req, res, next) =>
     {
-
         //TODO : Gérer les positions des autres étapes après la suppression
-
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
@@ -154,10 +152,10 @@ module.exports =
                 db.Circuit.findByPk(step.id_circuit).then(circuit => {
                     if (circuit.id_user === id_user) {
                         db.Step.destroy({where : {id_step : req.params.id_step}})
-                        .then(a => res.sendStatus(200))
+                        .then(() => res.sendStatus(200));
                     }
                 })
-            }).catch(res.sendStatus(500))
+            }).catch(() => res.sendStatus(500));
         }
         else
             res.sendStatus(401);
@@ -170,11 +168,13 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Step.findByPk(req.params.id).then(circuit => {
-                if(step.id_user === id_user) {
-                    step.update(req.body);
-                }
-            })
+            db.Step.findByPk(req.params.id_step).then(step => {
+                db.Circuit.findByPk(step.id_circuit).then(circuit => {
+                    if(circuit.id_user === id_user) {
+                        step.update(req.body).then(() => res.sendStatus(200));
+                    }
+                })
+            }).catch(() => res.sendStatus(500));
         }
         else
             res.sendStatus(401);

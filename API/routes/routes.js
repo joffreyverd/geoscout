@@ -1,8 +1,8 @@
 const user = require('../controllers/userController');
 const circuit = require('../controllers/circuitController');
 const step = require('../controllers/stepController');
-const transit = require('../controllers/transitController');
 const evaluation = require('../controllers/evaluationController');
+const question = require('../controllers/questionController');
 module.exports = function(app)
 {
 	app.route('/signup').post(user.createUser);
@@ -12,7 +12,6 @@ module.exports = function(app)
 	app.route('/relations').post(user.askRelation);
 	app.route('/evaluations/:id_circuit').get(evaluation.evaluationsCircuit);
 	app.route('/evaluations').post(evaluation.createEvaluation);	
-	app.route('/transit').get(transit.transit);
 	
 	app.route('/step/:id_step').get(step.step);
 	app.route('/step/:id_step').put(step.updateStep);
