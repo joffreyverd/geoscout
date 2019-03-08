@@ -30,14 +30,7 @@ module.exports =
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Question.create(
-            {
-                wording : req.body.wording,
-                response : req.body.response,
-                type_of : req.body.type_of,
-                points : req.body.points,
-                level : req.body.level
-            })
+            db.Question.create(req.body)
             .then((question) =>
             {
                 if(question)
