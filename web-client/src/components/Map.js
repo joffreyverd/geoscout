@@ -34,21 +34,24 @@ export default class Map extends React.Component {
     }
 
     render() {
-        const { steps, circuits } = this.props;
+        const {
+            steps, circuits, onClickMap, onClickMarker, className
+        } = this.props;
+        const { viewport, userPosition } = this.state;
 
         return (
-            <div className={this.props.class}>
+            <div className={className}>
                 <ReactMapGL
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
-                    {...this.state.viewport}
+                    {...viewport}
                     mapStyle={MAP_STYLE}
                     onViewportChange={viewport => this.setState({ viewport })}
-                    onClick={this.props.handleClick}
+                    onClick={onClickMap}
                 >
-                    {this.state.userPosition &&
+                    {userPosition &&
                         <Marker
-                            latitude={this.state.userPosition.latitude}
-                            longitude={this.state.userPosition.longitude}
+                            latitude={userPosition.latitude}
+                            longitude={userPosition.longitude}
                             offsetLeft={-10}
                             offsetTop={-20}
                         >
@@ -56,25 +59,33 @@ export default class Map extends React.Component {
                         </Marker>
                     }
                     { /* Affichage des étapes dans le cas de la création/update de circuit */}
-                    {steps && steps.map((s, idx) => <Marker
-                        key={idx}
-                        latitude={s.latitude}
-                        longitude={s.longitude}
-                        offsetLeft={-11}
-                        offsetTop={-25}
-                    >
-                        <Pin color='#1f7a1f' index={idx} onClick={() => this.props.removeMarker(idx)} />
-                    </Marker>)}
+                    {steps && steps.map((s, idx) =>
+                        <Marker
+                            key={s.id_step}
+                            latitude={s.latitude}
+                            longitude={s.longitude}
+                            offsetLeft={-11}
+                            offsetTop={-25}
+                        >
+                            <Pin color='#1f7a1f' index={s.ordre} onClick={() => onClickMarker(s)} />
+                        </Marker>
+                    )}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
-                    {circuits && circuits.map((c, idx) => <Marker
-                        key={idx}
-                        latitude={c.latitude}
-                        longitude={c.longitude}
-                        offsetLeft={-11}
-                        offsetTop={-25}
-                    >
-                        <Pin color='#0066cc' />
-                    </Marker>)}
+                    {circuits && circuits.map((c, idx) => {
+                        if (c.latitude && c.longitude)
+                            return (
+                                <Marker
+                                    key={idx}
+                                    latitude={c.latitude}
+                                    longitude={c.longitude}
+                                    offsetLeft={-11}
+                                    offsetTop={-25}
+                                >
+                                    <Pin color='#0066cc' onClick={() => onClickMarker(c)} />
+                                </Marker>
+                            );
+                        return null;
+                    })}
                 </ReactMapGL>
             </div>
         );
