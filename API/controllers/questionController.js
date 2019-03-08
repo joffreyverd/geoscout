@@ -15,7 +15,7 @@ module.exports =
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points']})
+            db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points','response']})
             
             .then(questions => res.status(200).json(questions))
             .catch((err) => {if(err) {console.log(err);res.sendStatus(500)}})
