@@ -106,10 +106,10 @@ export default class NewCircuit extends Component {
         return (
             <div className='view-wrapper'>
                 <Map
-                    class='new-map'
+                    className='new-map'
                     steps={steps}
-                    handleClick={this.handleClickMap}
-                    removeMarker={this.removeStep}
+                    onClickMap={this.handleClickMap}
+                    onClickMarker={this.onClickItem}
                 />
 
                 <div className='scroll-menu'>

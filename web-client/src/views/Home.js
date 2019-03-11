@@ -25,7 +25,7 @@ export default class Home extends Component {
         const { circuits } = this.state;
 
         return (
-            <Map class='map' circuits={circuits} />
+            <Map className='map' circuits={circuits} />
         );
     }
 
