@@ -7,6 +7,10 @@ import {
     Dimensions,
     Image
 } from 'react-native';
+import {
+    Permissions,
+    Location
+} from 'expo';
 import MapView from 'react-native-maps';
 import {mapStyle} from './style/mapStyle';
 
@@ -34,35 +38,41 @@ export default class GeoLocation extends React.Component{
     }
 
     componentDidMount() {
-        let geoOptions = {
-            enableHighAccuracy: true,
-            timeOut: 20000,
-            maximumAge: 60 * 60 * 24
-        };
+        this.findCurrentLocation();
+        // let geoOptions = {
+        //     enableHighAccuracy: true,
+        //     timeOut: 20000,
+        //     maximumAge: 14400
+        // };
 
-        navigator.geolocation.getCurrentPosition( 
-            this.geoSuccess, 
-            this.geoFailure,
-            geoOptions
-        );
+        // navigator.geolocation.getCurrentPosition( 
+        //     this.geoSuccess, 
+        //     this.geoFailure,
+        //     geoOptions
+        // );
 
-        this.watchID = navigator.geolocation.watchPosition((position) => {
-            var lat = parseFloat(position.coords.latitude)
-            var long = parseFloat(position.coords.longitude)
-            var lastRegion = {
-                latitude: lat,
-                longitude: long,
-                latitudeDelta: LATITUDE_DELTA,
-                longitudeDelta: LONGITUDE_DELTA
-            }    
-            this.setState({initialPosition: lastRegion})
-            this.setState({markerPosition: lastRegion})
-        })
+        let option = {
+            accuracy: Location.Accuracy.Highest,
+            timeInterval: 1000,
+            distanceInterval: 5            
+        }
+
+        this.watchID = Location.watchPositionAsync(option, callBack);
+    }
+
+    findCurrentLocation = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status === 'granted') {
+            let location = await Location.getCurrentPositionAsync({});
+            console.log(location);
+        }else{
+            this.setState({
+                error: "La location n'est pas autorisée sur le périphérique."
+            })
+        }
     }
 
     geoSuccess = (position) => {
-        console.log(parseFloat(position.coords.latitude) + parseFloat(position.coords.longitude));
-        
         var initialRegion = {
             latitude: parseFloat(position.coords.latitude),
             longitude: parseFloat(position.coords.longitude),
@@ -89,22 +99,10 @@ export default class GeoLocation extends React.Component{
     render() {
         return (
             <View style={styles.container}>
-                {
-                    !this.state.ready && (
-                        <>
-                        <Image
-                        style={{width: (width*0.8), height: (height*0.1)}}
-                        source={require('./img/logoGeoScoutPurple.png')}
-                        />
-                        <ActivityIndicator style={styles.loaderMargin} size='large' color='#2c3e50' />
-                        </>
-                )}
-                {
-                   !this.state.ready && (
-                        <Text style={styles.errorText}>{this.state.error}</Text>
-                )}
-                {
-                    this.state.ready && (
+                {((this.state.error)? 
+                    <Text style={styles.errorText}>{this.state.error}</Text> 
+                :
+                    ((this.state.ready)? 
                         <MapView 
                         style={styles.map}
                         region={this.state.initialPosition}
@@ -116,7 +114,16 @@ export default class GeoLocation extends React.Component{
                                     </View>
                                 </View>
                             </MapView.Marker>
-                        </MapView>
+                        </MapView> 
+                    :
+                        <>
+                            <Image
+                            style={{width: (width*0.8), height: (height*0.1)}}
+                            source={require('./img/logoGeoScoutWhite.png')}
+                            />
+                            <ActivityIndicator style={styles.loaderMargin} size='large' color='#fff' />
+                        </>
+                    )
                 )}
             </View>
         );
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#f5fcff'
+        backgroundColor: '#1abc9c'
     },
     map: {
         left: 0,

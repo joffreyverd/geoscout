@@ -22,7 +22,7 @@ class Connect extends Component {
 
     handleSubmit = () => {
         this.props.login('signin', this.state).then(() => {
-            this.displayModal();
+            this.props.displayModal();
         }).catch((error) => {
             console.log(error);
         });
@@ -31,6 +31,7 @@ class Connect extends Component {
     render() {
 
         const { email, password } = this.state;
+        const { displayModal } = this.props;
 
         return (
             <>
@@ -67,7 +68,7 @@ class Connect extends Component {
                     </Button>
                     <Button
                         color='secondary'
-                        onClick={this.displayModal}
+                        onClick={displayModal}
                     >Annuler
                     </Button>
                 </ModalFooter>
