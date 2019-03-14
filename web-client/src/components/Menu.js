@@ -56,8 +56,8 @@ export default class Menu extends React.Component {
                                         <Link to='/achievements'>
                                             <DropdownItem>Réalisés</DropdownItem>
                                         </Link>
-                                        <Link to='/'>
-                                            <DropdownItem>Favoris</DropdownItem>
+                                        <Link to='/todo'>
+                                            <DropdownItem>Ma liste</DropdownItem>
                                         </Link>
                                     </DropdownMenu>
                                 </Dropdown>

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
 
-export default class Achievement extends Component {
+export default class Todo extends Component {
 
     render() {
         return (
             <>
-                <h1>Circuits réalisés</h1>
+                <h1>Ma liste</h1>
             </>
         );
     }
