@@ -126,7 +126,7 @@ h1 {
 /************************** NEW-CIRCUIT **************************/
 .view-wrapper {
   display: flex;
-  height: 100vh;
+  height: 100%;
 }
 
 .new-map {
@@ -134,7 +134,7 @@ h1 {
 }
 
 .scroll-menu {
-  height: 100vh;
+  height: 100%;
   width: 30%;
 }
 
@@ -144,11 +144,12 @@ h1 {
   text-align: center;
   padding: 10px;
   margin: 0px;
+  height: 10%;
   position: relative;
 }
 
 .step-wrapper {
-  height: 100%;
+  height: 90%;
   overflow: scroll;
   padding: 0px;
   margin: 0px;
