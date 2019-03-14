@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Button, ModalBody, ModalFooter, Form, FormGroup,
-    Label, Input, Modal, ModalHeader,
+    Label, Input, Modal, ModalHeader
 } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
