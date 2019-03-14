@@ -33,6 +33,17 @@ export default class Map extends React.Component {
         }
     }
 
+    centerFirstSteps = () => {
+        const { steps } = this.props;
+        const { viewport } = this.state;
+        viewport.latitude = steps[0].latitude;
+        viewport.longitude = steps[0].longitude;
+
+        this.setState({
+            viewport: viewport,
+        });
+    }
+
     render() {
         const {
             steps, circuits, onClickMap, onClickMarker, className,
@@ -66,8 +77,8 @@ export default class Map extends React.Component {
                         offsetLeft={-11}
                         offsetTop={-25}
                     >
-                        <Pin color='#1f7a1f' index={s.ordre} onClick={() => onClickMarker(s)} />
-                                                    </Marker>)}
+                        <Pin color='#1f7a1f' index={s.order} onClick={() => onClickMarker(s)} />
+                    </Marker>)}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
                     {circuits && circuits.map((c, idx) => {
                         if (c.latitude && c.longitude) {
