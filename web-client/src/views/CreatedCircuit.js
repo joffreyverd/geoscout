@@ -3,7 +3,6 @@ import {
     ButtonDropdown, DropdownToggle,
     DropdownMenu, DropdownItem, Button,
 } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import '../css/app.css';
 import CreatedCircuitList from '../components/circuit/CreatedCircuitList';

@@ -139,6 +139,7 @@ h1 {
 }
 
 .circuit-title {
+  border-bottom: solid 1px #16a085;
   color: #2c3e50;
   width: 100%;
   text-align: center;
@@ -168,13 +169,13 @@ h1 {
 }
 
 .step-wrapper-item:nth-child(odd) {
-  background-color: #7f8c8d;
+  background-color: #007E65;
   color: #fff;
 }
 
 .step-wrapper-item:hover{
   color: white;
-  background-color: #2c3e50;
+  background-color: #004C3D;
   transition: .2s;
 }
 

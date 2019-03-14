@@ -23,6 +23,8 @@ export default class GeoLocation extends React.Component{
     constructor(props){
         super(props)
         this.state = {
+            ready: false,
+            error: null,
             initialPosition: {
                 latitude: 0,
                 longitude: 0,
@@ -32,50 +34,22 @@ export default class GeoLocation extends React.Component{
             markerPosition: {
                 latitude: 0,
                 longitude: 0
-            },            
+            }
         }
-        this.watchID = null
     }
 
     componentDidMount() {
-        this.findCurrentLocation();
-        // let geoOptions = {
-        //     enableHighAccuracy: true,
-        //     timeOut: 20000,
-        //     maximumAge: 14400
-        // };
-
-        // navigator.geolocation.getCurrentPosition( 
-        //     this.geoSuccess, 
-        //     this.geoFailure,
-        //     geoOptions
-        // );
-
-        let option = {
-            accuracy: Location.Accuracy.Highest,
-            timeInterval: 1000,
-            distanceInterval: 5            
-        }
-
-        this.watchID = Location.watchPositionAsync(option, callBack);
-    }
-
-    findCurrentLocation = async () => {
-        let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status === 'granted') {
-            let location = await Location.getCurrentPositionAsync({});
-            console.log(location);
+        if(this.askServiceEnable()){
+            
         }else{
-            this.setState({
-                error: "La location n'est pas autorisée sur le périphérique."
-            })
+            this.askPermissionLocation();
         }
     }
 
-    geoSuccess = (position) => {
-        var initialRegion = {
-            latitude: parseFloat(position.coords.latitude),
-            longitude: parseFloat(position.coords.longitude),
+    updateLocation = (location) => {
+        let initialRegion = {
+            latitude: parseFloat(location.coords.latitude),
+            longitude: parseFloat(location.coords.longitude),
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
         }
@@ -88,11 +62,31 @@ export default class GeoLocation extends React.Component{
         })
     }
 
-    geoFailure = (error) => {
-        this.setState({error: error.message});
-    }    
+    askServiceEnable = async () => {
+        let statusService = await Location.hasServicesEnabledAsync();
+        console.log(statusService);
+        if(statusService){
+            let location = await Location.getCurrentPositionAsync({});
+            this.updateLocation(location);
+        }else{
+            return false;
+        }
+    }
+
+    askPermissionLocation = async () => {
+        let { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status === 'granted') {
+            let location = await Location.getCurrentPositionAsync({});
+            this.updateLocation(location);
+        }else{
+            this.setState({
+                error: "La location n'est pas autorisée sur le périphérique."
+            })
+        }
+    }  
 
     componentWillUnmount() {
+        //Je ne sais pas si c'est encore utile !
         navigator.geolocation.clearWatch(this.state)
     }
 
