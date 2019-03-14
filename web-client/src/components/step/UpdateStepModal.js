@@ -12,7 +12,7 @@ class UpdateStepModal extends Component {
         name: '',
         description: '',
         instruction: '',
-        questions: { wording: '', response: '' }
+        questions: { wording: '', response: '' },
     };
 
     componentDidUpdate(prevProps) {
@@ -21,7 +21,7 @@ class UpdateStepModal extends Component {
             if (step) {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
-                    instruction: step.instruction || ''
+                    instruction: step.instruction || '',
                 }));
                 this.fetchQuestion(step.id_step);
             }
@@ -30,7 +30,7 @@ class UpdateStepModal extends Component {
 
     fetchQuestion = (id_step) => {
         api.get(`step/${id_step}/questions`).then((data) => {
-            if (data.length > 0)
+            if (data.length > 0) {
                 this.setState({
                     questions: {
                         id: data[0].id_question || undefined,
@@ -38,6 +38,7 @@ class UpdateStepModal extends Component {
                         response: data[0].response || ''
                     }
                 });
+            }
         });
     }
 
@@ -49,7 +50,7 @@ class UpdateStepModal extends Component {
         event.persist();
         this.setState((prev) => {
             prev.questions[event.target.name] = event.target.value;
-            return { questions: prev.questions }
+            return { questions: prev.questions };
         });
     }
 
@@ -67,9 +68,9 @@ class UpdateStepModal extends Component {
     putQuestion(question) {
         if (question.id) {
             return api.put(`question/${question.id}`, question)
-        } else {
-            return api.post('question', Object.assign({ id_step: this.state.id_step }, question))
         }
+        return api.post('question', Object.assign({ id_step: this.state.id_step }, question))
+
     }
 
     render() {
@@ -97,7 +98,7 @@ class UpdateStepModal extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>Description de l'étape</Label>
+                                <Label>Description</Label>
                                 <Input
                                     type='text'
                                     name='description'
@@ -127,7 +128,7 @@ class UpdateStepModal extends Component {
                             </FormGroup>
 
                             <FormGroup>
-                                <Label>Réponse à la question</Label>
+                                <Label>Réponse</Label>
                                 <Input
                                     type='text'
                                     name='response'

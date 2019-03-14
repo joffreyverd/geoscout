@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from 'reactstrap';
+
 import Map from '../components/Map';
 import StepList from '../components/step/StepList';
 import UpdateStepModal from '../components/step/UpdateStepModal';
@@ -116,13 +117,12 @@ export default class NewCircuit extends Component {
 
                     <div className='circuit-title'>
                         <h3>{circuit.name}</h3>
-                        <FontAwesomeIcon
+                        <Button
                             className='update-circuit'
+                            color='info'
                             onClick={this.displayUpdateCircuitModal}
-                            icon='pen'
-                            size='1x'
-                            color='#3B62FF'
-                        />
+                        >Modifier
+                        </Button>
                     </div>
 
                     <StepList
