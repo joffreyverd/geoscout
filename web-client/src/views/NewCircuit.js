@@ -52,9 +52,8 @@ export default class NewCircuit extends Component {
     // Création d'une étape dans la base
     handleClickMap = (event) => {
         const { steps, circuit } = this.state;
-        const index = steps.length;
         const step = {
-            name: `Etape ${index}`,
+            name: `Etape`,
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
             id_circuit: circuit.id_circuit,
