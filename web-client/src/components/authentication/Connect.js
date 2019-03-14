@@ -42,7 +42,7 @@ class Connect extends Component {
                             <Input
                                 type='email'
                                 name='email'
-                                placeholder='Saisissez votre email'
+                                placeholder='Indiquez votre email'
                                 value={email}
                                 onChange={this.handleChange}
                             />
@@ -52,7 +52,7 @@ class Connect extends Component {
                             <Input
                                 type='password'
                                 name='password'
-                                placeholder='Saisissez votre mot de passe'
+                                placeholder='Indiquez votre mot de passe'
                                 value={password}
                                 onChange={this.handleChange}
                             />

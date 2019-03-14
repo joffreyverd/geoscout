@@ -1,5 +1,8 @@
 import React from 'react';
-import { Collapse, Navbar, NavbarToggler, Nav, NavItem } from 'reactstrap';
+import {
+    Collapse, Navbar, NavbarToggler, Dropdown,
+    Nav, NavItem, DropdownMenu, DropdownItem, DropdownToggle,
+} from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 import Authentication from './authentication/Authentication';
@@ -7,7 +10,8 @@ import Authentication from './authentication/Authentication';
 export default class Menu extends React.Component {
 
     state = {
-        responsiveNavBarMode: false
+        responsiveNavBarMode: false,
+        dropdownOpen: false,
     }
 
     toggle = () => {
@@ -16,13 +20,19 @@ export default class Menu extends React.Component {
         }));
     }
 
+    displayDropdownCircuits = () => {
+        this.setState({
+            dropdownOpen: !this.state.dropdownOpen,
+        });
+    }
+
     render() {
-        const { responsiveNavBarMode } = this.state;
+        const { responsiveNavBarMode, dropdownOpen } = this.state;
         const { isConnected, login, logout } = this.props;
 
         return (
             <div>
-                <Navbar expand='md'>
+                <Navbar expand='md' fixed='top'>
                     <Link to='/'>
                         <img src='/img/logoGeoScoutWhite.png' className='logo' alt='GeoScout' />
                     </Link>
@@ -31,17 +41,28 @@ export default class Menu extends React.Component {
                     {isConnected ?
                         <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
                             <Nav className='ml-auto' navbar>
+                                <Dropdown
+                                    nav
+                                    isOpen={dropdownOpen}
+                                    toggle={this.displayDropdownCircuits}
+                                >
+                                    <DropdownToggle nav caret>
+                                        Circuits
+                                    </DropdownToggle>
+                                    <DropdownMenu>
+                                        <Link to='/circuits'>
+                                            <DropdownItem>Créés</DropdownItem>
+                                        </Link>
+                                        <Link to='/achievements'>
+                                            <DropdownItem>Réalisés</DropdownItem>
+                                        </Link>
+                                        <Link to='/'>
+                                            <DropdownItem>Favoris</DropdownItem>
+                                        </Link>
+                                    </DropdownMenu>
+                                </Dropdown>
                                 <NavItem>
-                                    <Link to='/circuits'>Mes circuits</Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Link to='/achievements'>Accomplissements</Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Link to='/' onClick={logout}>Déconnexion</Link>
-                                </NavItem>
-                                <NavItem>
-                                    <Authentication isConnected={isConnected} />
+                                    <Authentication isConnected={isConnected} logout={logout} />
                                 </NavItem>
                             </Nav>
                         </Collapse>

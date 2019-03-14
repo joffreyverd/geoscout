@@ -6,7 +6,7 @@ export default class Achievement extends Component {
     render() {
         return (
             <>
-                <h1>Accomplissements</h1>
+                <h1>Historique</h1>
             </>
         );
     }
