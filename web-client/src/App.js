@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser, faPlusCircle, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPen } from '@fortawesome/free-solid-svg-icons';
 
 import './css/app.css';
 import Menu from './components/Menu';
@@ -11,10 +11,11 @@ import Account from './views/Account';
 import CreatedCircuit from './views/CreatedCircuit';
 import NewCircuit from './views/NewCircuit';
 import Achievement from './views/Achievement';
+import Todo from './views/Todo';
 
 import api from './utils/httpMethods';
 
-library.add(faUser, faPlusCircle, faPen);
+library.add(faUser, faPen);
 
 class App extends Component {
 
@@ -65,6 +66,7 @@ class App extends Component {
                         <Route exact path='/circuits' component={CreatedCircuit} />
                         <Route exact path='/circuit/:id' component={NewCircuit} />
                         <Route exact path='/achievements' component={Achievement} />
+                        <Route exact path='/todo' component={Todo} />
                     </>
                     : null}
             </>

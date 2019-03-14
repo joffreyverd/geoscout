@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    ButtonDropdown, DropdownToggle,
+    DropdownMenu, DropdownItem, Button,
+} from 'reactstrap';
 
 import '../css/app.css';
 import CreatedCircuitList from '../components/circuit/CreatedCircuitList';
@@ -12,7 +14,7 @@ export default class CreatedCircuit extends Component {
 
     state = {
         dropdownOpen: false,
-        filter: 'all',
+        filter: 'Tous',
         modal: false,
         circuits: [],
     };
@@ -41,42 +43,53 @@ export default class CreatedCircuit extends Component {
 
     render() {
         const { dropdownOpen, modal, filter, circuits } = this.state;
-        const showPublished = (filter === 'published');
+        const showPublished = (filter === 'Publiés');
 
         return (
             <>
                 <div className='my-circuits-header'>
 
-                    <h1>Circuits crées</h1>
+                    <h1>Circuits créés</h1>
 
-                    <ButtonDropdown
-                        direction='left'
-                        className='button-dropdown'
-                        isOpen={dropdownOpen}
-                        toggle={this.toggle}
-                    >
-                        <DropdownToggle caret>Recherche avancée</DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem
-                                name='all'
-                                onClick={this.onFilterClick}
-                            >Tous
-                            </DropdownItem>
-                            <DropdownItem
-                                name='published'
-                                onClick={this.onFilterClick}
-                            >Circuits publiés
-                            </DropdownItem>
-                            <DropdownItem
-                                name='unpublished'
-                                onClick={this.onFilterClick}
-                            >Circuits non-publiés
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </ButtonDropdown>
+                    <div className='header-buttons'>
+
+                        <ButtonDropdown
+                            direction='left'
+                            className='button-dropdown'
+                            isOpen={dropdownOpen}
+                            toggle={this.toggle}
+                        >
+                            <DropdownToggle caret color='info'>{filter}</DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem
+                                    name='Tous'
+                                    onClick={this.onFilterClick}
+                                >Tous
+                                </DropdownItem>
+                                <DropdownItem
+                                    name='Publiés'
+                                    onClick={this.onFilterClick}
+                                >Publiés
+                                </DropdownItem>
+                                <DropdownItem
+                                    name='Non-publiés'
+                                    onClick={this.onFilterClick}
+                                >Non-publiés
+                                </DropdownItem>
+                            </DropdownMenu>
+                        </ButtonDropdown>
+
+                        <Button
+                            color='success'
+                            className='create-circuit'
+                            onClick={this.displayModal}
+                        >Création
+                        </Button>
+
+                    </div>
 
                 </div>
-                {filter === 'all' ?
+                {filter === 'Tous' ?
                     <CreatedCircuitList
                         items={circuits}
                     />
@@ -85,14 +98,6 @@ export default class CreatedCircuit extends Component {
                         items={circuits.filter(element => element.published === (showPublished))}
                     />
                 }
-
-                <FontAwesomeIcon
-                    className='add-circuit'
-                    onClick={this.displayModal}
-                    icon='plus-circle'
-                    size='3x'
-                    color='#2c3e50'
-                />
 
                 <CreateCircuitModal
                     displayModal={this.displayModal}

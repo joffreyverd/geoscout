@@ -72,7 +72,7 @@ class Register extends Component {
                             <Input
                                 type='password'
                                 name='password'
-                                placeholder='Plus de 8 caractères'
+                                placeholder='8 caractères minimum'
                                 onChange={this.handleChange}
                                 value={password}
                             />
