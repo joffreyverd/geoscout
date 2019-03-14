@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Modal, ModalHeader } from 'reactstrap';
+import {
+    Modal, ModalHeader, DropdownToggle,
+    DropdownMenu, DropdownItem, Dropdown,
+} from 'reactstrap';
 
 import Connect from './Connect';
 import Register from './Register';
@@ -15,6 +18,7 @@ export default class Authentication extends React.Component {
             modal: false,
             registerByDefault: true,
             isConnected: isConnected,
+            dropdownOpen: false,
         };
     }
 
@@ -24,17 +28,39 @@ export default class Authentication extends React.Component {
         }));
     }
 
+    displayDropdownAccount = () => {
+        this.setState({
+            dropdownOpen: !this.state.dropdownOpen,
+        });
+    }
+
     render() {
-        const { isConnected, modal, registerByDefault } = this.state;
-        const { login } = this.props;
+        const { isConnected, modal, registerByDefault, dropdownOpen } = this.state;
+        const { login, logout } = this.props;
 
         return (
             <>
 
                 {isConnected ?
-                    <Link to='/account'>
-                        <FontAwesomeIcon icon='user' className='user-icon' />
-                    </Link>
+                    <Dropdown
+                        nav
+                        direction='left'
+                        isOpen={dropdownOpen}
+                        toggle={this.displayDropdownAccount}
+                    >
+
+                        <DropdownToggle nav>
+                            <FontAwesomeIcon icon='user' className='user-icon' />
+                        </DropdownToggle>
+                        <DropdownMenu>
+                            <Link to='/account'>
+                                <DropdownItem>Mon compte</DropdownItem>
+                            </Link>
+                            <Link to='/' onClick={logout}>
+                                <DropdownItem>Déconnexion</DropdownItem>
+                            </Link>
+                        </DropdownMenu>
+                    </Dropdown>
                     :
                     <>
                         <FontAwesomeIcon onClick={this.displayModal} icon='user' className='user-icon' />
@@ -55,11 +81,17 @@ export default class Authentication extends React.Component {
                             </div>
 
                             {registerByDefault ?
-                                <Register displayModal={this.displayModal}
-                                    modal={modal} login={login} />
+                                <Register
+                                    displayModal={this.displayModal}
+                                    modal={modal}
+                                    login={login}
+                                />
                                 :
-                                <Connect displayModal={this.displayModal}
-                                    modal={modal} login={login} />
+                                <Connect
+                                    displayModal={this.displayModal}
+                                    modal={modal}
+                                    login={login}
+                                />
                             }
                         </Modal>
                     </>
