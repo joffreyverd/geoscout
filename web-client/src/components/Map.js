@@ -33,11 +33,11 @@ export default class Map extends React.Component {
         }
     }
 
-    centerFirstSteps = () => {
-        const { steps } = this.props;
+    centerStep = (step) => {
         const { viewport } = this.state;
-        viewport.latitude = steps[0].latitude;
-        viewport.longitude = steps[0].longitude;
+        viewport.latitude = step.latitude;
+        viewport.longitude = step.longitude + 0.03;
+        viewport.zoom = 12;
 
         this.setState({
             viewport: viewport,
@@ -70,14 +70,17 @@ export default class Map extends React.Component {
                         </Marker>
                     }
                     { /* Affichage des étapes dans le cas de la création/update de circuit */}
-                    {steps && steps.map((s, idx) => <Marker
+                    {steps && steps.map((s) => <Marker
                         key={s.id_step}
                         latitude={s.latitude}
                         longitude={s.longitude}
                         offsetLeft={-11}
                         offsetTop={-25}
                     >
-                        <Pin color='#1f7a1f' index={s.order} onClick={() => onClickMarker(s)} />
+                        <Pin color='#1f7a1f' index={s.order} onClick={() => {
+                            onClickMarker(s);
+                            this.centerStep(s);
+                        }} />
                     </Marker>)}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
                     {circuits && circuits.map((c, idx) => {

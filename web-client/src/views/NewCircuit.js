@@ -78,7 +78,7 @@ export default class NewCircuit extends Component {
      */
     updateStep = step => api.put(`step/${step.id_step}`, step).then(() => {
         this.setState((prev) => {
-            prev.steps.splice(step.order, 1, step);
+            prev.steps.splice(prev.steps.findIndex((s) => s.id_step === step.id_step), 1, step);
         });
     })
 
