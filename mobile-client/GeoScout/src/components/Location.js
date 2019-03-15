@@ -12,7 +12,7 @@ import {
     Location
 } from 'expo';
 import MapView from 'react-native-maps';
-import {mapStyle} from './style/mapStyle';
+import {mapStyle} from '../../utils/style/mapStyle';
 
 const {width,height} = Dimensions.get('window')
 const ASPECT_RATIO = width/height
@@ -40,7 +40,7 @@ export default class GeoLocation extends React.Component{
 
     componentDidMount() {
         if(this.askServiceEnable()){
-            
+            //fetch requete all circuit dans un rayon
         }else{
             this.askPermissionLocation();
         }
@@ -60,6 +60,7 @@ export default class GeoLocation extends React.Component{
             initialPosition: initialRegion,
             markerPosition: initialRegion
         })
+        console.log(this.state);
     }
 
     askServiceEnable = async () => {
@@ -113,9 +114,9 @@ export default class GeoLocation extends React.Component{
                         <>
                             <Image
                             style={{width: (width*0.8), height: (height*0.1)}}
-                            source={require('./img/logoGeoScoutWhite.png')}
+                            source={require('../../utils/img/logoGeoScoutWhite.png')}
                             />
-                            <ActivityIndicator style={styles.loaderMargin} size='large' color='#fff' />
+                            <ActivityIndicator style={styles.loaderMargin} size='large' color='#fff'/>
                         </>
                     )
                 )}
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
     radius: {
         height: 50,
         width: 50,
-        borderRadius: 50/2,
+        borderRadius: 25,
         overflow: 'hidden',
         backgroundColor: 'rgba(0,122,255,0.1)',
         borderWidth: 1,

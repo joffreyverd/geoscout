@@ -7,7 +7,7 @@ module.exports = (sequelize,DataTypes) =>
             name : {type : DataTypes.STRING, allowNull : true, unique : true},
             description : {type : DataTypes.STRING, allowNull : true},
             length : {type : DataTypes.FLOAT, allowNull : true},
-            duration : {type : DataTypes.DATE, defaultValue: null, allowNull : true},
+            duration : {type : DataTypes.INTEGER, defaultValue: null, allowNull : true},
             need_internet : {type : DataTypes.BOOLEAN, allowNull : true},
             published : {type : DataTypes.BOOLEAN, allowNull : true},
             version : {type : DataTypes.TINYINT,allowNull : true},
