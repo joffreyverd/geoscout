@@ -99,7 +99,7 @@ class UpdateStepModal extends Component {
                         <FormGroup>
                             <Label>Description</Label>
                             <Input
-                                type='text'
+                                type='textarea'
                                 name='description'
                                 value={description}
                                 onChange={this.handleChange}
@@ -129,7 +129,7 @@ class UpdateStepModal extends Component {
                         <FormGroup>
                             <Label>Réponse</Label>
                             <Input
-                                type='text'
+                                type='textarea'
                                 name='response'
                                 value={response}
                                 onChange={this.handleChangeQuestion}
@@ -138,7 +138,7 @@ class UpdateStepModal extends Component {
 
                         <div className='update-buttons'>
                             <Button
-                                color='primary'
+                                color='info'
                                 onClick={this.handleSubmit}
                             >Modifier
                             </Button>

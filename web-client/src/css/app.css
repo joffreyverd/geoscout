@@ -309,6 +309,14 @@ cursor: pointer;
   margin: auto;
 }
 
+.form-group > label {
+  font-weight: bold;
+}
+
+.form-group > textarea {
+  min-height: 100px;
+}
+
 .update-buttons {
   display: flex;
   justify-content: space-around;
