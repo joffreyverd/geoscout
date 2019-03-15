@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Button, ModalBody, ModalFooter, Form, FormGroup,
-    Label, Input, Modal, ModalHeader,
-} from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 import api from '../../utils/httpMethods';
 
@@ -22,8 +19,13 @@ class UpdateStepModal extends Component {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
+                    questions: step.questions || {
+                        wording: '',
+                        response: '',
+                    },
                 }));
                 this.fetchQuestion(step.id_step);
+                console.log(step);
             }
         }
     }
@@ -35,8 +37,8 @@ class UpdateStepModal extends Component {
                     questions: {
                         id: data[0].id_question || undefined,
                         wording: data[0].wording || '',
-                        response: data[0].response || ''
-                    }
+                        response: data[0].response || '',
+                    },
                 });
             }
         });
@@ -56,102 +58,104 @@ class UpdateStepModal extends Component {
 
     handleSubmit = () => {
         const step = this.state;
-        const { displayModal } = this.props;
+        const { displayUpdateStep } = this.props;
         this.props.updateStep(step)
             .then(() => {
                 this.putQuestion(step.questions);
-                displayModal();
+                displayUpdateStep();
             })
             .catch(error => console.log(error));
     }
 
     putQuestion(question) {
         if (question.id) {
-            return api.put(`question/${question.id}`, question)
+            return api.put(`question/${question.id}`, question);
         }
-        return api.post('question', Object.assign({ id_step: this.state.id_step }, question))
+        return api.post('question', Object.assign({ id_step: this.state.id_step }, question));
 
     }
 
     render() {
         const { name, description, instruction, questions: { wording, response } } = this.state;
-        const { open, displayModal } = this.props;
+        const { show, displayUpdateStep, removeStep } = this.props;
 
         return (
             <>
-                <Modal
-                    isOpen={open}
-                    fade={false}
-                    toggle={displayModal}
-                >
-                    <ModalHeader>Modification de l'étape</ModalHeader>
-                    <ModalBody>
-                        <Form>
-                            <FormGroup>
-                                <Label>Nom</Label>
-                                <Input
-                                    type='text'
-                                    name='name'
-                                    value={name}
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
+                <div className={show ? 'update-step' : 'hidden-update-step'}>
+                    <div className='update-title'>
+                        <h3>{'Modification de l\'étape'}</h3>
+                    </div>
+                    <Form className='update-form'>
+                        <FormGroup>
+                            <Label>Nom</Label>
+                            <Input
+                                type='text'
+                                name='name'
+                                value={name}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
 
-                            <FormGroup>
-                                <Label>Description</Label>
-                                <Input
-                                    type='text'
-                                    name='description'
-                                    value={description}
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
+                        <FormGroup>
+                            <Label>Description</Label>
+                            <Input
+                                type='textarea'
+                                name='description'
+                                value={description}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
 
-                            <FormGroup>
-                                <Label>Instruction de direction</Label>
-                                <Input
-                                    type='textarea'
-                                    name='instruction'
-                                    value={instruction}
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
+                        <FormGroup>
+                            <Label>Instruction de direction</Label>
+                            <Input
+                                type='textarea'
+                                name='instruction'
+                                value={instruction}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
 
-                            <FormGroup>
-                                <Label>Intitulé de la question</Label>
-                                <Input
-                                    type='textarea'
-                                    name='wording'
-                                    value={wording}
-                                    onChange={this.handleChangeQuestion}
-                                />
-                            </FormGroup>
+                        <FormGroup>
+                            <Label>Intitulé de la question</Label>
+                            <Input
+                                type='textarea'
+                                name='wording'
+                                value={wording}
+                                onChange={this.handleChangeQuestion}
+                            />
+                        </FormGroup>
 
-                            <FormGroup>
-                                <Label>Réponse</Label>
-                                <Input
-                                    type='text'
-                                    name='response'
-                                    value={response}
-                                    onChange={this.handleChangeQuestion}
-                                />
-                            </FormGroup>
-                        </Form>
-                    </ModalBody>
+                        <FormGroup>
+                            <Label>Réponse</Label>
+                            <Input
+                                type='textarea'
+                                name='response'
+                                value={response}
+                                onChange={this.handleChangeQuestion}
+                            />
+                        </FormGroup>
 
-                    <ModalFooter>
-                        <Button
-                            color='primary'
-                            onClick={this.handleSubmit}
-                        >Modifier
-                        </Button>
-                        <Button
-                            color='secondary'
-                            onClick={displayModal}
-                        >Annuler
-                        </Button>
-                    </ModalFooter>
-                </Modal>
+                        <div className='update-buttons'>
+                            <Button
+                                color='info'
+                                onClick={this.handleSubmit}
+                            >Modifier
+                            </Button>
+                            <Button
+                                color='danger'
+                                onClick={removeStep}
+                            >Supprimer !
+                            </Button>
+                            <Button
+                                color='secondary'
+                                onClick={displayUpdateStep}
+                            >Annuler
+                            </Button>
+                        </div>
+
+                    </Form>
+                </div>
             </>
         );
     }

@@ -15,6 +15,13 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+
+INSERT INTO `Users` (`id_user`, `firstname`, `lastname`, `picture`, `email`, `password`) VALUES ('1', 'PICHET', 'Roland', '', 'pichet.roland@caramail.fr', '$2a$12$oUfVka//SY2vtm30aKyjAO1z4R/b6HsldK30k.QTSol.f0WWBU2l.'),
+('2', 'Thomas', 'Unterfinger', '', 'thomas-un@hotmail.fr', '$2a$12$tmnNnaFVSDrBkCq2ycNan.iOjXaIAEq39qZYMeADcnnYzwCoZGI52'),
+('4', 'Joffrey', 'Verd', NULL, 'jverd@protonmail.com', '$2a$12$QDzF86tCq4yJjlrdsHd38.LZm.RX18TVMoCXXRBKnXBcdu6GYlrqS'),
+('5', 'Léon', 'Test', NULL, 'leon@test.fr', '$2a$12$xkHbqfEL4gp7RE7PW7AqrOzZiFVSeQcC4CKhogsQpZWwUVHVLiCe.'),
+('10', 'Stevy', 'Palarski', NULL, 'stevy.palarski@gmail.com', '$2a$12$fg7NXXgSeGAqoQenszVNRO.1kyen1sgDwgtO5Ki/R.PwoKRux30r.');
+
 INSERT INTO `Circuits` (`id_circuit`, `name`, `description`, `length`, `duration`, `need_internet`, `published`, `version`, `level`, `createdAt`, `updatedAt`, `id_user`) VALUES ('1', 'Circuit1', 'Un super circuit vous allez voir !', '50', '1970-01-01 02:00:00', '1', '0', '0', X'30', '2019-03-06 23:18:09', '2019-03-06 23:18:09', '1'),
 ('3', 'Circuit2', 'Un super circuit vous allez voir !', '50', '1970-01-01 02:00:00', '1', '0', '0', X'30', '2019-03-06 23:45:56', '2019-03-06 23:45:56', '1'),
 ('4', 'Malaga', NULL, NULL, NULL, NULL, '0', '0', NULL, '2019-03-07 17:10:39', '2019-03-07 17:10:39', '4'),
@@ -29,18 +36,6 @@ INSERT INTO `Circuits` (`id_circuit`, `name`, `description`, `length`, `duration
 ('36', 'Madrid', 'Circuit de découverte de Madrid', '14', NULL, NULL, '0', '0', NULL, '2019-03-08 09:49:02', '2019-03-08 09:51:37', '4'),
 ('37', 'Circuit Démo', 'Un chouette circuit de présentation du projet Akrobat', '51', '1970-01-01 02:00:00', NULL, '1', '0', NULL, '2019-03-08 10:00:23', '2019-03-08 10:00:23', '4'),
 ('38', 'Démo 2', NULL, NULL, NULL, NULL, '0', '0', NULL, '2019-03-08 10:35:22', '2019-03-08 10:35:22', '4');
-
-INSERT INTO `Evaluations` (`id`, `comment`, `stars`, `createdAt`, `updatedAt`, `id_circuit`, `id_user`) VALUES ('1', '10/10 would do it again', '5', '2019-03-06 23:43:32', '2019-03-06 23:43:32', '1', '1'),
-('2', '10/10 would do it again', '5', '2019-03-06 23:43:54', '2019-03-06 23:43:54', '1', '1');
-
-INSERT INTO `Questions` (`id_question`, `wording`, `response`, `type_of`, `points`, `id_step`) VALUES ('6', 'question première étape', 'réponse première étape', NULL, NULL, '325'),
-('10', 'Quel animal inattendu trouve-t-on ici, plus grand que nature, ce qui n’est pas peu dire ?', 'Girafe', NULL, NULL, '344'),
-('12', 'Quel animal inattendu trouve-t-on ici, plus grand que nature, ce qui n’est pas peu dire ?', 'Girafe', NULL, NULL, '349'),
-('13', 'En quelle année les Zürichois ont-ils eu l’occasion d’honorer leur serment de 1576 ?', '1870', NULL, NULL, '350'),
-('14', 'Que signifie Maïkäfer en français ?', NULL, NULL, NULL, '351'),
-('15', 'Le seul vestige significatif de la muraille protégeant Strasbourg au Moyen- ge se trouve sur cette place. Un portail Renaissance y a été intégré. En quelle année ?', NULL, NULL, NULL, '352'),
-('16', 'Comment appelle-t-on le motif représenté par la clé d’arc de la maison du 12 rue du Renard Prêchant ? (expression latine, 2 mots)', NULL, NULL, NULL, '354'),
-('17', 'Les bâtiments des rues Fritz et Wurtz datent principalement de la fin du XIXème siècle avec une vocation fréquente d’habitat social. Trouvez rue Wurtz le titre (français) d’un film sorti, en France, en 1968 (2 mots).', NULL, NULL, NULL, '355');
 
 INSERT INTO `Steps` (`id_step`, `name`, `latitude`, `longitude`, `description`, `order`, `instruction`, `validation`, `id_circuit`) VALUES ('37', 'Etape 7', '48.5546', '7.78687', NULL, '8', NULL, NULL, '1'),
 ('96', 'Etape 0', '48.5542', '7.77721', NULL, '1', NULL, NULL, '20'),
@@ -72,13 +67,17 @@ INSERT INTO `Steps` (`id_step`, `name`, `latitude`, `longitude`, `description`, 
 ('354', 'Etape 7', '48.5793', '7.75766', 'Rue du Renard Préchant', '6', 'Rue du Renard Prêchant…', NULL, '37'),
 ('355', 'Etape 8', '48.5795', '7.75938', 'Fritz/Wurtz', '7', 'Traversez la cour du Brochet et la rue de Zürich puis engagez vous dans la rue Fritz.', NULL, '37');
 
-INSERT INTO `Users` (`id_user`, `firstname`, `lastname`, `picture`, `email`, `password`) VALUES ('1', 'PICHET', 'Roland', '', 'pichet.roland@caramail.fr', '$2a$12$oUfVka//SY2vtm30aKyjAO1z4R/b6HsldK30k.QTSol.f0WWBU2l.'),
-('2', 'Thomas', 'Unterfinger', '', 'thomas-un@hotmail.fr', '$2a$12$tmnNnaFVSDrBkCq2ycNan.iOjXaIAEq39qZYMeADcnnYzwCoZGI52'),
-('4', 'Joffrey', 'Verd', NULL, 'jverd@protonmail.com', '$2a$12$QDzF86tCq4yJjlrdsHd38.LZm.RX18TVMoCXXRBKnXBcdu6GYlrqS'),
-('5', 'Léon', 'Test', NULL, 'leon@test.fr', '$2a$12$xkHbqfEL4gp7RE7PW7AqrOzZiFVSeQcC4CKhogsQpZWwUVHVLiCe.'),
-('10', 'Stevy', 'Palarski', NULL, 'stevy.palarski@gmail.com', '$2a$12$fg7NXXgSeGAqoQenszVNRO.1kyen1sgDwgtO5Ki/R.PwoKRux30r.');
+INSERT INTO `Questions` (`id_question`, `wording`, `response`, `type_of`, `points`, `id_step`) VALUES ('6', 'question première étape', 'réponse première étape', NULL, NULL, '325'),
+('10', 'Quel animal inattendu trouve-t-on ici, plus grand que nature, ce qui n’est pas peu dire ?', 'Girafe', NULL, NULL, '344'),
+('12', 'Quel animal inattendu trouve-t-on ici, plus grand que nature, ce qui n’est pas peu dire ?', 'Girafe', NULL, NULL, '349'),
+('13', 'En quelle année les Zürichois ont-ils eu l’occasion d’honorer leur serment de 1576 ?', '1870', NULL, NULL, '350'),
+('14', 'Que signifie Maïkäfer en français ?', NULL, NULL, NULL, '351'),
+('15', 'Le seul vestige significatif de la muraille protégeant Strasbourg au Moyen- ge se trouve sur cette place. Un portail Renaissance y a été intégré. En quelle année ?', NULL, NULL, NULL, '352'),
+('16', 'Comment appelle-t-on le motif représenté par la clé d’arc de la maison du 12 rue du Renard Prêchant ? (expression latine, 2 mots)', NULL, NULL, NULL, '354'),
+('17', 'Les bâtiments des rues Fritz et Wurtz datent principalement de la fin du XIXème siècle avec une vocation fréquente d’habitat social. Trouvez rue Wurtz le titre (français) d’un film sorti, en France, en 1968 (2 mots).', NULL, NULL, NULL, '355');
 
-
+INSERT INTO `Evaluations` (`id`, `comment`, `stars`, `createdAt`, `updatedAt`, `id_circuit`, `id_user`) VALUES ('1', '10/10 would do it again', '5', '2019-03-06 23:43:32', '2019-03-06 23:43:32', '1', '1'),
+('2', '10/10 would do it again', '5', '2019-03-06 23:43:54', '2019-03-06 23:43:54', '1', '1');
 
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

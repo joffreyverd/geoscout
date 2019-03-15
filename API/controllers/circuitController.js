@@ -18,16 +18,36 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
+    nearbyCircuits : (req,res,next) =>
+    {
+        db.Step.findAll({where : {order : 0}})
+        .then((steps) =>
+        {
+            let dist = 0;
+            let map = steps.map(step =>
+            {
+                dist = utils.distanceBetweenPoints(step.latitude,req.body.user_latitude,step.longitude,req.body.user_longitude);
+                if(dist <= req.body.distance)
+                {
+                    return db.Circuit.findOne({where : {id_circuit : step.id_circuit}});
+                }
+            });
+
+            return Promise.all(map);
+        })
+        .then((circuits => 
+        {
+            res.json(circuits)
+        }));
+    },
+
+    //////////////////////////////////////////////////////////
+
     circuits : (req,res,next) => 
     {
-        if(utils.verifToken(req.headers['authorization']))
-        {
-            db.Circuit.findAll()
-            .then((circuit) => res.json(circuit))
-            .catch((err) => {if(err) res.sendStatus(500)})
-        }
-        else
-            res.sendStatus(401);
+        db.Circuit.findAll()
+        .then((circuit) => res.json(circuit))
+        .catch((err) => {if(err) res.sendStatus(500)})
     },
 
     //////////////////////////////////////////////////////////
@@ -142,3 +162,5 @@ module.exports =
             res.sendStatus(401);
     }
 }
+
+
