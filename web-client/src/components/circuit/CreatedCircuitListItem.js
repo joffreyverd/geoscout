@@ -40,7 +40,7 @@ export default withRouter(({
                 <FontAwesomeIcon
                     icon='align-justify'
                     className='published-item'
-                    color={published == 1 ? '#27ae60' : 'white'}
+                    color={published === 1 ? '#27ae60' : 'white'}
                 />
                 <span className={`level-item ${classLevel}`} />
 

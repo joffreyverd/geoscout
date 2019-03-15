@@ -19,13 +19,13 @@ function request(route, method, body) {
         .then(checkStatus);
 }
 
-function checkStatus(response) {
+async function checkStatus(response) {
     if (response.ok) {
         if (response.status === 204)
             return Promise.resolve();
         return Promise.resolve(response.json());
     }
-    return Promise.reject({ code: response.status, text: response.text });
+    return Promise.reject({ code: response.status, text: await response.text() });
 }
 
 export default {

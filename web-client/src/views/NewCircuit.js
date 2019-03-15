@@ -92,7 +92,7 @@ export default class NewCircuit extends Component {
     })
 
     handleDropStep = (event, newOrder) => {
-        let id = event.dataTransfer.getData('id');
+        // let id = event.dataTransfer.getData('id');
         let oldOrder = event.dataTransfer.getData('order');
         this.changeStepOrder(oldOrder, newOrder);
 
@@ -110,7 +110,7 @@ export default class NewCircuit extends Component {
         this.setState((prev) => {
             let steps = prev.steps.map((step) => {
 
-                if (step.order == prevIdx) {
+                if (step.order === parseInt(prevIdx)) {
                     step.order = newIdx;
                 } else if (newIdx <= step.order && step.order < prevIdx) {
                     step.order += 1;
