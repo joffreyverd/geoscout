@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-    Button, ModalBody, ModalFooter, Form, FormGroup,
-    Label, Input, Modal, ModalHeader,
-} from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 class UpdateCircuitModal extends Component {
 
@@ -40,82 +37,78 @@ class UpdateCircuitModal extends Component {
             length: length || null,
             duration: duration || null,
         };
-        const { displayModal } = this.props;
+        const { displayUpdateCircuit } = this.props;
         this.props.updateCircuit(circuit)
-            .then(() => displayModal())
+            .then(() => displayUpdateCircuit())
             .catch(error => console.log(error));
     }
 
     render() {
         const { name, description, length, duration } = this.state;
-        const { open, displayModal } = this.props;
+        const { show, displayUpdateCircuit } = this.props;
 
         return (
             <>
-                <Modal
-                    isOpen={open}
-                    fade={false}
-                    toggle={displayModal}
-                >
-                    <ModalHeader>Modification du circuit</ModalHeader>
-                    <ModalBody>
-                        <Form>
-                            <FormGroup>
-                                <Label>Nom</Label>
-                                <Input
-                                    type='text'
-                                    name='name'
-                                    value={name}
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
+                <div className={show ? 'update-circuit' : 'hidden-update-circuit'}>
+                    <div className='update-title'>
+                        <h3>Modification du circuit</h3>
+                    </div>
+                    <Form className='update-form'>
+                        <FormGroup>
+                            <Label>Nom</Label>
+                            <Input
+                                type='text'
+                                name='name'
+                                value={name}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
 
-                            <FormGroup>
-                                <Label>Description</Label>
-                                <Input
-                                    type='textarea'
-                                    name='description'
-                                    value={description}
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
+                        <FormGroup>
+                            <Label>Description</Label>
+                            <Input
+                                type='textarea'
+                                name='description'
+                                value={description}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
 
-                            <FormGroup>
-                                <Label>Distance moyenne</Label>
-                                <Input
-                                    type='text'
-                                    name='length'
-                                    value={length}
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
+                        <FormGroup>
+                            <Label>Distance moyenne</Label>
+                            <Input
+                                type='text'
+                                name='length'
+                                value={length}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
 
-                            <FormGroup>
-                                <Label>Durée moyenne</Label>
-                                <Input
-                                    type='text'
-                                    name='duration'
-                                    value={duration}
-                                    onChange={this.handleChange}
-                                />
-                            </FormGroup>
+                        <FormGroup>
+                            <Label>Durée moyenne</Label>
+                            <Input
+                                type='text'
+                                name='duration'
+                                value={duration}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
 
-                        </Form>
-                    </ModalBody>
+                        <div className='update-buttons'>
+                            <Button
+                                color='primary'
+                                onClick={this.handleSubmit}
+                            >Modifier
+                            </Button>
+                            <Button
+                                color='secondary'
+                                onClick={displayUpdateCircuit}
+                            >Annuler
+                            </Button>
+                        </div>
 
-                    <ModalFooter>
-                        <Button
-                            color='primary'
-                            onClick={this.handleSubmit}
-                        >Modifier
-                        </Button>
-                        <Button
-                            color='secondary'
-                            onClick={displayModal}
-                        >Annuler
-                        </Button>
-                    </ModalFooter>
-                </Modal>
+                    </Form>
+                </div>
             </>
         );
     }

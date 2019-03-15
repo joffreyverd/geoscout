@@ -1,7 +1,7 @@
 'use_strict';
 const db = require('../models')
 const utils = require('./utils');
-
+const Promise = require('bluebird')
 module.exports = 
 {
     stepCircuit : (req,res,next) => 
@@ -59,36 +59,33 @@ module.exports =
 
     changeOrder : (req,res,next) =>
     {
-        if(utils.verifToken(req.headers['authorization']))
+        db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.params.id_circuit}})
+        .then((steps) =>
         {
-            db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}})
-            .then((steps) =>
+            console.log(req.params.new + " " + req.params.previous)
+            return db.sequelize.transaction(t=>
             {
-                let promise = steps.map((item,i) =>
+                return Promise.map(steps,step =>
                 {
-                    if(item.order === req.body.previous)
+                    if(step.order === req.params.previous)
                     {
-                        item.order = req.body.new;
+                        step.order = req.params.new;
                     }
-                    else if(item.order < req.body.previous && item.order >= req.body.new)
+                    else if(step.order < req.params.previous && step.order >= req.params.new)
                     {
-                        item.order += 1;
+                        step.order += 1;
                     }
-                    else if (item.order > req.body.previous && item.order <= req.body.new)
+                    else if (step.order > req.params.previous && step.order <= req.params.new)
                     {
-                        item.order -= 1;
+                        step.order -= 1;
                     }
 
-                    item.save();
-                });
-
-                Promise.all(promise)
+                    return step.save({transaction: t});
+                })
                 .then(res.sendStatus(200))
-                .catch(res.sendStatus(500))
-            });
-        }
-        else
-            res.sendStatus(401);
+                .catch(res.sendStatus(500))    
+            })
+        })
     },
 
     //////////////////////////////////////////////////////////

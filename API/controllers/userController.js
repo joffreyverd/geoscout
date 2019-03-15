@@ -32,8 +32,7 @@ module.exports =
         .then((user) => 
         {
             let token = null;
-
-             bcrypt.compare(req.body.password,user.password)
+            bcrypt.compare(req.body.password,user.password)
             .then((obj) =>
             {
                 if(obj)
@@ -46,7 +45,7 @@ module.exports =
                     res.status(401).send({auth : false,message:'Mot de passe incorrect'})
             })
         })
-        .catch(err => res.status(500).send({message : 'Une erreur interne est survenue'}))
+        .catch((err) => {console.log(err);res.status(500).send({message : 'Une erreur interne est survenue'})})
     },
 
     whoami : (req,res,next) =>

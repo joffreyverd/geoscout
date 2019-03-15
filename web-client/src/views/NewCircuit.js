@@ -13,8 +13,8 @@ export default class NewCircuit extends Component {
     state = {
         circuit: {},
         steps: [],
-        modalOpen: false,
-        updateCircuitModalOpen: false,
+        circuitIsDisplayed: false,
+        stepIsDisplayed: false,
     }
 
     componentDidMount() {
@@ -33,25 +33,8 @@ export default class NewCircuit extends Component {
         }
     }
 
-    displayModal = () => {
-        this.setState(previousState => ({
-            modalOpen: !previousState.modalOpen,
-        }));
-    }
-
-    displayUpdateCircuitModal = () => {
-        this.setState(previousState => ({
-            updateCircuitModalOpen: !previousState.updateCircuitModalOpen,
-        }));
-    }
-
-    /**
-     * Fonction lancé par le clic sur une étape (marker ou list)
-     * @param {Object} step : L'objet correspondant à l'étape cliqué
-     */
     onClickItem = (step) => {
-        this.setState({ stepFocus: step });
-        this.displayModal();
+        this.setState({ stepFocus: step, stepIsDisplayed: true, circuitIsDisplayed: false });
     }
 
     /**
@@ -60,7 +43,7 @@ export default class NewCircuit extends Component {
     handleClickMap = (event) => {
         const { circuit } = this.state;
         const step = {
-            name: `Etape`,
+            name: 'Etape',
             longitude: event.lngLat[0],
             latitude: event.lngLat[1],
             id_circuit: circuit.id_circuit,
@@ -153,8 +136,22 @@ export default class NewCircuit extends Component {
         });
     }
 
+    displayUpdateCircuit = () => {
+        this.setState(previousState => ({
+            circuitIsDisplayed: !previousState.circuitIsDisplayed,
+            stepIsDisplayed: false,
+        }));
+    }
+
+    displayUpdateStep = () => {
+        this.setState(previousState => ({
+            stepIsDisplayed: !previousState.stepIsDisplayed,
+            circuitIsDisplayed: false,
+        }));
+    }
+
     render() {
-        const { steps, circuit, stepFocus, modalOpen, updateCircuitModalOpen } = this.state;
+        const { steps, stepFocus, circuit, circuitIsDisplayed, stepIsDisplayed } = this.state;
 
         return (
             <div className='view-wrapper'>
@@ -170,9 +167,9 @@ export default class NewCircuit extends Component {
                     <div className='circuit-title'>
                         <h3>{circuit.name}</h3>
                         <Button
-                            className='update-circuit'
+                            className='update-circuit-button'
+                            onClick={this.displayUpdateCircuit}
                             color='info'
-                            onClick={this.displayUpdateCircuitModal}
                         >Modifier
                         </Button>
                     </div>
@@ -186,15 +183,16 @@ export default class NewCircuit extends Component {
                 </div>
                 <UpdateStepModal
                     step={stepFocus}
-                    open={modalOpen}
-                    displayModal={this.displayModal}
+                    removeStep={this.removeStep}
                     updateStep={this.updateStep}
+                    show={stepIsDisplayed}
+                    displayUpdateStep={this.displayUpdateStep}
                 />
 
                 <UpdateCircuitModal
                     circuit={circuit}
-                    open={updateCircuitModalOpen}
-                    displayModal={this.displayUpdateCircuitModal}
+                    show={circuitIsDisplayed}
+                    displayUpdateCircuit={this.displayUpdateCircuit}
                     updateCircuit={this.updateCircuit}
                 />
 
