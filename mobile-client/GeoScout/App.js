@@ -1,10 +1,10 @@
 import React from 'react';
-import GeoLocation from './Location';
+import Sign from './src/components/Sign';
 
 export default class App extends React.Component {
   render() {
     return (
-      <GeoLocation/>
+      <Sign/>
     );
   }
 }
