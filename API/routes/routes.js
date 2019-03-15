@@ -20,7 +20,7 @@ module.exports = function(app)
 	app.route('/step').post(step.createStep);
 	app.route('/step/:id_step/questions').get(step.questionsOfStep);
 	app.route('/step/question').post(step.addQuestionToStep);
-	app.route('/step/order').post(step.changeOrder)
+	app.route('/step/order/:id_circuit/:previous/:new').put(step.changeOrder);
 
 	app.route('/circuit/:id_circuit').get(circuit.circuit);
 	app.route('/my-circuits').get(circuit.myCircuits);
@@ -29,6 +29,7 @@ module.exports = function(app)
 	app.route('/publish-circuit').put(circuit.publicationCircuit);
 	app.route('/circuit/:id_circuit').put(circuit.updateCircuit);
 	app.route('/circuit').delete(circuit.deleteCircuit);
+	app.route('/circuit/nearby').post(circuit.nearbyCircuits)
 
 	app.route('/question/:id_question').get(question.getQuestion);
 	app.route('/question').post(question.createQuestion);
