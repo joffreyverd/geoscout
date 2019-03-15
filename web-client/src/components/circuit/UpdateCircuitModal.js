@@ -107,7 +107,7 @@ class UpdateCircuitModal extends Component {
                         <Button
                             color='primary'
                             onClick={this.handleSubmit}
-                        >Créer
+                        >Modifier
                         </Button>
                         <Button
                             color='secondary'

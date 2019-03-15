@@ -23,7 +23,7 @@ h1 {
 .ml-auto {
   display: flex;
   justify-content: space-between;
-  width: 90%;
+  
   font-size: .7em;
 }
 
@@ -106,21 +106,59 @@ h1 {
 }
 
 .list-item {
-  background-color: #1abc9c;
+  background-color: #ecf0f1;
   border-radius: 5px;
-  width: 46%;
-  height: 400px;
+  width: 30%;
+  height: 200px;
   margin: 20px;
-  padding: 30px;
-  color: #fff;
+  padding: 15px;
   transition: 0.2s;
+  position: relative;
 }
 
 .list-item:hover {
   cursor: pointer;
-  background-color: #16a085;
+  background-color: #65D8C1;
   color: #fff;
   transition: 0.2s;
+}
+
+.version-item  {
+  position: absolute;
+  background-color: white;
+  color: #2c3e50;
+  border-radius: 2px;
+  padding: 0px 5px;
+  width: 90px;
+  text-align: center;
+  bottom: 0px;
+  right: 10px;
+}
+.published-item {
+  position: absolute;
+  top: 15px;
+  right: 40px;
+}
+
+.level-item {
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  width: 15px;
+  height: 15px;
+  border-radius: 100%;
+}
+
+.easy {
+  background-color:#27ae60; 
+}
+
+.medium {
+  background-color:#2980b9; 
+}
+
+.hard {
+  background-color:#c0392b; 
 }
 
 /************************** NEW-CIRCUIT **************************/
@@ -146,7 +184,8 @@ h1 {
   padding: 10px;
   margin: 0px;
   height: 10%;
-  position: relative;
+  display: flex;
+  justify-content: center;
 }
 
 .step-wrapper {
@@ -190,11 +229,13 @@ h1 {
 }
 
 .update-circuit {
-  position: absolute;
-  bottom: 30px;
-  right: 20px;
+  padding: auto;
+  line-height: 10px;
+  height: 25px;
+  margin: auto 10px;
+  display: block;
 }
- 
+
  .update-circuit:hover {
    cursor: pointer;
  }
