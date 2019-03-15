@@ -61,9 +61,7 @@ export default class Menu extends React.Component {
                                         </Link>
                                     </DropdownMenu>
                                 </Dropdown>
-                                <NavItem>
-                                    <Authentication isConnected={isConnected} logout={logout} />
-                                </NavItem>
+                                <Authentication isConnected={isConnected} logout={logout} />
                             </Nav>
                         </Collapse>
 

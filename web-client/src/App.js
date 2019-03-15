@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUser, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faUser, faPen, faAlignJustify } from '@fortawesome/free-solid-svg-icons';
 
 import './css/app.css';
 import Menu from './components/Menu';
@@ -15,7 +15,7 @@ import Todo from './views/Todo';
 
 import api from './utils/httpMethods';
 
-library.add(faUser, faPen);
+library.add(faUser, faPen, faAlignJustify);
 
 class App extends Component {
 

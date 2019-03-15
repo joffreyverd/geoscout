@@ -34,19 +34,19 @@ export default class Map extends React.Component {
     }
 
     centerFirstSteps = () => {
-        const { steps } = this.props
-        let { viewport } = this.state;
+        const { steps } = this.props;
+        const { viewport } = this.state;
         viewport.latitude = steps[0].latitude;
         viewport.longitude = steps[0].longitude;
 
         this.setState({
-            viewport: viewport
+            viewport: viewport,
         });
     }
 
     render() {
         const {
-            steps, circuits, onClickMap, onClickMarker, className
+            steps, circuits, onClickMap, onClickMarker, className,
         } = this.props;
         const { viewport, userPosition } = this.state;
 
@@ -70,20 +70,18 @@ export default class Map extends React.Component {
                         </Marker>
                     }
                     { /* Affichage des étapes dans le cas de la création/update de circuit */}
-                    {steps && steps.map((s, idx) =>
-                        <Marker
-                            key={s.id_step}
-                            latitude={s.latitude}
-                            longitude={s.longitude}
-                            offsetLeft={-11}
-                            offsetTop={-25}
-                        >
-                            <Pin color='#1f7a1f' index={s.order} onClick={() => onClickMarker(s)} />
-                        </Marker>
-                    )}
+                    {steps && steps.map((s, idx) => <Marker
+                        key={s.id_step}
+                        latitude={s.latitude}
+                        longitude={s.longitude}
+                        offsetLeft={-11}
+                        offsetTop={-25}
+                    >
+                        <Pin color='#1f7a1f' index={s.order} onClick={() => onClickMarker(s)} />
+                    </Marker>)}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
                     {circuits && circuits.map((c, idx) => {
-                        if (c.latitude && c.longitude)
+                        if (c.latitude && c.longitude) {
                             return (
                                 <Marker
                                     key={idx}
@@ -95,6 +93,7 @@ export default class Map extends React.Component {
                                     <Pin color='#0066cc' onClick={() => onClickMarker(c)} />
                                 </Marker>
                             );
+                        }
                         return null;
                     })}
                 </ReactMapGL>

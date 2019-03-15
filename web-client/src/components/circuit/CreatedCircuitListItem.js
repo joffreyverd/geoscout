@@ -1,5 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { Tooltip } from 'reactstrap';
 
 export default withRouter(({
     id_circuit,
@@ -7,22 +9,42 @@ export default withRouter(({
     description,
     length,
     duration,
-    needInternet,
     published,
     version,
     level,
-    history
-}) => (
-        <li className='list-item' onClick={() => history.push(`circuit/${id_circuit}`)}>
+    history,
+}) => {
 
-            <h3 className='item-name'>{name}</h3>
-            <span>{description}</span>
-            <span>{length}</span>
-            <span>{duration}</span>
-            <span>{needInternet}</span>
-            <span>{published}</span>
-            <span>{version}</span>
-            <span>{level}</span>
+    let classLevel;
+    switch (level) {
+        case '1':
+            classLevel = 'medium';
+            break;
+        case '2':
+            classLevel = 'hard';
+            break;
+        default:
+            classLevel = 'easy';
+            break;
+    }
 
-        </li>
-    ));
+    return (
+        <>
+            <li className='list-item' onClick={() => history.push(`circuit/${id_circuit}`)}>
+
+                <h3 className='item-name'>{name}</h3>
+                <p>{description && description}</p>
+                <p>{length && `${length} km`}</p>
+                <p>{duration && `${length} heures`}</p>
+                <p className='version-item'>{version && `Version : ${version}`}</p>
+                <FontAwesomeIcon
+                    icon='align-justify'
+                    className='published-item'
+                    color={published == 1 ? '#27ae60' : 'white'}
+                />
+                <span className={`level-item ${classLevel}`} />
+
+            </li>
+        </>
+    );
+});
