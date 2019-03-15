@@ -4,7 +4,7 @@ export default ({ step, onClickItem, handleDrop }) => (
     <li className='step-wrapper-item' draggable
         onClick={() => onClickItem(step)}
         onDragStart={(e) => handleDragStart(e, step)}
-        onDragOver={(e) => { e.preventDefault(); }}
+        onDragOver={(e) => handleDragOver(e)}
         onDrop={(e) => handleDrop(e, step.order)}>
 
         <div>
@@ -28,4 +28,8 @@ export default ({ step, onClickItem, handleDrop }) => (
 function handleDragStart(event, step) {
     event.dataTransfer.setData('id', step.id_step);
     event.dataTransfer.setData('order', step.order)
+}
+
+function handleDragOver(event) {
+    event.preventDefault();
 }

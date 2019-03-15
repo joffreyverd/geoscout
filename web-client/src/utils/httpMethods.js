@@ -1,5 +1,11 @@
 const API_HOST = process.env.REACT_APP_API_URL;
 
+/**
+ * Fonction d'envoie d'une requête au serveur
+ * @param {String} route : La route de la requête (sans l'url du serveur)
+ * @param {String} method : La méthode de la requête
+ * @param {Object} body : Un objet représentant le body de la requête
+ */
 function request(route, method, body) {
     const options = {
         method: method,
