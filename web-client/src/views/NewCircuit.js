@@ -51,7 +51,7 @@ export default class NewCircuit extends Component {
 
     // Création d'une étape dans la base
     handleClickMap = (event) => {
-        const { steps, circuit } = this.state;
+        const { circuit } = this.state;
         const step = {
             name: `Etape`,
             longitude: event.lngLat[0],
@@ -90,12 +90,37 @@ export default class NewCircuit extends Component {
         });
     })
 
+    handleDropStep = (event, newOrder) => {
+        let id = event.dataTransfer.getData('id');
+        let oldOrder = event.dataTransfer.getData('order');
+        this.changeStepOrder(oldOrder, newOrder);
+
+        // api.put('order', {
+        //     id: id,
+        //     id_circuit: this.state.circuit.id_circuit,
+        //     previous: oldOrder,
+        //     new: newOrder,
+        // })
+        //     .then(() => this.changeStepOrder(oldOrder, newOrder))
+        //     .catch(error => console.log(error))
+    }
+
     changeStepOrder = (prevIdx, newIdx) => {
         this.setState((prev) => {
-            const step = prev.step.splice(prevIdx, 1)[0];
-            // inserts at newIdx position
-            prev.steps.splice(newIdx, 0, step);
-            return { steps: prev.steps };
+            let steps = prev.steps.map((step) => {
+
+                if (step.order == prevIdx) {
+                    step.order = newIdx;
+                } else if (newIdx <= step.order && step.order < prevIdx) {
+                    step.order += 1;
+                } else if (step.order > prevIdx && step.order <= newIdx) {
+                    step.order -= 1;
+                }
+
+                return step;
+            })
+            steps.sort((a, b) => a.order - b.order);
+            return { steps: steps };
         });
     }
 
@@ -127,6 +152,7 @@ export default class NewCircuit extends Component {
                     <StepList
                         items={steps}
                         onClickItem={this.onClickItem}
+                        handleDrop={this.handleDropStep}
                     />
 
                 </div>
