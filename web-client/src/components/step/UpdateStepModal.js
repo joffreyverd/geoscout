@@ -25,7 +25,6 @@ class UpdateStepModal extends Component {
                     },
                 }));
                 this.fetchQuestion(step.id_step);
-                console.log(step);
             }
         }
     }
@@ -58,6 +57,8 @@ class UpdateStepModal extends Component {
 
     handleSubmit = () => {
         const step = this.state;
+        console.log(step);
+
         const { displayUpdateStep } = this.props;
         this.props.updateStep(step)
             .then(() => {
@@ -145,7 +146,7 @@ class UpdateStepModal extends Component {
                             <Button
                                 color='danger'
                                 onClick={removeStep}
-                            >Supprimer !
+                            >Supprimer
                             </Button>
                             <Button
                                 color='secondary'
