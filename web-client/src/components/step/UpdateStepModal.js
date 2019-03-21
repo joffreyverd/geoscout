@@ -76,7 +76,7 @@ class UpdateStepModal extends Component {
     }
 
     render() {
-        const { name, description, instruction, questions: { wording, response } } = this.state;
+        const { id_step, name, description, instruction, questions: { wording, response } } = this.state;
         const { show, displayUpdateStep, removeStep } = this.props;
 
         return (
@@ -85,7 +85,7 @@ class UpdateStepModal extends Component {
                     <div className='update-title'>
                         <h3>{'Modification de l\'étape'}</h3>
                     </div>
-                    <Form className='update-form'>
+                    <Form className='update-form' onSubmit={e => e.preventDefault()}>
                         <FormGroup>
                             <Label>Nom</Label>
                             <Input
@@ -138,13 +138,14 @@ class UpdateStepModal extends Component {
 
                         <div className='update-buttons'>
                             <Button
+                                type='submit'
                                 color='info'
                                 onClick={this.handleSubmit}
                             >Modifier
                             </Button>
                             <Button
                                 color='danger'
-                                onClick={removeStep}
+                                onClick={() => removeStep(id_step)}
                             >Supprimer !
                             </Button>
                             <Button

@@ -39,6 +39,7 @@ export default class NewCircuit extends Component {
 
     /**
      * Création d'une étape dans la base
+     * @param {Event} event : event envoyé
      */
     handleClickMap = (event) => {
         const { circuit } = this.state;
@@ -61,14 +62,15 @@ export default class NewCircuit extends Component {
      * Suppression d'une étape sur le serveur puis dans le state
      * @param {Integer} idx : L'index de l'étape dans le tableau steps du state
      */
-    removeStep = (idx) => {
-        const step = this.state.steps[idx];
-        api.delete(`step/${step.id_step}`).then(() => {
+    removeStep = (id_step) => {
+        api.delete(`step/${id_step}`).then(() => {
             // Suppression de l'étape dans la liste
             this.setState((prev) => {
+                const idx = prev.steps.findIndex(element => element.id_step === id_step);
                 prev.steps.splice(idx, 1);
                 return { steps: prev.steps };
             });
+            this.displayUpdateStep();
         }).catch(error => console.log(error.text));
     }
 
