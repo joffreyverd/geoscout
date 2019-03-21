@@ -31,7 +31,7 @@ export default class CreatedCircuit extends Component {
     }
 
     render() {
-        const { dropdownOpen, modal, filter, circuits } = this.state;
+        const { dropdownOpen, filter, circuits } = this.state;
         const showPublished = (filter === 'Publiés');
 
         return (

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'reactstrap';
 
@@ -56,28 +57,28 @@ class CreatedCircuitListItem extends Component {
                         placement='top'
                         isOpen={tooltipPublicationOpen}
                         autohide={false}
-                        target='published-status'
-                        publishedStatusToggler={this.publishedStatusToggler}
+                        target={`published${id_circuit}`}
+                        toggle={this.publishedStatusToggler}
                     >
-                        Etat de publication
+                        {published === true ? 'Publié' : 'Non-publié'}
                     </Tooltip>
                     <FontAwesomeIcon
-                        id='published-status'
+                        id={`published${id_circuit}`}
                         icon='align-justify'
                         className='published-item'
-                        color={published === 1 ? '#27ae60' : 'white'}
+                        color={published === true ? '#27ae60' : 'white'}
                     />
 
                     <Tooltip
                         placement='top'
                         isOpen={tooltipLevelOpen}
                         autohide={false}
-                        target='level'
-                        publishedStatusToggler={this.levelToggler}
+                        target={`level${id_circuit}`}
+                        toggle={this.levelToggler}
                     >
                         {`Difficulté : ${classLevel}`}
                     </Tooltip>
-                    <span className={`level-item ${classLevel}`} id='level' />
+                    <span className={`level-item ${classLevel}`} id={`level${id_circuit}`} />
 
                 </li>
             </>
@@ -86,4 +87,4 @@ class CreatedCircuitListItem extends Component {
 
 }
 
-export default CreatedCircuitListItem;
+export default withRouter(CreatedCircuitListItem);

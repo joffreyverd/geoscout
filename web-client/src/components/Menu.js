@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Collapse, Navbar, NavbarToggler, Dropdown, Button,
+    Collapse, Navbar, NavbarToggler, Dropdown,
     Nav, NavItem, DropdownMenu, DropdownItem, DropdownToggle,
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
@@ -60,7 +60,7 @@ export default class Menu extends React.Component {
                                         <DropdownItem
                                             onClick={this.displayModal}
                                             className='create-circuit'
-                                        >Créer circuit
+                                        >Créer un circuit
                                         </DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
