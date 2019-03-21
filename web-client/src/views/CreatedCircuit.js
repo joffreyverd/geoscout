@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
-import {
-    ButtonDropdown, DropdownToggle,
-    DropdownMenu, DropdownItem, Button,
-} from 'reactstrap';
+import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import '../css/app.css';
 import CreatedCircuitList from '../components/circuit/CreatedCircuitList';
-import CreateCircuitModal from '../components/circuit/CreateCircuitModal';
 
 import api from '../utils/httpMethods';
 
@@ -15,7 +11,6 @@ export default class CreatedCircuit extends Component {
     state = {
         dropdownOpen: false,
         filter: 'Tous',
-        modal: false,
         circuits: [],
     };
 
@@ -23,12 +18,6 @@ export default class CreatedCircuit extends Component {
         this.setState({
             dropdownOpen: !this.state.dropdownOpen,
         });
-    }
-
-    displayModal = () => {
-        this.setState(previousState => ({
-            modal: !previousState.modal,
-        }));
     }
 
     onFilterClick = (event) => {
@@ -78,14 +67,6 @@ export default class CreatedCircuit extends Component {
                                 </DropdownItem>
                             </DropdownMenu>
                         </ButtonDropdown>
-
-                        <Button
-                            color='success'
-                            className='create-circuit'
-                            onClick={this.displayModal}
-                        >Création
-                        </Button>
-
                     </div>
 
                 </div>
@@ -98,11 +79,6 @@ export default class CreatedCircuit extends Component {
                         items={circuits.filter(element => element.published === (showPublished))}
                     />
                 }
-
-                <CreateCircuitModal
-                    displayModal={this.displayModal}
-                    modal={modal}
-                />
             </>
         );
     }

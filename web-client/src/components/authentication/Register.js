@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Button, ModalBody, ModalFooter,
-    Form, FormGroup, Label, Input, FormFeedback
+    Form, FormGroup, Label, Input, FormFeedback,
 } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
@@ -19,7 +19,7 @@ class Register extends Component {
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            ["verif" + event.target.name]: undefined
+            [`verif${  event.target.name}`]: undefined,
         });
     }
 
@@ -30,21 +30,18 @@ class Register extends Component {
             lastname,
             email,
             password,
-            repeatPassword
+            repeatPassword,
         } = this.state;
 
 
         // Vérification du format d'email
         if (!email.match(/^[\w-]+@[\w-]+\.\w+$/g)) {
-            this.setState({ verifemail: true })
-        }
-        else if (password.length < 8) {
-            this.setState({ verifpassword: true })
-        }
-        else if (repeatPassword !== password) {
-            this.setState({ verifrepeatPassword: true })
-        }
-        else {
+            this.setState({ verifemail: true });
+        } else if (password.length < 8) {
+            this.setState({ verifpassword: true });
+        } else if (repeatPassword !== password) {
+            this.setState({ verifrepeatPassword: true });
+        } else {
             // Copie du state dans un nouvel objet pour pouvoir supprimer des propriétés
             const user = Object.assign({}, this.state);
             delete user.repeatPassword;
@@ -92,7 +89,7 @@ class Register extends Component {
                             value={email}
                             invalid={verifemail}
                         />
-                        <FormFeedback >Ce n'est pas une adresse valide</FormFeedback>
+                        <FormFeedback>Ce n'est pas une adresse valide</FormFeedback>
                     </FormGroup>
 
                     <Label>Mot de passe</Label>
