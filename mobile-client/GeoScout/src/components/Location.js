@@ -135,7 +135,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'rgba(0,112,255,0.3)',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        
     },
     marker: {
         height: 20,

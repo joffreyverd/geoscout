@@ -15,10 +15,11 @@ module.exports =
                 id_circuit : req.body.id_circuit,
                 id_user : id_user
             })
-            .then(() => res.sendStatus(201));
+            .then(() => res.sendStatus(201))
+            .catch((err => {if(err)res.status(500).send(utils.messages.serverError)}));
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     ////////////////////////////////////////////////////////////////////////////
@@ -41,8 +42,9 @@ module.exports =
                 where : {id_circuit : req.params.id_circuit}
             })
             .then(evaluations => {res.json(evaluations)})
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 }

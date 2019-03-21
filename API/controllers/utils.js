@@ -31,6 +31,13 @@ module.exports =
                 Math.sin(Δλ/2) * Math.sin(Δλ/2);
         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return Math.round((R * c)/1000);
+    },
+
+    messages : 
+    {
+        serverError : 'Il y a eu un problème avec le serveur',
+        incorrectPassword : 'Le mot de passe est incorrect',
+        invalidToken : 'Vous n\'avez pas fourni vos informations de connexion'
     }
 }
 
