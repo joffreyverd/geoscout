@@ -8,10 +8,12 @@
     "compiler": "pkg package.json",
     "start": "node serveur.js"
   },
+  
   "pkg": {
     "assets": [
       "models/**/*",
-      "routes/**/*"
+      "routes/**/*",
+      "build/**/*"
     ],
     "targets": [
       "node10-linux-x64"

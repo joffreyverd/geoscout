@@ -10,10 +10,10 @@ module.exports =
         if(id_user)
         {
             db.Step.findAll({where : {id_circuit : req.params.id_circuit}, order: ['order']})
-            .then((step) => res.json(step));
+            .then(step => res.status(200).send(step));
         }
         else
-            res.sendStatus(401);    
+            res.status(401).send(utils.messages.invalidToken); 
     },
 
     //////////////////////////////////////////////////////////
@@ -23,10 +23,10 @@ module.exports =
         if(utils.verifToken(req.headers['authorization']))
         {
             db.Step.findByPk(req.params.id_step)
-            .then((step) => res.json(step));
+            .then(step => res.status(200).send(step));
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     },
 
     //////////////////////////////////////////////////////////
@@ -52,40 +52,46 @@ module.exports =
             }).catch((err) => {if(err) res.sendStatus(500)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     },
 
     //////////////////////////////////////////////////////////
 
     changeOrder : (req,res,next) =>
     {
-        db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.params.id_circuit}})
-        .then((steps) =>
+        if(utils.verifToken(req.headers['authorization']))
         {
-            console.log(req.params.new + " " + req.params.previous)
-            return db.sequelize.transaction(t=>
+            db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.params.id_circuit}})
+            .then((steps) =>
             {
-                return Promise.map(steps,step =>
+                console.log(req.params.new + " " + req.params.previous)
+                return db.sequelize.transaction(t=>
                 {
-                    if(step.order === req.params.previous)
+                    return Promise.map(steps,step =>
                     {
-                        step.order = req.params.new;
-                    }
-                    else if(step.order < req.params.previous && step.order >= req.params.new)
-                    {
-                        step.order += 1;
-                    }
-                    else if (step.order > req.params.previous && step.order <= req.params.new)
-                    {
-                        step.order -= 1;
-                    }
+                        if(step.order === req.params.previous)
+                        {
+                            step.order = req.params.new;
+                        }
+                        else if(step.order < req.params.previous && step.order >= req.params.new)
+                        {
+                            step.order += 1;
+                        }
+                        else if (step.order > req.params.previous && step.order <= req.params.new)
+                        {
+                            step.order -= 1;
+                        }
 
-                    return step.save({transaction: t});
+                        return step.save({transaction: t});
+                    })
+                    .then(res.sendStatus(200))
+                    .catch(res.sendStatus(500))    
                 })
-                .then(res.sendStatus(200))
-                .catch(res.sendStatus(500))    
-            })
-        })
+            });
+        }
+        else
+            res.status(401).send(utils.messages.invalidToken); 
+        
     },
 
     //////////////////////////////////////////////////////////
@@ -112,10 +118,11 @@ module.exports =
                 else
                     throw 'err'
                 
-            }).catch((err) => {if(err) res.sendStatus(500)})
+            })
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     },
 
 
@@ -131,10 +138,10 @@ module.exports =
                 attributes : ['id_question','wording','points']
             })
             .then(questions => res.status(200).json(questions))
-            .catch((err) => {if(err) {console.log(err);res.sendStatus(500)}})
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     },
 
     //////////////////////////////////////////////////////////
@@ -145,16 +152,20 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Step.findByPk(req.params.id_step).then(step => {
-                db.Circuit.findByPk(step.id_circuit).then(circuit => {
-                    if (circuit.id_user === id_user) {
+            db.Step.findByPk(req.params.id_step).then(step => 
+                {
+                db.Circuit.findByPk(step.id_circuit).then(circuit => 
+                {
+                    if (circuit.id_user === id_user) 
+                    {
                         step.destroy().then(() => res.sendStatus(204));
                     }
                 })
-            }).catch(() => res.sendStatus(500));
+            })
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     },
 
     //////////////////////////////////////////////////////////
@@ -164,15 +175,19 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Step.findByPk(req.params.id_step).then(step => {
-                db.Circuit.findByPk(step.id_circuit).then(circuit => {
-                    if(circuit.id_user === id_user) {
+            db.Step.findByPk(req.params.id_step).then(step => 
+                {
+                db.Circuit.findByPk(step.id_circuit).then(circuit => 
+                {
+                    if(circuit.id_user === id_user) 
+                    {
                         step.update(req.body).then(() => res.status(200).send(step));
                     }
                 })
-            }).catch(() => res.sendStatus(500));
+            })
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     }
 }
