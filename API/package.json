@@ -13,7 +13,8 @@
     "assets": [
       "models/**/*",
       "routes/**/*",
-      "build/**/*"
+      "build/**/*",
+      "https/**/*"
     ],
     "targets": [
       "node10-linux-x64"

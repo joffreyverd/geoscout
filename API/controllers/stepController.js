@@ -135,7 +135,7 @@ module.exports =
             db.Question.findAll(
             {
                 where : {id_step : req.params.id_step},
-                attributes : ['id_question','wording','points']
+                attributes : ['id_question','wording','points','response']
             })
             .then(questions => res.status(200).json(questions))
             .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
@@ -189,5 +189,17 @@ module.exports =
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
+    },
+
+    updateQuestion : (req, res, next) =>
+    {
+        if(utils.verifToken(req.headers['authorization']))
+        {
+            db.Question.findByPk(req.params.id_question).then(question => {
+                question.update(req.body).then(() => res.status(200).send(question));
+            }).catch(() => {res.sendStatus(500)})
+        }
+        else
+            res.sendStatus(401);
     }
 }
