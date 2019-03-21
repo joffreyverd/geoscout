@@ -80,7 +80,7 @@ export default class NewCircuit extends Component {
      */
     updateStep = step => api.put(`step/${step.id_step}`, step).then(() => {
         this.setState((prev) => {
-            prev.steps.splice(prev.steps.findIndex((s) => s.id_step === step.id_step), 1, step);
+            prev.steps.splice(prev.steps.findIndex(s => s.id_step === step.id_step), 1, step);
         });
     })
 
@@ -101,7 +101,7 @@ export default class NewCircuit extends Component {
      */
     handleDropStep = (event, newOrder) => {
         // let id = event.dataTransfer.getData('id');
-        let oldOrder = event.dataTransfer.getData('order');
+        const oldOrder = event.dataTransfer.getData('order');
         this.changeStepOrder(oldOrder, newOrder);
 
         // api.put('order', {
@@ -121,7 +121,7 @@ export default class NewCircuit extends Component {
      */
     changeStepOrder = (prevOrder, newOrder) => {
         this.setState((prev) => {
-            let steps = prev.steps.map((step) => {
+            const steps = prev.steps.map((step) => {
 
                 if (step.order === parseInt(prevOrder)) {
                     step.order = newOrder;
@@ -132,7 +132,7 @@ export default class NewCircuit extends Component {
                 }
 
                 return step;
-            })
+            });
             steps.sort((a, b) => a.order - b.order);
             return { steps: steps };
         });
