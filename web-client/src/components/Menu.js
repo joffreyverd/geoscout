@@ -6,12 +6,13 @@ import {
 import { Link } from 'react-router-dom';
 
 import Authentication from './authentication/Authentication';
+import CreateCircuitModal from './circuit/CreateCircuitModal';
 
 export default class Menu extends React.Component {
 
     state = {
         responsiveNavBarMode: false,
-        dropdownOpen: false,
+        modal: false,
     }
 
     toggle = () => {
@@ -20,14 +21,14 @@ export default class Menu extends React.Component {
         }));
     }
 
-    displayDropdownCircuits = () => {
-        this.setState({
-            dropdownOpen: !this.state.dropdownOpen,
-        });
+    displayModal = () => {
+        this.setState(previousState => ({
+            modal: !previousState.modal,
+        }));
     }
 
     render() {
-        const { responsiveNavBarMode, dropdownOpen } = this.state;
+        const { responsiveNavBarMode, modal } = this.state;
         const { isConnected, login, logout } = this.props;
 
         return (
@@ -41,11 +42,7 @@ export default class Menu extends React.Component {
                     {isConnected ?
                         <Collapse responsiveNavBarMode={responsiveNavBarMode} navbar>
                             <Nav className='ml-auto' navbar>
-                                <Dropdown
-                                    nav
-                                    isOpen={dropdownOpen}
-                                    toggle={this.displayDropdownCircuits}
-                                >
+                                <Dropdown nav>
                                     <DropdownToggle nav caret>
                                         Circuits
                                     </DropdownToggle>
@@ -59,6 +56,12 @@ export default class Menu extends React.Component {
                                         <Link to='/todo'>
                                             <DropdownItem>Ma liste</DropdownItem>
                                         </Link>
+                                        <DropdownItem divider />
+                                        <DropdownItem
+                                            onClick={this.displayModal}
+                                            className='create-circuit'
+                                        >Créer un circuit
+                                        </DropdownItem>
                                     </DropdownMenu>
                                 </Dropdown>
                                 <Authentication isConnected={isConnected} logout={logout} />
@@ -76,6 +79,12 @@ export default class Menu extends React.Component {
                     }
 
                 </Navbar>
+
+                <CreateCircuitModal
+                    displayModal={this.displayModal}
+                    modal={modal}
+                />
+
             </div>
         );
     }

@@ -18,7 +18,6 @@ export default class Authentication extends React.Component {
             modal: false,
             registerByDefault: true,
             isConnected: isConnected,
-            dropdownOpen: false,
         };
     }
 
@@ -28,14 +27,8 @@ export default class Authentication extends React.Component {
         }));
     }
 
-    displayDropdownAccount = () => {
-        this.setState({
-            dropdownOpen: !this.state.dropdownOpen,
-        });
-    }
-
     render() {
-        const { isConnected, modal, registerByDefault, dropdownOpen } = this.state;
+        const { isConnected, modal, registerByDefault } = this.state;
         const { login, logout } = this.props;
 
         return (
@@ -44,15 +37,13 @@ export default class Authentication extends React.Component {
                 {isConnected ?
                     <Dropdown
                         nav
-                        direction='left'
-                        isOpen={dropdownOpen}
                         toggle={this.displayDropdownAccount}
                     >
 
                         <DropdownToggle nav>
                             <FontAwesomeIcon icon='user' className='user-icon' />
                         </DropdownToggle>
-                        <DropdownMenu>
+                        <DropdownMenu className='account-dropdown'>
                             <Link to='/account'>
                                 <DropdownItem>Mon compte</DropdownItem>
                             </Link>
@@ -63,7 +54,7 @@ export default class Authentication extends React.Component {
                     </Dropdown>
                     :
                     <>
-                        <FontAwesomeIcon onClick={this.displayModal} icon='user' className='user-icon' />
+                        <p onClick={this.displayModal} className='auth-text'>Autentification</p>
 
                         <Modal isOpen={modal} fade={false} toggle={this.displayModal}>
 

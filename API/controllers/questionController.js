@@ -21,7 +21,7 @@ module.exports =
             .catch((err) => {if(err) {console.log(err);res.sendStatus(500)}})
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     //////////////////////////////////////////////////////////

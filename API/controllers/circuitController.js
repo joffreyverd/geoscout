@@ -10,10 +10,10 @@ module.exports =
         {
             db.Circuit.findByPk(req.params.id_circuit)
             .then((circuit) => res.json(circuit))
-            .catch((err) => {if(err) res.sendStatus(500)})
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     //////////////////////////////////////////////////////////
@@ -35,10 +35,8 @@ module.exports =
 
             return Promise.all(map);
         })
-        .then((circuits => 
-        {
-            res.json(circuits)
-        }));
+        .then(circuits => res.status(201).send(circuits))
+        .catch((err) => {if (err) res.status(500).send(utils.messages.serverError)});
     },
 
     //////////////////////////////////////////////////////////
@@ -46,8 +44,8 @@ module.exports =
     circuits : (req,res,next) => 
     {
         db.Circuit.findAll()
-        .then((circuit) => res.json(circuit))
-        .catch((err) => {if(err) res.sendStatus(500)})
+        .then(circuits => res.status(200).send(circuits))
+        .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
     },
 
     //////////////////////////////////////////////////////////
@@ -59,10 +57,10 @@ module.exports =
         {
             db.Circuit.findAll({where : {id_user : id_user}})
             .then((circuit) => res.json(circuit))
-            .catch((err) => {if(err) res.sendStatus(500)})
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     //////////////////////////////////////////////////////////
@@ -91,10 +89,10 @@ module.exports =
                 else
                     throw "err"
             })
-            .catch((err) => {if(err) res.sendStatus(500)})
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     //////////////////////////////////////////////////////////
@@ -109,10 +107,11 @@ module.exports =
             {
                 circuit.update({published: !circuit.published})
             })
-            .then(res.send(200))
+            .then(res.sendStatus(200))
+            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     //////////////////////////////////////////////////////////
@@ -124,10 +123,10 @@ module.exports =
         {
             db.Circuit.destroy({where : {id_circuit : req.body.id_circuit}})
             .then(a => res.sendStatus(200))
-            .catch(res.sendStatus(500))
+            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401); 
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     //////////////////////////////////////////////////////////
@@ -139,10 +138,10 @@ module.exports =
         {
             db.Circuit.findAll({where : {published : true}})
             .then(a => res.sendStatus(200))
-            .catch(res.sendStatus(500))
+            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     },
 
     //////////////////////////////////////////////////////////
@@ -152,14 +151,17 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Circuit.findByPk(req.params.id_circuit).then(circuit => {
-                if(circuit.id_user === id_user) {
+            db.Circuit.findByPk(req.params.id_circuit).then(circuit => 
+                {
+                if(circuit.id_user === id_user) 
+                {
                     circuit.update(req.body).then(() => res.status(200).send(circuit));
                 }
-            }).catch(() => {res.sendStatus(500)});
+            })
+            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken);
     }
 }
 

@@ -20,10 +20,9 @@ module.exports =
         })
         .then((user) =>
         {
-            return  token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
+            return res.status(201).send({token :jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400}),user : user});
         })
-        res.status(201).send({ auth: true, token: token,User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}})
-        .catch(err => res.status(500).send({message : 'Une erreur est survenue lors de la création de votre compte'}))
+        .catch(err => res.status(500).send(utils.messages.serverError))  
     },
 
     login : (req,res,next) =>
@@ -42,20 +41,20 @@ module.exports =
                 }
                     
                 else
-                    res.status(401).send({auth : false,message:'Mot de passe incorrect'})
+                    res.status(401).send(utils.messages.incorrectPassword);
             })
         })
-        .catch((err) => {console.log(err);res.status(500).send({message : 'Une erreur interne est survenue'})})
+        .catch((err) => res.status(500).send(utils.messages.serverError));
     },
 
     whoami : (req,res,next) =>
     {
         let token = req.headers['authorization'];
         if (!token) 
-            return res.status(401).send({ auth: false, message: 'Vous n\'avez pas fourni vos informations de connexion !'});
+            return res.status(401).send(utils.messages.invalidToken);
         let id = jwt.verify(token.split(' ')[1], config.secret, (err, decoded) =>
         {
-            if (err) return res.status(401).send({ auth: false, message: 'Informations' });
+            if (err) return res.status(401).send(utils.messages.invalidToken);
             else
             {
                 db.User.findByPk(decoded.id_user,{attributes : ['firstname','lastname','id_user']})
@@ -71,7 +70,6 @@ module.exports =
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            console.log(id_user)
             db.User.findOne(
             {
                 where : {id_user: id_user},
@@ -80,13 +78,12 @@ module.exports =
             {
                 return user.getRelations({attributes : ['id_user','firstname','lastname']})
             })
-            .then((relations) => res.status(200).json(relations))
-            .catch((err) => {if(err) res.sendStatus(500)});
+            .then((relations) => res.status(200).send(relations))
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
 
         else
-            res.sendStatus(401);
-        
+            res.status(401).send(utils.messages.invalidToken);       
     },
 
     //////////////////////////////////////////////////////////
@@ -105,10 +102,10 @@ module.exports =
                 .then(user => friend.addRelation(user,{through : {status : '0'}}))
             })
             .then(() => res.status(201).send(friend))
-            .catch((err) => {if(err) res.sendStatus(500)});
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     },
 
     //////////////////////////////////////////////////////////
@@ -124,9 +121,9 @@ module.exports =
                 db.user.getRelations()
             })
             .then(() => res.sendStatus(200))
-            .catch((err) => {if(err) res.sendStatus(500)});
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
-            res.sendStatus(401);
+            res.status(401).send(utils.messages.invalidToken); 
     }
 }
