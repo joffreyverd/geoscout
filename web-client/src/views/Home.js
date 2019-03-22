@@ -15,7 +15,7 @@ export default class Home extends Component {
 
 
     componentDidMount() {
-        api.get('circuits').then((data) => {
+        api.get('circuit/nearby').then((data) => {
             this.setState({
                 circuits: data,
             });

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 import api from '../../utils/httpMethods';
@@ -57,15 +58,14 @@ class UpdateStepModal extends Component {
 
     handleSubmit = () => {
         const step = this.state;
-        console.log(step);
-
-        const { displayUpdateStep } = this.props;
+        const { displayUpdateStep, alert } = this.props;
         this.props.updateStep(step)
             .then(() => {
                 this.putQuestion(step.questions);
                 displayUpdateStep();
+                alert.success('Etape mise à jour');
             })
-            .catch(error => console.log(error));
+            .catch(() => alert.error('Oups, une erreur s\'est produite'));
     }
 
     putQuestion(question) {
@@ -164,4 +164,4 @@ class UpdateStepModal extends Component {
 
 }
 
-export default UpdateStepModal;
+export default withAlert()(UpdateStepModal);
