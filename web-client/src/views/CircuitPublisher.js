@@ -34,6 +34,10 @@ export default class CircuitPublisher extends Component {
         }
     }
 
+    /**
+     * Fonction de gestion du clic sur une étape
+     * @param {Object} step : l'objet Step qui a été cliqué
+     */
     onClickItem = (step) => {
         this.setState({ stepFocus: step, stepIsDisplayed: true, circuitIsDisplayed: false });
     }
@@ -111,6 +115,10 @@ export default class CircuitPublisher extends Component {
         }));
     }
 
+    /**
+     * Fonction lancé par le Drag & Drop de la liste d'étape
+     * @param {Object} dropResult : Event lancé par le drop d'un Draggable dans un Droppable
+     */
     dragEnd = (dropResult) => {
         if (dropResult.destination) {
             const {
@@ -139,8 +147,6 @@ export default class CircuitPublisher extends Component {
                     console.log(error);
                     this.changeStepOrder(newOrder, prevOrder);
                 });
-
-            console.log(`${id} : ${prevOrder} => ${newOrder}`);
         }
     }
 
