@@ -9,7 +9,7 @@ import UpdateCircuitModal from '../components/circuit/UpdateCircuitModal';
 
 import api from '../utils/httpMethods';
 
-export default class NewCircuit extends Component {
+export default class CircuitPublisher extends Component {
 
     state = {
         circuit: {},
@@ -99,6 +99,7 @@ export default class NewCircuit extends Component {
         this.setState(previousState => ({
             circuitIsDisplayed: !previousState.circuitIsDisplayed,
             stepIsDisplayed: false,
+            stepFocus: null,
         }));
     }
 
@@ -106,6 +107,7 @@ export default class NewCircuit extends Component {
         this.setState(previousState => ({
             stepIsDisplayed: !previousState.stepIsDisplayed,
             circuitIsDisplayed: false,
+            stepFocus: null,
         }));
     }
 
@@ -196,6 +198,7 @@ export default class NewCircuit extends Component {
                         <StepList
                             items={steps}
                             onClickItem={this.onClickItem}
+                            stepFocus={stepFocus}
                         />
                     </DragDropContext>
 

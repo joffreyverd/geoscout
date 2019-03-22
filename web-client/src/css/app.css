@@ -117,6 +117,26 @@ h1 {
   color: #2c3e50;
 }
 
+.toggle-button {
+  background-color: #1abc9c;
+  padding: 8px;
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  border-radius: 4px;
+  width: 120px;
+  display: flex;
+  justify-content: center;
+}
+
+.toggle-button > p {
+  margin: 0px;
+  padding-right: 10px;
+  text-align: center;
+  color: white;
+  font-weight: bold;
+}
+
 /************************** CIRCUIT **************************/
 
 .my-circuits-header {
@@ -211,10 +231,10 @@ h1 {
 .scroll-menu {
   height: 100%;
   width: 20%;
+  background-color: #ecf0f1;
 }
 
 .circuit-title {
-  background-color: #ecf0f1;
   color: #2c3e50;
   width: 100%;
   text-align: center;
@@ -239,8 +259,10 @@ h1 {
 .step-wrapper {
   height: 85%;
   overflow: scroll;
-  padding: 0px;
+  padding: 7px;
   margin: 0px;
+  display: block;
+  margin: auto;
 }
 
 .step-wrapper-item {
@@ -253,16 +275,17 @@ h1 {
   list-style: none;
   position: relative;
   transition: .2s;
+  margin-bottom: 7px;
+  background-color: white;
 }
 
-.step-wrapper-item:nth-child(odd) {
-  background-color: #007E65;
-  color: #fff;
+.step-wrapper-item:nth-last-child(1) {
+  margin-bottom: 0;
 }
 
 .step-wrapper-item:hover{
   color: white;
-  background-color: #004C3D;
+  background-color: #1abc9c;
   transition: .2s;
 }
 
@@ -290,6 +313,7 @@ cursor: pointer;
 
 .update-circuit {
   display: block;
+  background-color: #ecf0f1;
 }
 
 .hidden-update-circuit {
@@ -298,6 +322,7 @@ cursor: pointer;
 
 .update-step {
   display: block;
+  background-color: #ecf0f1;
 }
 
 .hidden-update-step {
@@ -312,7 +337,6 @@ cursor: pointer;
   top: 50px;
   left: 50%;
   bottom: 0px;
-  background-color: white;
   width: 30%;
   z-index: 2;
 }
@@ -354,4 +378,9 @@ cursor: pointer;
   display: flex;
   justify-content: space-around;
   margin: 20px;
+}
+
+.focus-step {
+  background-color: #007E65;
+  color: white;
 }

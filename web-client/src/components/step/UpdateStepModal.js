@@ -147,7 +147,7 @@ class UpdateStepModal extends Component {
                             <Button
                                 color='danger'
                                 onClick={() => removeStep(id_step)}
-                            >Supprimer !
+                            >Supprimer
                             </Button>
                             <Button
                                 color='secondary'
