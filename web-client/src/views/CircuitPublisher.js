@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import Map from '../components/Map';
 import StepList from '../components/step/StepList';
@@ -94,24 +95,53 @@ export default class CircuitPublisher extends Component {
         });
     })
 
-    /**
-     * Fonction lancer lorsqu'on dépose une étape sur une autre (la cible)
-     * @param {Event} event : L'event lancé par l'action
-     * @param {Integer} newOrder : L'ordre de l'étape cible
-     */
-    handleDropStep = (event, newOrder) => {
-        // let id = event.dataTransfer.getData('id');
-        const oldOrder = event.dataTransfer.getData('order');
-        this.changeStepOrder(oldOrder, newOrder);
+    displayUpdateCircuit = () => {
+        this.setState(previousState => ({
+            circuitIsDisplayed: !previousState.circuitIsDisplayed,
+            stepIsDisplayed: false,
+            stepFocus: null,
+        }));
+    }
 
-        // api.put('order', {
-        //     id: id,
-        //     id_circuit: this.state.circuit.id_circuit,
-        //     previous: oldOrder,
-        //     new: newOrder,
-        // })
-        //     .then(() => this.changeStepOrder(oldOrder, newOrder))
-        //     .catch(error => console.log(error))
+    displayUpdateStep = () => {
+        this.setState(previousState => ({
+            stepIsDisplayed: !previousState.stepIsDisplayed,
+            circuitIsDisplayed: false,
+            stepFocus: null,
+        }));
+    }
+
+    dragEnd = (dropResult) => {
+        if (dropResult.destination) {
+            const {
+                draggableId: id,
+                source: {
+                    index: prevOrder,
+                },
+                destination: {
+                    index: newOrder,
+                },
+            } = dropResult;
+
+
+            const { circuit: { id_circuit } } = this.state;
+
+            this.changeStepOrder(prevOrder, newOrder);
+
+            api.put('step/order', {
+                id: id,
+                id_circuit: id_circuit,
+                previous: prevOrder,
+                new: newOrder,
+            })
+                .then(() => null)
+                .catch((error) => {
+                    console.log(error);
+                    this.changeStepOrder(newOrder, prevOrder);
+                });
+
+            console.log(`${id} : ${prevOrder} => ${newOrder}`);
+        }
     }
 
     /**
@@ -138,22 +168,6 @@ export default class CircuitPublisher extends Component {
         });
     }
 
-    displayUpdateCircuit = () => {
-        this.setState(previousState => ({
-            circuitIsDisplayed: !previousState.circuitIsDisplayed,
-            stepIsDisplayed: false,
-            stepFocus: null,
-        }));
-    }
-
-    displayUpdateStep = () => {
-        this.setState(previousState => ({
-            stepIsDisplayed: !previousState.stepIsDisplayed,
-            circuitIsDisplayed: false,
-            stepFocus: null,
-        }));
-    }
-
     render() {
         const { steps, stepFocus, circuit, circuitIsDisplayed, stepIsDisplayed } = this.state;
 
@@ -178,12 +192,15 @@ export default class CircuitPublisher extends Component {
                         </Button>
                     </div>
 
-                    <StepList
-                        items={steps}
-                        onClickItem={this.onClickItem}
-                        handleDrop={this.handleDropStep}
-                        stepFocus={stepFocus}
-                    />
+                    <DragDropContext
+                        onDragEnd={this.dragEnd}
+                    >
+                        <StepList
+                            items={steps}
+                            onClickItem={this.onClickItem}
+                            stepFocus={stepFocus}
+                        />
+                    </DragDropContext>
 
                 </div>
                 <UpdateStepModal
