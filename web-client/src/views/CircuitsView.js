@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import '../css/app.css';
-import CreatedCircuitList from '../components/circuit/CreatedCircuitList';
+import CreatedCircuitList from '../components/circuit/CircuitList';
 
 import api from '../utils/httpMethods';
 
-export default class CreatedCircuit extends Component {
+export default class CircuitsView extends Component {
 
     state = {
         dropdownOpen: false,

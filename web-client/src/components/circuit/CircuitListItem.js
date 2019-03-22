@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'reactstrap';
 
-class CreatedCircuitListItem extends Component {
+class CircuitListItem extends Component {
 
     state = {
         tooltipPublicationOpen: false,
@@ -87,4 +87,4 @@ class CreatedCircuitListItem extends Component {
 
 }
 
-export default withRouter(CreatedCircuitListItem);
+export default withRouter(CircuitListItem);
