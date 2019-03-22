@@ -121,8 +121,8 @@ h1 {
   background-color: #1abc9c;
   padding: 8px;
   position: fixed;
-  bottom: 50px;
-  right: 50px;
+  bottom: 30px;
+  right: 30px;
   border-radius: 4px;
   width: 120px;
   display: flex;
@@ -218,7 +218,7 @@ h1 {
   background-color:#c0392b; 
 }
 
-/************************** NEW-CIRCUIT **************************/
+/************************** CIRCUIT-PUBLISHER **************************/
 .view-wrapper {
   display: flex;
   height: 100%;

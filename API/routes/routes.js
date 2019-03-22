@@ -15,7 +15,7 @@ module.exports = function(app)
 	
 	app.route('/step/:id_step').get(step.step);
 	app.route('/step/:id_step').put(step.updateStep);
-	app.route('/steps/:id_circuit/:order').delete(step.deleteStep); 
+	app.route('/step/:id_step').delete(step.deleteStep);
 	app.route('/steps/:id_circuit').get(step.stepCircuit);
 	app.route('/step').post(step.createStep);
 	app.route('/step/:id_step/questions').get(step.questionsOfStep);
