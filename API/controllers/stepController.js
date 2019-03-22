@@ -146,34 +146,48 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    deleteStep : (req, res, next) => 
-    {   
-        if (utils.verifToken(req.headers['authorization'])) 
-        { 
-            db.Step.findAll({attributes : ['id_step','order'], where : {id_circuit : req.params.id_circuit, order: {[db.sequelize.Op.gte]: req.params.order}}}) 
-            .then((steps)=> 
-            { 
-                return db.sequelize.transaction(t=> 
-                { 
-                    return Promise.map(steps,step => 
-                    { 
-                        if(parseInt(step.order) === parseInt(req.params.order)) 
-                        { 
-                            step.destroy().then(); 
-                        } 
-                        else if (step.order > req.params.order) 
-                        { 
-                            step.order -= 1; 
-                        } 
- 
-                        return step.save({transaction: t}); 
-                    }) 
-                    .then(res.sendStatus(200)) 
-                    .catch((err) => {if(err) res.sendStatus(500)}) 
-                }) 
-            }); 
-        }     
-    }, 
+    deleteStep : (req, res, next) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        let step_order = undefined;
+        let step_circuit = undefined;
+        if(id_user)
+        {
+            db.Step.findByPk(req.params.id_step).then(step => 
+                {
+                db.Circuit.findByPk(step.id_circuit).then(circuit => 
+                {
+                    if (circuit.id_user === id_user) 
+                    {
+                        step_order = step.order;
+                        step_circuit = step.order
+                        step.destroy().then();
+                    }
+                })
+            })
+            .then((res) =>
+            {
+                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: step_circuit, order: {[db.sequelize.Op.gt]: step_order}}})
+                .then((steps)=>
+                {
+                    return db.sequelize.transaction(t=>
+                    {
+                        return Promise.map(steps,step =>
+                        {
+                            step.order -= 1;
+    
+                            return step.save({transaction: t});
+                        })
+                        .then(res.sendStatus(200))
+                        .catch((err) => { if (err) res.sendStatus(500)})
+                    })
+                })
+            })   
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
+        }
+        else
+            res.status(401).send(utils.messages.invalidToken); 
+    },
 
     //////////////////////////////////////////////////////////
 
