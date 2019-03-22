@@ -1,35 +1,31 @@
 import React from 'react';
+import { Draggable } from 'react-beautiful-dnd';
 
-export default ({ step, onClickItem, handleDrop }) => (
-    <li className='step-wrapper-item' draggable
-        onClick={() => onClickItem(step)}
-        onDragStart={(e) => handleDragStart(e, step)}
-        onDragOver={(e) => handleDragOver(e)}
-        onDrop={(e) => handleDrop(e, step.order)}>
+export default ({ step, onClickItem }) => (
+    <Draggable
+        draggableId={step.id_step}
+        index={step.order}
+    >
+        {(provided, snapshot) => (
+            <li
+                className='step-wrapper-item'
+                onClick={() => onClickItem(step)}
+                ref={provided.innerRef}
+                {...provided.draggableProps}
+                {...provided.dragHandleProps}
+            >
 
-        <div>
-            <span className='step-name'>{step.name}</span>
-        </div>
+                <div>
+                    <span className='step-name'>{step.name}</span>
+                </div>
 
-        <div>
-            <span>{step.description}</span>
-        </div>
+                <div>
+                    <span>{step.description}</span>
+                </div>
 
-        <span className='order-item'>{step.order}</span>
+                <span className='order-item'>{step.order}</span>
 
-    </li>
+            </li>
+        )}
+    </Draggable>
 );
-
-/**
- * 
- * @param {Event} event 
- * @param {Step} step 
- */
-function handleDragStart(event, step) {
-    event.dataTransfer.setData('id', step.id_step);
-    event.dataTransfer.setData('order', step.order)
-}
-
-function handleDragOver(event) {
-    event.preventDefault();
-}
