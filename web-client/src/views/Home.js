@@ -3,7 +3,7 @@ import ToggleButton from 'react-toggle-button';
 
 import Map from '../components/Map';
 import api from '../utils/httpMethods';
-import CreatedCircuit from './CircuitsView';
+import CircuitsView from './CircuitsView';
 
 export default class Home extends Component {
 
@@ -34,8 +34,7 @@ export default class Home extends Component {
                     ?
                     <Map className='map' circuits={circuits} />
                     :
-                    <CreatedCircuit onHome={onHome} />
-
+                    <CircuitsView onHome={onHome} />
                 }
 
                 <div className='toggle-button'>

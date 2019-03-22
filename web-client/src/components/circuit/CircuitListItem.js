@@ -25,7 +25,7 @@ class CircuitListItem extends Component {
     render() {
 
         const {
-            id_circuit, name, description, length,
+            id_circuit, name, description, length, onHome,
             duration, version, published, level, history,
         } = this.props;
         const { tooltipPublicationOpen, tooltipLevelOpen } = this.state;
@@ -45,7 +45,10 @@ class CircuitListItem extends Component {
 
         return (
             <>
-                <li className='list-item' onClick={() => history.push(`circuit/${id_circuit}`)}>
+                <li
+                    className='list-item'
+                    onClick={() => (onHome ? history.push('detail/') : history.push(`circuit/${id_circuit}`))}
+                >
 
                     <h3 className='item-name'>{name}</h3>
                     <p>{description && description}</p>
@@ -53,22 +56,25 @@ class CircuitListItem extends Component {
                     <p>{duration && `${length} heures`}</p>
                     <p className='version-item'>{version && `Version : ${version}`}</p>
 
-                    <Tooltip
-                        placement='top'
-                        isOpen={tooltipPublicationOpen}
-                        autohide={false}
-                        target={`published${id_circuit}`}
-                        toggle={this.publishedStatusToggler}
-                    >
-                        {published === true ? 'Publié' : 'Non-publié'}
-                    </Tooltip>
-                    <FontAwesomeIcon
-                        id={`published${id_circuit}`}
-                        icon='align-justify'
-                        className='published-item'
-                        color={published === true ? '#27ae60' : 'white'}
-                    />
-
+                    {!onHome &&
+                        <>
+                            <Tooltip
+                                placement='top'
+                                isOpen={tooltipPublicationOpen}
+                                autohide={false}
+                                target={`published${id_circuit}`}
+                                toggle={this.publishedStatusToggler}
+                            >
+                                {published === true ? 'Publié' : 'Non-publié'}
+                            </Tooltip>
+                            <FontAwesomeIcon
+                                id={`published${id_circuit}`}
+                                icon='align-justify'
+                                className='published-item'
+                                color={published === true ? '#27ae60' : 'white'}
+                            />
+                        </>
+                    }
                     <Tooltip
                         placement='top'
                         isOpen={tooltipLevelOpen}
