@@ -27,9 +27,22 @@ module.exports =
             let map = steps.map(step =>
             {
                 dist = utils.distanceBetweenPoints(step.latitude,req.body.user_latitude,step.longitude,req.body.user_longitude);
+                console.log(dist +' ' + req.body.distance)
                 if(dist <= req.body.distance)
                 {
-                    return db.Circuit.findOne({where : {id_circuit : step.id_circuit}});
+                    
+                    return db.Circuit.findOne(
+                    {
+                        where : {id_circuit : step.id_circuit},
+                        include : 
+                        [
+                            {
+                                model : db.Step,
+                                where : {order: 0},
+                                attributes : ['latitude','longitude']
+                            }
+                        ]
+                    });
                 }
             });
 
