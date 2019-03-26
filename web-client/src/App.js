@@ -8,10 +8,11 @@ import Menu from './components/Menu';
 
 import Home from './views/Home';
 import Account from './views/Account';
-import CreatedCircuit from './views/CreatedCircuit';
-import NewCircuit from './views/NewCircuit';
+import CircuitsView from './views/CircuitsView';
+import CircuitPublisher from './views/CircuitPublisher';
 import Achievement from './views/Achievement';
 import Todo from './views/Todo';
+import DetailedCircuit from './views/DetailedCircuit';
 
 import api from './utils/httpMethods';
 
@@ -63,10 +64,11 @@ class App extends Component {
                 {isConnected ?
                     <>
                         <Route exact path='/account' render={props => <Account {...props} user={user} />} />
-                        <Route exact path='/circuits' component={CreatedCircuit} />
-                        <Route exact path='/circuit/:id' component={NewCircuit} />
+                        <Route exact path='/circuits' component={CircuitsView} />
+                        <Route exact path='/circuit/:id' component={CircuitPublisher} />
                         <Route exact path='/achievements' component={Achievement} />
                         <Route exact path='/todo' component={Todo} />
+                        <Route exact path='/detail' component={DetailedCircuit} />
                     </>
                     : null}
             </>

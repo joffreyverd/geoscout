@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 import Map from '../components/Map';
 import StepList from '../components/step/StepList';
@@ -8,7 +9,7 @@ import UpdateCircuitModal from '../components/circuit/UpdateCircuitModal';
 
 import api from '../utils/httpMethods';
 
-export default class NewCircuit extends Component {
+export default class CircuitPublisher extends Component {
 
     state = {
         circuit: {},
@@ -33,6 +34,10 @@ export default class NewCircuit extends Component {
         }
     }
 
+    /**
+     * Fonction de gestion du clic sur une étape
+     * @param {Object} step : l'objet Step qui a été cliqué
+     */
     onClickItem = (step) => {
         this.setState({ stepFocus: step, stepIsDisplayed: true, circuitIsDisplayed: false });
     }
@@ -94,24 +99,55 @@ export default class NewCircuit extends Component {
         });
     })
 
-    /**
-     * Fonction lancer lorsqu'on dépose une étape sur une autre (la cible)
-     * @param {Event} event : L'event lancé par l'action
-     * @param {Integer} newOrder : L'ordre de l'étape cible
-     */
-    handleDropStep = (event, newOrder) => {
-        // let id = event.dataTransfer.getData('id');
-        const oldOrder = event.dataTransfer.getData('order');
-        this.changeStepOrder(oldOrder, newOrder);
+    displayUpdateCircuit = () => {
+        this.setState(previousState => ({
+            circuitIsDisplayed: !previousState.circuitIsDisplayed,
+            stepIsDisplayed: false,
+            stepFocus: null,
+        }));
+    }
 
-        // api.put('order', {
-        //     id: id,
-        //     id_circuit: this.state.circuit.id_circuit,
-        //     previous: oldOrder,
-        //     new: newOrder,
-        // })
-        //     .then(() => this.changeStepOrder(oldOrder, newOrder))
-        //     .catch(error => console.log(error))
+    displayUpdateStep = () => {
+        this.setState(previousState => ({
+            stepIsDisplayed: !previousState.stepIsDisplayed,
+            circuitIsDisplayed: false,
+            stepFocus: null,
+        }));
+    }
+
+    /**
+     * Fonction lancé par le Drag & Drop de la liste d'étape
+     * @param {Object} dropResult : Event lancé par le drop d'un Draggable dans un Droppable
+     */
+    dragEnd = (dropResult) => {
+        if (dropResult.destination) {
+            const {
+                draggableId: id,
+                source: {
+                    index: prevOrder,
+                },
+                destination: {
+                    index: newOrder,
+                },
+            } = dropResult;
+
+
+            const { circuit: { id_circuit } } = this.state;
+
+            this.changeStepOrder(prevOrder, newOrder);
+
+            api.put('step/order', {
+                id: id,
+                id_circuit: id_circuit,
+                previous: prevOrder,
+                new: newOrder,
+            })
+                .then(() => null)
+                .catch((error) => {
+                    console.log(error);
+                    this.changeStepOrder(newOrder, prevOrder);
+                });
+        }
     }
 
     /**
@@ -138,20 +174,6 @@ export default class NewCircuit extends Component {
         });
     }
 
-    displayUpdateCircuit = () => {
-        this.setState(previousState => ({
-            circuitIsDisplayed: !previousState.circuitIsDisplayed,
-            stepIsDisplayed: false,
-        }));
-    }
-
-    displayUpdateStep = () => {
-        this.setState(previousState => ({
-            stepIsDisplayed: !previousState.stepIsDisplayed,
-            circuitIsDisplayed: false,
-        }));
-    }
-
     render() {
         const { steps, stepFocus, circuit, circuitIsDisplayed, stepIsDisplayed } = this.state;
 
@@ -176,11 +198,15 @@ export default class NewCircuit extends Component {
                         </Button>
                     </div>
 
-                    <StepList
-                        items={steps}
-                        onClickItem={this.onClickItem}
-                        handleDrop={this.handleDropStep}
-                    />
+                    <DragDropContext
+                        onDragEnd={this.dragEnd}
+                    >
+                        <StepList
+                            items={steps}
+                            onClickItem={this.onClickItem}
+                            stepFocus={stepFocus}
+                        />
+                    </DragDropContext>
 
                 </div>
                 <UpdateStepModal

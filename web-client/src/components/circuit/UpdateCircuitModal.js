@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
 class UpdateCircuitModal extends Component {
@@ -30,6 +31,7 @@ class UpdateCircuitModal extends Component {
 
     handleSubmit = () => {
         const { id_circuit, name, description, length, duration } = this.state;
+        const { displayUpdateCircuit, alert } = this.props;
         const circuit = {
             id_circuit: id_circuit,
             name: name || null,
@@ -37,10 +39,12 @@ class UpdateCircuitModal extends Component {
             length: length || null,
             duration: duration || null,
         };
-        const { displayUpdateCircuit } = this.props;
         this.props.updateCircuit(circuit)
-            .then(() => displayUpdateCircuit())
-            .catch(error => console.log(error));
+            .then(() => {
+                displayUpdateCircuit();
+                alert.success('Circuit mis à jour');
+            })
+            .catch(() => alert.error('Oups, une erreur s\'est produite'));
     }
 
     render() {
@@ -115,4 +119,4 @@ class UpdateCircuitModal extends Component {
 
 }
 
-export default UpdateCircuitModal;
+export default withAlert()(UpdateCircuitModal);

@@ -148,8 +148,9 @@ module.exports =
 
     deleteStep : (req, res, next) =>
     {
-        //TODO : Gérer les positions des autres étapes après la suppression
         let id_user = utils.verifToken(req.headers['authorization']);
+        let step_order = undefined;
+        let step_circuit = undefined;
         if(id_user)
         {
             db.Step.findByPk(req.params.id_step).then(step => 
@@ -158,10 +159,30 @@ module.exports =
                 {
                     if (circuit.id_user === id_user) 
                     {
-                        step.destroy().then(() => res.sendStatus(204));
+                        step_order = step.order;
+                        step_circuit = step.order
+                        step.destroy().then();
                     }
                 })
             })
+            .then((res) =>
+            {
+                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: step_circuit, order: {[db.sequelize.Op.gt]: step_order}}})
+                .then((steps)=>
+                {
+                    return db.sequelize.transaction(t=>
+                    {
+                        return Promise.map(steps,step =>
+                        {
+                            step.order -= 1;
+    
+                            return step.save({transaction: t});
+                        })
+                        .then(res.sendStatus(200))
+                        .catch((err) => { if (err) res.sendStatus(500)})
+                    })
+                })
+            })   
             .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
         }
         else
