@@ -31,7 +31,6 @@ export default class SigninModal extends React.Component {
         this.props.signin('signin', user).then((data) => {
             // success
             console.log("Connecté");
-            this.props.navigation.navigate('Location');
         }).catch((error) => {
             // error
             console.log(error);

@@ -37,7 +37,6 @@ export default class SignupModal extends React.Component {
         delete user.rePassword;
 
         this.props.signup('signup', user).then((data) => {
-            this.props.navigation.navigate('Location');
             console.log("Connecté");
             // success
         }).catch((error) => {

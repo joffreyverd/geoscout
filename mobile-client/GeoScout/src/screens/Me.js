@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { ScrollView, View } from 'react-native';
-import { Tile, List, ListItem, Button, FormLabel, FormInput } from 'react-native-elements';
-import { me } from '../config/data';
+import { ScrollView } from 'react-native';
+import { Tile, List, ListItem, Button } from 'react-native-elements';
 
 class Me extends Component {
   handleSettingsPress = () => {
@@ -49,7 +48,5 @@ class Me extends Component {
     );
   }
 }
-
-Me.defaultProps = { ...me };
 
 export default Me;

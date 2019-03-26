@@ -13,7 +13,6 @@ import {
 } from 'expo';
 import MapView from 'react-native-maps';
 import {mapStyle} from '../../utils/style/mapStyle';
-import Authentication from './Authentication';
 
 const {width,height} = Dimensions.get('window')
 const ASPECT_RATIO = width/height
@@ -40,9 +39,12 @@ class GeoLocation extends React.Component{
     }
 
     componentDidMount() {
+        console.log('hey beach');
         if(this.askServiceEnable()){
+            console.log('hey true');
             //fetch requete all circuit dans un rayon
         }else{
+            console.log('hey false');
             this.askPermissionLocation();
         }
     }
@@ -66,7 +68,6 @@ class GeoLocation extends React.Component{
 
     askServiceEnable = async () => {
         let statusService = await Location.hasServicesEnabledAsync();
-        console.log(statusService);
         if(statusService){
             let location = await Location.getCurrentPositionAsync({});
             this.updateLocation(location);
@@ -125,7 +126,7 @@ class GeoLocation extends React.Component{
     }
 }
 
-export default Location;
+export default GeoLocation;
 
 const styles = StyleSheet.create({
     radius: {
