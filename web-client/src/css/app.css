@@ -137,7 +137,7 @@ h1 {
   font-weight: bold;
 }
 
-/************************** CIRCUIT **************************/
+/************************** CIRCUIT-VIEW **************************/
 
 .my-circuits-header {
   display: flex;
@@ -383,4 +383,40 @@ cursor: pointer;
 .focus-step {
   background-color: #007E65;
   color: white;
+}
+
+/************************** DETAILED-CIRCUIT **************************/
+
+.up-wrapper {
+  color: #2c3e50;
+  display: flex;
+  justify-content: space-between;
+  height: 20%;
+}
+
+.bottom-wrapper {
+  color: #2c3e50;
+  display: flex;
+  height: 80%;
+}
+
+.circuit-infos, .circuit-comments, .circuit-score {
+  background-color: #ecf0f1;
+  border-radius: 3px;
+  padding: 15px;
+}
+
+.circuit-infos {
+  margin: 0px 15px 30px 20px;
+  width: 50%;
+}
+
+.circuit-score {
+  margin: 30px 20px 30px 30px;
+  width: 47%;
+}
+
+.circuit-comments {
+  margin: 0px 20px 30px 15px;
+  width: 50%;
 }

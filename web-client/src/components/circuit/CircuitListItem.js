@@ -47,7 +47,7 @@ class CircuitListItem extends Component {
             <>
                 <li
                     className='list-item'
-                    onClick={() => (onHome ? history.push('detail/') : history.push(`circuit/${id_circuit}`))}
+                    onClick={() => (onHome ? history.push(`detail/${id_circuit}`) : history.push(`circuit/${id_circuit}`))}
                 >
 
                     <h3 className='item-name'>{name}</h3>
