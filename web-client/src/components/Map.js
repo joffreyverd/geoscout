@@ -7,48 +7,19 @@ import MAP_STYLE from '../utils/map-style-basic.json';
 /* Map de création de circuits */
 export default class Map extends React.Component {
 
-    state = {
-        viewport: {
-            width: '100%',
-            height: window.innerHeight - 50,
-            latitude: 48.582651,
-            longitude: 7.749534,
-            zoom: 12,
-        },
-    }
-
-    componentDidMount() {
-        // Récupération de la position de l'utilisateur
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((data) => {
-                const { viewport } = this.state;
-                viewport.latitude = data.coords.latitude;
-                viewport.longitude = data.coords.longitude;
-
-                this.setState({
-                    viewport: viewport,
-                    userPosition: data.coords,
-                });
-            });
-        }
-    }
-
     centerStep = (step) => {
-        const { viewport } = this.state;
+        const { viewport, changeViewport } = this.props;
         viewport.latitude = step.latitude;
         viewport.longitude = step.longitude + 0.03;
         viewport.zoom = 12;
-
-        this.setState({
-            viewport: viewport,
-        });
+        changeViewport(viewport);
     }
 
     render() {
         const {
-            steps, circuits, onClickMap, onClickMarker, className,
+            steps, circuits, onClickMap, onClickMarker,
+            className, viewport, userPosition, changeViewport,
         } = this.props;
-        const { viewport, userPosition } = this.state;
 
         return (
             <div className={className}>
@@ -56,7 +27,7 @@ export default class Map extends React.Component {
                     mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_API_KEY}
                     {...viewport}
                     mapStyle={MAP_STYLE}
-                    onViewportChange={viewport => this.setState({ viewport })}
+                    onViewportChange={changeViewport}
                     onClick={onClickMap}
                 >
                     {userPosition &&
@@ -85,19 +56,22 @@ export default class Map extends React.Component {
                                 this.centerStep(s);
                             }}
                         />
-                    </Marker>)}
+                                             </Marker>)}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
                     {circuits && circuits.map((c, idx) => {
-                        if (c.latitude && c.longitude) {
+                        if (c.Steps[0].latitude && c.Steps[0].longitude) {
                             return (
                                 <Marker
                                     key={idx}
-                                    latitude={c.latitude}
-                                    longitude={c.longitude}
+                                    latitude={c.Steps[0].latitude}
+                                    longitude={c.Steps[0].longitude}
                                     offsetLeft={-11}
                                     offsetTop={-25}
                                 >
-                                    <Pin color='#0066cc' onClick={() => onClickMarker(c)} />
+                                    <Pin
+                                        color='#0066cc'
+                                        onClick={() => onClickMarker(c.id_circuit)}
+                                    />
                                 </Marker>
                             );
                         }

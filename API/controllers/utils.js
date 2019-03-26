@@ -21,16 +21,16 @@ module.exports =
 
     distanceBetweenPoints : (lat1,lat2,lon1,lon2) =>
     {
-        let R = 6371e3; // metres
-        let φ1 = Math.radians(lat1);
-        let φ2 = Math.radians(lat2)
-        let Δφ = Math.radians(lat2-lat1);
-        let Δλ = Math.radians(lon2-lon1);
-        let a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
-                Math.cos(φ1) * Math.cos(φ2) *
-                Math.sin(Δλ/2) * Math.sin(Δλ/2);
-        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return Math.round((R * c)/1000);
+        let R = 6371; // km
+        let x1 = lat2 - lat1;
+        let dLat = Math.radians(x1);
+        let x2 = lon2 - lon1;
+        let dLon = Math.radians(x2)
+        let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(Math.radians(lat1)) * Math.cos(Math.radians(lat2)) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return Math.round(R * c);
     },
 
     messages : 

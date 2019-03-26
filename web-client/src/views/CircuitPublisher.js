@@ -16,9 +16,32 @@ export default class CircuitPublisher extends Component {
         steps: [],
         circuitIsDisplayed: false,
         stepIsDisplayed: false,
+        viewport: {
+            width: '100%',
+            height: window.innerHeight - 50,
+            latitude: 48.582651,
+            longitude: 7.749534,
+            distance: 30,
+            zoom: 12,
+        },
     }
 
     componentDidMount() {
+        // Récupération de la position de l'utilisateur
+        // eslint-disable-next-line no-undef
+        if (navigator.geolocation) {
+            // eslint-disable-next-line no-undef
+            navigator.geolocation.getCurrentPosition((data) => {
+                const { viewport } = this.state;
+                viewport.latitude = data.coords.latitude;
+                viewport.longitude = data.coords.longitude;
+
+                this.setState({
+                    viewport: viewport,
+                    userPosition: data.coords,
+                });
+            });
+        }
         const { id } = this.props.match.params;
         if (id) {
             api.get(`circuit/${id}`).then((circuit) => {
@@ -32,6 +55,12 @@ export default class CircuitPublisher extends Component {
                 console.log(error);
             });
         }
+    }
+
+    changeViewport = (viewport) => {
+        this.setState({
+            viewport: viewport,
+        });
     }
 
     /**
@@ -175,7 +204,7 @@ export default class CircuitPublisher extends Component {
     }
 
     render() {
-        const { steps, stepFocus, circuit, circuitIsDisplayed, stepIsDisplayed } = this.state;
+        const { steps, stepFocus, circuit, circuitIsDisplayed, stepIsDisplayed, userPosition, viewport } = this.state;
 
         return (
             <div className='view-wrapper'>
@@ -184,6 +213,9 @@ export default class CircuitPublisher extends Component {
                     steps={steps}
                     onClickMap={this.handleClickMap}
                     onClickMarker={this.onClickItem}
+                    userPosition={userPosition}
+                    viewport={viewport}
+                    changeViewport={this.changeViewport}
                 />
 
                 <div className='scroll-menu'>

@@ -23,7 +23,6 @@ app.get('/', function (req, res) {
 	res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-
 const privateKey  = fs.readFileSync(path.join(path.dirname(process.execPath)+'/https', 'server.key'))
 const certificate = fs.readFileSync(path.join(path.dirname(process.execPath)+'/https', 'server.crt'))
 

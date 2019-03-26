@@ -26,8 +26,6 @@ class Register extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         const {
-            firstname,
-            lastname,
             email,
             password,
             repeatPassword,

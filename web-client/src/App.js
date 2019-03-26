@@ -68,9 +68,9 @@ class App extends Component {
                         <Route exact path='/circuit/:id' component={CircuitPublisher} />
                         <Route exact path='/achievements' component={Achievement} />
                         <Route exact path='/todo' component={Todo} />
-                        <Route exact path='/detail' component={DetailedCircuit} />
                     </>
                     : null}
+                <Route exact path='/detail/:id' component={DetailedCircuit} />
             </>
         );
     }

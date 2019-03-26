@@ -25,9 +25,16 @@ export default class CircuitsView extends Component {
     }
 
     componentDidMount = () => {
-        api.get('my-circuits').then((data) => {
-            this.setState({ circuits: data });
-        }).catch(error => console.log(error));
+        const { onHome, circuits } = this.props;
+        if (onHome) {
+            this.setState({
+                circuits: circuits,
+            });
+        } else {
+            api.get('my-circuits').then((data) => {
+                this.setState({ circuits: data });
+            }).catch(error => console.log(error));
+        }
     }
 
     render() {
