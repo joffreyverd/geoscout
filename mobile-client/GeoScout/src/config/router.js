@@ -1,52 +1,46 @@
-import React from 'react';
-import { TabNavigator, StackNavigator } from 'react-navigation';
-import { Icon } from 'react-native-elements';
+import { createBottomTabNavigator, createStackNavigator, createAppContainer } from 'react-navigation';
 
 import Authentication from '../screens/Authentication';
-import Location from '../screens/Location';
+import GeoLocation from '../screens/GeoLocation';
 import Settings from '../screens/Settings.js';
 import Me from '../screens/Me';
 
-export const FeedStack = StackNavigator({
-  Feed: {
-    screen: Feed,
+export const Tabs = createBottomTabNavigator({
+  GeoLocation: {
+    screen: GeoLocation,
     navigationOptions: {
-      title: 'Feed',
-    },
-  },
-  Details: {
-    screen: UserDetail,
-    navigationOptions: ({ navigation }) => ({
-      title: `${navigation.state.params.name.first.toUpperCase()} ${navigation.state.params.name.last.toUpperCase()}`,
-    }),
-  },
-});
-
-export const Tabs = TabNavigator({
-  Location: {
-    screen: Location,
-    navigationOptions: {
-      tabBarLabel: 'Carte',
-      tabBarIcon: ({ tintColor }) => <Icon name="map" size={35} color={tintColor} />,
+      tabBarLabel: 'Carte'
     },
   },
   Me: {
     screen: Me,
     navigationOptions: {
-      tabBarLabel: 'Moi',
-      tabBarIcon: ({ tintColor }) => <Icon name="account-circle" size={35} color={tintColor} />
+      tabBarLabel: 'Moi'
     },
   },
 });
 
-export const Root = StackNavigator({
-  Authentication: {
-    screen: Authentication,
+export const RootStack = createStackNavigator({
+    Tabs: {
+      screen: Tabs
+    },
+    Authentication: {
+      screen: Authentication
+    },
+    GeoLocation: {
+      screen: GeoLocation
+    },
+    Me: {
+      screen: Me
+    },
+    Settings: {
+      screen: Settings
+    },
   },
-  Settings: {
-    screen: SettingsStack,
-  },
-}, {
+  {
   mode: 'modal',
   headerMode: 'none',
+  initialRouteName: 'Authentication'
 });
+
+export const AppContainer = createAppContainer(RootStack);

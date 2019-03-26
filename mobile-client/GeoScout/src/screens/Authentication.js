@@ -12,6 +12,7 @@ import storage from '../config/asyncStorageToken';
 
 import SigninModal from '../components/Signin';
 import SignupModal from '../components/Signup';
+import { Tabs } from '../config/router';
 
 const {width,height} = Dimensions.get('window')
 
@@ -34,6 +35,7 @@ class Authentication extends React.Component{
             api.get('whoami').then((data) => {
                 //ALLER SUR LA MAP AVEC LES CIRCUITS ENVIRONENT
                 this.setState({ user: data });
+                this.props.navigation.navigate('Tabs', this.state.user);
             }).catch((error) => {
                 //GESTION DES ERREURS
                 storage.removeTokenAsyncStorage();
@@ -47,7 +49,7 @@ class Authentication extends React.Component{
                 user: data.user
             });
 
-            this.props.navigation.navigate('Location', this.state.user);
+            this.props.navigation.navigate('Tabs', this.state.user);
         }else{
             //GESTION DES ERREURS
         }
