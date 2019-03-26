@@ -5,18 +5,17 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    Image,
-    TextInput,
-    Modal
+    Image
 } from 'react-native';
-import api from '../../utils/httpMethods';
-import storage from '../../utils/asyncStorageToken';
+import api from '../config/httpMethods';
+import storage from '../config/asyncStorageToken';
 
-import signin from '../components/Signin';
+import SigninModal from '../components/Signin';
+import SignupModal from '../components/Signup';
 
 const {width,height} = Dimensions.get('window')
 
-export default class Autentication extends React.Component{
+class Authentication extends React.Component{
     constructor(props){
         super(props)
         this.state = {
@@ -26,9 +25,14 @@ export default class Autentication extends React.Component{
         }
     }
 
+    //Vérification de la présence d'un token dans le storage du mobile.
+    //Si le token est présent, on lance un whoami à l'api.
+    //Si la requête abouti, alors l'utilisateur est rediriger sur la map.
+    //Si la requête n'abouti pas, alors on supprime le token qui n'est plus valide.
     componentDidMount() {
         if(storage.getTokenAsyncStorage()){
             api.get('whoami').then((data) => {
+                //ALLER SUR LA MAP AVEC LES CIRCUITS ENVIRONENT
                 this.setState({ user: data });
             }).catch((error) => {
                 //GESTION DES ERREURS
@@ -37,8 +41,21 @@ export default class Autentication extends React.Component{
         }
     }
 
-    sign = (route, credentials) => api.post('signin', credentials).then((data) => {
+    signin = (route, credentials) => api.post('signin', credentials).then((data) => {
         if(storage.setTokenAsyncStorage(data.token)){
+            this.setState({
+                user: data.user
+            });
+
+            this.props.navigation.navigate('Location', this.state.user);
+        }else{
+            //GESTION DES ERREURS
+        }
+    })
+
+    signup = (route, credentials) => api.post('signup', credentials).then((data) => {
+        if(storage.setTokenAsyncStorage(data.token)){
+            //PROBLEME
             this.setState({
                 user: data.user
             });
@@ -47,6 +64,7 @@ export default class Autentication extends React.Component{
         }
     })
 
+    //Vérification utilité dans authentification
     signout = () => {
         if(storage.removeTokenAsyncStorage()){
             this.setState({
@@ -57,76 +75,43 @@ export default class Autentication extends React.Component{
         }
     }
 
-    setModalConnexionVisible(visible){
+    //Fonction qui permet de changer la visibilité de la modal de connexion
+    setModalConnexionVisible = (visible) => {
         this.setState({modalConnexionVisible: visible});
     }
 
-    setModalInscriptionVisible(visible){
+    //Fonction qui permet de changer la visibilité de la modal d'inscription
+    setModalInscriptionVisible = (visible) => {
         this.setState({modalInscriptionVisible: visible});
     }
 
     render() {
 
-        const { modalConnexionVisible } = this.state;
+        const { modalConnexionVisible, modalInscriptionVisible } = this.state;
 
         return (
             <View style={styles.container}>
-            <Signin
-                sign={this.sign}
-                modalConnexionVisible={modalConnexionVisible}
-            />
+                <SigninModal
+                    modalConnexionVisible={modalConnexionVisible}
+                    signin={this.signin}
+                    onRequestClose={() => {
+                        this.setModalConnexionVisible(false);
+                    }}
+                />
 
-                <Modal
-                animationType="slide"
-                transparent={false}
-                onRequestClose={() => {
-                    this.setModalInscriptionVisible(false);
-                }}
-                visible={this.state.modalInscriptionVisible}>
-                    <View style={styles.container}>
-                        <TextInput
-                        value={this.state.firstname}
-                        onChangeText={(firstname) => this.setState({ firstname })}
-                        placeholder={'Prénom'}
-                        style={styles.input}/>
-
-                        <TextInput
-                        value={this.state.lastname}
-                        onChangeText={(lastname) => this.setState({ lastname })}
-                        placeholder={'Nom'}
-                        style={styles.input}/>
-
-                        <TextInput
-                        value={this.state.email}
-                        onChangeText={(email) => this.setState({ email })}
-                        placeholder={'Email'}
-                        style={styles.input}/>
-
-                        <TextInput
-                        value={this.state.password}
-                        onChangeText={(password) => this.setState({ password })}
-                        placeholder={'Mot de passe'}
-                        secureTextEntry={true}
-                        style={styles.input}/>
-
-                        <TextInput
-                        value={this.state.repassword}
-                        onChangeText={(repassword) => this.setState({ repassword })}
-                        placeholder={'Répétez votre mot de passe'}
-                        secureTextEntry={true}
-                        style={styles.input}/>
-                        
-                        <TouchableOpacity
-                        style={styles.button}
-                        onPress={this.sign}>
-                            <Text style={styles.textButton}>Inscription</Text>
-                        </TouchableOpacity>
-                    </View>
-                </Modal>
+                <SignupModal
+                    modalInscriptionVisible={modalInscriptionVisible}
+                    signup={this.signup}
+                    onRequestClose={() => {
+                        this.setModalInscriptionVisible(false);
+                    }}
+                />
 
                 <Image
-                style={{width: (width*0.8), height: (height*0.1)}}
-                source={require('../../utils/img/logoGeoScoutWhite.png')}/>
+                    style={{width: (width*0.8), height: (height*0.1)}}
+                    source={require('../../utils/img/logoGeoScoutWhite.png')}
+                />
+
                 <View style={styles.wrapperBottom}>
                     <TouchableOpacity
                     style={styles.button}
@@ -134,19 +119,18 @@ export default class Autentication extends React.Component{
                         this.setModalConnexionVisible(true);
                     }}
                     activeOpacity={0.8}>
-                        <Text
-                        style={styles.textButton}>
+                        <Text style={styles.textButton}>
                             Connexion
                         </Text>
                     </TouchableOpacity>
+
                     <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
                         this.setModalInscriptionVisible(true);
                     }}
                     activeOpacity={0.8}>
-                        <Text
-                        style={styles.textButton}>
+                        <Text style={styles.textButton}>
                             Inscription
                         </Text>
                     </TouchableOpacity>
@@ -156,6 +140,9 @@ export default class Autentication extends React.Component{
     }
 }
 
+export default Authentication;
+
+//Feuille de style
 const styles = StyleSheet.create({
     container: {
         flex: 1,

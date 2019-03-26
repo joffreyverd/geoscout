@@ -1,5 +1,7 @@
 import storage from './asyncStorageToken';
-const API_HOST = process.env.REACT_NATIVE_APP_API_URL;
+//import Config from 'react-native-config';
+
+const API_HOST = 'http://154.49.211.218:5555/';
 
 function request(route, method, body) {
     const options = {
@@ -8,8 +10,9 @@ function request(route, method, body) {
             'Content-Type': 'application/json',
         },
     };
-    if (storage.getTokenAsyncStorage()) {
-        options.headers.authorization = `Bearer ${getTokenAsyncStorage}`;
+    let token = storage.getTokenAsyncStorage();
+    if(token){
+        options.headers.authorization = `Bearer ${token}`;
     }
 
     if (body) {
