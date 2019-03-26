@@ -64,20 +64,19 @@ module.exports =
             db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.params.id_circuit}})
             .then((steps) =>
             {
-                console.log(req.params.new + " " + req.params.previous)
                 return db.sequelize.transaction(t=>
                 {
                     return Promise.map(steps,step =>
                     {
-                        if(step.order === req.params.previous)
+                        if(parseInt(step.order) === parseInt(req.params.previous))
                         {
                             step.order = req.params.new;
                         }
-                        else if(step.order < req.params.previous && step.order >= req.params.new)
+                        else if(parseInt(step.order) < parseInt(req.params.previous) && parseInt(step.order) >= parseInt(req.params.new))
                         {
                             step.order += 1;
                         }
-                        else if (step.order > req.params.previous && step.order <= req.params.new)
+                        else if (parseInt(step.order) > parseInt(req.params.previous) && parseInt(step.order) <= parseInt(req.params.new))
                         {
                             step.order -= 1;
                         }
@@ -85,7 +84,7 @@ module.exports =
                         return step.save({transaction: t});
                     })
                     .then(res.sendStatus(200))
-                    .catch(res.sendStatus(500))    
+                    .catch((err) => {if(err)res.sendStatus(500)})    
                 })
             });
         }
@@ -153,30 +152,43 @@ module.exports =
         let step_circuit = undefined;
         if(id_user)
         {
+
             db.Step.findByPk(req.params.id_step).then(step => 
-                {
+            {
                 db.Circuit.findByPk(step.id_circuit).then(circuit => 
                 {
+                    console.log(circuit.id_user + ' ' + id_user)
                     if (circuit.id_user === id_user) 
-                    {
-                        step_order = step.order;
-                        step_circuit = step.order
-                        step.destroy().then();
+                    { 
+                        step.destroy()
+                        .then(() => 
+                        {
+                            step_order = step.order,
+                            step_circuit = step.id_circuit
+
+                        });
                     }
-                })
+
+                    else
+                        throw ''
+                });
             })
-            .then((res) =>
+            .then((obj) =>
             {
-                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: step_circuit, order: {[db.sequelize.Op.gt]: step_order}}})
+                console.log(obj)
+                console.log(step_circuit)
+                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: obj.step_circuit, order: {[db.sequelize.Op.gt]: obj.step_order}}})
                 .then((steps)=>
                 {
                     return db.sequelize.transaction(t=>
                     {
+                        let i = 0;
                         return Promise.map(steps,step =>
                         {
-                            step.order -= 1;
-    
-                            return step.save({transaction: t});
+                            console.log(i)
+                            step.order= i;
+                            i++;
+                            return step.save({transaction: t});  
                         })
                         .then(res.sendStatus(200))
                         .catch((err) => { if (err) res.sendStatus(500)})
