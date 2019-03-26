@@ -13,13 +13,14 @@ import {
 } from 'expo';
 import MapView from 'react-native-maps';
 import {mapStyle} from '../../utils/style/mapStyle';
+import Authentication from './Authentication';
 
 const {width,height} = Dimensions.get('window')
 const ASPECT_RATIO = width/height
 const LATITUDE_DELTA = 0.5
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
-export default class GeoLocation extends React.Component{
+class GeoLocation extends React.Component{
     constructor(props){
         super(props)
         this.state = {
@@ -102,8 +103,7 @@ export default class GeoLocation extends React.Component{
                         style={styles.map}
                         region={this.state.initialPosition}
                         customMapStyle={mapStyle}>
-                            <MapView.Marker
-                            coordinate={this.state.markerPosition}>
+                            <MapView.Marker coordinate={this.state.markerPosition}>
                                 <View style={styles.radius}>
                                     <View style={styles.marker}>
                                     </View>
@@ -113,8 +113,8 @@ export default class GeoLocation extends React.Component{
                     :
                         <>
                             <Image
-                            style={{width: (width*0.8), height: (height*0.1)}}
-                            source={require('../../utils/img/logoGeoScoutWhite.png')}
+                                style={{width: (width*0.8), height: (height*0.1)}}
+                                source={require('../../utils/img/logoGeoScoutWhite.png')}
                             />
                             <ActivityIndicator style={styles.loaderMargin} size='large' color='#fff'/>
                         </>
@@ -124,6 +124,8 @@ export default class GeoLocation extends React.Component{
         );
     }
 }
+
+export default Location;
 
 const styles = StyleSheet.create({
     radius: {
