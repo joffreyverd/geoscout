@@ -56,7 +56,7 @@ export default class Map extends React.Component {
                                 this.centerStep(s);
                             }}
                         />
-                                             </Marker>)}
+                    </Marker>)}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
                     {circuits && circuits.map((c, idx) => {
                         if (c.Steps[0].latitude && c.Steps[0].longitude) {
