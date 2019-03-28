@@ -102,6 +102,11 @@ export default class CircuitPublisher extends Component {
             this.setState((prev) => {
                 const idx = prev.steps.findIndex(element => element.id_step === id_step);
                 prev.steps.splice(idx, 1);
+                prev.steps.forEach((element, index) => {
+                    if (index >= idx) {
+                        element.order--;
+                    }
+                });
                 return { steps: prev.steps };
             });
             this.displayUpdateStep();

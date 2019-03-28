@@ -103,7 +103,7 @@ class UpdateStepModal extends Component {
     }
 
     render() {
-        const { id_step, name, description, instruction, questions: { wording, response } } = this.state;
+        const { id_circuit, id_step, name, description, instruction, questions: { wording, response } } = this.state;
         const { show, displayUpdateStep, removeStep } = this.props;
 
         return (
@@ -174,7 +174,7 @@ class UpdateStepModal extends Component {
                             </Button>
                             <Button
                                 color='danger'
-                                onClick={() => removeStep(id_step)}
+                                onClick={() => removeStep(id_circuit, id_step)}
                             >Supprimer
                             </Button>
                             <Button
