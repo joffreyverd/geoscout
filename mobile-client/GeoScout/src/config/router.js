@@ -1,7 +1,10 @@
 import React from 'react';
-import { createBottomTabNavigator, createStackNavigator,
-    createSwitchNavigator, createAppContainer } from 'react-navigation';
+import {
+    createBottomTabNavigator, createStackNavigator,
+    createSwitchNavigator, createAppContainer
+} from 'react-navigation';
 import { Text } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import Authentication from '../screens/Authentication';
 import GeoLocation from '../screens/GeoLocation';
@@ -10,19 +13,45 @@ import Signin from '../components/Signin';
 import Signup from '../components/Signup';
 import Me from '../screens/Me';
 
-const Tabs = createBottomTabNavigator({
+export const Tabs = createBottomTabNavigator({
     GeoLocation: {
         screen: GeoLocation,
         navigationOptions: {
-            tabBarLabel: 'Carte'
+            tabBarLabel: 'Carte',
+            tabBarIcon: (({ tintColor }) => (<Icon name='map' type='font-awesome' size={20} color={tintColor} />)),
+            tabBarOptions: {
+                activeTintColor: 'white',
+                inactiveTintColor: '#2c3e50',
+                labelStyle: {
+                    fontSize: 14,
+                },
+                style: {
+                    backgroundColor: '#1abc9c',
+                    borderWidth: 1,
+                    borderColor: '#2c3e50',
+                },
+            },
         },
     },
     Me: {
-        screen: () => {return <Text>Salut, c'est moi.</Text>},
+        screen: Me,
         navigationOptions: {
-            tabBarLabel: 'Moi'
+            tabBarLabel: 'Moi',
+            tabBarIcon: (({ tintColor }) => (<Icon name='user-circle' type='font-awesome' size={20} color={tintColor} />)),
+            tabBarOptions: {
+                activeTintColor: 'white',
+                inactiveTintColor: '#2c3e50',
+                labelStyle: {
+                    fontSize: 14,
+                },
+                style: {
+                    backgroundColor: '#1abc9c',
+                    borderWidth: 1,
+                    borderColor: '#2c3e50',
+                },
+            },
         },
-    },
+    }
 });
 
 const AuthStack = createStackNavigator(
@@ -32,7 +61,7 @@ const AuthStack = createStackNavigator(
         },
         Signin: Signin,
         Signup: Signup,
-    },{
+    }, {
         headerMode: 'none',
         initialRouteName: 'Authentication'
     }

@@ -6,7 +6,7 @@ export default ({ step, onClickItem, stepFocus }) => (
         draggableId={step.id_step}
         index={step.order}
     >
-        {(provided, snapshot) => (
+        {provided => (
             <li
                 className={`step-wrapper-item ${stepFocus && step.id_step === stepFocus.id_step && 'focus-step'}`}
                 onClick={() => onClickItem(step)}
@@ -19,9 +19,6 @@ export default ({ step, onClickItem, stepFocus }) => (
                     <span className='step-name'>{step.name}</span>
                 </div>
 
-                <div>
-                    <span>{step.description}</span>
-                </div>
 
                 <span className='order-item'>{step.order}</span>
 

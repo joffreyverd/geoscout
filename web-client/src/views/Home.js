@@ -64,7 +64,6 @@ export default class Home extends Component {
 
     onClickItem = (id_circuit) => {
         const { history } = this.props;
-        console.log(this.state);
         if (id_circuit) {
             history.push(`detail/${id_circuit}`);
         }

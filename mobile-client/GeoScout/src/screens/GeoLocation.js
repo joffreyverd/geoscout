@@ -7,10 +7,9 @@ import {
     Dimensions,
     Image
 } from 'react-native';
-import {
-    Permissions,
-    Location
-} from 'expo';
+import { Location } from 'expo';
+
+import api from '../config/httpMethods';
 import MapView from 'react-native-maps';
 import {mapStyle} from '../../utils/style/mapStyle';
 
@@ -34,16 +33,33 @@ class GeoLocation extends React.Component{
             markerPosition: {
                 latitude: 0,
                 longitude: 0
-            }
+            },
+            circuits: null
         }
     }
 
     componentDidMount() {
         console.log('hey beach');
         this.checkLocation().then(() => {
-            console.log('hey true');
-            //fetch requete all circuit dans un rayon
-        }).catch(() => console.log('erreur'));
+            this.getCircuits();
+        }).catch((error) => console.log(error));
+    }
+
+    getCircuits = () => {
+        const { markerPosition: { longitude, latitude } } = this.state;
+        const body = {
+            user_longitude: longitude,
+            user_latitude: latitude,
+            distance: 30,
+        };
+        api.post('circuit/nearby', body).then((data) => {
+            console.log(data);
+            this.setState({
+                circuits: data,
+            });
+        }).catch((error) => {
+            console.log(error);
+        });
     }
 
     updateLocation = (location) => {
@@ -86,6 +102,22 @@ class GeoLocation extends React.Component{
         navigator.geolocation.clearWatch(this.state)
     }
 
+    displayNearbyCircuits(){
+        const { circuits } = this.state;
+        return circuits.map((item) => {
+            let latLongCircuit = {
+                latitude: parseFloat(item.Steps[0].latitude),
+                longitude: parseFloat(item.Steps[0].longitude)
+            }
+            return (
+                <MapView.Marker coordinate={latLongCircuit}>
+                    <View style={styles.markerCircuit}>
+                    </View>
+                </MapView.Marker>
+            );
+        });
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -103,6 +135,11 @@ class GeoLocation extends React.Component{
                                     </View>
                                 </View>
                             </MapView.Marker>
+                            {(this.state.circuits != null)?
+                                this.displayNearbyCircuits()
+                            :
+                                null
+                            }
                         </MapView> 
                     :
                         <>
@@ -143,11 +180,19 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: '#007aff'
     },
+    markerCircuit: {
+        height: 30,
+        width: 30,
+        borderColor: '#1abc9c',
+        borderRadius: 30/2,
+        overflow: 'hidden',
+        backgroundColor: '#1abc9c'
+    },
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#1abc9c'
+        backgroundColor: 'white'
     },
     map: {
         left: 0,
