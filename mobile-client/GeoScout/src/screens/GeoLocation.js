@@ -110,8 +110,10 @@ class GeoLocation extends React.Component{
                 longitude: parseFloat(item.Steps[0].longitude)
             }
             return (
-                <MapView.Marker coordinate={latLongCircuit}>
+                <MapView.Marker coordinate={latLongCircuit}
+                onPress={() => (<View style={styles.container}><Text style={styles.circuitTitle}>{item.name}</Text></View>)}>
                     <View style={styles.markerCircuit}>
+                        <Text style={styles.c}>C</Text>
                     </View>
                 </MapView.Marker>
             );
@@ -145,9 +147,9 @@ class GeoLocation extends React.Component{
                         <>
                             <Image
                                 style={{width: (width*0.8), height: (height*0.1)}}
-                                source={require('../../utils/img/logoGeoScoutWhite.png')}
+                                source={require('../../utils/img/logoGeoScoutGreen.png')}
                             />
-                            <ActivityIndicator style={styles.loaderMargin} size='large' color='#fff'/>
+                            <ActivityIndicator style={styles.loaderMargin} size='large' color='#1abc9c'/>
                         </>
                     )
                 )}
@@ -160,9 +162,9 @@ export default GeoLocation;
 
 const styles = StyleSheet.create({
     radius: {
-        height: 50,
-        width: 50,
-        borderRadius: 25,
+        height: 30,
+        width: 30,
+        borderRadius: 15,
         overflow: 'hidden',
         backgroundColor: 'rgba(0,122,255,0.1)',
         borderWidth: 1,
@@ -183,10 +185,18 @@ const styles = StyleSheet.create({
     markerCircuit: {
         height: 30,
         width: 30,
-        borderColor: '#1abc9c',
+        borderWidth: 0,
+        borderColor: '#2c3e50',
         borderRadius: 30/2,
         overflow: 'hidden',
-        backgroundColor: '#1abc9c'
+        backgroundColor: '#1abc9c',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    c: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold'
     },
     container: {
         flex: 1,
