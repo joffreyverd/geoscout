@@ -59,25 +59,25 @@ module.exports =
 
     changeOrder : (req,res,next) =>
     {
+        console.log('nigga')
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.params.id_circuit}})
+            db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}})
             .then((steps) =>
             {
-                console.log(req.params.new + " " + req.params.previous)
                 return db.sequelize.transaction(t=>
                 {
                     return Promise.map(steps,step =>
                     {
-                        if(step.order === req.params.previous)
+                        if(parseInt(step.order) === parseInt(req.body.previous))
                         {
-                            step.order = req.params.new;
+                            step.order = req.body.new;
                         }
-                        else if(step.order < req.params.previous && step.order >= req.params.new)
+                        else if(parseInt(step.order) < parseInt(req.body.previous) && parseInt(step.order) >= parseInt(req.body.new))
                         {
                             step.order += 1;
                         }
-                        else if (step.order > req.params.previous && step.order <= req.params.new)
+                        else if (parseInt(step.order) > parseInt(req.body.previous) && parseInt(step.order) <= parseInt(req.body.new))
                         {
                             step.order -= 1;
                         }
@@ -85,7 +85,7 @@ module.exports =
                         return step.save({transaction: t});
                     })
                     .then(res.sendStatus(200))
-                    .catch(res.sendStatus(500))    
+                    .catch((err) => {if(err)res.sendStatus(500)})    
                 })
             });
         }
@@ -153,37 +153,42 @@ module.exports =
         let step_circuit = undefined;
         if(id_user)
         {
-            db.Step.findByPk(req.params.id_step).then(step => 
-                {
-                db.Circuit.findByPk(step.id_circuit).then(circuit => 
-                {
-                    if (circuit.id_user === id_user) 
-                    {
-                        step_order = step.order;
-                        step_circuit = step.order
-                        step.destroy().then();
-                    }
-                })
-            })
-            .then((res) =>
+
+            db.Circuit.findOne(
             {
-                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: step_circuit, order: {[db.sequelize.Op.gt]: step_order}}})
+                where : {id_circuit : req.params.id_circuit},
+                include :
+                [
+                    {
+                        model : db.Step,
+                        where : {id_step : req.params.id_step}
+                    }
+                ]
+            })
+            .then(circuit =>
+            {
+                let order = circuit.Steps[0].order;
+                circuit.Steps[0].destroy()
+                
+                return order
+            })
+            .then((order) =>
+            {
+                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: 34, order: {[db.sequelize.Op.gt]: order}}})
                 .then((steps)=>
                 {
                     return db.sequelize.transaction(t=>
                     {
                         return Promise.map(steps,step =>
                         {
-                            step.order -= 1;
-    
-                            return step.save({transaction: t});
+                            step.order-= 1;
+                            return step.save({transaction: t})
                         })
                         .then(res.sendStatus(200))
                         .catch((err) => { if (err) res.sendStatus(500)})
                     })
                 })
-            })   
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
+            })
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
