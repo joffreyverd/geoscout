@@ -37,6 +37,10 @@ export default class Home extends Component {
                 });
             });
         }
+        this.getCircuits();
+    }
+
+    getCircuits = () => {
         const { viewport: { longitude, latitude, distance } } = this.state;
         const body = {
             user_longitude: longitude,

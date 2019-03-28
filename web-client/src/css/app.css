@@ -385,6 +385,21 @@ cursor: pointer;
   color: white;
 }
 
+.come-back-button {
+  background-color: #1abc9c;
+  color: white;
+  font-weight: bold;
+  padding: 8px;
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  border-radius: 4px;
+  width: 100px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
 /************************** DETAILED-CIRCUIT **************************/
 
 .up-wrapper {

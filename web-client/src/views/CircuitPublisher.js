@@ -204,7 +204,11 @@ export default class CircuitPublisher extends Component {
     }
 
     render() {
-        const { steps, stepFocus, circuit, circuitIsDisplayed, stepIsDisplayed, userPosition, viewport } = this.state;
+        const { steps, stepFocus, circuit, circuitIsDisplayed,
+            stepIsDisplayed, userPosition, viewport,
+        } = this.state;
+
+        const { history } = this.props;
 
         return (
             <div className='view-wrapper'>
@@ -241,6 +245,13 @@ export default class CircuitPublisher extends Component {
                     </DragDropContext>
 
                 </div>
+
+                <p
+                    className='come-back-button'
+                    onClick={() => history.goBack()}
+                >Valider
+                </p>
+
                 <UpdateStepModal
                     step={stepFocus}
                     removeStep={this.removeStep}
