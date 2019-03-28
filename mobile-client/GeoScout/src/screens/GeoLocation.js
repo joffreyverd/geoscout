@@ -40,13 +40,10 @@ class GeoLocation extends React.Component{
 
     componentDidMount() {
         console.log('hey beach');
-        if(this.askServiceEnable()){
+        this.checkLocation().then(() => {
             console.log('hey true');
             //fetch requete all circuit dans un rayon
-        }else{
-            console.log('hey false');
-            this.askPermissionLocation();
-        }
+        }).catch(() => console.log('erreur'));
     }
 
     updateLocation = (location) => {
@@ -66,27 +63,23 @@ class GeoLocation extends React.Component{
         console.log(this.state);
     }
 
-    askServiceEnable = async () => {
-        let statusService = await Location.hasServicesEnabledAsync();
-        if(statusService){
-            let location = await Location.getCurrentPositionAsync({});
-            this.updateLocation(location);
-        }else{
-            return false;
-        }
-    }
-
-    askPermissionLocation = async () => {
-        let { status } = await Permissions.askAsync(Permissions.LOCATION);
-        if (status === 'granted') {
-            let location = await Location.getCurrentPositionAsync({});
-            this.updateLocation(location);
-        }else{
+    checkLocation = async () => {
+        return Location.requestPermissionsAsync().then(async () => {
+            let locationEnabled = await Location.hasServicesEnabledAsync();
+            if (locationEnabled) {
+                let location = await Location.getCurrentPositionAsync({});
+                this.updateLocation(location);
+            } else {
+                this.setState({
+                    error: "La localisation n'est pas activée sur le périphérique."
+                })
+            }
+        }).catch(() => {
             this.setState({
-                error: "La location n'est pas autorisée sur le périphérique."
-            })
-        }
-    }  
+                error: "La localisation n'est pas autorisée sur le périphérique."
+            });
+        });
+    }
 
     componentWillUnmount() {
         //Je ne sais pas si c'est encore utile !
