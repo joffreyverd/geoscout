@@ -59,7 +59,7 @@ export default class Map extends React.Component {
                                              </Marker>)}
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
                     {circuits && circuits.map((c, idx) => {
-                        if (c.Steps[0].latitude && c.Steps[0].longitude) {
+                        if (c != null && c.Steps[0].latitude && c.Steps[0].longitude) {
                             return (
                                 <Marker
                                     key={idx}

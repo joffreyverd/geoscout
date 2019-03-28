@@ -96,8 +96,8 @@ export default class CircuitPublisher extends Component {
      * Suppression d'une étape sur le serveur puis dans le state
      * @param {Integer} idx : L'index de l'étape dans le tableau steps du state
      */
-    removeStep = (id_step) => {
-        api.delete(`step/${id_step}`).then(() => {
+    removeStep = (id_circuit, id_step) => {
+        api.delete(`step/${id_circuit}/${id_step}`).then(() => {
             // Suppression de l'étape dans la liste
             this.setState((prev) => {
                 const idx = prev.steps.findIndex(element => element.id_step === id_step);
@@ -113,6 +113,7 @@ export default class CircuitPublisher extends Component {
      * @param {Object} step : L'objet étape modifié
      */
     updateStep = step => api.put(`step/${step.id_step}`, step).then(() => {
+        console.log(step);
         this.setState((prev) => {
             prev.steps.splice(prev.steps.findIndex(s => s.id_step === step.id_step), 1, step);
         });
@@ -151,7 +152,6 @@ export default class CircuitPublisher extends Component {
     dragEnd = (dropResult) => {
         if (dropResult.destination) {
             const {
-                draggableId: id,
                 source: {
                     index: prevOrder,
                 },
@@ -165,8 +165,7 @@ export default class CircuitPublisher extends Component {
 
             this.changeStepOrder(prevOrder, newOrder);
 
-            api.put('step/order', {
-                id: id,
+            api.put('step-order', {
                 id_circuit: id_circuit,
                 previous: prevOrder,
                 new: newOrder,
