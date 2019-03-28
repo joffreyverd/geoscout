@@ -400,6 +400,10 @@ cursor: pointer;
   cursor: pointer;
 }
 
+.rich-text-editor {
+  background-color: white;
+}
+
 /************************** DETAILED-CIRCUIT **************************/
 
 .up-wrapper {

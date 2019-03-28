@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 import api from '../../utils/httpMethods';
 
 class UpdateStepModal extends Component {
@@ -12,6 +15,23 @@ class UpdateStepModal extends Component {
         instruction: '',
         questions: { wording: '', response: '' },
     };
+
+    modules = {
+        toolbar: [
+            [{ header: [1, 2, false] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+            ['link', 'image'],
+            ['clean'],
+        ],
+    };
+
+    formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image',
+    ];
 
     componentDidUpdate(prevProps) {
         const { step } = this.props;
@@ -46,6 +66,12 @@ class UpdateStepModal extends Component {
 
     handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
+    }
+
+    handleRichTextChange = (value) => {
+        this.setState({
+            description: value,
+        });
     }
 
     handleChangeQuestion = (event) => {
@@ -99,11 +125,13 @@ class UpdateStepModal extends Component {
 
                         <FormGroup>
                             <Label>Description</Label>
-                            <Input
-                                type='textarea'
-                                name='description'
+                            <ReactQuill
+                                className='rich-text-editor'
+                                theme='snow'
+                                modules={this.modules}
+                                formats={this.formats}
                                 value={description}
-                                onChange={this.handleChange}
+                                onChange={this.handleRichTextChange}
                             />
                         </FormGroup>
 
