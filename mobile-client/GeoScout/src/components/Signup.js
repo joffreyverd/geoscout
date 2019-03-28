@@ -4,11 +4,10 @@ import {
     Text,
     StyleSheet,
     View,
-    TextInput,
-    Modal
+    TextInput
 } from 'react-native';
 
-export default class SignupModal extends React.Component {
+export default class Signup extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -36,7 +35,7 @@ export default class SignupModal extends React.Component {
         const user = Object.assign({}, this.state);
         delete user.rePassword;
 
-        this.props.signup('signup', user).then((data) => {
+        this.props.navigation.state.params.signup('signup', user).then((data) => {
             console.log("Connecté");
             // success
         }).catch((error) => {
@@ -47,57 +46,51 @@ export default class SignupModal extends React.Component {
 
     render() {
         return (
-            <Modal
-            animationType="slide"
-            transparent={false}
-            onRequestClose={this.props.onRequestClose}
-            visible={this.props.modalInscriptionVisible}>
-                <View style={styles.container}>
-                    <TextInput
-                        value={this.state.firstname}
-                        onChangeText={(firstname) => this.setState({ firstname })}
-                        placeholder={'Prénom'}
-                        style={styles.input}
-                    />
+            <View style={styles.container}>
+                <TextInput
+                    value={this.state.firstname}
+                    onChangeText={(firstname) => this.setState({ firstname })}
+                    placeholder={'Prénom'}
+                    style={styles.input}
+                />
 
-                    <TextInput
-                        value={this.state.lastname}
-                        onChangeText={(lastname) => this.setState({ lastname })}
-                        placeholder={'Nom'}
-                        style={styles.input}
-                    />
+                <TextInput
+                    value={this.state.lastname}
+                    onChangeText={(lastname) => this.setState({ lastname })}
+                    placeholder={'Nom'}
+                    style={styles.input}
+                />
 
-                    <TextInput
-                        value={this.state.email}
-                        onChangeText={(email) => this.setState({ email })}
-                        placeholder={'Email'}
-                        style={styles.input}
-                    />
+                <TextInput
+                    value={this.state.email}
+                    onChangeText={(email) => this.setState({ email })}
+                    placeholder={'Email'}
+                    style={styles.input}
+                />
 
-                    <TextInput
-                        value={this.state.password}
-                        onChangeText={(password) => this.setState({ password })}
-                        placeholder={'Mot de passe'}
-                        secureTextEntry={true}
-                        style={styles.input}
-                    />
+                <TextInput
+                    value={this.state.password}
+                    onChangeText={(password) => this.setState({ password })}
+                    placeholder={'Mot de passe'}
+                    secureTextEntry={true}
+                    style={styles.input}
+                />
 
-                    <TextInput
-                        value={this.state.repassword}
-                        onChangeText={(repassword) => this.setState({ rePassword })}
-                        placeholder={'Répétez votre mot de passe'}
-                        secureTextEntry={true}
-                        style={styles.input}
-                    />
-                    
-                    <TouchableOpacity
-                    style={styles.button}
-                    onPress={this.handleSubmit}
-                    activeOpacity={0.8}>
-                        <Text style={styles.textButton}>Inscription</Text>
-                    </TouchableOpacity>
-                </View>
-            </Modal>
+                <TextInput
+                    value={this.state.repassword}
+                    onChangeText={(repassword) => this.setState({ rePassword })}
+                    placeholder={'Répétez votre mot de passe'}
+                    secureTextEntry={true}
+                    style={styles.input}
+                />
+                
+                <TouchableOpacity
+                style={styles.button}
+                onPress={this.handleSubmit}
+                activeOpacity={0.8}>
+                    <Text style={styles.textButton}>Inscription</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 }

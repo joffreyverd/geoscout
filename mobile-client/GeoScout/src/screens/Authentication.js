@@ -10,8 +10,6 @@ import {
 import api from '../config/httpMethods';
 import storage from '../config/asyncStorageToken';
 
-import SigninModal from '../components/Signin';
-import SignupModal from '../components/Signup';
 
 const {width,height} = Dimensions.get('window')
 
@@ -19,7 +17,6 @@ class Authentication extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            modalConnexionVisible: false,
             modalInscriptionVisible: false,
             user: {}
         }
@@ -44,7 +41,7 @@ class Authentication extends React.Component{
         }
     }
 
-    signin = (route, credentials) => api.post('signin', credentials).then((data) => {
+    signin = (credentials) => api.post('signin', credentials).then((data) => {
         if(storage.setTokenAsyncStorage(data.token)){
             this.setState({
                 user: data.user,
@@ -81,38 +78,12 @@ class Authentication extends React.Component{
             //GESTION DES ERREURS
         }
     }
-
-    //Fonction qui permet de changer la visibilité de la modal de connexion
-    setModalConnexionVisible = (visible) => {
-        this.setState({modalConnexionVisible: visible});
-    }
-
-    //Fonction qui permet de changer la visibilité de la modal d'inscription
-    setModalInscriptionVisible = (visible) => {
-        this.setState({modalInscriptionVisible: visible});
-    }
-
+    
     render() {
-
-        const { modalConnexionVisible, modalInscriptionVisible } = this.state;
+        const { navigation } = this.props;
 
         return (
             <View style={styles.container}>
-                <SigninModal
-                    modalConnexionVisible={modalConnexionVisible}
-                    signin={this.signin}
-                    onRequestClose={() => {
-                        this.setModalConnexionVisible(false);
-                    }}
-                />
-
-                <SignupModal
-                    modalInscriptionVisible={modalInscriptionVisible}
-                    signup={this.signup}
-                    onRequestClose={() => {
-                        this.setModalInscriptionVisible(false);
-                    }}
-                />
 
                 <Image
                     style={{width: (width*0.8), height: (height*0.1)}}
@@ -123,7 +94,9 @@ class Authentication extends React.Component{
                     <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        this.setModalConnexionVisible(true);
+                        navigation.navigate('Signin',{
+                            signin: this.signin,
+                        })
                     }}
                     activeOpacity={0.8}>
                         <Text style={styles.textButton}>
@@ -134,7 +107,9 @@ class Authentication extends React.Component{
                     <TouchableOpacity
                     style={styles.button}
                     onPress={() => {
-                        this.setModalInscriptionVisible(true);
+                        navigation.navigate('Signup', {
+                            signup: this.signup
+                        })
                     }}
                     activeOpacity={0.8}>
                         <Text style={styles.textButton}>
