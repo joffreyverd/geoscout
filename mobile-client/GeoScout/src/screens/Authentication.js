@@ -12,7 +12,6 @@ import storage from '../config/asyncStorageToken';
 
 import SigninModal from '../components/Signin';
 import SignupModal from '../components/Signup';
-import { Tabs } from '../config/router';
 
 const {width,height} = Dimensions.get('window')
 
@@ -34,7 +33,9 @@ class Authentication extends React.Component{
         if(storage.getTokenAsyncStorage()){
             api.get('whoami').then((data) => {
                 //ALLER SUR LA MAP AVEC LES CIRCUITS ENVIRONENT
-                this.setState({ user: data });
+                this.setState({
+                    user: data 
+                });
                 this.props.navigation.navigate('Tabs', this.state.user);
             }).catch((error) => {
                 //GESTION DES ERREURS
@@ -46,7 +47,8 @@ class Authentication extends React.Component{
     signin = (route, credentials) => api.post('signin', credentials).then((data) => {
         if(storage.setTokenAsyncStorage(data.token)){
             this.setState({
-                user: data.user
+                user: data.user,
+                modalConnexionVisible: false
             });
 
             this.props.navigation.navigate('Tabs', this.state.user);
@@ -59,8 +61,11 @@ class Authentication extends React.Component{
         if(storage.setTokenAsyncStorage(data.token)){
             //PROBLEME
             this.setState({
-                user: data.user
+                user: data.user,
+                modalInscriptionVisible: false
             });
+
+            this.props.navigation.navigate('Tabs', this.state.user);
         }else{
             //GESTION DES ERREURS
         }
