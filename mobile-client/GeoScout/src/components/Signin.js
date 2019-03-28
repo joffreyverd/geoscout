@@ -4,16 +4,15 @@ import {
     Text,
     StyleSheet,
     View,
-    TextInput,
-    Modal
+    TextInput
 } from 'react-native';
 
-export default class SigninModal extends React.Component {
+export default class Signin extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            email: 'stevy.palarski@gmail.com',
-            password: 'rootroot'
+            email: '',
+            password: ''
         }
     }
 
@@ -28,7 +27,7 @@ export default class SigninModal extends React.Component {
         const user = Object.assign({}, this.state);
         console.log(user);
 
-        this.props.signin('signin', user).then((data) => {
+        this.props.navigation.state.params.signin(user).then((data) => {
             // success
             console.log("Connecté");
         }).catch((error) => {
@@ -39,35 +38,29 @@ export default class SigninModal extends React.Component {
 
     render() {
         return (
-            <Modal
-            animationType='slide'
-            transparent={false}
-            onRequestClose={this.props.onRequestClose}
-            visible={this.props.modalConnexionVisible}>
-                <View style={styles.container}>
-                    <TextInput
-                        value={this.state.email}
-                        //onChangeText={(email) => this.setState({ email })}
-                        placeholder={'Email'}
-                        style={styles.input}
-                    />
+            <View style={styles.container}>
+                <TextInput
+                    value={this.state.email}
+                    onChangeText={(email) => this.setState({ email })}
+                    placeholder={'Email'}
+                    style={styles.input}
+                />
 
-                    <TextInput
-                        value={this.state.password}
-                        //onChangeText={(password) => this.setState({ password })}
-                        placeholder={'Mot de passe'}
-                        secureTextEntry={true}
-                        style={styles.input}
-                    />
-                    
-                    <TouchableOpacity
-                    style={styles.button}
-                    onPress={this.handleSubmit}
-                    activeOpacity={0.8}>
-                        <Text style={styles.textButton}>Connexion</Text>
-                    </TouchableOpacity>
-                </View>
-            </Modal>
+                <TextInput
+                    value={this.state.password}
+                    onChangeText={(password) => this.setState({ password })}
+                    placeholder={'Mot de passe'}
+                    secureTextEntry={true}
+                    style={styles.input}
+                />
+                
+                <TouchableOpacity
+                style={styles.button}
+                onPress={this.handleSubmit}
+                activeOpacity={0.8}>
+                    <Text style={styles.textButton}>Connexion</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 }
