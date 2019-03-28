@@ -156,7 +156,7 @@ module.exports =
 
             db.Circuit.findOne(
             {
-                where : {id_circuit : 34},
+                where : {id_circuit : req.params.id_circuit},
                 include :
                 [
                     {
@@ -189,49 +189,6 @@ module.exports =
                     })
                 })
             })
-            /*db.Step.findByPk(req.params.id_step).then(step => 
-            {
-                db.Circuit.findByPk(step.id_circuit).then(circuit => 
-                {
-                    console.log(circuit.id_user + ' ' + id_user)
-                    if (circuit.id_user === id_user) 
-                    { 
-                        step.destroy()
-                        .then(() => 
-                        {
-                            step_order = step.order,
-                            step_circuit = step.id_circuit
-
-                        });
-                    }
-
-                    else
-                        throw ''
-                });
-            })
-            .then((obj) =>
-            {
-                console.log(obj)
-                console.log(step_circuit)
-                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: obj.step_circuit, order: {[db.sequelize.Op.gt]: obj.step_order}}})
-                .then((steps)=>
-                {
-                    return db.sequelize.transaction(t=>
-                    {
-                        let i = 0;
-                        return Promise.map(steps,step =>
-                        {
-                            console.log(i)
-                            step.order= i;
-                            i++;
-                            return step.save({transaction: t});  
-                        })
-                        .then(res.sendStatus(200))
-                        .catch((err) => { if (err) res.sendStatus(500)})
-                    })
-                })
-            })   
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})*/
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
