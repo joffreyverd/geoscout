@@ -6,7 +6,7 @@ export default class Todo extends Component {
     render() {
         return (
             <>
-                <h1>Ma liste</h1>
+                <h1>Mes favoris</h1>
             </>
         );
     }

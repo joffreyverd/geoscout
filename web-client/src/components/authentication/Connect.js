@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Button, ModalBody, ModalFooter,
-    Form, FormGroup, FormFeedback, Label, Input
+    Form, FormGroup, FormFeedback, Label, Input,
 } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
@@ -20,16 +20,18 @@ class Connect extends Component {
     handleChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
-            error: undefined
+            error: undefined,
         });
     }
 
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.login('signin', this.state).catch((error) => {
-            console.log(error);
-            if (error.code === 401)
-                this.setState({ error: error.text })
+            if (error.code === 401) {
+                const { alert } = this.props;
+                this.setState({ error: error.text });
+                alert.error('Oups, une erreur s\'est produite');
+            }
         });
     }
 
