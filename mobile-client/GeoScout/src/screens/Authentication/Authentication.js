@@ -7,8 +7,8 @@ import {
     Dimensions,
     Image
 } from 'react-native';
-import api from '../config/httpMethods';
-import storage from '../config/asyncStorageToken';
+import api from '../../config/httpMethods';
+import storage from '../../config/asyncStorageToken';
 
 
 const {width,height} = Dimensions.get('window')

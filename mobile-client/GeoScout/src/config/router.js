@@ -5,12 +5,21 @@ import {
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import Authentication from '../screens/Authentication';
+import Authentication from '../screens/Authentication/Authentication';
 import GeoLocation from '../screens/GeoLocation';
-import Settings from '../screens/Settings.js';
-import Signin from '../components/Signin';
-import Signup from '../components/Signup';
-import Me from '../screens/Me';
+import Settings from '../screens/Profil/Settings.js';
+import Signin from '../screens/Authentication/Signin';
+import Signup from '../screens/Authentication/Signup';
+import Me from '../screens/Profil/Me';
+
+const ProfilStack = createStackNavigator(
+    {
+        Me: Me,
+        Settings: Settings
+    }, {
+        initialRouteName: 'Me'
+    }
+);
 
 const Home = createBottomTabNavigator({
     GeoLocation: {
@@ -32,10 +41,10 @@ const Home = createBottomTabNavigator({
             },
         },
     },
-    Me: {
-        screen: Me,
+    Profil: {
+        screen: ProfilStack,
         navigationOptions: {
-            tabBarLabel: 'Moi',
+            tabBarLabel: 'Profil',
             tabBarIcon: (({ tintColor }) => (<Icon name='user-circle' type='font-awesome' size={20} color={tintColor} />)),
             tabBarOptions: {
                 activeTintColor: 'white',
@@ -65,28 +74,26 @@ const Home = createBottomTabNavigator({
 
 const AuthStack = createStackNavigator(
     {
-        Authentication: {
-            screen: Authentication
-        },
+        Authentication: Authentication,
         Signin: Signin,
         Signup: Signup,
     }, {
         headerMode: 'none',
         initialRouteName: 'Authentication'
     }
-)
+);
 
 
 export const RootStack = createSwitchNavigator(
     {
         Auth: AuthStack,
-        Home: Home,
-        Settings: Settings,
+        Home: Home
     },
     {
         mode: 'card',
         headerMode: 'none',
         initialRouteName: 'Auth'
-    });
+    }
+);
 
 export const AppContainer = createAppContainer(RootStack);
