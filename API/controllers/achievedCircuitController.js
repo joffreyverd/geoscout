@@ -32,5 +32,19 @@ module.exports=
     },
 
     //////////////////////////////////////////////////////////
+
+    deleteAchievement: (req,res,next) =>
+    {
+        if (utils.verifToken(req.headers['authorization']))
+        {
+            db.AchievedCircuit.destroy({where : {id_route : req.params.id_route}})
+            .then(a => res.sendStatus(204))
+            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
+        }
+        else
+            res.status(401).send(utils.messages.invalidToken);
+    },
+
+    //////////////////////////////////////////////////////////
+
 }
- 
