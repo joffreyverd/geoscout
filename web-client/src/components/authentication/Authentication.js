@@ -54,7 +54,7 @@ export default class Authentication extends React.Component {
                     </Dropdown>
                     :
                     <>
-                        <p onClick={this.displayModal} className='auth-text'>Autentification</p>
+                        <p onClick={this.displayModal} className='auth-text'>Authentification</p>
 
                         <Modal isOpen={modal} fade={false} toggle={this.displayModal}>
 

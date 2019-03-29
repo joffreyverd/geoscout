@@ -46,13 +46,13 @@ export default class CircuitPublisher extends Component {
         if (id) {
             api.get(`circuit/${id}`).then((circuit) => {
                 api.get(`steps/${id}`).then((steps) => {
+                    console.log(steps);
                     this.setState({
                         circuit: circuit,
                         steps: steps,
                     });
                 });
             }).catch(() => {
-                const { alert } = this.props;
                 console.log('Oups, une erreur s\'est produite');
             });
         }
@@ -91,7 +91,6 @@ export default class CircuitPublisher extends Component {
                 return { steps: prev.steps };
             });
         }).catch(() => {
-            const { alert } = this.props;
             console.log('Oups, une erreur s\'est produite');
         });
     }
@@ -182,7 +181,6 @@ export default class CircuitPublisher extends Component {
             })
                 .then(() => null)
                 .catch(() => {
-                    const { alert } = this.props;
                     this.changeStepOrder(newOrder, prevOrder);
                     console.log('Oups, une erreur s\'est produite');
                 });

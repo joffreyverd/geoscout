@@ -15,7 +15,6 @@ export default class DetailedCircuit extends Component {
                 circuit: circuit,
             });
         }).catch(() => {
-            const { alert } = this.props;
             console.log('Oups, une erreur s\'est produite');
         });
     }

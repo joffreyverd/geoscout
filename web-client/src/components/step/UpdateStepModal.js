@@ -5,6 +5,7 @@ import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+import MultipleQuestion from './MultipleQuestion';
 import api from '../../utils/httpMethods';
 
 class UpdateStepModal extends Component {
@@ -145,25 +146,11 @@ class UpdateStepModal extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup>
-                            <Label>Intitulé de la question</Label>
-                            <Input
-                                type='textarea'
-                                name='wording'
-                                value={wording}
-                                onChange={this.handleChangeQuestion}
-                            />
-                        </FormGroup>
-
-                        <FormGroup>
-                            <Label>Réponse</Label>
-                            <Input
-                                type='textarea'
-                                name='response'
-                                value={response}
-                                onChange={this.handleChangeQuestion}
-                            />
-                        </FormGroup>
+                        <MultipleQuestion
+                            wording={wording}
+                            response={response}
+                            handleChangeQuestion={this.handleChangeQuestion}
+                        />
 
                         <div className='update-buttons'>
                             <Button

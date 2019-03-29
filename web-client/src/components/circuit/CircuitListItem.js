@@ -59,8 +59,15 @@ class CircuitListItem extends Component {
                     <h3 className='item-name'>{name}</h3>
 
                     {overview}
+
                     <p>{length && `${length} km`}</p>
-                    <p>{duration && `${length} heures`}</p>
+
+                    {duration === null ?
+                        <p>{duration && `${length} heures`}</p>
+                        :
+                        <p>Moins d'une heure</p>
+                    }
+
                     <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
 
                     {!onHome &&
