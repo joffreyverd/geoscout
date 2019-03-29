@@ -22,11 +22,23 @@ module.exports =
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.findByPk(req.params.id_step)
-            .then(step => res.status(200).send(step));
+            db.Step.findOne(
+                {
+                    where : {id_step : req.params.id_step},
+                    attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
+                    include : 
+                    [
+                        {
+                            model : db.Question,
+                            attributes : ['id_question','wording','response','type_of','points']
+                        }
+                    ]
+                }
+            )
+            .then(step => res.status(200).send(step))
         }
         else
-            res.status(401).send(utils.messages.invalidToken); 
+            res.status(401).send(utils.messages.invalidToken);  
     },
 
     //////////////////////////////////////////////////////////
@@ -119,25 +131,6 @@ module.exports =
                     throw 'err'
                 
             })
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
-        }
-        else
-            res.status(401).send(utils.messages.invalidToken); 
-    },
-
-
-    //////////////////////////////////////////////////////////
-
-    questionsOfStep : (req,res,next) =>
-    {
-        if(utils.verifToken(req.headers['authorization']))
-        {
-            db.Question.findAll(
-            {
-                where : {id_step : req.params.id_step},
-                attributes : ['id_question','wording','points','response']
-            })
-            .then(questions => res.status(200).json(questions))
             .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
         }
         else

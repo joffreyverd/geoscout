@@ -15,5 +15,10 @@ module.exports = (sequelize,DataTypes) =>
         {createdAt: false, updatedAt: false}
     );
 
+    Step.associate = (db) =>
+    {
+        Step.hasMany(db.Question,{foreignKey : 'id_step', targetKey : 'id_step'})
+    }
+
     return Step;
 }
