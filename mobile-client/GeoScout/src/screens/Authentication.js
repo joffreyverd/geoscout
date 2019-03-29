@@ -14,70 +14,32 @@ import storage from '../config/asyncStorageToken';
 const {width,height} = Dimensions.get('window')
 
 class Authentication extends React.Component{
-    constructor(props){
-        super(props)
-        this.state = {
-            user: {}
-        }
-    }
-
     //Vérification de la présence d'un token dans le storage du mobile.
     //Si le token est présent, on lance un whoami à l'api.
     //Si la requête abouti, alors l'utilisateur est rediriger sur la map.
     //Si la requête n'abouti pas, alors on supprime le token qui n'est plus valide.
     componentDidMount() {
-        if(storage.getTokenAsyncStorage()){
-            api.get('whoami').then((data) => {
-                //ALLER SUR LA MAP AVEC LES CIRCUITS ENVIRONENT
-                this.setState({
-                    user: data 
+        storage.getTokenAsyncStorage().then((token) => {
+            if (token) {
+                api.get('whoami').then((data) => {
+                    //ALLER SUR LA MAP AVEC LES CIRCUITS ENVIRONNANT
+                    this.props.navigation.navigate('Home', data.user);
+                }).catch((error) => {
+                    //GESTION DES ERREURS
                 });
-                this.props.navigation.navigate('Tabs', this.state.user);
-            }).catch((error) => {
-                //GESTION DES ERREURS
-                storage.removeTokenAsyncStorage();
-            });
-        }
+            }
+        });
     }
 
-    signin = (credentials) => api.post('signin', credentials).then((data) => {
-        if(storage.setTokenAsyncStorage(data.token)){
-            this.setState({
-                user: data.user,
-                modalConnexionVisible: false
-            });
+    signin = (credentials) => api.post('signin', credentials).then(this.stockageUser);
 
-            this.props.navigation.navigate('Tabs', this.state.user);
-        }else{
-            //GESTION DES ERREURS
-        }
-    })
+    signup = (credentials) => api.post('signup', credentials).then(this.stockageUser);
 
-    signup = (route, credentials) => api.post('signup', credentials).then((data) => {
-        if(storage.setTokenAsyncStorage(data.token)){
-            //PROBLEME
-            this.setState({
-                user: data.user,
-                modalInscriptionVisible: false
-            });
-
-            this.props.navigation.navigate('Tabs', this.state.user);
-        }else{
-            //GESTION DES ERREURS
-        }
-    })
-
-    //Vérification utilité dans authentification
-    signout = () => {
-        if(storage.removeTokenAsyncStorage()){
-            this.setState({
-                user: {}
-            });
-        }else{
-            //GESTION DES ERREURS
-        }
+    stockageUser = (data) => {
+        storage.setTokenAsyncStorage(data.token);
+        this.props.navigation.navigate('Home', data.user);
     }
-    
+
     render() {
         const { navigation } = this.props;
 

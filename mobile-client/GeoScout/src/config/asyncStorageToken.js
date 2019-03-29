@@ -1,27 +1,25 @@
 import { AsyncStorage } from 'react-native';
 
 setTokenAsyncStorage = async (userToken) => {
+    console.log(userToken);
     try {
-        await AsyncStorage.setItem('token', userToken);
+        await AsyncStorage.setItem('GeoScoutToken', userToken);
     }catch (error) {
         //GESTION DES ERREURS
     }
 };
 
 getTokenAsyncStorage = async () => {
-    try {
-        const value = await AsyncStorage.getItem('token');
-        if (value !== null) {
-            return value;
-        }
-    }catch (error) {
-        //GESTION DES ERREURS
-    }
+    console.log("Try get token");
+    return AsyncStorage.getItem('GeoScoutToken').then((token) => {
+        console.log(`token : ${token}`);
+        return token;
+    }).catch(error => console.log(error));
 };
 
 removeTokenAsyncStorage = async () => {
     try {
-        await AsyncStorage.removeItem('token');
+        await AsyncStorage.removeItem('GeoScoutToken');
         return true;
     }catch (error) {
         //GESTION DES ERREURS
