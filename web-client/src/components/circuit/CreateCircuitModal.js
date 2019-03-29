@@ -27,8 +27,7 @@ class CreateCircuitModal extends Component {
             const { history } = this.props;
             history.push(`/circuit/${data.id_circuit}`);
         }).catch(() => {
-            const { alert } = this.props;
-            alert.error('Oups, une erreur s\'est produite');
+            console.log('Oups, une erreur s\'est produite');
         });
     }
 

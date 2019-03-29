@@ -52,8 +52,7 @@ export default class Home extends Component {
                 circuits: data,
             });
         }).catch(() => {
-            const { alert } = this.props;
-            alert.error('Oups, une erreur s\'est produite');
+            console.log('Oups, une erreur s\'est produite');
         });
     }
 

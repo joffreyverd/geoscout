@@ -162,6 +162,7 @@ h1 {
   flex-wrap: wrap;
 }
 
+/*
 .list-item {
   background-color: #ecf0f1;
   border-radius: 5px;
@@ -173,12 +174,13 @@ h1 {
   position: relative;
 }
 
-.list-item:hover {
+.list-item:hover{
   cursor: pointer;
   background-color: #65D8C1;
   color: #fff;
   transition: 0.2s;
 }
+*/
 
 .version-item  {
   position: absolute;
@@ -215,7 +217,32 @@ h1 {
 }
 
 .hard {
-  background-color:#c0392b; 
+  background-color:#c0392b;
+}
+
+.html-reformat > *,
+.html-reformat > * > *,
+.html-reformat > * > * > * {
+  color: black;
+  font-size: 1em;
+  font-weight: normal;
+  text-decoration: none;
+  list-style-type: none;
+  text-indent: 0px;
+  margin: 0px;
+  text-align: start;
+}
+
+.html-reformat > *:hover,
+.html-reformat > * > *:hover,
+.html-reformat > * > * > *:hover {
+  text-decoration: none;
+  color: black;
+}
+
+.html-reformat {
+  max-height: 50px;
+  overflow: hidden;
 }
 
 /************************** CIRCUIT-PUBLISHER **************************/

@@ -70,7 +70,7 @@ class UpdateCircuitModal extends Component {
                 displayUpdateCircuit();
                 alert.success('Circuit mis à jour');
             })
-            .catch(() => alert.error('Oups, une erreur s\'est produite'));
+            .catch(() => console.log('Oups, une erreur s\'est produite'));
     }
 
     render() {

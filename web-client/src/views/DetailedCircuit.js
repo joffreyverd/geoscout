@@ -16,7 +16,7 @@ export default class DetailedCircuit extends Component {
             });
         }).catch(() => {
             const { alert } = this.props;
-            alert.error('Oups, une erreur s\'est produite');
+            console.log('Oups, une erreur s\'est produite');
         });
     }
 

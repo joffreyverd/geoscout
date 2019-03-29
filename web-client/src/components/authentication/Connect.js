@@ -28,9 +28,8 @@ class Connect extends Component {
         e.preventDefault();
         this.props.login('signin', this.state).catch((error) => {
             if (error.code === 401) {
-                const { alert } = this.props;
                 this.setState({ error: error.text });
-                alert.error('Oups, une erreur s\'est produite');
+                console.log('Oups, une erreur s\'est produite');
             }
         });
     }
