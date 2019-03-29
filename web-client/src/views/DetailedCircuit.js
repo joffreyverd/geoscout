@@ -14,8 +14,9 @@ export default class DetailedCircuit extends Component {
             this.setState({
                 circuit: circuit,
             });
-        }).catch((error) => {
-            console.log(error);
+        }).catch(() => {
+            const { alert } = this.props;
+            console.log('Oups, une erreur s\'est produite');
         });
     }
 
@@ -37,7 +38,8 @@ export default class DetailedCircuit extends Component {
 
                 <div className='bottom-wrapper'>
                     <div className='circuit-infos'>
-                        <p>{description}</p>
+                        <div dangerouslySetInnerHTML={{ __html: description }} />
+
                         <p>{duration}</p>
                         <p>{`${length} km`}</p>
                         <p>{level}</p>

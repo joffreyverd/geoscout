@@ -3,6 +3,7 @@ const circuit = require('../controllers/circuitController');
 const step = require('../controllers/stepController');
 const evaluation = require('../controllers/evaluationController');
 const question = require('../controllers/questionController');
+const achievements = require('../controllers/achievedCircuitController');
 module.exports = function(app)
 {
 	app.route('/signup').post(user.createUser);
@@ -31,6 +32,9 @@ module.exports = function(app)
 	app.route('/circuit/:id_circuit').put(circuit.updateCircuit);
 	app.route('/circuit').delete(circuit.deleteCircuit);
 	app.route('/circuit/nearby').post(circuit.nearbyCircuits)
+
+	app.route('/achievedcircuit').post(achievements.createAchievement)
+	app.route('/achievedcircuit/:id_route').delete(achievements.deleteAchievement)
 
 	app.route('/question/:id_question').get(question.getQuestion);
 	app.route('/question').post(question.createQuestion);

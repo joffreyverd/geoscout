@@ -22,6 +22,10 @@ class CircuitListItem extends Component {
         });
     }
 
+    test = () => {
+
+    };
+
     render() {
 
         const {
@@ -43,6 +47,8 @@ class CircuitListItem extends Component {
                 break;
         }
 
+        const overview = (description != null) && `${description.replace(/<(.|\n)*?>/g, '').substring(0, 50)}...`;
+
         return (
             <>
                 <li
@@ -51,7 +57,8 @@ class CircuitListItem extends Component {
                 >
 
                     <h3 className='item-name'>{name}</h3>
-                    <p>{description && description}</p>
+
+                    {overview}
                     <p>{length && `${length} km`}</p>
                     <p>{duration && `${length} heures`}</p>
                     <p className='version-item'>{version && `Version : ${version}`}</p>

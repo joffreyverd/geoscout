@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 class UpdateCircuitModal extends Component {
 
     state = {
@@ -10,6 +13,23 @@ class UpdateCircuitModal extends Component {
         length: '',
         duration: '',
     };
+
+    modules = {
+        toolbar: [
+            [{ header: [1, 2, false] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
+            ['link', 'image'],
+            ['clean'],
+        ],
+    };
+
+    formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image',
+    ];
 
     componentDidUpdate(prevProps) {
         const { circuit } = this.props;
@@ -29,6 +49,12 @@ class UpdateCircuitModal extends Component {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    handleRichTextChange = (value) => {
+        this.setState({
+            description: value,
+        });
+    }
+
     handleSubmit = () => {
         const { id_circuit, name, description, length, duration } = this.state;
         const { displayUpdateCircuit, alert } = this.props;
@@ -44,7 +70,7 @@ class UpdateCircuitModal extends Component {
                 displayUpdateCircuit();
                 alert.success('Circuit mis à jour');
             })
-            .catch(() => alert.error('Oups, une erreur s\'est produite'));
+            .catch(() => console.log('Oups, une erreur s\'est produite'));
     }
 
     render() {
@@ -70,32 +96,24 @@ class UpdateCircuitModal extends Component {
 
                         <FormGroup>
                             <Label>Description</Label>
-                            <Input
-                                type='textarea'
-                                name='description'
+                            <ReactQuill
+                                className='rich-text-editor'
+                                theme='snow'
+                                modules={this.modules}
+                                formats={this.formats}
                                 value={description}
-                                onChange={this.handleChange}
+                                onChange={this.handleRichTextChange}
                             />
                         </FormGroup>
 
                         <FormGroup>
-                            <Label>Distance moyenne</Label>
-                            <Input
-                                type='text'
-                                name='length'
-                                value={length}
-                                onChange={this.handleChange}
-                            />
+                            <Label>Durée estimée</Label>
+                            <p>{`${duration} heure(s)`}</p>
                         </FormGroup>
 
                         <FormGroup>
-                            <Label>Durée moyenne</Label>
-                            <Input
-                                type='text'
-                                name='duration'
-                                value={duration}
-                                onChange={this.handleChange}
-                            />
+                            <Label>Distance à vol d'oisée</Label>
+                            <p>{`${length} km(s)`}</p>
                         </FormGroup>
 
                         <div className='update-buttons'>

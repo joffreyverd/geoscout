@@ -51,8 +51,8 @@ export default class Home extends Component {
             this.setState({
                 circuits: data,
             });
-        }).catch((error) => {
-            console.log(error);
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
         });
     }
 

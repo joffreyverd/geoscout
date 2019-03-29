@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
     Button, ModalBody, ModalFooter, Form, FormGroup,
-    Label, Input, Modal, ModalHeader
+    Label, Input, Modal, ModalHeader,
 } from 'reactstrap';
 import { withRouter } from 'react-router-dom';
 
@@ -26,7 +26,9 @@ class CreateCircuitModal extends Component {
             displayModal();
             const { history } = this.props;
             history.push(`/circuit/${data.id_circuit}`);
-        }).catch(error => console.log(error));
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
     }
 
     render() {

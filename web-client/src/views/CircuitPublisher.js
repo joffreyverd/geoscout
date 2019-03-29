@@ -51,8 +51,9 @@ export default class CircuitPublisher extends Component {
                         steps: steps,
                     });
                 });
-            }).catch((error) => {
-                console.log(error);
+            }).catch(() => {
+                const { alert } = this.props;
+                console.log('Oups, une erreur s\'est produite');
             });
         }
     }
@@ -89,7 +90,10 @@ export default class CircuitPublisher extends Component {
                 prev.steps.push(data);
                 return { steps: prev.steps };
             });
-        }).catch(error => console.log(error.text));
+        }).catch(() => {
+            const { alert } = this.props;
+            console.log('Oups, une erreur s\'est produite');
+        });
     }
 
     /**
@@ -110,7 +114,9 @@ export default class CircuitPublisher extends Component {
                 return { steps: prev.steps };
             });
             this.displayUpdateStep();
-        }).catch(error => console.log(error.text));
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
     }
 
     /**
@@ -118,7 +124,6 @@ export default class CircuitPublisher extends Component {
      * @param {Object} step : L'objet étape modifié
      */
     updateStep = step => api.put(`step/${step.id_step}`, step).then(() => {
-        console.log(step);
         this.setState((prev) => {
             prev.steps.splice(prev.steps.findIndex(s => s.id_step === step.id_step), 1, step);
         });
@@ -176,9 +181,10 @@ export default class CircuitPublisher extends Component {
                 new: newOrder,
             })
                 .then(() => null)
-                .catch((error) => {
-                    console.log(error);
+                .catch(() => {
+                    const { alert } = this.props;
                     this.changeStepOrder(newOrder, prevOrder);
+                    console.log('Oups, une erreur s\'est produite');
                 });
         }
     }

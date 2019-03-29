@@ -6,7 +6,7 @@ export default class Achievement extends Component {
     render() {
         return (
             <>
-                <h1>Circuits réalisés</h1>
+                <h1>Circuits accomplis</h1>
             </>
         );
     }
