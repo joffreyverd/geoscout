@@ -51,10 +51,10 @@ export default class Menu extends React.Component {
                                             <DropdownItem>Créés</DropdownItem>
                                         </Link>
                                         <Link to='/achievements'>
-                                            <DropdownItem>Réalisés</DropdownItem>
+                                            <DropdownItem>Accomplis</DropdownItem>
                                         </Link>
                                         <Link to='/todo'>
-                                            <DropdownItem>Ma liste</DropdownItem>
+                                            <DropdownItem>Favoris</DropdownItem>
                                         </Link>
                                         <DropdownItem divider />
                                         <DropdownItem

@@ -376,8 +376,12 @@ cursor: pointer;
 
 .update-buttons {
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-end;
   margin: 20px;
+}
+
+.update-buttons > button{
+  margin: 0px 10px;
 }
 
 .focus-step {

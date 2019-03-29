@@ -51,7 +51,7 @@ class CircuitListItem extends Component {
                 >
 
                     <h3 className='item-name'>{name}</h3>
-                    <p>{description && description}</p>
+                    <div dangerouslySetInnerHTML={{ __html: description }} />
                     <p>{length && `${length} km`}</p>
                     <p>{duration && `${length} heures`}</p>
                     <p className='version-item'>{version && `Version : ${version}`}</p>
