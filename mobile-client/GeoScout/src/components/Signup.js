@@ -35,7 +35,7 @@ export default class Signup extends React.Component {
         const user = Object.assign({}, this.state);
         delete user.rePassword;
 
-        this.props.navigation.state.params.signup('signup', user).then((data) => {
+        this.props.navigation.state.params.signup(user).then(() => {
             console.log("Connecté");
             // success
         }).catch((error) => {
