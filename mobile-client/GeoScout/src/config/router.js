@@ -3,7 +3,6 @@ import {
     createBottomTabNavigator, createStackNavigator,
     createSwitchNavigator, createAppContainer
 } from 'react-navigation';
-import { Text } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import Authentication from '../screens/Authentication';
@@ -13,7 +12,7 @@ import Signin from '../components/Signin';
 import Signup from '../components/Signup';
 import Me from '../screens/Me';
 
-export const Tabs = createBottomTabNavigator({
+const Home = createBottomTabNavigator({
     GeoLocation: {
         screen: GeoLocation,
         navigationOptions: {
@@ -54,6 +53,16 @@ export const Tabs = createBottomTabNavigator({
     }
 });
 
+// const PlaySwitch = createSwitchNavigator(
+//     {
+//         Start: Start,
+//         Etape: Etape
+//     }, {
+//         headerMode: 'none',
+//         initialRouteName: Start
+//     }
+// )
+
 const AuthStack = createStackNavigator(
     {
         Authentication: {
@@ -67,15 +76,12 @@ const AuthStack = createStackNavigator(
     }
 )
 
+
 export const RootStack = createSwitchNavigator(
     {
         Auth: AuthStack,
-        Tabs: {
-            screen: Tabs
-        },
-        Settings: {
-            screen: Settings
-        },
+        Home: Home,
+        Settings: Settings,
     },
     {
         mode: 'card',

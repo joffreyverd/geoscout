@@ -3,27 +3,29 @@ import storage from './asyncStorageToken';
 
 const API_HOST = 'http://154.49.211.218:5555/';
 
-function request(route, method, body) {
+async function request(route, method, body) {
     const options = {
         method: method,
         headers: {
             'Content-Type': 'application/json',
         },
     };
-    let token = storage.getTokenAsyncStorage();
-    if(token){
-        options.headers.authorization = `Bearer ${token}`;
-    }
 
+    // Attente de la récupération du token
+    await storage.getTokenAsyncStorage().then((token) => {
+        if(token){
+            options.headers.authorization = `Bearer ${token}`;
+        }
+    })
+    
     if (body) {
         options.body = JSON.stringify(body);
     }
 
-    return fetch(API_HOST + route, options)
-        .then(checkStatus);
+    return fetch(API_HOST + route, options).then(checkStatus);
 }
 
-function checkStatus(response) {
+async function checkStatus(response) {
     if (response.ok) {
         if (response.status === 204)
             return Promise.resolve();

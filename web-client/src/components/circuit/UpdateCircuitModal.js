@@ -70,7 +70,7 @@ class UpdateCircuitModal extends Component {
                 displayUpdateCircuit();
                 alert.success('Circuit mis à jour');
             })
-            .catch(() => alert.error('Oups, une erreur s\'est produite'));
+            .catch(() => console.log('Oups, une erreur s\'est produite'));
     }
 
     render() {
@@ -113,7 +113,7 @@ class UpdateCircuitModal extends Component {
 
                         <FormGroup>
                             <Label>Distance à vol d'oisée</Label>
-                            <p>{`${length} km(s)`}</p>
+                            <p>{(length != null) && `${length} km`}</p>
                         </FormGroup>
 
                         <div className='update-buttons'>

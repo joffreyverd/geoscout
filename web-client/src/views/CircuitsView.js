@@ -34,8 +34,7 @@ export default class CircuitsView extends Component {
             api.get('my-circuits').then((data) => {
                 this.setState({ circuits: data });
             }).catch(() => {
-                const { alert } = this.props;
-                alert.error('Oups, une erreur s\'est produite');
+                console.log(this.props);
             });
         }
     }

@@ -7,6 +7,8 @@ import {
     TextInput
 } from 'react-native';
 
+import setTokenAsyncStorage from '../config/asyncStorageToken';
+
 export default class Signin extends React.Component {
     constructor(props){
         super(props)
@@ -27,13 +29,8 @@ export default class Signin extends React.Component {
         const user = Object.assign({}, this.state);
         console.log(user);
 
-        this.props.navigation.state.params.signin(user).then((data) => {
-            // success
-            console.log("Connecté");
-        }).catch((error) => {
-            // error
-            console.log(error);
-        });
+        this.props.navigation.state.params.signin(user)
+        .catch((error) => console.log(error));
     }
 
     render() {

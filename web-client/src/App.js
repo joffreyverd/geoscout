@@ -30,9 +30,8 @@ class App extends Component {
             api.get('whoami').then((data) => {
                 this.setState({ user: data, isConnected: true });
             }).catch(() => {
-                const { alert } = this.props;
                 localStorage.removeItem('token');
-                alert.error('Oups, une erreur s\'est produite');
+                console.log('Oups, une erreur s\'est produite');
             });
         }
     }
