@@ -16,6 +16,35 @@ module.exports =
             res.status(401).send(utils.messages.invalidToken);
     },
 
+    downloadCircuit : (req,res,next) =>
+    {
+        if(utils.verifToken(req.headers['authorization']))
+        {
+            db.Circuit.findOne(
+            {
+                where : {id_circuit : req.params.id_circuit, published : 1},
+                attributes : ['name','description','duration','need_internet','level'],
+                include : 
+                [
+                    {
+                        model : db.Step,
+                        attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
+                        include : 
+                        [
+                            {
+                                model : db.Question,
+                                attributes : ['id_question','wording','response','type_of','points']
+                            }
+                        ]
+                    }
+                ]
+            })
+            .then(circuit => res.status(200).send(circuit))
+        }
+        else
+            res.status(401).send(utils.messages.invalidToken);
+    },
+
     //////////////////////////////////////////////////////////
 
     nearbyCircuits : (req,res,next) =>
@@ -27,13 +56,12 @@ module.exports =
             let map = steps.map(step =>
             {
                 dist = utils.distanceBetweenPoints(step.latitude,req.body.user_latitude,step.longitude,req.body.user_longitude);
-                console.log(dist +' ' + req.body.distance)
                 if(dist <= req.body.distance)
                 {
                     
                     return db.Circuit.findOne(
                     {
-                        where : {id_circuit : step.id_circuit},
+                        where : {id_circuit : step.id_circuit, published : 1},
                         include : 
                         [
                             {
@@ -48,7 +76,17 @@ module.exports =
 
             return Promise.all(map);
         })
-        .then(circuits => res.status(201).send(circuits))
+        .then(circuits =>
+        {
+            let c = [];
+            circuits.map(circuit => 
+            {
+                if(circuit)
+                    c.push(circuit)
+            });
+
+            res.status(201).send(c)
+        })
         .catch((err) => {if (err) res.status(500).send(utils.messages.serverError)});
     },
 
@@ -91,7 +129,7 @@ module.exports =
                 duration : req.body.duration,
                 need_internet : req.body.need_internet,
                 published : 0,
-                version : 0,
+                version : 1,
                 level : req.body.level,
                 id_user : id_user
             })
@@ -100,7 +138,7 @@ module.exports =
                 if(circuit)
                     res.status(201).send(circuit)
                 else
-                    throw "err"
+                    throw 'err'
             })
             .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
         }
