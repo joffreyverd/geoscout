@@ -15,10 +15,10 @@ module.exports = (sequelize,DataTypes) =>
         }
     );
 
-    Question.associate = (db) =>
+    /*Question.associate = (db) =>
     {
         Question.belongsTo(db.Step,{foreignKey : 'id_step', targetKey : 'id_step'})
-    }
+    }*/
 
     return Question;
 }
