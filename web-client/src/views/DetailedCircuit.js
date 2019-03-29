@@ -41,7 +41,7 @@ export default class DetailedCircuit extends Component {
                         <div dangerouslySetInnerHTML={{ __html: description }} />
 
                         <p>{duration}</p>
-                        <p>{`${length} km`}</p>
+                        <p>{(length != null) && `${length} km`}</p>
                         <p>{level}</p>
                         <p>{need_internet}</p>
                         <p>{version}</p>

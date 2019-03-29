@@ -61,7 +61,7 @@ class CircuitListItem extends Component {
                     {overview}
                     <p>{length && `${length} km`}</p>
                     <p>{duration && `${length} heures`}</p>
-                    <p className='version-item'>{version && `Version : ${version}`}</p>
+                    <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
 
                     {!onHome &&
                         <>
