@@ -48,7 +48,7 @@ class Authentication extends React.Component{
 
                 <Image
                     style={{width: (width*0.8), height: (height*0.1)}}
-                    source={require('../../utils/img/logoGeoScoutWhite.png')}
+                    source={require('../../../utils/img/logoGeoScoutWhite.png')}
                 />
 
                 <View style={styles.wrapperBottom}>

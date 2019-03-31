@@ -5,9 +5,12 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    Image
+    Image,
+    TouchableWithoutFeedback,
+    Modal
 } from 'react-native';
 import { Location } from 'expo';
+import { Icon } from 'react-native-elements';
 
 import api from '../config/httpMethods';
 import MapView from 'react-native-maps';
@@ -34,7 +37,8 @@ class GeoLocation extends React.Component{
                 latitude: 0,
                 longitude: 0
             },
-            circuits: null
+            circuits: null,
+            circuitReady: false
         }
     }
 
@@ -53,9 +57,9 @@ class GeoLocation extends React.Component{
             distance: 30,
         };
         api.post('circuit/nearby', body).then((data) => {
-            console.log(data);
             this.setState({
                 circuits: data,
+                circuitReady: true
             });
         }).catch((error) => {
             console.log(error);
@@ -102,6 +106,22 @@ class GeoLocation extends React.Component{
         navigator.geolocation.clearWatch(this.state)
     }
 
+    displayModalCircuit(visible, item) {
+        <TouchableWithoutFeedback onPress={() => visible = false}>
+            <Modal
+            isVisible = {visible}
+            style={styles.modalBottom}>
+                <TouchableWithoutFeedback onPress={() => (
+                    visible = false,
+                    navigation.navigate('DetailCircuit', item)
+                )}>
+                    <Text style={styles.big}>{item.name}</Text>
+                    <Icon name='star' type='font-awesome' size={10} color='yellow'/>
+                </TouchableWithoutFeedback>
+            </Modal>
+        </TouchableWithoutFeedback>
+    }
+
     displayNearbyCircuits(){
         const { circuits } = this.state;
         return circuits.map((item) => {
@@ -111,7 +131,10 @@ class GeoLocation extends React.Component{
             }
             return (
                 <MapView.Marker coordinate={latLongCircuit}
-                onPress={() => (<View style={styles.container}><Text style={styles.circuitTitle}>{item.name}</Text></View>)}>
+                onPress={() => {
+                    const visible = true;
+                    this.displayModalCircuit(visible, item);
+                }}>
                     <View style={styles.markerCircuit}>
                         <Text style={styles.c}>C</Text>
                     </View>
@@ -137,10 +160,10 @@ class GeoLocation extends React.Component{
                                     </View>
                                 </View>
                             </MapView.Marker>
-                            {(this.state.circuits != null)?
+                            {(this.state.circuitReady)?
                                 this.displayNearbyCircuits()
                             :
-                                null
+                                <ActivityIndicator style={styles.loaderMargin} size='large' color='#1abc9c'/>
                             }
                         </MapView> 
                     :
@@ -223,5 +246,9 @@ const styles = StyleSheet.create({
         fontSize: 24,
         textAlign: 'center',
         color: '#2c3e50'
+    },
+    modalBottom: {
+        justifyContent: 'flex-end',
+        margin: 0,
     }
 });
