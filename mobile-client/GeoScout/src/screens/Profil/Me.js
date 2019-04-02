@@ -26,7 +26,7 @@ class Me extends Component {
                 <ScrollView>
                     <Tile
                     //Faire une condition si il y a une image d'enregistré
-                    imageSrc={'../../utils/img/userAnonymous.png'}
+                    imageSrc={'../../../utils/img/userAnonymous.png'}
                     featured
                     title={'Profil'}/>
 
