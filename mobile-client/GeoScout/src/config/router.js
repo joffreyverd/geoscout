@@ -6,12 +6,32 @@ import {
 import { Icon } from 'react-native-elements';
 
 import Authentication from '../screens/Authentication/Authentication';
+import Signin from '../screens/Authentication/Signin';
+import Signup from '../screens/Authentication/Signup';
+
 import GeoLocation from '../screens/GeoLocation';
 import DetailCircuit from '../screens/Circuit/DetailCircuit';
 import Settings from '../screens/Profil/Settings.js';
-import Signin from '../screens/Authentication/Signin';
-import Signup from '../screens/Authentication/Signup';
 import Me from '../screens/Profil/Me';
+
+import Start from '../screens/Play/Start';
+import Transit from '../screens/Play/Transit';
+import Etape from '../screens/Play/Etape';
+import Question from '../screens/Play/Question';
+
+// Style des tab du TabNnavigator
+const styleTab = {
+    activeTintColor: 'white',
+    inactiveTintColor: '#2c3e50',
+    labelStyle: {
+        fontSize: 14,
+    },
+    style: {
+        backgroundColor: '#1abc9c',
+        borderWidth: 1,
+        borderColor: '#2c3e50',
+    },
+};
 
 const ProfilStack = createStackNavigator(
     {
@@ -32,24 +52,14 @@ const circuitStack = createStackNavigator(
     }
 );
 
+// Tab de navigation pour la map et le profil utilisateur
 const Home = createBottomTabNavigator({
     GeoLocation: {
         screen: circuitStack,
         navigationOptions: {
             tabBarLabel: 'Carte',
             tabBarIcon: (({ tintColor }) => (<Icon name='map' type='font-awesome' size={20} color={tintColor} />)),
-            tabBarOptions: {
-                activeTintColor: 'white',
-                inactiveTintColor: '#2c3e50',
-                labelStyle: {
-                    fontSize: 14,
-                },
-                style: {
-                    backgroundColor: '#1abc9c',
-                    borderWidth: 1,
-                    borderColor: '#2c3e50',
-                },
-            },
+            tabBarOptions: styleTab,
         },
     },
     Profil: {
@@ -57,32 +67,36 @@ const Home = createBottomTabNavigator({
         navigationOptions: {
             tabBarLabel: 'Profil',
             tabBarIcon: (({ tintColor }) => (<Icon name='user-circle' type='font-awesome' size={20} color={tintColor} />)),
-            tabBarOptions: {
-                activeTintColor: 'white',
-                inactiveTintColor: '#2c3e50',
-                labelStyle: {
-                    fontSize: 14,
-                },
-                style: {
-                    backgroundColor: '#1abc9c',
-                    borderWidth: 1,
-                    borderColor: '#2c3e50',
-                },
-            },
+            tabBarOptions: styleTab,
         },
     }
 });
 
-// const PlaySwitch = createSwitchNavigator(
-//     {
-//         Start: Start,
-//         Etape: Etape
-//     }, {
-//         headerMode: 'none',
-//         initialRouteName: Start
-//     }
-// )
+// Stack d'une étape de jeu
+const EtapeStack = createStackNavigator(
+    {
+        Description: Etape,
+        Question: Question
+    }, {
+        headerMode: 'none',
+        initialRouteName: 'Description'
+    }
+);
 
+// Switch Stack du jeu
+const PlaySwitch = createSwitchNavigator(
+    {
+        Start: Start,
+        Transit: Transit,
+        Etape: EtapeStack
+    }, {
+        headerMode: 'none',
+        initialRouteName: 'Start'
+    }
+)
+
+
+// Switch Stack de l'authentification
 const AuthStack = createStackNavigator(
     {
         Authentication: Authentication,
@@ -94,11 +108,12 @@ const AuthStack = createStackNavigator(
     }
 );
 
-
+// Navigateur Root de l'application
 export const RootStack = createSwitchNavigator(
     {
         Auth: AuthStack,
-        Home: Home
+        Home: Home,
+        Play: PlaySwitch,
     },
     {
         mode: 'card',
