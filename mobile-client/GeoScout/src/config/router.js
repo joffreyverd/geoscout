@@ -7,6 +7,7 @@ import { Icon } from 'react-native-elements';
 
 import Authentication from '../screens/Authentication/Authentication';
 import GeoLocation from '../screens/GeoLocation';
+import DetailCircuit from '../screens/Circuit/DetailCircuit';
 import Settings from '../screens/Profil/Settings.js';
 import Signin from '../screens/Authentication/Signin';
 import Signup from '../screens/Authentication/Signup';
@@ -21,9 +22,19 @@ const ProfilStack = createStackNavigator(
     }
 );
 
+const circuitStack = createStackNavigator(
+    {
+        GeoLocation: GeoLocation,
+        DetailCircuit: DetailCircuit
+    }, {
+        headerMode: 'none',
+        initialRouteName: 'GeoLocation'
+    }
+);
+
 const Home = createBottomTabNavigator({
     GeoLocation: {
-        screen: GeoLocation,
+        screen: circuitStack,
         navigationOptions: {
             tabBarLabel: 'Carte',
             tabBarIcon: (({ tintColor }) => (<Icon name='map' type='font-awesome' size={20} color={tintColor} />)),
