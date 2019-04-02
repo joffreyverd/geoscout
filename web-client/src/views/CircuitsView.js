@@ -15,8 +15,9 @@ export default class CircuitsView extends Component {
     };
 
     toggle = () => {
+        const { dropdownOpen } = this.state;
         this.setState({
-            dropdownOpen: !this.state.dropdownOpen,
+            dropdownOpen: !dropdownOpen,
         });
     }
 

@@ -84,7 +84,8 @@ class UpdateStepModal extends Component {
         if (question.id) {
             return api.put(`question/${question.id}`, question);
         }
-        return api.post('question', Object.assign({ id_step: this.state.id_step }, question));
+        const { id_step } = this.state;
+        return api.post('question', Object.assign({ id_step: id_step }, question));
 
     }
 

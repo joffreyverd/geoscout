@@ -6,12 +6,6 @@ module.exports = {
     },
     "parser": "babel-eslint",
     "rules": {
-        "camelcase": [
-            "error",
-            {
-                "allow": []
-            }
-        ],
         "class-methods-use-this": "off",
         "indent": [
             "error",

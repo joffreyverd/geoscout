@@ -57,7 +57,7 @@ class UpdateCircuitModal extends Component {
 
     handleSubmit = () => {
         const { id_circuit, name, description, length, duration } = this.state;
-        const { displayUpdateCircuit, alert } = this.props;
+        const { displayUpdateCircuit, alert, updateCircuit } = this.props;
         const circuit = {
             id_circuit: id_circuit,
             name: name || null,
@@ -65,7 +65,8 @@ class UpdateCircuitModal extends Component {
             length: length || null,
             duration: duration || null,
         };
-        this.props.updateCircuit(circuit)
+
+        updateCircuit(circuit)
             .then(() => {
                 displayUpdateCircuit();
                 alert.success('Circuit mis à jour');

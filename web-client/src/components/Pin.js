@@ -11,9 +11,10 @@ export default class Pin extends PureComponent {
         const { onClick, index } = this.props;
         let x = 8;
 
+        const { color } = this.props;
         const pinStyle = {
             cursor: 'pointer',
-            fill: this.props.color,
+            fill: color,
             stroke: 'none',
         };
 
