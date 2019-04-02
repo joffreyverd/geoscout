@@ -23,6 +23,7 @@ export default class MultipleQuestion extends React.Component {
     render() {
 
         const { activeTab } = this.state;
+        const { questions } = this.props;
 
         return (
             <>
@@ -55,7 +56,7 @@ export default class MultipleQuestion extends React.Component {
                     </NavItem>
                 </Nav>
 
-                <QuestionList />
+                <QuestionList items={questions} />
 
             </>
         );

@@ -8,7 +8,8 @@ export default class QuestionItem extends React.Component {
 
     render() {
 
-        const { wording, response, handleChangeQuestion } = this.props;
+        const { handleChangeQuestion } = this.props;
+        const { wording, response } = (this.props.items) ? this.props.items : '';
 
         return (
             <>
@@ -20,7 +21,7 @@ export default class QuestionItem extends React.Component {
                                 <Input
                                     type='textarea'
                                     name='wording'
-                                    // value={wording}
+                                    value={wording}
                                     onChange={handleChangeQuestion}
                                 />
                             </FormGroup>
@@ -29,7 +30,7 @@ export default class QuestionItem extends React.Component {
                                 <Input
                                     type='textarea'
                                     name='response'
-                                    // value={response}
+                                    value={response}
                                     onChange={handleChangeQuestion}
                                 />
                             </FormGroup>

@@ -14,6 +14,7 @@ export default class CircuitPublisher extends Component {
     state = {
         circuit: {},
         steps: [],
+        stepFocus: [],
         circuitIsDisplayed: false,
         stepIsDisplayed: false,
         viewport: {
@@ -44,14 +45,12 @@ export default class CircuitPublisher extends Component {
         }
         const { id } = this.props.match.params;
         if (id) {
-            api.get(`circuit/${id}`).then((circuit) => {
-                api.get(`steps/${id}`).then((steps) => {
-                    console.log(steps);
-                    this.setState({
-                        circuit: circuit,
-                        steps: steps,
-                    });
+            api.get(`download-circuit/${id}`).then((circuit) => {
+                this.setState({
+                    circuit: circuit,
+                    steps: circuit.Steps,
                 });
+                circuit.id_circuit = id;
             }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
@@ -69,7 +68,11 @@ export default class CircuitPublisher extends Component {
      * @param {Object} step : l'objet Step qui a été cliqué
      */
     onClickItem = (step) => {
-        this.setState({ stepFocus: step, stepIsDisplayed: true, circuitIsDisplayed: false });
+        this.setState({
+            stepFocus: step,
+            stepIsDisplayed: true,
+            circuitIsDisplayed: false,
+        });
     }
 
     /**
@@ -97,10 +100,11 @@ export default class CircuitPublisher extends Component {
 
     /**
      * Suppression d'une étape sur le serveur puis dans le state
-     * @param {Integer} idx : L'index de l'étape dans le tableau steps du state
+     * @param {Integer} id_step : L'index de l'étape dans le tableau steps du state
      */
-    removeStep = (id_circuit, id_step) => {
-        api.delete(`step/${id_circuit}/${id_step}`).then(() => {
+    removeStep = (id_step) => {
+        const { circuit } = this.state;
+        api.delete(`step/${circuit.id_circuit}/${id_step}`).then(() => {
             // Suppression de l'étape dans la liste
             this.setState((prev) => {
                 const idx = prev.steps.findIndex(element => element.id_step === id_step);
@@ -171,10 +175,9 @@ export default class CircuitPublisher extends Component {
 
 
             const { circuit: { id_circuit } } = this.state;
-
             this.changeStepOrder(prevOrder, newOrder);
 
-            api.put('step-order', {
+            api.put('step/order', {
                 id_circuit: id_circuit,
                 previous: prevOrder,
                 new: newOrder,

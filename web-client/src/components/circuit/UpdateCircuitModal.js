@@ -111,10 +111,12 @@ class UpdateCircuitModal extends Component {
                             <p>{`${duration} heure(s)`}</p>
                         </FormGroup>
 
-                        <FormGroup>
-                            <Label>Distance à vol d'oisée</Label>
-                            <p>{(length != null) && `${length} km`}</p>
-                        </FormGroup>
+                        {length > 0 &&
+                            <FormGroup>
+                                <Label>Distance à vol d'oisée</Label>
+                                <p>{`${length} km`}</p>
+                            </FormGroup>
+                        }
 
                         <div className='update-buttons'>
                             <Button

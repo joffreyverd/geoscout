@@ -35,11 +35,7 @@ export default class Authentication extends React.Component {
             <>
 
                 {isConnected ?
-                    <Dropdown
-                        nav
-                        toggle={this.displayDropdownAccount}
-                    >
-
+                    <Dropdown nav>
                         <DropdownToggle nav>
                             <FontAwesomeIcon icon='user' className='user-icon' />
                         </DropdownToggle>
