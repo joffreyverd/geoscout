@@ -173,7 +173,7 @@ module.exports =
         if(id_user)
         {
             db.Circuit.destroy({where : {id_circuit : req.body.id_circuit}})
-            .then(a => res.sendStatus(200))
+            .then(a => res.sendStatus(204))
             .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else

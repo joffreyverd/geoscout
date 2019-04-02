@@ -57,7 +57,7 @@ class UpdateCircuitModal extends Component {
 
     handleSubmit = () => {
         const { id_circuit, name, description, length, duration } = this.state;
-        const { displayUpdateCircuit, alert } = this.props;
+        const { displayUpdateCircuit, alert, updateCircuit } = this.props;
         const circuit = {
             id_circuit: id_circuit,
             name: name || null,
@@ -65,7 +65,8 @@ class UpdateCircuitModal extends Component {
             length: length || null,
             duration: duration || null,
         };
-        this.props.updateCircuit(circuit)
+
+        updateCircuit(circuit)
             .then(() => {
                 displayUpdateCircuit();
                 alert.success('Circuit mis à jour');
@@ -111,10 +112,12 @@ class UpdateCircuitModal extends Component {
                             <p>{`${duration} heure(s)`}</p>
                         </FormGroup>
 
-                        <FormGroup>
-                            <Label>Distance à vol d'oisée</Label>
-                            <p>{(length != null) && `${length} km`}</p>
-                        </FormGroup>
+                        {length > 0 &&
+                            <FormGroup>
+                                <Label>Distance à vol d'oisée</Label>
+                                <p>{`${length} km`}</p>
+                            </FormGroup>
+                        }
 
                         <div className='update-buttons'>
                             <Button

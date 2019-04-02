@@ -1,5 +1,5 @@
 h1 {
-  margin: 30px 20px 10px 20px;
+  margin: 30px 20px 10px 20px !important;
   font-size: 2em;
   color: #2c3e50;
 }
@@ -10,7 +10,7 @@ h1 {
   border-color: #2c3e50;
 }
 
-/************************** MENU **************************/
+/************************** NAVIGATION **************************/
 
 .navbar {
   background-color: #1abc9c;
@@ -20,24 +20,15 @@ h1 {
   justify-content: space-between;
 }
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-.account-dropdown {
-  right: 0px;
-  left: unset;
-}
-
 .create-circuit {
   color: #007E65;
   font-weight: bold;
+  margin: 0px;
 }
 
 .ml-auto {
   display: flex;
   justify-content: space-between;
-  
   font-size: .7em;
 }
 
@@ -65,32 +56,20 @@ h1 {
   font-weight: bold;
   background-color: white;
   color: #004C3D;
-  padding: 2px 10px;
   border-radius: 2px;
-  width: 150px;
-  transition: .1s;
-}
-
-.auth-text:hover {
-  font-size: .8em;
+  width: 140px;
+  text-align: center;
   transition: .1s;
 }
 
 .user-icon {
   margin-right: 20px;
+  margin-left: 20px;
   color: white;
 }
 
-.user-icon:hover {
-  cursor: pointer;
-}
-
-.nav-item > a {
-  color: white;
-}
-
-.nav-item > a:hover {
-  text-decoration: none;
+.ant-dropdown-link {
+  color: white !important;
 }
 
 /************************** AUTHENTIFICATION **************************/
@@ -104,7 +83,7 @@ h1 {
   cursor: pointer;
 }
 
-.active {
+.active > * {
   color: #1abc9c;
 }
 

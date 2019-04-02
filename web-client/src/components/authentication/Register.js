@@ -43,11 +43,11 @@ class Register extends Component {
             // Copie du state dans un nouvel objet pour pouvoir supprimer des propriétés
             const user = Object.assign({}, this.state);
             delete user.repeatPassword;
-
-            this.props.login('signup', user).then((data) => {
-                // success
-            }).catch((error) => {
-                // error
+            const { login } = this.props;
+            login('signup', user).then((data) => {
+                console.log(data);
+            }).catch(() => {
+                console.log('Oups, une erreur s\'est produite');
             });
         }
 
@@ -57,6 +57,7 @@ class Register extends Component {
         const { firstname, lastname, email, password, repeatPassword,
             verifemail, verifpassword, verifrepeatPassword } = this.state;
         const { displayModal } = this.props;
+
         return (
             <Form onSubmit={this.handleSubmit}>
                 <ModalBody>
