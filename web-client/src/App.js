@@ -4,7 +4,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUser, faPen, faAlignJustify } from '@fortawesome/free-solid-svg-icons';
 
 import './css/app.css';
-import Menu from './components/Menu';
+import Navigation from './components/Navigation';
 
 import Home from './views/Home';
 import Account from './views/Account';
@@ -57,7 +57,7 @@ class App extends Component {
         return (
             <>
                 <div className='menu-wrapper'>
-                    <Menu isConnected={isConnected} login={this.login} logout={this.logout} />
+                    <Navigation isConnected={isConnected} login={this.login} logout={this.logout} />
                 </div>
 
                 <Route exact path='/' component={Home} />

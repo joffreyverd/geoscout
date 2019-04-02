@@ -57,6 +57,7 @@ class Register extends Component {
         const { firstname, lastname, email, password, repeatPassword,
             verifemail, verifpassword, verifrepeatPassword } = this.state;
         const { displayModal } = this.props;
+
         return (
             <Form onSubmit={this.handleSubmit}>
                 <ModalBody>

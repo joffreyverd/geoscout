@@ -177,7 +177,7 @@ export default class CircuitPublisher extends Component {
             const { circuit: { id_circuit } } = this.state;
             this.changeStepOrder(prevOrder, newOrder);
 
-            api.put('step/order', {
+            api.put('step-order', {
                 id_circuit: id_circuit,
                 previous: prevOrder,
                 new: newOrder,
