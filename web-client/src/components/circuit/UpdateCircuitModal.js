@@ -56,16 +56,14 @@ class UpdateCircuitModal extends Component {
     }
 
     handleSubmit = () => {
-        const { id_circuit, name, description, length, duration } = this.state;
+        const { name, description } = this.state;
         const { displayUpdateCircuit, alert, updateCircuit } = this.props;
+        const { id_circuit } = this.props.circuit;
         const circuit = {
             id_circuit: id_circuit,
             name: name || null,
             description: description || null,
-            length: length || null,
-            duration: duration || null,
         };
-
         updateCircuit(circuit)
             .then(() => {
                 displayUpdateCircuit();
@@ -114,7 +112,7 @@ class UpdateCircuitModal extends Component {
 
                         {length > 0 &&
                             <FormGroup>
-                                <Label>Distance à vol d'oisée</Label>
+                                <Label>Distance à vol d‘oiseau</Label>
                                 <p>{`${length} km`}</p>
                             </FormGroup>
                         }

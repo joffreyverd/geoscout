@@ -443,8 +443,24 @@ cursor: pointer;
 .up-wrapper {
   color: #2c3e50;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
   height: 20%;
+}
+
+.rating-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.rating-wrapper > p {
+    display: block;
+    margin: 0px 20px 10px 0px;
+}
+
+.ant-rate {
+    margin: 0px 0px 10px 20px !important;
 }
 
 .bottom-wrapper {
@@ -454,14 +470,20 @@ cursor: pointer;
   height: 80%;
 }
 
-.circuit-infos, .circuit-comments, .circuit-score {
+.circuit-infos {
   background-color: #ecf0f1;
   border-radius: 3px;
   padding: 15px;
   margin: 20px;
 }
 
-.circuit-score {
-  margin: 30px 20px 30px 30px;
-  width: 47%;
+.circuit-comments {
+  border-radius: 3px;
+  padding: 15px;
+  margin: 20px;
+}
+
+.comments-title {
+  font-size: 1.5em;
+  color: #1abc9c;
 }

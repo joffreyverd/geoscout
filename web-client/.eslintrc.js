@@ -6,6 +6,16 @@ module.exports = {
     },
     "parser": "babel-eslint",
     "rules": {
+        "camelcase": [
+            "error",
+            {
+                "allow": [
+                    "id_step",
+                    "id_circuit",
+                    "need_internet"
+                ]
+            }
+        ],
         "class-methods-use-this": "off",
         "indent": [
             "error",
