@@ -70,8 +70,8 @@ class UpdateStepModal extends Component {
 
     handleSubmit = () => {
         const step = this.state;
-        const { displayUpdateStep, alert } = this.props;
-        this.props.updateStep(step)
+        const { displayUpdateStep, updateStep, alert } = this.props;
+        updateStep(step)
             .then(() => {
                 this.putQuestion(step.questions);
                 displayUpdateStep();

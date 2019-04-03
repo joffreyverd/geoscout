@@ -46,6 +46,7 @@ export default class CircuitPublisher extends Component {
         const { id } = this.props.match.params;
         if (id) {
             api.get(`download-circuit/${id}`).then((circuit) => {
+                circuit.Steps.sort((a, b) => a.order - b.order);
                 this.setState({
                     circuit: circuit,
                     steps: circuit.Steps,
@@ -209,6 +210,7 @@ export default class CircuitPublisher extends Component {
 
                 return step;
             });
+            console.log(steps);
             steps.sort((a, b) => a.order - b.order);
             return { steps: steps };
         });

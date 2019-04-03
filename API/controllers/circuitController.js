@@ -5,15 +5,9 @@ module.exports =
 {
     circuit : (req,res,next) => 
     {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
-        {
-            db.Circuit.findByPk(req.params.id_circuit)
-            .then((circuit) => res.json(circuit))
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
-        }
-        else
-            res.status(401).send(utils.messages.invalidToken);
+        db.Circuit.findByPk(req.params.id_circuit,{attributes : ['id_step','name','latitude','longitude','description','order','instruction','length']})
+        .then((circuit) => res.json(circuit))
+        .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
     },
 
     downloadCircuit : (req,res,next) =>
@@ -28,7 +22,7 @@ module.exports =
                 [
                     {
                         model : db.Step,
-                        attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
+                        attributes : ['id_step','name','latitude','longitude','description','order','instruction','length'],
                         include : 
                         [
                             {

@@ -96,7 +96,7 @@ module.exports =
 
                         return step.save({transaction: t});
                     })
-                    .then(res.sendStatus(200))
+                    .then(res.sendStatus(204))
                     .catch((err) => {if(err)res.sendStatus(500)})    
                 })
             });
@@ -177,7 +177,7 @@ module.exports =
                             step.order-= 1;
                             return step.save({transaction: t})
                         })
-                        .then(res.sendStatus(200))
+                        .then(res.sendStatus(204))
                         .catch((err) => { if (err) res.sendStatus(500)})
                     })
                 })

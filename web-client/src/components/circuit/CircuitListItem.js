@@ -65,7 +65,7 @@ class CircuitListItem extends Component {
                     {duration === null ?
                         <p>{duration && `${length} heures`}</p>
                         :
-                        <p>Moins d'une heure</p>
+                        <p>Moins d‘une heure</p>
                     }
 
                     <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>

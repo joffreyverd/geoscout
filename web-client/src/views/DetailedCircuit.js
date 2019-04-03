@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Rate, Comment, Icon, Tooltip, Avatar } from 'antd';
+import 'antd/dist/antd.css';
 
 import api from '../utils/httpMethods';
 
@@ -29,10 +31,11 @@ export default class DetailedCircuit extends Component {
             <>
                 <div className='up-wrapper'>
                     <h1>{name}</h1>
-
-                    <div className='circuit-score'>
-                        <p>score</p>
+                    <div className='rating-wrapper'>
+                        <Rate disabled defaultValue={4} />
+                        <p>(256)</p>
                     </div>
+
                 </div>
 
                 <div className='bottom-wrapper'>
@@ -49,7 +52,29 @@ export default class DetailedCircuit extends Component {
                     </div>
 
                     <div className='circuit-comments'>
-                        <p>commentaires</p>
+                        <h2 className='comments-title'>Commentaires</h2>
+                        <Comment
+                            author={<a>Stevy Palarski</a>}
+                            avatar={(
+                                <Avatar
+                                    src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                                    alt='Stevy Palarski'
+                                />
+                            )}
+                            content={(
+                                <p>
+                                    J‘ai pris beaucoup de plaisir à effectuer ce circuit.
+                                    Il m‘a permis de découvrir le centre-ville de Strasbourg.
+                                    Etant originaire de Caen, je n‘avais rarement eu l‘occasion
+                                    de voir une aussi belle ville !
+                                </p>
+                            )}
+                            datetime={(
+                                <Tooltip>
+                                    <span>Il y a deux jours</span>
+                                </Tooltip>
+                            )}
+                        />
                     </div>
                 </div>
 
@@ -59,18 +84,3 @@ export default class DetailedCircuit extends Component {
     }
 
 }
-
-/*
-    createdAt: "2019-03-08T08:00:23.000Z"
-    description: "Un chouette circuit de présentation du projet Akrobat"
-    duration: 4
-    id_circuit: 37
-    id_user: 4
-    length: 51
-    level: "1"
-    name: "Circuit Démo"
-    need_internet: null
-    published: true
-    updatedAt: "2019-03-08T08:00:23.000Z"
-    version: 2
-*/

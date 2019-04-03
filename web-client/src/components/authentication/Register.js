@@ -88,7 +88,7 @@ class Register extends Component {
                             value={email}
                             invalid={verifemail}
                         />
-                        <FormFeedback>Ce n'est pas une adresse valide</FormFeedback>
+                        <FormFeedback>Ce n‘est pas une adresse valide</FormFeedback>
                     </FormGroup>
 
                     <FormGroup>
