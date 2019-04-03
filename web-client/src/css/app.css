@@ -322,7 +322,7 @@ cursor: pointer;
 
 .update-circuit {
   display: block;
-  background-color: #ecf0f1;
+  background-color: white;
 }
 
 .hidden-update-circuit {
@@ -331,7 +331,7 @@ cursor: pointer;
 
 .update-step {
   display: block;
-  background-color: #ecf0f1;
+  background-color: white;
 }
 
 .hidden-update-step {
@@ -353,7 +353,6 @@ cursor: pointer;
 .update-title {
   height: 15%;
   display: flex;
-  background-color: #ecf0f1;
 }
 
 .update-title > h3 {
@@ -425,9 +424,9 @@ cursor: pointer;
 }
 
 .nav-item {
-  width: 30%;
+  width: 33%;
   text-align: center;
-  font-size: .8em;
+  font-size: .9em;
 }
 
 .nav-item:hover {
@@ -438,9 +437,19 @@ cursor: pointer;
   font-weight: bold;
 }
 
+.dropdown-question-score {
+    display: block !important;
+    margin: 20px auto !important;
+}
+
 /************************** DETAILED-CIRCUIT **************************/
 
-.up-wrapper {
+.header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name-score {
   color: #2c3e50;
   display: flex;
   flex-direction: column;
@@ -461,6 +470,10 @@ cursor: pointer;
 
 .ant-rate {
     margin: 0px 0px 10px 20px !important;
+}
+
+.favoris-button {
+    margin: 30px 20px 20px 20px;
 }
 
 .bottom-wrapper {

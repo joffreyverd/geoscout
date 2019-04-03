@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Rate, Comment, Icon, Tooltip, Avatar } from 'antd';
+import { Rate, Comment, Tooltip, Avatar, Button } from 'antd';
 import 'antd/dist/antd.css';
 
 import api from '../utils/httpMethods';
@@ -29,13 +29,15 @@ export default class DetailedCircuit extends Component {
 
         return (
             <>
-                <div className='up-wrapper'>
-                    <h1>{name}</h1>
-                    <div className='rating-wrapper'>
-                        <Rate disabled defaultValue={4} />
-                        <p>(256)</p>
+                <div className='header-wrapper'>
+                    <div className='name-score'>
+                        <h1>{name}</h1>
+                        <div className='rating-wrapper'>
+                            <Rate disabled defaultValue={4} />
+                            <p>(256)</p>
+                        </div>
                     </div>
-
+                    <Button type='primary' className='favoris-button'>Favoris</Button>
                 </div>
 
                 <div className='bottom-wrapper'>
@@ -54,7 +56,7 @@ export default class DetailedCircuit extends Component {
                     <div className='circuit-comments'>
                         <h2 className='comments-title'>Commentaires</h2>
                         <Comment
-                            author={<a>Stevy Palarski</a>}
+                            author={<a href='http://copainsdavant.linternaute.com/p/stevy-palarski-20002480'>Stevy Palarski</a>}
                             avatar={(
                                 <Avatar
                                     src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
