@@ -43,7 +43,6 @@ class GeoLocation extends React.Component{
     }
 
     componentDidMount() {
-        console.log('hey beach');
         this.checkLocation().then(() => {
             this.getCircuits();
         }).catch((error) => console.log(error));
@@ -130,7 +129,8 @@ class GeoLocation extends React.Component{
                 longitude: parseFloat(item.Steps[0].longitude)
             }
             return (
-                <MapView.Marker coordinate={latLongCircuit}
+                <MapView.Marker key={item.id_circuit}
+                coordinate={latLongCircuit}
                 onPress={() => {
                     const visible = true;
                     this.displayModalCircuit(visible, item);
@@ -149,7 +149,7 @@ class GeoLocation extends React.Component{
                 {((this.state.error)? 
                     <Text style={styles.errorText}>{this.state.error}</Text> 
                 :
-                    ((this.state.ready)? 
+                    (this.state.ready ? 
                         <MapView 
                         style={styles.map}
                         region={this.state.initialPosition}
