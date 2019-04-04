@@ -9,7 +9,11 @@ module.exports = {
         "camelcase": [
             "error",
             {
-                "allow": []
+                "allow": [
+                    "id_step",
+                    "id_circuit",
+                    "need_internet"
+                ]
             }
         ],
         "class-methods-use-this": "off",

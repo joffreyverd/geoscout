@@ -45,7 +45,6 @@ class GeoLocation extends React.Component{
     }
 
     componentDidMount() {
-        console.log('hey beach');
         this.checkLocation().then(() => {
             this.getCircuits();
         }).catch((error) => console.log(error));
@@ -139,8 +138,7 @@ class GeoLocation extends React.Component{
                 {((this.state.error)? 
                     <Text style={styles.errorText}>{this.state.error}</Text> 
                 :
-                    ((this.state.ready)? 
-                        <>
+                    (this.state.ready ? 
                         <MapView 
                         style={styles.map}
                         region={this.state.initialPosition}

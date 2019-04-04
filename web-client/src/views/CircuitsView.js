@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-import '../css/app.css';
+import '../css/app-minifized.css';
 import CreatedCircuitList from '../components/circuit/CircuitList';
 
 import api from '../utils/httpMethods';
@@ -15,8 +15,9 @@ export default class CircuitsView extends Component {
     };
 
     toggle = () => {
+        const { dropdownOpen } = this.state;
         this.setState({
-            dropdownOpen: !this.state.dropdownOpen,
+            dropdownOpen: !dropdownOpen,
         });
     }
 

@@ -8,14 +8,10 @@ import { withRouter } from 'react-router-dom';
 
 class Connect extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            email: '',
-            password: '',
-        };
-    }
+    state = {
+        email: '',
+        password: '',
+    };
 
     handleChange = (event) => {
         this.setState({
@@ -26,7 +22,8 @@ class Connect extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        this.props.login('signin', this.state).catch((error) => {
+        const { login } = this.props;
+        login('signin', this.state).catch((error) => {
             if (error.code === 401) {
                 this.setState({ error: error.text });
                 console.log('Oups, une erreur s\'est produite');

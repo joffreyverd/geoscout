@@ -1,5 +1,5 @@
 h1 {
-  margin: 30px 20px 10px 20px;
+  margin: 30px 20px 10px 20px !important;
   font-size: 2em;
   color: #2c3e50;
 }
@@ -10,7 +10,7 @@ h1 {
   border-color: #2c3e50;
 }
 
-/************************** MENU **************************/
+/************************** NAVIGATION **************************/
 
 .navbar {
   background-color: #1abc9c;
@@ -20,24 +20,15 @@ h1 {
   justify-content: space-between;
 }
 
-.dropdown:hover .dropdown-menu {
-  display: block;
-}
-
-.account-dropdown {
-  right: 0px;
-  left: unset;
-}
-
 .create-circuit {
   color: #007E65;
   font-weight: bold;
+  margin: 0px;
 }
 
 .ml-auto {
   display: flex;
   justify-content: space-between;
-  
   font-size: .7em;
 }
 
@@ -65,32 +56,20 @@ h1 {
   font-weight: bold;
   background-color: white;
   color: #004C3D;
-  padding: 2px 10px;
   border-radius: 2px;
-  width: 150px;
-  transition: .1s;
-}
-
-.auth-text:hover {
-  font-size: .8em;
+  width: 140px;
+  text-align: center;
   transition: .1s;
 }
 
 .user-icon {
   margin-right: 20px;
+  margin-left: 20px;
   color: white;
 }
 
-.user-icon:hover {
-  cursor: pointer;
-}
-
-.nav-item > a {
-  color: white;
-}
-
-.nav-item > a:hover {
-  text-decoration: none;
+.ant-dropdown-link {
+  color: white !important;
 }
 
 /************************** AUTHENTIFICATION **************************/
@@ -104,7 +83,7 @@ h1 {
   cursor: pointer;
 }
 
-.active {
+.active > * {
   color: #1abc9c;
 }
 
@@ -343,7 +322,7 @@ cursor: pointer;
 
 .update-circuit {
   display: block;
-  background-color: #ecf0f1;
+  background-color: white;
 }
 
 .hidden-update-circuit {
@@ -352,7 +331,7 @@ cursor: pointer;
 
 .update-step {
   display: block;
-  background-color: #ecf0f1;
+  background-color: white;
 }
 
 .hidden-update-step {
@@ -374,7 +353,6 @@ cursor: pointer;
 .update-title {
   height: 15%;
   display: flex;
-  background-color: #ecf0f1;
 }
 
 .update-title > h3 {
@@ -446,9 +424,9 @@ cursor: pointer;
 }
 
 .nav-item {
-  width: 30%;
+  width: 33%;
   text-align: center;
-  font-size: .8em;
+  font-size: .9em;
 }
 
 .nav-item:hover {
@@ -459,13 +437,43 @@ cursor: pointer;
   font-weight: bold;
 }
 
+.dropdown-question-score {
+    display: block !important;
+    margin: 20px auto !important;
+}
+
 /************************** DETAILED-CIRCUIT **************************/
 
-.up-wrapper {
+.header-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+
+.name-score {
   color: #2c3e50;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: flex-start;
   height: 20%;
+}
+
+.rating-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+.rating-wrapper > p {
+    display: block;
+    margin: 0px 20px 10px 0px;
+}
+
+.ant-rate {
+    margin: 0px 0px 10px 20px !important;
+}
+
+.favoris-button {
+    margin: 30px 20px 20px 20px;
 }
 
 .bottom-wrapper {
@@ -475,14 +483,20 @@ cursor: pointer;
   height: 80%;
 }
 
-.circuit-infos, .circuit-comments, .circuit-score {
+.circuit-infos {
   background-color: #ecf0f1;
   border-radius: 3px;
   padding: 15px;
   margin: 20px;
 }
 
-.circuit-score {
-  margin: 30px 20px 30px 30px;
-  width: 47%;
+.circuit-comments {
+  border-radius: 3px;
+  padding: 15px;
+  margin: 20px;
+}
+
+.comments-title {
+  font-size: 1.5em;
+  color: #1abc9c;
 }

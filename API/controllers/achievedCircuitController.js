@@ -22,7 +22,7 @@ module.exports=
 
             }).then((achievement) =>
             {
-                return res.status(201).send(achievement);
+                return res.status(200).send(achievement);
             }).catch((err) => {if(err) res.sendStatus()});
         }
         else
@@ -46,5 +46,18 @@ module.exports=
     },
 
     //////////////////////////////////////////////////////////
+
+    getAchievements: (req,res,next) =>
+    {
+        let id = utils.verifToken(req.headers['authorization'])
+        if (id)
+        {
+            db.AchievedCircuit.findAll({where : {id_user : id}})
+            .then(achievements => res.status(200).send(achievements))
+            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
+        }
+        else
+        res.status(401).send(utils.messages.invalidToken);
+    }
 
 }

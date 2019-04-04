@@ -14,7 +14,7 @@ class UpdateStepModal extends Component {
         name: '',
         description: '',
         instruction: '',
-        questions: { wording: '', response: '' },
+        questions: [],
     };
 
     modules = {
@@ -41,28 +41,13 @@ class UpdateStepModal extends Component {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
-                    questions: step.questions || {
+                    questions: (step.Questions !== undefined) ? step.Questions : {
                         wording: '',
                         response: '',
                     },
                 }));
-                this.fetchQuestion(step.id_step);
             }
         }
-    }
-
-    fetchQuestion = (id_step) => {
-        api.get(`step/${id_step}/questions`).then((data) => {
-            if (data.length > 0) {
-                this.setState({
-                    questions: {
-                        id: data[0].id_question || undefined,
-                        wording: data[0].wording || '',
-                        response: data[0].response || '',
-                    },
-                });
-            }
-        });
     }
 
     handleChange = (event) => {
@@ -85,8 +70,8 @@ class UpdateStepModal extends Component {
 
     handleSubmit = () => {
         const step = this.state;
-        const { displayUpdateStep, alert } = this.props;
-        this.props.updateStep(step)
+        const { displayUpdateStep, updateStep, alert } = this.props;
+        updateStep(step)
             .then(() => {
                 this.putQuestion(step.questions);
                 displayUpdateStep();
@@ -99,12 +84,13 @@ class UpdateStepModal extends Component {
         if (question.id) {
             return api.put(`question/${question.id}`, question);
         }
-        return api.post('question', Object.assign({ id_step: this.state.id_step }, question));
+        const { id_step } = this.state;
+        return api.post('question', Object.assign({ id_step: id_step }, question));
 
     }
 
     render() {
-        const { id_circuit, id_step, name, description, instruction, questions: { wording, response } } = this.state;
+        const { id_step, name, description, instruction, questions } = this.state;
         const { show, displayUpdateStep, removeStep } = this.props;
 
         return (
@@ -147,8 +133,7 @@ class UpdateStepModal extends Component {
                         </FormGroup>
 
                         <MultipleQuestion
-                            wording={wording}
-                            response={response}
+                            questions={questions}
                             handleChangeQuestion={this.handleChangeQuestion}
                         />
 
@@ -161,7 +146,7 @@ class UpdateStepModal extends Component {
                             </Button>
                             <Button
                                 color='danger'
-                                onClick={() => removeStep(id_circuit, id_step)}
+                                onClick={() => removeStep(id_step)}
                             >Supprimer
                             </Button>
                             <Button

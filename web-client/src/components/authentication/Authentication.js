@@ -1,25 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-    Modal, ModalHeader, DropdownToggle,
-    DropdownMenu, DropdownItem, Dropdown,
-} from 'reactstrap';
+import { Modal, ModalHeader } from 'reactstrap';
+import { Menu, Dropdown } from 'antd';
+import 'antd/dist/antd.css';
 
 import Connect from './Connect';
 import Register from './Register';
 
 export default class Authentication extends React.Component {
 
-    constructor(props) {
-        super(props);
-        const { isConnected } = this.props;
-        this.state = {
-            modal: false,
-            registerByDefault: true,
-            isConnected: isConnected,
-        };
-    }
+    state = {
+        modal: false,
+        registerByDefault: true,
+    };
+
 
     displayModal = () => {
         this.setState(previousState => ({
@@ -28,31 +23,33 @@ export default class Authentication extends React.Component {
     }
 
     render() {
-        const { isConnected, modal, registerByDefault } = this.state;
-        const { login, logout } = this.props;
+        const { modal, registerByDefault } = this.state;
+        const { login, logout, isConnected } = this.props;
+
+        const userOptions = (
+            <Menu>
+                <Menu.Item>
+                    <Link to='/account'>Mon compte</Link>
+                </Menu.Item>
+                <Menu.Item>
+                    <Link to='/' onClick={logout}>Déconnexion</Link>
+                </Menu.Item>
+            </Menu>
+        );
 
         return (
             <>
 
                 {isConnected ?
-                    <Dropdown
-                        nav
-                        toggle={this.displayDropdownAccount}
-                    >
 
-                        <DropdownToggle nav>
+                    <Dropdown overlay={userOptions} id='dropdown'>
+                        <a className='ant-dropdown-link' href='#dropdown'>
                             <FontAwesomeIcon icon='user' className='user-icon' />
-                        </DropdownToggle>
-                        <DropdownMenu className='account-dropdown'>
-                            <Link to='/account'>
-                                <DropdownItem>Mon compte</DropdownItem>
-                            </Link>
-                            <Link to='/' onClick={logout}>
-                                <DropdownItem>Déconnexion</DropdownItem>
-                            </Link>
-                        </DropdownMenu>
+                        </a>
                     </Dropdown>
+
                     :
+
                     <>
                         <p onClick={this.displayModal} className='auth-text'>Authentification</p>
 

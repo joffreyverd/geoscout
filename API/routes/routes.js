@@ -21,7 +21,7 @@ module.exports = function(app)
 	app.route('/step').post(step.createStep);
 	app.route('/step/question').post(step.addQuestionToStep);
 	app.route('/question/:id_question').put(step.updateQuestion);
-	app.route('/step/order').put(step.changeOrder);
+	app.route('/step-order').put(step.changeOrder);
 
 	app.route('/circuit/:id_circuit').get(circuit.circuit);
 	app.route('/download-circuit/:id_circuit').get(circuit.downloadCircuit)
@@ -33,6 +33,7 @@ module.exports = function(app)
 	app.route('/circuit').delete(circuit.deleteCircuit);
 	app.route('/circuit/nearby').post(circuit.nearbyCircuits)
 
+	app.route('/achievedcircuit').get(achievements.getAchievements)
 	app.route('/achievedcircuit').post(achievements.createAchievement)
 	app.route('/achievedcircuit/:id_route').delete(achievements.deleteAchievement)
 

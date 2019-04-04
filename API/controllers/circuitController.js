@@ -5,15 +5,9 @@ module.exports =
 {
     circuit : (req,res,next) => 
     {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
-        {
-            db.Circuit.findByPk(req.params.id_circuit)
-            .then((circuit) => res.json(circuit))
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
-        }
-        else
-            res.status(401).send(utils.messages.invalidToken);
+        db.Circuit.findByPk(req.params.id_circuit,{attributes : ['id_step','name','latitude','longitude','description','order','instruction','length']})
+        .then((circuit) => res.json(circuit))
+        .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
     },
 
     downloadCircuit : (req,res,next) =>
@@ -28,7 +22,7 @@ module.exports =
                 [
                     {
                         model : db.Step,
-                        attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
+                        attributes : ['id_step','name','latitude','longitude','description','order','instruction','length'],
                         include : 
                         [
                             {
@@ -128,7 +122,7 @@ module.exports =
                 length : req.body.length,
                 duration : req.body.duration,
                 need_internet : req.body.need_internet,
-                published : 0,
+                published : 1,
                 version : 1,
                 level : req.body.level,
                 id_user : id_user
@@ -173,7 +167,7 @@ module.exports =
         if(id_user)
         {
             db.Circuit.destroy({where : {id_circuit : req.body.id_circuit}})
-            .then(a => res.sendStatus(200))
+            .then(a => res.sendStatus(204))
             .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
