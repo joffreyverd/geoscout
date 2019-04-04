@@ -150,17 +150,25 @@ h1 {
   height: 200px;
   margin: 20px;
   padding: 15px;
-  transition: 0.2s;
+  transition: .2s;
   position: relative;
 }
 
-.list-item:hover{
+.list-item > h3 {
+  transition: .2s;
+}
+
+.list-item:hover {
   cursor: pointer;
   background-color: #65D8C1;
   color: #fff;
-  transition: 0.2s;
+  transition: .2s;
 }
 
+.list-item:hover > h3, .list-item:hover > .bold-info-circuit {
+  color: #fff;
+  transition: .2s;
+}
 
 .version-item  {
   position: absolute;
@@ -199,28 +207,6 @@ h1 {
 .hard {
   background-color:#c0392b;
 }
-
-/*
-.html-reformat > *,
-.html-reformat > * > *,
-.html-reformat > * > * > * {
-  color: black;
-  font-size: 1em;
-  font-weight: normal;
-  text-decoration: none;
-  list-style-type: none;
-  text-indent: 0px;
-  margin: 0px;
-  text-align: start;
-}
-
-.html-reformat > *:hover,
-.html-reformat > * > *:hover,
-.html-reformat > * > * > *:hover {
-  text-decoration: none;
-  color: black;
-}
-*/
 
 .html-reformat {
   max-height: 50px;
@@ -448,6 +434,13 @@ cursor: pointer;
   margin: auto !important;
   width: 210px !important;
   margin : 20px auto !important;
+}
+
+.bold-info-circuit {
+    font-weight: bold;
+    color: #004C3D;
+    margin: 20px 0px 20px 0px;
+    transition: .2s;
 }
 
 /************************** DETAILED-CIRCUIT **************************/

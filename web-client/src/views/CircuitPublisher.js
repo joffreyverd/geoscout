@@ -61,6 +61,11 @@ export default class CircuitPublisher extends Component {
      * @param {Object} step : l'objet Step qui a été cliqué
      */
     onClickItem = (step) => {
+        document.getElementById('scroll-top-step').scrollIntoView({
+            behavior: 'smooth',
+            block: 'end',
+            inline: 'nearest',
+        });
         this.setState({
             stepFocus: step,
             stepIsDisplayed: true,
@@ -118,7 +123,7 @@ export default class CircuitPublisher extends Component {
      * Modification d'une étape
      * @param {Object} step : L'objet étape modifié
      */
-    updateStep = (step, questions) => api.put(`step/${step.id_step}`, { step, questions }).then(() => {
+    updateStep = step => api.put(`step/${step.id_step}`, { step }).then(() => {
         this.setState((prev) => {
             prev.steps.splice(prev.steps.findIndex(s => s.id_step === step.id_step), 1, step);
         });

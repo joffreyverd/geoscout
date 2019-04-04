@@ -57,7 +57,7 @@ export default class Navigation extends React.Component {
                             <Nav className='ml-auto' navbar>
 
                                 <Dropdown overlay={circuitOptions} id='dropdown'>
-                                    <a className='ant-dropdown-link' href='#dropdown'>Circuits</a>
+                                    <a className='ant-dropdown-link' href='#g'>Circuits</a>
                                 </Dropdown>
 
                                 <Authentication isConnected={isConnected} logout={logout} />
