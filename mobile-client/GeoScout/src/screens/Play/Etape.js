@@ -10,6 +10,24 @@ import {
 import HTML from 'react-native-render-html';
 
 class Etape extends React.Component {
+    /**
+     * Navigue vers le transit de l'étape suivante
+     */
+    nextStep = () => {
+        const { 
+            navigation: {
+                navigate,
+                state: { 
+                    params: {
+                        circuit,
+                        step: stepNumber
+                    }
+                }
+            }
+        } = this.props;
+        navigate('Transit', { circuit, step: stepNumber + 1 })
+    }
+
     render() {
         const { 
             navigation: {
@@ -23,7 +41,6 @@ class Etape extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
-
         return (
             <View style={styles.container}>
                 <Text style={styles.title}>{step.name}</Text>
@@ -31,11 +48,11 @@ class Etape extends React.Component {
                     <HTML html={step.description} imagesMaxWidth={Dimensions.get('window').width} />
                 </ScrollView>
 
-                { ( step.questions && step.questions.length !== 0 ) &&
-                    step.questions.map((item) => 
+                { ( step.Questions && step.Questions.length > 0 ) &&
+                    step.Questions.map((item) => 
                         <TouchableOpacity
                             key={item.id}
-                            onPress={() => navigate('Question', { question: item })}
+                            onPress={() => navigate('Question', { question: item, nextStep: this.nextStep })}
                             activeOpacity={0.8}
                             style={styles.button}
                         >
@@ -44,7 +61,7 @@ class Etape extends React.Component {
                 )}
                 
                 <TouchableOpacity
-                    onPress={() => navigate('Transit', { circuit, step: stepNumber + 1 })}
+                    onPress={this.nextStep}
                     activeOpacity={0.8}
                     style={styles.button}
                 >

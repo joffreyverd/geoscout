@@ -45,10 +45,18 @@ class UpdateCircuitModal extends Component {
         }
     }
 
+    /**
+     * Fonction de gestion de modification d'un circuit
+     * @param {Event} event : event envoyé lorsque le nom d'un circuit est modifié
+     */
     handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    /**
+     * Fonction de gestion de modification d'un circuit
+     * @param {String} value : renvoyée en cas de modification de la description
+     */
     handleRichTextChange = (value) => {
         this.setState({
             description: value,
