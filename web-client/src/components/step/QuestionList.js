@@ -10,6 +10,7 @@ export default class QuestionList extends React.Component {
     render() {
         const { activeTab, handleChangeQuestion } = this.props;
         const { wording, response } = (this.props.items[activeTab]) ? this.props.items[activeTab] : '';
+        console.log(wording, response);
 
         return (
 
@@ -24,8 +25,8 @@ export default class QuestionList extends React.Component {
                                     <Input
                                         type='textarea'
                                         name='wording'
-                                        value={(wording !== undefined) ? wording : ''}
-                                        onChange={handleChangeQuestion}
+                                        value={(wording) || ''}
+                                        onChange={event => handleChangeQuestion(event, activeTab)}
                                     />
                                 </FormGroup>
 
@@ -34,8 +35,8 @@ export default class QuestionList extends React.Component {
                                     <Input
                                         type='textarea'
                                         name='response'
-                                        value={(response !== undefined) ? response : ''}
-                                        onChange={handleChangeQuestion}
+                                        value={(response) || ''}
+                                        onChange={event => handleChangeQuestion(event, activeTab)}
                                     />
                                 </FormGroup>
 
