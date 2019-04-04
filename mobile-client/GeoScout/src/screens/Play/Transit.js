@@ -24,11 +24,6 @@ class Transit extends React.Component {
         const step = circuit.Steps[stepNumber];
         if (step){
             //if (step.validation) {
-                Location.getCurrentPositionAsync().then((data) => {
-                    const { coords: { latitude, longitude}} = data;
-                    console.log('Moi : '+latitude +','+longitude);
-                    console.log('Etape : '+step.latitude +','+step.longitude);
-                })
                 Location.startGeofencingAsync(DETECT_STEP, [
                     {
                         latitude: step.latitude,
@@ -61,10 +56,8 @@ class Transit extends React.Component {
 
             const { 
                 navigation: {
-                    navigate,
                     state: { 
                         params: {
-                            circuit,
                             step
                         }
                     }
@@ -74,10 +67,29 @@ class Transit extends React.Component {
             Alert.alert(
                 'Arrivé',
                 step === 0 ? 'Vous êtes arrivé au point de départ' : `Vous êtes arrivé à l'étape ${step}`,
-                [{ text: 'Valider', onPress: () => { navigate('Etape', { circuit, step }); } }],
+                [{ text: 'Valider', onPress: this.goToStep }],
                 { cancelable: false }
             )
         })
+    }
+
+    /**
+     * Fonction pour passer sur la vue de l'étape
+     */
+    goToStep = () => {
+        const { 
+            navigation: {
+                navigate,
+                state: { 
+                    params: {
+                        circuit,
+                        step,
+                        score
+                    }
+                }
+            }
+        } = this.props;
+        navigate('Etape', { circuit, step, score });
     }
 
     componentWillUnmount() {
@@ -89,7 +101,6 @@ class Transit extends React.Component {
     render() {
         const { 
             navigation: {
-                navigate,
                 state: { 
                     params: {
                         circuit,
@@ -116,7 +127,7 @@ class Transit extends React.Component {
 
                         {!step.validation ? 
                             <TouchableOpacity
-                                onPress={() => navigate('Etape', { circuit, step: stepNumber })}
+                                onPress={this.goToStep}
                                 activeOpacity={0.8}
                                 style={styles.button}
                             >

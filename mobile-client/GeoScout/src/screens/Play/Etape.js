@@ -13,19 +13,24 @@ class Etape extends React.Component {
     /**
      * Navigue vers le transit de l'étape suivante
      */
-    nextStep = () => {
+    nextStep = (scoreWin) => {
         const { 
             navigation: {
                 navigate,
                 state: { 
                     params: {
                         circuit,
-                        step: stepNumber
+                        step: stepNumber,
+                        score
                     }
                 }
             }
         } = this.props;
-        navigate('Transit', { circuit, step: stepNumber + 1 })
+        navigate('Transit', { 
+            circuit,
+            step: stepNumber + 1,
+            score: score + scoreWin
+        });
     }
 
     render() {
@@ -42,12 +47,14 @@ class Etape extends React.Component {
         } = this.props;
         const step = circuit.Steps[stepNumber];
         return (
+            <>
             <View style={styles.container}>
                 <Text style={styles.title}>{step.name}</Text>
                 <ScrollView style={{ flex: 1 }}>
                     <HTML html={step.description} imagesMaxWidth={Dimensions.get('window').width} />
                 </ScrollView>
-
+            </View>
+            <View style={styles.containerButton}>
                 { ( step.Questions && step.Questions.length > 0 ) &&
                     step.Questions.map((item) => 
                         <TouchableOpacity
@@ -68,6 +75,7 @@ class Etape extends React.Component {
                     <Text style={styles.textButton}>Passer cette étape</Text>
                 </TouchableOpacity>
             </View>
+            </>
         )
     }
 }
@@ -77,7 +85,14 @@ export default Etape;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        margin: 20,
+    },
+    containerButton: {
+        backgroundColor: 'white',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     title: {
         color: '#2c3e50',
