@@ -15,24 +15,31 @@ import HTML from 'react-native-render-html';
 // Nom de la variable dans AsyncStorage 
 const DETECTED = 'stepDetected';
 
+const DETECT_STEP = 'step-location-detection_task';
+
 class Transit extends React.Component {
     state = {}
     componentDidMount() {
         const { circuit, step: stepNumber } = this.props.navigation.state.params;
         const step = circuit.Steps[stepNumber];
         if (step){
-            if (step.validation) {
+            //if (step.validation) {
+                Location.getCurrentPositionAsync().then((data) => {
+                    const { coords: { latitude, longitude}} = data;
+                    console.log('Moi : '+latitude +','+longitude);
+                    console.log('Etape : '+step.latitude +','+step.longitude);
+                })
                 Location.startGeofencingAsync(DETECT_STEP, [
                     {
                         latitude: step.latitude,
                         longitude: step.longitude,
-                        radius: 30,
+                        radius: 50,
                         notifyOnEnter: true,
                         notifyOnExit: false
                     }
                 ]);
                 this.setState({ interval: setInterval(this.enterStepLocation, 1000) });
-            }
+            //}
         }
         else {
             this.props.navigation.navigate('Finish', { circuit });
@@ -40,10 +47,12 @@ class Transit extends React.Component {
         
     }
 
-    enterStepLocation = () => {$
+    enterStepLocation = () => {
         // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
         AsyncStorage.getItem(DETECTED).then((x) => {
             console.log(x);
+            if (x === null)
+                return;
             const { interval } = this.state;
             // Suppresion de la variable
             AsyncStorage.removeItem(DETECTED);
@@ -61,10 +70,11 @@ class Transit extends React.Component {
                     }
                 }
             } = this.props;
+
             Alert.alert(
                 'Arrivé',
                 step === 0 ? 'Vous êtes arrivé au point de départ' : `Vous êtes arrivé à l'étape ${step}`,
-                [{ text: 'Valider', onPress: () => { navigate('Step', { circuit, step }) } }],
+                [{ text: 'Valider', onPress: () => { navigate('Etape', { circuit, step }); } }],
                 { cancelable: false }
             )
         })
@@ -89,7 +99,6 @@ class Transit extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
-        console.log(step);
         return (
             <View style={styles.container}>
                 {step &&
@@ -122,7 +131,6 @@ class Transit extends React.Component {
         );
     }
 }
-const DETECT_STEP = 'step-location-detection_task';
 
 TaskManager.defineTask(DETECT_STEP, ({ data: { eventType, region }, error }) => {
     if (error) {

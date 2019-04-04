@@ -95,7 +95,7 @@ class GeoLocation extends React.Component{
         return Location.requestPermissionsAsync().then(async () => {
             let locationEnabled = await Location.hasServicesEnabledAsync();
             if (locationEnabled) {
-                let location = await Location.getCurrentPositionAsync({});
+                let location = await Location.getCurrentPositionAsync({accuracy: 5});
                 this.updateLocation(location);
             } else {
                 this.setState({

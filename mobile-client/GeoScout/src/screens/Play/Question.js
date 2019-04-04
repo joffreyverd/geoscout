@@ -2,8 +2,10 @@ import React from 'react';
 import { 
     View,
     Text,
+    TouchableOpacity,
     Dimensions,
-    ScrollView
+    ScrollView,
+    StyleSheet
 } from 'react-native';
 import HTML from 'react-native-render-html';
 
