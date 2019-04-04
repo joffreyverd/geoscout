@@ -26,7 +26,6 @@ export default class Signin extends React.Component {
 
         // Copie du state dans un nouvel objet
         const user = Object.assign({}, this.state);
-        console.log(user);
 
         this.props.navigation.state.params.signin(user)
         .catch((error) => console.log(error));

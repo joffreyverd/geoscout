@@ -17,6 +17,7 @@ function Start(props) {
                 activeOpacity={0.8}
                 style={styles.button}
             >
+            {console.log(circuit)}
                 <Text style={styles.textButton}>Aller au point de départ</Text>
             </TouchableOpacity>
         </View>
