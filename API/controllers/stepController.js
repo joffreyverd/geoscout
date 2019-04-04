@@ -197,15 +197,92 @@ module.exports =
     updateStep : (req, res, next) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
+        console.log(JSON.stringify(req.body.step));
         if(id_user)
         {
-            db.Step.findByPk(req.params.id_step).then(step => 
+            db.Step.findOne(
+            {
+                where : {id_step : req.params.id_step},
+                include : 
+                [
+                    {
+                        model : db.Question,
+                    }
+                ]
+            })
+            .then(step => 
             {
                 db.Circuit.findByPk(step.id_circuit).then(circuit => 
                 {
                     if(circuit.id_user === id_user) 
                     {
-                        step.update(req.body).then(() => res.status(200).send(step));
+
+                        db.sequelize.transaction(t =>
+                        {
+                            step.description = req.body.step.description;
+                            step.instruction = req.body.step.instruction;
+                            step.latitude = req.body.step.latitude;
+                            step.longitude = req.body.step.longitude;
+                            step.name = req.body.step.name;
+                            step.order = req.body.step.order;
+                            step.validation = req.body.step.validation
+
+                            if(!step.Questions.length)
+                            {
+                                req.body.step.Questions.map(question =>
+                                {
+                                    db.Question.create(
+                                    {
+                                        wording : question.wording,
+                                        response : question.response,
+                                        type_of : question.type_of,
+                                        points : question.points,
+                                        id_step : step.id_step
+                                    },{transaction : t});
+                                });
+                            }
+
+                            else
+                            {
+                                let match = {};
+                                console.log(req.body.step.Questions)
+                                step.Questions.map(question => 
+                                {
+                                    match = {};
+                                    match = req.body.step.Questions.find(e =>  e.id_question === question.id_question);
+                                    if(match)
+                                    {
+                                        
+                                        question.wording = match.wording;
+                                        question.response = match.response;
+                                        question.type_of = match.type_of;
+                                        question.points = match.points;
+                                        question.save({transaction : t});
+                                    }
+                                });
+
+                                req.body.step.Questions.map(question_body =>
+                                {
+                                   
+                                    if(!question_body.id_question)
+                                    {
+                                        db.Question.create(
+                                        {
+                                            wording : question_body.wording,
+                                            response : question_body.response,
+                                            type_of : question_body.type_of,
+                                            points : question_body.points,
+                                            id_step : step.id_step
+                                        },{transaction : t});
+                                    }
+                                })
+                            }
+
+                            return step.save({transaction : t})
+ 
+                        })
+                        .then((step) => {utils.evaluateDistance(step.id_circuit);return step})
+                        .then(step =>  res.status(200).send(step));
                     }
                 })
             })
