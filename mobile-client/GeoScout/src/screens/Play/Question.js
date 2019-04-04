@@ -17,7 +17,7 @@ class Question extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const { trueResponse } = this.props.navigation.state.params;
+        const { trueResponse } = this.props.navigation.state.params.response;
         const { userResponse } = this.state;
         let isGood = '', score = 0;
 
@@ -43,7 +43,8 @@ class Question extends React.Component {
         return(
             <View>
                 <ScrollView style={{ flex: 1, marginTop:20, height: '30%' }}>
-                    <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} />
+                    {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
+                    <Text>{wording}</Text>
                 </ScrollView>
 
                 <TextInput

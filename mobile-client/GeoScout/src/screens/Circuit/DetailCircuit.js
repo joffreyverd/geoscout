@@ -28,18 +28,17 @@ export default class DetailCircuit extends React.Component {
                         'Circuit Télécharger',
                         'Votre circuit a été télécharger.',
                         [
-                            {text: 'Retour', onPress: () => {this.props.navigation.navigate('Home')}, style: 'cancel'},
+                            {text: 'Retour', onPress: () => {this.props.navigation.navigate('Home');}, style: 'cancel'},
                             {text: 'Commencer à jouer', onPress: () => {
                                 api.get('download-circuit/'+ id_circuit).then((data) => {
                                     this.props.navigation.navigate('Start',{circuit: data});
                                 }).catch((error) => {
                                     Alert.alert(
                                         'Erreur',
-                                        'Une erreur est survenue, merci de réesayé.',
+                                        'Une erreur est survenue, merci de réessayer.',
                                         [
                                             {text: 'Ok', onPress: () => {
                                                 this.props.navigation.navigate('Home');
-                                                console.log(error);
                                             }, style: 'cancel'}
                                         ],
                                         { cancelable: false }
