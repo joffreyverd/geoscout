@@ -6,7 +6,6 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import MultipleQuestion from './MultipleQuestion';
-import api from '../../utils/httpMethods';
 
 class UpdateStepModal extends Component {
 
@@ -41,10 +40,19 @@ class UpdateStepModal extends Component {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
-                    questions: (step.Questions !== undefined) ? step.Questions : {
-                        wording: '',
-                        response: '',
-                    },
+                    questions: (step.Questions && step.Questions.length !== 0) ? step.Questions :
+                        [{
+                            wording: '',
+                            response: '',
+                        },
+                        {
+                            wording: '',
+                            response: '',
+                        },
+                        {
+                            wording: '',
+                            response: '',
+                        }],
                 }));
             }
         }
@@ -60,18 +68,21 @@ class UpdateStepModal extends Component {
         });
     }
 
-    handleChangeQuestion = (event) => {
-        event.persist();
-        this.setState((prev) => {
-            prev.questions[event.target.name] = event.target.value;
-            return { questions: prev.questions };
+    handleChangeQuestion = (event, index) => {
+        const { name, value } = event.target;
+        this.setState((prevState) => {
+            prevState.questions[index][name] = value;
+            return {
+                question: prevState.questions,
+            };
         });
     }
 
     handleSubmit = () => {
         const step = this.state;
+        const { questions } = this.state;
         const { displayUpdateStep, updateStep, alert } = this.props;
-        updateStep(step)
+        updateStep(step, questions)
             .then(() => {
                 this.putQuestion(step.questions);
                 displayUpdateStep();
@@ -80,14 +91,15 @@ class UpdateStepModal extends Component {
             .catch(() => alert.error('Oups, une erreur s\'est produite'));
     }
 
-    putQuestion(question) {
-        if (question.id) {
-            return api.put(`question/${question.id}`, question);
+    /*
+    updateQuestion(questions) {
+        if (questions.id) {
+            return api.put(`question/${questions.id}`, questions);
         }
         const { id_step } = this.state;
         return api.post('question', Object.assign({ id_step: id_step }, question));
-
     }
+    */
 
     render() {
         const { id_step, name, description, instruction, questions } = this.state;

@@ -2,8 +2,12 @@ import React from 'react';
 import {
     View,
     Text,
-    TouchableOpacity
+    TouchableOpacity,
+    StyleSheet,
+    Dimensions,
+    ScrollView
 } from  'react-native';
+import HTML from 'react-native-render-html';
 
 class Etape extends React.Component {
     render() {
@@ -21,24 +25,30 @@ class Etape extends React.Component {
         const step = circuit.Steps[stepNumber];
 
         return (
-            <View>
-                <Text>{step.name}</Text>
-                <Text>{step.description}</Text>
+            <View style={styles.container}>
+                <Text style={styles.title}>{step.name}</Text>
+                <ScrollView style={{ flex: 1 }}>
+                    <HTML html={step.description} imagesMaxWidth={Dimensions.get('window').width} />
+                </ScrollView>
 
                 { ( step.questions && step.questions.length !== 0 ) &&
                     step.questions.map((item) => 
                         <TouchableOpacity
                             key={item.id}
                             onPress={() => navigate('Question', { question: item })}
+                            activeOpacity={0.8}
+                            style={styles.button}
                         >
-                            <Text>Question {item.difficulty}</Text>
+                            <Text style={styles.textButton}>Question {item.difficulty}</Text>
                         </TouchableOpacity>
                 )}
                 
                 <TouchableOpacity
                     onPress={() => navigate('Transit', { circuit, step: stepNumber + 1 })}
+                    activeOpacity={0.8}
+                    style={styles.button}
                 >
-                    <Text>Passer cette étape</Text>
+                    <Text style={styles.textButton}>Passer cette étape</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -46,3 +56,29 @@ class Etape extends React.Component {
 }
 
 export default Etape;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'white'
+    },
+    title: {
+        color: '#2c3e50',
+        fontSize: 24,
+        marginTop: 30,
+        marginBottom: 15,
+        fontWeight: 'bold'
+    },
+    button: {
+        backgroundColor: '#2c3e50',
+        borderRadius: 5,
+        padding: 8,
+        marginBottom: 5,
+        width: '80%',
+        alignItems: 'center'
+    },
+    textButton: {
+        color: '#fff',
+        fontSize: 18
+    }
+});
