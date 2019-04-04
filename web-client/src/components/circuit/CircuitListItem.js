@@ -60,12 +60,16 @@ class CircuitListItem extends Component {
 
                     {overview}
 
-                    <p>{length && `${length} km`}</p>
-
-                    {duration === null ?
-                        <p>{duration && `${length} heures`}</p>
+                    {(length && length > 0 && length !== null) ?
+                        <p className='bold-info-circuit'>{length} km</p>
                         :
-                        <p>Moins d‘une heure</p>
+                        <p className='bold-info-circuit'>- 1km</p>
+                    }
+
+                    {(duration && length > 0 && duration !== null) ?
+                        <p className='bold-info-circuit'>{duration && `${duration} heures`}</p>
+                        :
+                        <p className='bold-info-circuit'>- 1heure</p>
                     }
 
                     <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>

@@ -16,7 +16,7 @@ class UpdateStepModal extends Component {
         description: '',
         instruction: '',
         validation: false,
-        questions: [],
+        Questions: [],
     };
 
     modules = {
@@ -43,7 +43,7 @@ class UpdateStepModal extends Component {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
-                    questions: (step.Questions && step.Questions.length !== 0) ? step.Questions :
+                    Questions: (step.Questions && step.Questions.length !== 0) ? step.Questions :
                         [{
                             wording: '',
                             response: '',
@@ -85,8 +85,8 @@ class UpdateStepModal extends Component {
     handleChangeQuestion = (event, index) => {
         const { name, value } = event.target;
         this.setState((prevState) => {
-            prevState.questions[index][name] = value;
-            return { question: prevState.questions };
+            prevState.Questions[index][name] = value;
+            return { Questions: prevState.Questions };
         });
     }
 
@@ -100,11 +100,10 @@ class UpdateStepModal extends Component {
 
     handleSubmit = () => {
         const step = this.state;
-        const { questions } = this.state;
         const { displayUpdateStep, updateStep, alert } = this.props;
-        updateStep(step, questions)
+        updateStep(step)
             .then(() => {
-                this.putQuestion(step.questions);
+                this.putQuestion(step.Questions);
                 displayUpdateStep();
                 alert.success('Etape mise à jour');
             })
@@ -112,7 +111,7 @@ class UpdateStepModal extends Component {
     }
 
     render() {
-        const { id_step, name, description, instruction, validation, questions } = this.state;
+        const { id_step, name, description, instruction, validation, Questions } = this.state;
         const { show, displayUpdateStep, removeStep } = this.props;
 
         return (
@@ -123,7 +122,7 @@ class UpdateStepModal extends Component {
                     </div>
                     <Form className='update-form' onSubmit={e => e.preventDefault()}>
                         <FormGroup>
-                            <Label>Nom</Label>
+                            <Label id='scroll-top-step'>Nom</Label>
                             <Input
                                 type='text'
                                 name='name'
@@ -162,7 +161,7 @@ class UpdateStepModal extends Component {
                         </Checkbox>
 
                         <MultipleQuestion
-                            questions={questions}
+                            questions={Questions}
                             handleChangeQuestion={this.handleChangeQuestion}
                         />
 
