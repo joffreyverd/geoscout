@@ -18,6 +18,7 @@ import Start from '../screens/Play/Start';
 import Transit from '../screens/Play/Transit';
 import Etape from '../screens/Play/Etape';
 import Question from '../screens/Play/Question';
+import Finish from '../screens/Play/Finish';
 
 // Style des tab du TabNnavigator
 const styleTab = {
@@ -76,11 +77,11 @@ const Home = createBottomTabNavigator({
 // Stack d'une étape de jeu
 const EtapeStack = createStackNavigator(
     {
-        Description: Etape,
+        Etape: Etape,
         Question: Question
     }, {
         headerMode: 'none',
-        initialRouteName: 'Description'
+        initialRouteName: 'Etape'
     }
 );
 
@@ -88,7 +89,8 @@ const EtapeStack = createStackNavigator(
 const PlaySwitch = createSwitchNavigator(
     {
         Transit: Transit,
-        Etape: EtapeStack
+        EtapeStack: EtapeStack,
+        Finish: Finish
     }, {
         headerMode: 'none'
     }

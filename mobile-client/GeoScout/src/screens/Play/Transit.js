@@ -12,23 +12,28 @@ import { Location, TaskManager } from 'expo';
 const DETECTED = 'stepDetected';
 
 class Transit extends React.Component {
-
+    state = {}
     componentDidMount() {
-        const { circuit, step: stepNumber } = this.props.navigation.params.state;
+        const { circuit, step: stepNumber } = this.props.navigation.state.params;
         const step = circuit.Steps[stepNumber];
-
-        if (step.validation) {
-            Location.startGeofencingAsync(DETECT_STEP, [
-                {
-                    latitude: step.latitude,
-                    longitude: step.longitude,
-                    radius: 30,
-                    notifyOnEnter: true,
-                    notifyOnExit: false
-                }
-            ]);
-            this.setState({ interval: setInterval(this.enterStepLocation, 1000) });
+        if (step){
+            if (step.validation) {
+                Location.startGeofencingAsync(DETECT_STEP, [
+                    {
+                        latitude: step.latitude,
+                        longitude: step.longitude,
+                        radius: 30,
+                        notifyOnEnter: true,
+                        notifyOnExit: false
+                    }
+                ]);
+                this.setState({ interval: setInterval(this.enterStepLocation, 1000) });
+            }
         }
+        else {
+            this.props.navigation.navigate('Finish', { circuit });
+        }
+        
     }
 
     enterStepLocation = () => {$
@@ -44,8 +49,8 @@ class Transit extends React.Component {
             const { 
                 navigation: {
                     navigate,
-                    params: { 
-                        state: {
+                    state: { 
+                        params: {
                             circuit,
                             step
                         }
@@ -71,8 +76,8 @@ class Transit extends React.Component {
         const { 
             navigation: {
                 navigate,
-                params: { 
-                    state: {
+                state: { 
+                    params: {
                         circuit,
                         step: stepNumber
                     }
@@ -80,18 +85,28 @@ class Transit extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
-
+        console.log(step);
         return (
             <View>
-                <Text>Transit vers l'étape {step.order}</Text>
-                <Text>{step.instruction}</Text>
+                {step &&
+                    <>
+                        <Text>Transit vers {
+                            step.order === 0 ?
+                                'le point de départ'
+                            :   `l'étape ${step.order} sur ${circuit.Steps.length - 1}`
+                        }</Text>
+                        <Text>{step.instruction}</Text>
 
-                {step.validation && 
-                    <TouchableOpacity
-                        onPress={() => navigate('Etape', { circuit, step: stepNumber })}
-                    >
-                        <Text>Je suis arrivé</Text>
-                    </TouchableOpacity>
+                        {!step.validation ? 
+                            <TouchableOpacity
+                                onPress={() => navigate('Etape', { circuit, step: stepNumber })}
+                            >
+                                <Text>Je suis arrivé</Text>
+                            </TouchableOpacity>
+                        :
+                            <Text>Détéction automatique de votre position</Text>
+                        }
+                    </>
                 }
             </View>
         );

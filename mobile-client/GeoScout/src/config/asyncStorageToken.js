@@ -1,7 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
 setTokenAsyncStorage = async (userToken) => {
-    console.log(userToken);
     try {
         await AsyncStorage.setItem('GeoScoutToken', userToken);
     }catch (error) {
@@ -10,9 +9,7 @@ setTokenAsyncStorage = async (userToken) => {
 };
 
 getTokenAsyncStorage = async () => {
-    console.log("Try get token");
     return AsyncStorage.getItem('GeoScoutToken').then((token) => {
-        console.log(`token : ${token}`);
         return token;
     }).catch(error => console.log(error));
 };

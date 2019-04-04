@@ -10,8 +10,8 @@ class Etape extends React.Component {
         const { 
             navigation: {
                 navigate,
-                params: { 
-                    state: {
+                state: { 
+                    params: {
                         circuit,
                         step: stepNumber
                     }
@@ -25,13 +25,14 @@ class Etape extends React.Component {
                 <Text>{step.name}</Text>
                 <Text>{step.description}</Text>
 
-                { step.questions.map((item) => 
-                    <TouchableOpacity
-                        key={item.id}
-                        onPress={() => navigate('Question', { question: item })}
-                    >
-                        <Text>Question {item.difficulty}</Text>
-                    </TouchableOpacity>
+                { ( step.questions && step.questions.length !== 0 ) &&
+                    step.questions.map((item) => 
+                        <TouchableOpacity
+                            key={item.id}
+                            onPress={() => navigate('Question', { question: item })}
+                        >
+                            <Text>Question {item.difficulty}</Text>
+                        </TouchableOpacity>
                 )}
                 
                 <TouchableOpacity
