@@ -73,15 +73,15 @@ const Home = createBottomTabNavigator({
     }
 });
 
-// const PlaySwitch = createSwitchNavigator(
-//     {
-//         Start: Start,
-//         Etape: Etape
-//     }, {
-//         headerMode: 'none',
-//         initialRouteName: Start
-//     }
-// )
+const PlaySwitch = createSwitchNavigator(
+    {
+        Start: DetailCircuit,
+        // Etape: Etape
+    }, {
+        headerMode: 'none',
+        initialRouteName: 'Start'
+    }
+)
 
 const AuthStack = createStackNavigator(
     {
@@ -98,7 +98,8 @@ const AuthStack = createStackNavigator(
 export const RootStack = createSwitchNavigator(
     {
         Auth: AuthStack,
-        Home: Home
+        Home: Home,
+        Play: PlaySwitch
     },
     {
         mode: 'card',
