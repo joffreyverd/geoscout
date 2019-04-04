@@ -2,6 +2,7 @@ import React from 'react';
 import { 
     View,
     Text,
+    TextInput,
     TouchableOpacity,
     Dimensions,
     ScrollView,
@@ -16,11 +17,11 @@ class Question extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const { trueResponse } = this.props.navigation.state.params;
+        const { trueResponse } = this.props.navigation.state.params.response;
         const { userResponse } = this.state;
         let isGood = '', score = 0;
 
-        if(trim(toLowerCase(userResponse)) == trim(toLowerCase(trueResponse))){
+        if( userResponse && userResponse.toLowerCase().trim() === trueResponse.toLowerCase().trim()){
             isGood = 'Bonne réponse';
             score = 10;
         }else{
@@ -42,7 +43,8 @@ class Question extends React.Component {
         return(
             <View>
                 <ScrollView style={{ flex: 1, marginTop:20, height: '30%' }}>
-                    <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} />
+                    {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
+                    <Text>{wording}</Text>
                 </ScrollView>
 
                 <TextInput
@@ -53,9 +55,7 @@ class Question extends React.Component {
                 />
 
                 <TouchableOpacity
-                    onPress={() => {
-                        this.handleSubmit
-                    }}
+                    onPress={this.handleSubmit}
                     activeOpacity={0.8}
                     style={styles.button}
                 >
