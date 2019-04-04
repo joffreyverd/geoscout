@@ -31,7 +31,7 @@ export default class DetailCircuit extends React.Component {
                             {text: 'Retour', onPress: () => {this.props.navigation.navigate('Home')}, style: 'cancel'},
                             {text: 'Commencer à jouer', onPress: () => {
                                 api.get('download-circuit/'+ id_circuit).then((data) => {
-                                    this.props.navigation.navigate('Play',data);
+                                    this.props.navigation.navigate('Start',{circuit: data});
                                 }).catch((error) => {
                                     Alert.alert(
                                         'Erreur',

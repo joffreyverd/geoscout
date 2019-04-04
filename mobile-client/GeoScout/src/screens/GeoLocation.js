@@ -57,13 +57,21 @@ class GeoLocation extends React.Component{
             user_latitude: latitude,
             distance: 30,
         };
+
         api.post('circuit/nearby', body).then((data) => {
             this.setState({
                 circuits: data,
                 circuitReady: true
             });
         }).catch((error) => {
-            console.log(error);
+            Alert.alert(
+                'Erreur',
+                error,
+                [
+                    {text: 'Retour', style: 'cancel'},
+                ],
+                { cancelable: true }
+            )
         });
     }
 
@@ -81,7 +89,6 @@ class GeoLocation extends React.Component{
             initialPosition: initialRegion,
             markerPosition: initialRegion
         })
-        console.log(this.state);
     }
 
     checkLocation = async () => {
@@ -139,6 +146,7 @@ class GeoLocation extends React.Component{
                     <Text style={styles.errorText}>{this.state.error}</Text> 
                 :
                     (this.state.ready ? 
+                        <>
                         <MapView 
                         style={styles.map}
                         region={this.state.initialPosition}
@@ -155,15 +163,18 @@ class GeoLocation extends React.Component{
                                 <ActivityIndicator style={styles.loaderMargin} size='large' color='#1abc9c'/>
                             }
                         </MapView>
-                        {(this.state.iconCircuitPress && 
+                        {this.state.iconCircuitPress && 
                             <TouchableWithoutFeedback
-                            onPress={() => this.props.navigation.navigate('DetailCircuit', this.state.circuit)}>
+                            onPress={() => {
+                                this.setState({ iconCircuitPress: false });
+                                this.props.navigation.navigate('DetailCircuit', this.state.circuit);
+                            }}>
                                 <View style={styles.bottomCircuitDetail}>
                                     <Text style={styles.modalText}>{this.state.circuit.name}</Text>
                                     <Rate rate={2}/>
                                 </View>
                             </TouchableWithoutFeedback>
-                        )}
+                        }
                         </>
                     :
                         <>
