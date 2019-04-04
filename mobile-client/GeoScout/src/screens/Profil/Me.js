@@ -10,9 +10,7 @@ import {
 } from 'react-native';
 import {
     Tile,
-    List,
-    ListItem,
-    Button
+    ListItem
 } from 'react-native-elements';
 
 class Me extends Component {
@@ -32,23 +30,15 @@ class Me extends Component {
 
                     <ListItem
                     title="Nom"
-                    rightTitle={'Palarski'}
+                    rightTitle={this.props.navigation.state.params.lastname}
                     hideChevron/>
                     <ListItem
                     title="Prénom"
-                    rightTitle={'Stevy'}
+                    rightTitle={this.props.navigation.state.params.firstname}
                     hideChevron/>
                     <ListItem
                     title="Email"
-                    rightTitle={'stevy.palarski@gmail.com'}
-                    hideChevron/>
-                    <ListItem
-                    title="Anniversaire"
-                    rightTitle={'11/11/1998'}
-                    hideChevron/>
-                    <ListItem
-                    title="Ville"
-                    rightTitle={'Strasbourg'}
+                    rightTitle={this.props.navigation.state.params.email}
                     hideChevron/>
 
                     <TouchableOpacity
