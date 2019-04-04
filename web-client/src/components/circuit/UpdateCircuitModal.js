@@ -113,10 +113,13 @@ class UpdateCircuitModal extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup>
-                            <Label>Durée estimée</Label>
-                            <p>{`${duration} heure(s)`}</p>
-                        </FormGroup>
+                        {duration > 0 &&
+                            <FormGroup>
+                                <Label>Durée estimée</Label>
+                                <p>{`${duration} heure(s)`}</p>
+                            </FormGroup>
+                        }
+
 
                         {length > 0 &&
                             <FormGroup>

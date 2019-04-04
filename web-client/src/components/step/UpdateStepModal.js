@@ -43,18 +43,28 @@ class UpdateStepModal extends Component {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
+                    validation: step.validation || true,
                     Questions: (step.Questions && step.Questions.length !== 0) ? step.Questions :
                         [{
                             wording: '',
                             response: '',
+                            type_of: 1,
+                            points: 5,
+                            difficulty: 1,
                         },
                         {
                             wording: '',
                             response: '',
+                            type_of: 1,
+                            points: 10,
+                            difficulty: 2,
                         },
                         {
                             wording: '',
                             response: '',
+                            type_of: 1,
+                            points: 15,
+                            difficulty: 3,
                         }],
                 }));
             }
@@ -103,7 +113,6 @@ class UpdateStepModal extends Component {
         const { displayUpdateStep, updateStep, alert } = this.props;
         updateStep(step)
             .then(() => {
-                this.putQuestion(step.Questions);
                 displayUpdateStep();
                 alert.success('Etape mise à jour');
             })
@@ -161,7 +170,7 @@ class UpdateStepModal extends Component {
                         </Checkbox>
 
                         <MultipleQuestion
-                            questions={Questions}
+                            Questions={Questions}
                             handleChangeQuestion={this.handleChangeQuestion}
                         />
 

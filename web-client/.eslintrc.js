@@ -12,7 +12,8 @@ module.exports = {
                 "allow": [
                     "id_step",
                     "id_circuit",
-                    "need_internet"
+                    "need_internet",
+                    "type_of"
                 ]
             }
         ],
