@@ -28,28 +28,20 @@ export default class CircuitPublisher extends Component {
     }
 
     componentDidMount() {
-        // Récupération de la position de l'utilisateur
-        // eslint-disable-next-line no-undef
-        if (navigator.geolocation) {
-            // eslint-disable-next-line no-undef
-            navigator.geolocation.getCurrentPosition((data) => {
-                const { viewport } = this.state;
-                viewport.latitude = data.coords.latitude;
-                viewport.longitude = data.coords.longitude;
-
-                this.setState({
-                    viewport: viewport,
-                    userPosition: data.coords,
-                });
-            });
-        }
         const { id } = this.props.match.params;
         if (id) {
             api.get(`download-circuit/${id}`).then((circuit) => {
+                const { longitude, latitude } = circuit.Steps[0];
+                const { viewport } = this.state;
+
+                viewport.latitude = latitude;
+                viewport.longitude = longitude;
                 circuit.Steps.sort((a, b) => a.order - b.order);
+
                 this.setState({
                     circuit: circuit,
                     steps: circuit.Steps,
+                    viewport: viewport,
                 });
                 circuit.id_circuit = id;
             }).catch(() => {
@@ -220,7 +212,6 @@ export default class CircuitPublisher extends Component {
         const { steps, stepFocus, circuit, circuitIsDisplayed,
             stepIsDisplayed, userPosition, viewport,
         } = this.state;
-
         const { history } = this.props;
 
         return (

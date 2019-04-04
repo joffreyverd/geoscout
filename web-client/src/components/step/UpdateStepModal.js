@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Checkbox } from 'antd';
+import 'antd/dist/antd.css';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -13,6 +15,7 @@ class UpdateStepModal extends Component {
         name: '',
         description: '',
         instruction: '',
+        validation: false,
         questions: [],
     };
 
@@ -58,24 +61,41 @@ class UpdateStepModal extends Component {
         }
     }
 
+    /**
+     * Fonction de gestion de modification des champs non-riches
+     * @param {Event} event : évènement contenant la valeur des champs non-riches
+     */
     handleChange = (event) => {
         this.setState({ [event.target.name]: event.target.value });
     }
 
+    /**
+     * Fonction de gestion de modification de la description d'une étape
+     * @param {String} value : nouvelle valeur qui est renvoyée par le champs
+     */
     handleRichTextChange = (value) => {
-        this.setState({
-            description: value,
-        });
+        this.setState({ description: value });
     }
 
+    /**
+     * Fonction de gestion de modification d'une question
+     * @param {Event} event : event envoyé lorsqu'une question est modifiée
+     * @param {String} index : index de la question qui vient d'être modifiée
+     */
     handleChangeQuestion = (event, index) => {
         const { name, value } = event.target;
         this.setState((prevState) => {
             prevState.questions[index][name] = value;
-            return {
-                question: prevState.questions,
-            };
+            return { question: prevState.questions };
         });
+    }
+
+    /**
+     * Fonction de gestion du changement d'état de la checkbox
+     * @param {Event} event : event envoyé lorsque la checkbox est cochée
+     */
+    handleCheckboxChange = (event) => {
+        this.setState({ validation: event.target.checked });
     }
 
     handleSubmit = () => {
@@ -91,18 +111,8 @@ class UpdateStepModal extends Component {
             .catch(() => alert.error('Oups, une erreur s\'est produite'));
     }
 
-    /*
-    updateQuestion(questions) {
-        if (questions.id) {
-            return api.put(`question/${questions.id}`, questions);
-        }
-        const { id_step } = this.state;
-        return api.post('question', Object.assign({ id_step: id_step }, question));
-    }
-    */
-
     render() {
-        const { id_step, name, description, instruction, questions } = this.state;
+        const { id_step, name, description, instruction, validation, questions } = this.state;
         const { show, displayUpdateStep, removeStep } = this.props;
 
         return (
@@ -135,7 +145,7 @@ class UpdateStepModal extends Component {
                         </FormGroup>
 
                         <FormGroup>
-                            <Label>Instruction de direction</Label>
+                            <Label>Instruction de transit</Label>
                             <Input
                                 type='textarea'
                                 name='instruction'
@@ -143,6 +153,13 @@ class UpdateStepModal extends Component {
                                 onChange={this.handleChange}
                             />
                         </FormGroup>
+
+                        <Checkbox
+                            name='validation'
+                            value={validation}
+                            onChange={this.handleCheckboxChange}
+                        >Validation par position GPS
+                        </Checkbox>
 
                         <MultipleQuestion
                             questions={questions}

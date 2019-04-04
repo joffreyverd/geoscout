@@ -10,7 +10,6 @@ export default class QuestionList extends React.Component {
     render() {
         const { activeTab, handleChangeQuestion } = this.props;
         const { wording, response } = (this.props.items[activeTab]) ? this.props.items[activeTab] : '';
-        console.log(wording, response);
 
         return (
 

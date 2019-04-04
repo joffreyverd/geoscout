@@ -442,6 +442,14 @@ cursor: pointer;
     margin: 20px auto !important;
 }
 
+.ant-checkbox-wrapper {
+  display: flex !important;
+  justify-content: center;
+  margin: auto !important;
+  width: 210px !important;
+  margin : 20px auto !important;
+}
+
 /************************** DETAILED-CIRCUIT **************************/
 
 .header-wrapper {
