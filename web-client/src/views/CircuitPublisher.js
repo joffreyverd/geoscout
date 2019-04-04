@@ -220,7 +220,6 @@ export default class CircuitPublisher extends Component {
         const { steps, stepFocus, circuit, circuitIsDisplayed,
             stepIsDisplayed, userPosition, viewport,
         } = this.state;
-
         const { history } = this.props;
 
         return (
