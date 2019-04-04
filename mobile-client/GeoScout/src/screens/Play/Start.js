@@ -13,7 +13,7 @@ function Start(props) {
         <View style={styles.container}>
             <Text style={styles.text}>Le circuit {circuit.name} est chargé !</Text>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Transit', { circuit: circuit, step: O })}
+                onPress={() => navigation.navigate('Transit', { circuit: circuit, step: 0 })}
                 activeOpacity={0.8}
                 style={styles.button}
             >
