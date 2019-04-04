@@ -12,7 +12,7 @@ function Start(props) {
         <View>
             <Text>Tu veux Jouer ?</Text>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Transit', { circuit: circuit, step: O })}
+                onPress={() => navigation.navigate('Transit', { circuit: circuit, step: 0 })}
             >
                 <Text>Commencer</Text>
             </TouchableOpacity>
