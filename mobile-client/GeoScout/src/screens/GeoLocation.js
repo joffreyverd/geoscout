@@ -6,12 +6,12 @@ import {
     View,
     Dimensions,
     Image,
-    TouchableWithoutFeedback,
-    Modal
+    TouchableWithoutFeedback
 } from 'react-native';
 import { Location } from 'expo';
 import { Icon } from 'react-native-elements';
 
+import Rate from '../components/Rate';
 import api from '../config/httpMethods';
 import MapView from 'react-native-maps';
 import {mapStyle} from '../../utils/style/mapStyle';
@@ -38,6 +38,8 @@ class GeoLocation extends React.Component{
                 longitude: 0
             },
             circuits: null,
+            circuit: null,
+            iconCircuitPress: false,
             circuitReady: false
         }
     }
@@ -55,13 +57,21 @@ class GeoLocation extends React.Component{
             user_latitude: latitude,
             distance: 30,
         };
+
         api.post('circuit/nearby', body).then((data) => {
             this.setState({
                 circuits: data,
                 circuitReady: true
             });
         }).catch((error) => {
-            console.log(error);
+            Alert.alert(
+                'Erreur',
+                error,
+                [
+                    {text: 'Retour', style: 'cancel'},
+                ],
+                { cancelable: true }
+            )
         });
     }
 
@@ -79,7 +89,6 @@ class GeoLocation extends React.Component{
             initialPosition: initialRegion,
             markerPosition: initialRegion
         })
-        console.log(this.state);
     }
 
     checkLocation = async () => {
@@ -105,22 +114,6 @@ class GeoLocation extends React.Component{
         navigator.geolocation.clearWatch(this.state)
     }
 
-    displayModalCircuit(visible, item) {
-        <TouchableWithoutFeedback onPress={() => visible = false}>
-            <Modal
-            isVisible = {visible}
-            style={styles.modalBottom}>
-                <TouchableWithoutFeedback onPress={() => (
-                    visible = false,
-                    navigation.navigate('DetailCircuit', item)
-                )}>
-                    <Text style={styles.big}>{item.name}</Text>
-                    <Icon name='star' type='font-awesome' size={10} color='yellow'/>
-                </TouchableWithoutFeedback>
-            </Modal>
-        </TouchableWithoutFeedback>
-    }
-
     displayNearbyCircuits(){
         const { circuits } = this.state;
         return circuits.map((item) => {
@@ -129,14 +122,17 @@ class GeoLocation extends React.Component{
                 longitude: parseFloat(item.Steps[0].longitude)
             }
             return (
-                <MapView.Marker key={item.id_circuit}
+                <MapView.Marker
+                key={item.id_circuit}
                 coordinate={latLongCircuit}
                 onPress={() => {
-                    const visible = true;
-                    this.displayModalCircuit(visible, item);
+                    this.setState({
+                        circuit: item,
+                        iconCircuitPress: true
+                    })
                 }}>
                     <View style={styles.markerCircuit}>
-                        <Text style={styles.c}>C</Text>
+                        <Icon name='flag' type='font-awesome' size={15} color='white'/>
                     </View>
                 </MapView.Marker>
             );
@@ -150,6 +146,7 @@ class GeoLocation extends React.Component{
                     <Text style={styles.errorText}>{this.state.error}</Text> 
                 :
                     (this.state.ready ? 
+                        <>
                         <MapView 
                         style={styles.map}
                         region={this.state.initialPosition}
@@ -165,13 +162,26 @@ class GeoLocation extends React.Component{
                             :
                                 <ActivityIndicator style={styles.loaderMargin} size='large' color='#1abc9c'/>
                             }
-                        </MapView> 
+                        </MapView>
+                        {this.state.iconCircuitPress && 
+                            <TouchableWithoutFeedback
+                            onPress={() => {
+                                this.setState({ iconCircuitPress: false });
+                                this.props.navigation.navigate('DetailCircuit', this.state.circuit);
+                            }}>
+                                <View style={styles.bottomCircuitDetail}>
+                                    <Text style={styles.modalText}>{this.state.circuit.name}</Text>
+                                    <Rate rate={2}/>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        }
+                        </>
                     :
                         <>
                             <Image
-                                style={{width: (width*0.8), height: (height*0.1)}}
-                                source={require('../../utils/img/logoGeoScoutGreen.png')}
-                            />
+                            style={{width: (width*0.8), height: (height*0.1)}}
+                            source={require('../../utils/img/logoGeoScoutGreen.png')}/>
+
                             <ActivityIndicator style={styles.loaderMargin} size='large' color='#1abc9c'/>
                         </>
                     )
@@ -216,11 +226,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    c: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold'
-    },
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -234,10 +239,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         position: 'absolute'
     },
-    big: {
-        color: '#8e44ad',
-        textAlign: 'center',
-        fontSize: 36
+    modalText: {
+        color: '#1abc9c',
+        fontSize: 26,
+        fontWeight: 'bold'
     },
     loaderMargin: {
         marginTop: 70
@@ -247,8 +252,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#2c3e50'
     },
-    modalBottom: {
-        justifyContent: 'flex-end',
-        margin: 0,
+    bottomCircuitDetail: {
+        width: '98%',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        position: 'absolute',
+        bottom: 5,
+        backgroundColor: 'white',
+        borderColor: '#66D8C2',
+        borderRadius: 3,
+        borderWidth: 0.5,
+        padding: 5
     }
 });

@@ -45,7 +45,8 @@ const ProfilStack = createStackNavigator(
 const circuitStack = createStackNavigator(
     {
         GeoLocation: GeoLocation,
-        DetailCircuit: DetailCircuit
+        DetailCircuit: DetailCircuit,
+        Start: Start
     }, {
         headerMode: 'none',
         initialRouteName: 'GeoLocation'
@@ -86,12 +87,10 @@ const EtapeStack = createStackNavigator(
 // Switch Stack du jeu
 const PlaySwitch = createSwitchNavigator(
     {
-        Start: Start,
         Transit: Transit,
         Etape: EtapeStack
     }, {
-        headerMode: 'none',
-        initialRouteName: 'Start'
+        headerMode: 'none'
     }
 )
 
