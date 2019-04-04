@@ -50,7 +50,6 @@ module.exports =
             db.Step.count({where : {id_circuit : req.body.id_circuit}})
             .then(count =>
             {
-                console.log(count)
                 db.Step.create(
                 {
                     name : req.body.name,
@@ -60,7 +59,10 @@ module.exports =
                     order : count,
                     instruction : req.body.instruction,
                     id_circuit : req.body.id_circuit
-                }).then(step =>res.status(201).send(step));
+                })
+                
+                .then((step) => {utils.evaluateDistance(req.body.id_circuit);return step})
+                .then(step =>res.status(201).send(step))
             }).catch((err) => {if(err) res.sendStatus(500)});
         }
         else
@@ -71,7 +73,6 @@ module.exports =
 
     changeOrder : (req,res,next) =>
     {
-        console.log('nigga')
         if(utils.verifToken(req.headers['authorization']))
         {
             db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}})
@@ -161,13 +162,16 @@ module.exports =
             .then(circuit =>
             {
                 let order = circuit.Steps[0].order;
-                circuit.Steps[0].destroy()
-                
+                db.sequelize.transaction(t =>
+                {
+                    return circuit.Steps[0].destroy({transaction : t})
+                })
+                      
                 return order
             })
             .then((order) =>
             {
-                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: 34, order: {[db.sequelize.Op.gt]: order}}})
+                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: req.params.id_circuit, order: {[db.sequelize.Op.gt]: order}}})
                 .then((steps)=>
                 {
                     return db.sequelize.transaction(t=>
@@ -177,6 +181,7 @@ module.exports =
                             step.order-= 1;
                             return step.save({transaction: t})
                         })
+                        .then(utils.evaluateDistance(req.params.id_circuit))
                         .then(res.sendStatus(204))
                         .catch((err) => { if (err) res.sendStatus(500)})
                     })
@@ -209,6 +214,8 @@ module.exports =
         else
             res.status(401).send(utils.messages.invalidToken); 
     },
+
+    //////////////////////////////////////////////////////////
 
     updateQuestion : (req, res, next) =>
     {

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const config = require('./configUser');
+const db = require('../models')
 module.exports = 
 {
     verifToken : (token) =>
@@ -31,6 +32,27 @@ module.exports =
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
         let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return Math.round(R * c);
+    },
+
+    evaluateDistance : (id_circuit) =>
+    {
+        db.Circuit.findOne({where : {id_circuit:id_circuit},include :[{model : db.Step}]})
+        .then(circuit =>
+        {
+            let lat = circuit.Steps[0].latitude;
+            let lon = circuit.Steps[0].longitude;
+            let dist = 0;
+            circuit.Steps.map(step => 
+            {
+               dist+= module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude)
+            });
+
+            db.sequelize.transaction(t =>
+            {
+                circuit.length = dist;
+                return circuit.save({transaction: t});
+            })
+        })
     },
 
     messages : 

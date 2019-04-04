@@ -5,9 +5,9 @@ module.exports =
 {
     circuit : (req,res,next) => 
     {
-        db.Circuit.findByPk(req.params.id_circuit,{attributes : ['id_step','name','latitude','longitude','description','order','instruction','length']})
+        db.Circuit.findByPk(req.params.id_circuit,{attributes : ['name','description','duration','need_internet','level']})
         .then((circuit) => res.json(circuit))
-        .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
+        .catch((err) => {if(err) res.status(500).send(utils.messages.invalidToken)});
     },
 
     downloadCircuit : (req,res,next) =>
@@ -16,13 +16,13 @@ module.exports =
         {
             db.Circuit.findOne(
             {
-                where : {id_circuit : req.params.id_circuit, published : 1},
+                where : {id_circuit : req.params.id_circuit},
                 attributes : ['name','description','duration','need_internet','level'],
                 include : 
                 [
                     {
                         model : db.Step,
-                        attributes : ['id_step','name','latitude','longitude','description','order','instruction','length'],
+                        attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
                         include : 
                         [
                             {
