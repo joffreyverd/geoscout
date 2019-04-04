@@ -126,11 +126,13 @@ export default class CircuitPublisher extends Component {
      * Modification d'une étape
      * @param {Object} step : L'objet étape modifié
      */
-    updateStep = step => api.put(`step/${step.id_step}`, step).then(() => {
+    updateStep = (step, questions) => api.put(`step/${step.id_step}`, { step, questions }).then(() => {
         this.setState((prev) => {
             prev.steps.splice(prev.steps.findIndex(s => s.id_step === step.id_step), 1, step);
         });
-    })
+    }).then(
+
+    )
 
     /**
      * Modification du circuit
