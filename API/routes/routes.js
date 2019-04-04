@@ -33,6 +33,7 @@ module.exports = function(app)
 	app.route('/circuit').delete(circuit.deleteCircuit);
 	app.route('/circuit/nearby').post(circuit.nearbyCircuits)
 
+	app.route('/achievedcircuit').get(achievements.getAchievements)
 	app.route('/achievedcircuit').post(achievements.createAchievement)
 	app.route('/achievedcircuit/:id_route').delete(achievements.deleteAchievement)
 

@@ -41,7 +41,7 @@ class UpdateStepModal extends Component {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
-                    questions: (step.Questions !== undefined) ? step.Questions[0] : {
+                    questions: (step.Questions !== undefined) ? step.Questions : {
                         wording: '',
                         response: '',
                     },

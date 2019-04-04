@@ -88,7 +88,6 @@ export default class CircuitPublisher extends Component {
             latitude: event.lngLat[1],
             id_circuit: circuit.id_circuit,
         };
-
         api.post('step', step).then((data) => {
             this.setState((prev) => {
                 prev.steps.push(data);
@@ -210,7 +209,6 @@ export default class CircuitPublisher extends Component {
 
                 return step;
             });
-            console.log(steps);
             steps.sort((a, b) => a.order - b.order);
             return { steps: steps };
         });

@@ -2,12 +2,12 @@ import React from 'react';
 import classnames from 'classnames';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 
-import QuestionList from './QuestionListItem';
+import QuestionList from './QuestionList';
 
 export default class MultipleQuestion extends React.Component {
 
     state = {
-        activeTab: '1',
+        activeTab: '0',
     }
 
     toggle = (tab) => {
@@ -23,17 +23,26 @@ export default class MultipleQuestion extends React.Component {
     render() {
 
         const { activeTab } = this.state;
-        const { questions } = this.props;
+        const { questions, handleChangeQuestion } = this.props;
 
         return (
             <>
                 <Nav tabs>
                     <NavItem>
                         <NavLink
+                            className={classnames({ active: activeTab === '0' })}
+                            onClick={() => { this.toggle('0'); }}
+                        >
+                            Facile
+                        </NavLink>
+                    </NavItem>
+
+                    <NavItem>
+                        <NavLink
                             className={classnames({ active: activeTab === '1' })}
                             onClick={() => { this.toggle('1'); }}
                         >
-                            Facile
+                            Intermédiaire
                         </NavLink>
                     </NavItem>
 
@@ -42,22 +51,16 @@ export default class MultipleQuestion extends React.Component {
                             className={classnames({ active: activeTab === '2' })}
                             onClick={() => { this.toggle('2'); }}
                         >
-                            Intermédiaire
-                        </NavLink>
-                    </NavItem>
-
-                    <NavItem>
-                        <NavLink
-                            className={classnames({ active: activeTab === '3' })}
-                            onClick={() => { this.toggle('3'); }}
-                        >
                             Difficile
                         </NavLink>
                     </NavItem>
                 </Nav>
 
-                <QuestionList items={questions} />
-
+                <QuestionList
+                    items={questions}
+                    activeTab={activeTab}
+                    handleChangeQuestion={handleChangeQuestion}
+                />
             </>
         );
     }
