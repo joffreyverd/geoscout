@@ -73,11 +73,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 26        
     },
-    description: {
-        color: '#007E65',
-        textAlign: 'left',
-        fontSize: 18
-    },
     buttonWrapper: {
         width: '100%',
         flex: 1,
