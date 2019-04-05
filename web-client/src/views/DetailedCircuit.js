@@ -23,9 +23,7 @@ export default class DetailedCircuit extends Component {
 
     render() {
 
-        const { name, description, duration, length, level,
-            need_internet, version, createdAt, updatedAt,
-        } = this.state.circuit;
+        const { name, description } = this.state.circuit;
 
         return (
             <>
@@ -43,14 +41,6 @@ export default class DetailedCircuit extends Component {
                 <div className='bottom-wrapper'>
                     <div className='circuit-infos'>
                         <div dangerouslySetInnerHTML={{ __html: description }} />
-
-                        <p>{duration}</p>
-                        <p>{(length != null) && `${length} km`}</p>
-                        <p>{level}</p>
-                        <p>{need_internet}</p>
-                        <p>{version}</p>
-                        <p>{createdAt}</p>
-                        <p>{updatedAt}</p>
                     </div>
 
                     <div className='circuit-comments'>

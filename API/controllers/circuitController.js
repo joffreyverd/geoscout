@@ -22,7 +22,7 @@ module.exports =
                 [
                     {
                         model : db.Step,
-                        attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
+                        attributes : ['id_step','name','latitude','longitude','description','order','instruction','validation'],
                         include : 
                         [
                             {

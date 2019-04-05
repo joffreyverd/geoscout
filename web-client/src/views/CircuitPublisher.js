@@ -125,11 +125,10 @@ export default class CircuitPublisher extends Component {
      */
     updateStep = step => api.put(`step/${step.id_step}`, { step }).then(() => {
         this.setState((prev) => {
-            prev.steps.splice(prev.steps.findIndex(s => s.id_step === step.id_step), 1, step);
+            const index = prev.steps.findIndex(s => s.id_step === step.id_step);
+            prev.steps[index] = step;
         });
-    }).then(
-
-    )
+    })
 
     /**
      * Modification du circuit

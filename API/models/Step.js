@@ -10,7 +10,7 @@ module.exports = (sequelize,DataTypes) =>
             description : {type : DataTypes.TEXT, allowNull : true},
             order : {type : DataTypes.INTEGER, allowNull : true},
             instruction : {type : DataTypes.STRING, allowNull : true},
-            validation : {type : DataTypes.STRING, allowNull : true}
+            validation : {type : DataTypes.BOOLEAN, allowNull : true}
         },
         {createdAt: false, updatedAt: false}
     );

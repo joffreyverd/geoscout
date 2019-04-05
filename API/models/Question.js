@@ -8,6 +8,7 @@ module.exports = (sequelize,DataTypes) =>
             response : {type : DataTypes.TEXT,allowNull : true},
             type_of : {type : DataTypes.TINYINT, allowNull : true},
             points : {type : DataTypes.INTEGER, allowNull : true},
+            difficulty : {type : DataTypes.TINYINT, allowNull : true}
         },
         {
             createdAt: false,
