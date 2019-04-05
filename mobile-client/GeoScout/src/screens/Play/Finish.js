@@ -2,13 +2,24 @@ import React from 'react';
 import {
     Text,
     View,
-    StyleSheet
+    StyleSheet,
+    TouchableOpacity
 } from 'react-native';
 
 export default function Finish(props) {
+
+    const { navigation: { navigate } } = props;
+
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Bravo.</Text>
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => navigate('Home')}
+                activeOpacity={0.8}
+            >
+                <Text style={styles.textButton}>Revenir sur la carte</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -20,6 +31,18 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        
-    }
+        fontSize: 45
+    },
+    button: {
+        backgroundColor: '#2c3e50',
+        borderRadius: 5,
+        padding: 8,
+        marginBottom: 5,
+        width: '90%',
+        alignItems: 'center'
+    },
+    textButton: {
+        color: '#fff',
+        fontSize: 22
+    },
 });

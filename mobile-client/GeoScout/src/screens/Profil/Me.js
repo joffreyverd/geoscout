@@ -24,21 +24,21 @@ class Me extends Component {
                 <ScrollView>
                     <Tile
                     //Faire une condition si il y a une image d'enregistré
-                    imageSrc={'../../../utils/img/userAnonymous.png'}
+                    //imageSrc={'../../../utils/img/userAnonymous.png'}
                     featured
                     title={'Profil'}/>
 
                     <ListItem
                     title="Nom"
-                    rightTitle={this.props.navigation.state.params.lastname}
+                    rightTitle={'Dupond'}
                     hideChevron/>
                     <ListItem
                     title="Prénom"
-                    rightTitle={this.props.navigation.state.params.firstname}
+                    rightTitle={'Jacques'}
                     hideChevron/>
                     <ListItem
                     title="Email"
-                    rightTitle={this.props.navigation.state.params.email}
+                    rightTitle={'jacques.dupond@mail.com'}
                     hideChevron/>
 
                     <TouchableOpacity
