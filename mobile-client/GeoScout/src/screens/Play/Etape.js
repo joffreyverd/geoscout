@@ -13,7 +13,7 @@ class Etape extends React.Component {
     /**
      * Navigue vers le transit de l'étape suivante
      */
-    nextStep = (scoreWin) => {
+    nextStep = (scoreWin = 0) => {
         const { 
             navigation: {
                 navigate,
@@ -68,7 +68,7 @@ class Etape extends React.Component {
                     )}
                     
                     <TouchableOpacity
-                        onPress={this.nextStep}
+                        onPress={() => this.nextStep()}
                         activeOpacity={0.8}
                         style={styles.button}
                     >

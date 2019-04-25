@@ -8,11 +8,23 @@ import {
 
 export default function Finish(props) {
 
-    const { navigation: { navigate } } = props;
+    const { 
+        navigation: { 
+            navigate,
+            state: {
+                params: {
+                    circuit,
+                    score
+                }
+            }
+        }
+    } = props;
+    console.log(score);
 
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Bravo.</Text>
+            <Text style={styles.text}>Vous avez {score} points.</Text>
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => navigate('Home')}

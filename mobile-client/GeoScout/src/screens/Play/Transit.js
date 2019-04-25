@@ -20,10 +20,10 @@ const DETECT_STEP = 'step-location-detection_task';
 class Transit extends React.Component {
     state = {}
     componentDidMount() {
-        const { circuit, step: stepNumber } = this.props.navigation.state.params;
+        const { circuit, step: stepNumber, score } = this.props.navigation.state.params;
         const step = circuit.Steps[stepNumber];
         if (step){
-            //if (step.validation) {
+            if (step.validation) {
                 Location.startGeofencingAsync(DETECT_STEP, [
                     {
                         latitude: step.latitude,
@@ -34,10 +34,10 @@ class Transit extends React.Component {
                     }
                 ]);
                 this.setState({ interval: setInterval(this.enterStepLocation, 1000) });
-            //}
+            }
         }
         else {
-            this.props.navigation.navigate('Finish', { circuit });
+            this.props.navigation.navigate('Finish', { circuit, score });
         }
         
     }
@@ -127,16 +127,16 @@ class Transit extends React.Component {
                         </ScrollView>
                     </View>
                     <View style={Object.assign({},styles.containerButton, styles.container)}>
-                        {step.validation ? 
+                        { step.validation ?
+                            <Text style={styles.description}>Détection automatique de votre position</Text>
+                        :
                             <TouchableOpacity
                                 onPress={this.goToStep}
                                 activeOpacity={0.8}
                                 style={styles.button}
                             >
                                 <Text style={styles.textButton}>Je suis arrivé</Text>
-                            </TouchableOpacity>
-                        :
-                            <Text style={styles.description}>Détection automatique de votre position</Text>
+                            </TouchableOpacity>  
                         }
                     </View>
                 </>
