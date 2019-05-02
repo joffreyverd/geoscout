@@ -14,7 +14,6 @@ class BasicInformations extends Component {
             <>
                 <div className='basic-informations-wrapper'>
                     <h2>{`${user.firstname} ${user.lastname}`}</h2>
-                    <p>{`@${user.firstname}`}</p>
                     <p>{user.email}</p>
                     <p>Strasbourg</p>
                     <p>Inscrit depuis Mai 2017</p>

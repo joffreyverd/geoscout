@@ -8,6 +8,12 @@ import ProfilEdition from '../components/account/ProfilEdition';
 import UserFeed from '../components/account/UserFeed';
 import api from '../utils/httpMethods';
 
+const Relations = [
+    { id_user: 1, firstname: 'Stevy', lastname: 'Palarski', profil_picture: 'blablabla' },
+    { id_user: 2, firstname: 'Thomas', lastname: 'Unterfinger', profil_picture: 'blablabla' },
+    { id_user: 3, firstname: 'Joffrey', lastname: 'Verd', profil_picture: 'blablabla' },
+];
+
 export default class Account extends Component {
 
     state = {
@@ -38,7 +44,7 @@ export default class Account extends Component {
                 currentComponent = (<OpinionFeed />);
                 break;
             case 'relations':
-                currentComponent = (<RelationsFeed />);
+                currentComponent = (<RelationsFeed relations={Relations} />);
                 break;
             case 'edition':
                 currentComponent = (<ProfilEdition />);
