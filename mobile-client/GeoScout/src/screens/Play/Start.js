@@ -5,22 +5,23 @@ import {
     TouchableOpacity,
     StyleSheet
 } from  'react-native';
+import { SafeAreaView } from 'react-navigation';
 
 function Start(props) {
     const { navigation } = props;
     const { circuit } = navigation.state.params;
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Text style={styles.title}>Le circuit {circuit.name} est chargé !</Text>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Transit', { circuit: circuit, step: 0, score: 0 })}
+                onPress={() => navigation.navigate('Transit', { circuit: circuit, step: 0, score: 0, maxScore: 0 })}
                 activeOpacity={0.8}
                 style={styles.button}
             >
             {console.log(circuit)}
                 <Text style={styles.textButton}>Aller au point de départ</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     )
 }
 

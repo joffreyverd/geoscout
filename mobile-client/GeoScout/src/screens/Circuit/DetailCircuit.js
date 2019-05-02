@@ -8,6 +8,7 @@ import {
     ScrollView,
     Dimensions
 } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import HTML from 'react-native-render-html';
 
 import api from '../../config/httpMethods';
@@ -16,7 +17,7 @@ export default class DetailCircuit extends React.Component {
     render() {
         const { name, description, id_circuit } = this.props.navigation.state.params;
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
             {console.log(this.props.navigation.state.params)}
                 <Text style={styles.title}>{name}</Text>
                 <ScrollView style={{ flex: 1 }}>
@@ -54,7 +55,7 @@ export default class DetailCircuit extends React.Component {
                         Télécharger
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </SafeAreaView>
         );
     }
 }

@@ -26,6 +26,7 @@ class Authentication extends React.Component{
                     this.props.navigation.navigate('Home', data.user);
                 }).catch((error) => {
                     //GESTION DES ERREURS
+                    storage.removeTokenAsyncStorage();
                 });
             }
         });

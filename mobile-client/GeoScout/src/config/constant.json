@@ -1,0 +1,12 @@
+{
+    "difficulty": {
+        "0": "facile",
+        "1": "intermédiaire",
+        "2": "difficile"
+    },
+    "statut_circuit": {
+        "0": "pause",
+        "1": "terminé",
+        "2": "abandonné"
+    }
+}

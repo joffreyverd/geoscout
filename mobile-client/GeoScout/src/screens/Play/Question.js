@@ -18,9 +18,12 @@ class Question extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const { question:{ response: trueResponse } } = this.props.navigation.state.params;
+        const { question:{ response: trueResponse, difficulty } } = this.props.navigation.state.params;
         const { userResponse } = this.state;
         let isGood = '', score = 0;
+        let maxScore = 15
+        if (difficulty)
+            maxScore = difficulty * 5;
 
         if( userResponse && userResponse.toLowerCase().trim() === trueResponse.toLowerCase().trim()){
             isGood = 'Bonne réponse';
@@ -33,7 +36,7 @@ class Question extends React.Component {
             isGood,
             'C\'est une '+isGood+', vous avez gagnez '+score,
             [
-                {text: 'Ok', onPress: () => this.props.navigation.state.params.nextStep(score)}
+                {text: 'Ok', onPress: () => this.props.navigation.state.params.nextStep(score, maxScore)}
             ],
             {cancelable: false}
         )

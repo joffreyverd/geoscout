@@ -22,7 +22,7 @@ removeTokenAsyncStorage = async () => {
         //GESTION DES ERREURS
         return false;
     }
-}
+};
 
 export default{
     setTokenAsyncStorage,
