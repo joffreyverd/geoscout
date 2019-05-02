@@ -6,14 +6,16 @@
       "database": "akrobat",
       "host": "154.49.211.218",
       "dialect": "mysql",
-      "timezone": "+02:00"
+      "timezone": "+02:00",
+      "logging": false
     },
     "production": {
       "username": "root",
       "password": null,
       "database": "database_production",
       "host": "127.0.0.1",
-      "dialect": "mysql"
+      "dialect": "mysql",
+      "logging": false
     }
   }
   
