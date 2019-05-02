@@ -157,10 +157,8 @@ class GeoLocation extends React.Component{
                                     </View>
                                 </View>
                             </MapView.Marker>
-                            {(this.state.circuitReady)?
+                            {(this.state.circuitReady) &&
                                 this.displayNearbyCircuits()
-                            :
-                                <ActivityIndicator style={styles.loaderMargin} size='large' color='#1abc9c'/>
                             }
                         </MapView>
                         {this.state.iconCircuitPress && 

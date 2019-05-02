@@ -13,7 +13,7 @@ class Etape extends React.Component {
     /**
      * Navigue vers le transit de l'étape suivante
      */
-    nextStep = (scoreWin) => {
+    nextStep = (scoreWin = 0) => {
         const { 
             navigation: {
                 navigate,
@@ -48,33 +48,33 @@ class Etape extends React.Component {
         const step = circuit.Steps[stepNumber];
         return (
             <>
-            <View style={styles.container}>
-                <Text style={styles.title}>{step.name}</Text>
-                <ScrollView style={{ flex: 1 }}>
-                    <HTML html={step.description} imagesMaxWidth={Dimensions.get('window').width} />
-                </ScrollView>
-            </View>
-            <View style={styles.containerButton}>
-                { ( step.Questions && step.Questions.length > 0 ) &&
-                    step.Questions.map((item) => 
-                        <TouchableOpacity
-                            key={item.id}
-                            onPress={() => navigate('Question', { question: item, nextStep: this.nextStep })}
-                            activeOpacity={0.8}
-                            style={styles.button}
-                        >
-                            <Text style={styles.textButton}>Question {item.difficulty}</Text>
-                        </TouchableOpacity>
-                )}
-                
-                <TouchableOpacity
-                    onPress={this.nextStep}
-                    activeOpacity={0.8}
-                    style={styles.button}
-                >
-                    <Text style={styles.textButton}>Passer cette étape</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={Object.assign({},styles.containerStep,styles.container)}>
+                    <Text style={styles.title}>{step.name}</Text>
+                    <ScrollView style={{ flex: 1, color: 'white' }}>
+                        <HTML html={step.description} imagesMaxWidth={Dimensions.get('window').width} />
+                    </ScrollView>
+                </View>
+                <View style={Object.assign({},styles.containerButton,styles.container)}>
+                    { ( step.Questions && step.Questions.length > 0 ) &&
+                        step.Questions.map((item) => 
+                            <TouchableOpacity
+                                key={item.id_question}
+                                onPress={() => navigate('Question', { question: item, nextStep: this.nextStep })}
+                                activeOpacity={0.8}
+                                style={styles.button}
+                            >
+                                <Text style={styles.textButton}>Question {item.difficulty}</Text>
+                            </TouchableOpacity>
+                    )}
+                    
+                    <TouchableOpacity
+                        onPress={() => this.nextStep()}
+                        activeOpacity={0.8}
+                        style={styles.button}
+                    >
+                        <Text style={styles.textButton}>Passer cette étape</Text>
+                    </TouchableOpacity>
+                </View>
             </>
         )
     }
@@ -84,33 +84,38 @@ export default Etape;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#1abc9c',
         justifyContent: 'center',
-        margin: 20,
+        padding: 20
+    },  
+    containerStep: {
+        flex: 1
     },
     containerButton: {
-        backgroundColor: 'white',
-        justifyContent: 'center',
         alignItems: 'center'
     },
     title: {
-        color: '#2c3e50',
-        fontSize: 24,
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 28,
         marginTop: 30,
-        marginBottom: 15,
+        marginBottom: 30,
         fontWeight: 'bold'
+    },
+    description: {
+        color: 'white',
+        fontSize: 22
     },
     button: {
         backgroundColor: '#2c3e50',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
-        width: '80%',
+        width: '90%',
         alignItems: 'center'
     },
     textButton: {
         color: '#fff',
-        fontSize: 18
+        fontSize: 22
     }
 });

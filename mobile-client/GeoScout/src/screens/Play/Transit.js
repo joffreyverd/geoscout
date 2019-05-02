@@ -20,10 +20,10 @@ const DETECT_STEP = 'step-location-detection_task';
 class Transit extends React.Component {
     state = {}
     componentDidMount() {
-        const { circuit, step: stepNumber } = this.props.navigation.state.params;
+        const { circuit, step: stepNumber, score } = this.props.navigation.state.params;
         const step = circuit.Steps[stepNumber];
         if (step){
-            //if (step.validation) {
+            if (step.validation) {
                 Location.startGeofencingAsync(DETECT_STEP, [
                     {
                         latitude: step.latitude,
@@ -34,10 +34,10 @@ class Transit extends React.Component {
                     }
                 ]);
                 this.setState({ interval: setInterval(this.enterStepLocation, 1000) });
-            //}
+            }
         }
         else {
-            this.props.navigation.navigate('Finish', { circuit });
+            this.props.navigation.navigate('Finish', { circuit, score });
         }
         
     }
@@ -45,7 +45,6 @@ class Transit extends React.Component {
     enterStepLocation = () => {
         // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
         AsyncStorage.getItem(DETECTED).then((x) => {
-            console.log(x);
             if (x === null)
                 return;
             const { interval } = this.state;
@@ -110,10 +109,11 @@ class Transit extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
-        return (
-            <View style={styles.container}>
-                {step &&
-                    <>
+        if(step) {
+            return (
+                //<View style={styles.container}>
+                <>
+                    <View style={Object.assign({},styles.containerTransit, styles.container)}>
                         <Text 
                             style={styles.title}
                         >Transit vers {
@@ -123,24 +123,28 @@ class Transit extends React.Component {
                         }</Text>
                         <ScrollView style={{ flex: 1 }}>
                             {/* <HTML html={step.instruction} imagesMaxWidth={Dimensions.get('window').width} /> */}
-                            <Text>{step.instruction}</Text>
+                            <Text style={styles.description}>{step.instruction}</Text>
                         </ScrollView>
-
-                        {!step.validation ? 
+                    </View>
+                    <View style={Object.assign({},styles.containerButton, styles.container)}>
+                        { step.validation ?
+                            <Text style={styles.description}>Détection automatique de votre position</Text>
+                        :
                             <TouchableOpacity
                                 onPress={this.goToStep}
                                 activeOpacity={0.8}
                                 style={styles.button}
                             >
                                 <Text style={styles.textButton}>Je suis arrivé</Text>
-                            </TouchableOpacity>
-                        :
-                            <Text>Détéction automatique de votre position</Text>
+                            </TouchableOpacity>  
                         }
-                    </>
-                }
-            </View>
-        );
+                    </View>
+                </>
+                //</View>
+            );
+        } else {
+            return null;
+        }
     }
 }
 
@@ -161,26 +165,38 @@ export default Transit;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: 'white'
+        backgroundColor: '#1abc9c',
+        justifyContent: 'center',
+        padding: 20
+    },  
+    containerTransit: {
+        flex: 1
+    },
+    containerButton: {
+        alignItems: 'center'
     },
     title: {
-        color: '#2c3e50',
-        fontSize: 24,
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 28,
         marginTop: 30,
-        marginBottom: 15,
+        marginBottom: 30,
         fontWeight: 'bold'
+    },
+    description: {
+        color: 'white',
+        fontSize: 22
     },
     button: {
         backgroundColor: '#2c3e50',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
-        width: '80%',
+        width: '90%',
         alignItems: 'center'
     },
     textButton: {
         color: '#fff',
-        fontSize: 18
+        fontSize: 22
     }
 });

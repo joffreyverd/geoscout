@@ -6,7 +6,8 @@ import {
     TouchableOpacity,
     Dimensions,
     ScrollView,
-    StyleSheet
+    StyleSheet,
+    Alert
 } from 'react-native';
 import HTML from 'react-native-render-html';
 
@@ -17,7 +18,7 @@ class Question extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const { trueResponse } = this.props.navigation.state.params.response;
+        const { question:{ response: trueResponse } } = this.props.navigation.state.params;
         const { userResponse } = this.state;
         let isGood = '', score = 0;
 
@@ -28,7 +29,7 @@ class Question extends React.Component {
             isGood = 'Mauvaise réponse';
         }
 
-        alert.alert(
+        Alert.alert(
             isGood,
             'C\'est une '+isGood+', vous avez gagnez '+score,
             [
@@ -39,29 +40,32 @@ class Question extends React.Component {
     }
 
     render() {
-        const { wording } = this.props.navigation.state.params;
+        const { question: { wording } } = this.props.navigation.state.params;
         return(
-            <View>
-                <ScrollView style={{ flex: 1, marginTop:20, height: '30%' }}>
-                    {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
-                    <Text>{wording}</Text>
-                </ScrollView>
+            <>
+                <View style={Object.assign({},styles.container, styles.containerQuestion)}>
+                    <ScrollView>
+                        {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
+                        <Text style={styles.description}>{wording}</Text>
+                    </ScrollView>
 
-                <TextInput
-                    value={this.state.userResponse}
-                    onChangeText={(userResponse) => this.setState({ userResponse })}
-                    placeholder={'Réponse'}
-                    style={styles.input}
-                />
-
-                <TouchableOpacity
-                    onPress={this.handleSubmit}
-                    activeOpacity={0.8}
-                    style={styles.button}
-                >
-                    <Text style={styles.textButton}>Valider</Text>
-                </TouchableOpacity>
-            </View>
+                    <TextInput
+                        value={this.state.userResponse}
+                        onChangeText={(userResponse) => this.setState({ userResponse })}
+                        placeholder={'Réponse'}
+                        style={styles.input}
+                    />
+                </View>
+                <View style={Object.assign({},styles.container, styles.containerButton)}>
+                    <TouchableOpacity
+                        onPress={this.handleSubmit}
+                        activeOpacity={0.8}
+                        style={styles.button}
+                    >
+                        <Text style={styles.textButton}>Valider</Text>
+                    </TouchableOpacity>
+                </View>
+            </>
         );
     }
 }
@@ -70,8 +74,24 @@ export default Question;
 
 const styles = StyleSheet.create({
     container: {
+        backgroundColor: '#1abc9c',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20
+    },  
+    containerQuestion: {
+        paddingTop: 40,
+        paddingBottom: 50,
         flex: 1,
-        backgroundColor: 'white'
+        justifyContent: 'flex-start',
+
+    },
+    containerButton: {
+        alignItems: 'center'
+    },
+    description: {
+        color: 'white',
+        fontSize: 22
     },
     button: {
         backgroundColor: '#2c3e50',
@@ -83,7 +103,7 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color: '#fff',
-        fontSize: 18
+        fontSize: 22
     },
     input: {
         width: '90%',

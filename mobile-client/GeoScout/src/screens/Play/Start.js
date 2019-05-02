@@ -11,7 +11,7 @@ function Start(props) {
     const { circuit } = navigation.state.params;
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>Le circuit {circuit.name} est chargé !</Text>
+            <Text style={styles.title}>Le circuit {circuit.name} est chargé !</Text>
             <TouchableOpacity
                 onPress={() => navigation.navigate('Transit', { circuit: circuit, step: 0, score: 0 })}
                 activeOpacity={0.8}
@@ -29,25 +29,28 @@ export default Start;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'white'
+        margin: 20
     },
-    text: {
+    title: {
+        textAlign: 'center',
         color: '#2c3e50',
-        fontSize: 24,
-        marginBottom: 30
+        fontSize: 28,
+        marginBottom: 30,
+        fontWeight: 'bold'
     },
     button: {
         backgroundColor: '#2c3e50',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
-        width: '80%',
+        width: '90%',
         alignItems: 'center'
     },
     textButton: {
         color: '#fff',
-        fontSize: 18
+        fontSize: 22
     }
 });
