@@ -10,10 +10,12 @@ module.exports = {
             "error",
             {
                 "allow": [
+                    "id_user",
                     "id_step",
                     "id_circuit",
                     "need_internet",
-                    "type_of"
+                    "type_of",
+                    "profil_picture"
                 ]
             }
         ],

@@ -34,4 +34,4 @@ const httpsServer = https.createServer(credentials, app);
 httpServer.listen(5555);
 httpsServer.listen(5556);
 
-module.exports = app;
+module.exports = httpServer;
