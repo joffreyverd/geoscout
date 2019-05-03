@@ -1,7 +1,9 @@
 import React from 'react';
 import {
-    createBottomTabNavigator, createStackNavigator,
-    createSwitchNavigator, createAppContainer
+    createBottomTabNavigator,
+    createStackNavigator,
+    createSwitchNavigator,
+    createAppContainer
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 

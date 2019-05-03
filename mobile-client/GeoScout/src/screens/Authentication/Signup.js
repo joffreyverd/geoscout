@@ -21,13 +21,6 @@ export default class Signup extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const {
-            firstname,
-            lastname,
-            email,
-            password,
-            rePassword
-        } = this.state;
 
         //FAIRE LES VERIF
 
