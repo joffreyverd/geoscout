@@ -58,7 +58,7 @@ module.exports=
             .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
         }
         else
-        res.status(401).send(utils.messages.invalidToken);
+            res.status(401).send(utils.messages.invalidToken);
     }
 
 }

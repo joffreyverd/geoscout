@@ -143,8 +143,6 @@ module.exports =
     deleteStep : (req, res, next) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
-        let step_order = undefined;
-        let step_circuit = undefined;
         if(id_user)
         {
 

@@ -32,9 +32,9 @@ module.exports =
 		{
 			db.sequelize.transaction(t =>
 			{
-				user.email = req.body.email,
-				user.password = bcrypt.hashSync(req.body.password, 12),
-				user.firstname = req.body.firstname,
+				user.email = req.body.email;
+				user.password = bcrypt.hashSync(req.body.password, 12);
+				user.firstname = req.body.firstname;
 				user.lastname = req.body.lastname;
 				user.save({transaction : t})
 				.then(res.sendStatus(204));
@@ -70,7 +70,7 @@ module.exports =
 		let token = req.headers['authorization'];
 		if (!token) 
 			return res.status(401).send(utils.messages.invalidToken);
-		let id = jwt.verify(token.split(' ')[1], config.secret, (err, decoded) =>
+		jwt.verify(token.split(' ')[1], config.secret, (err, decoded) =>
 		{
 			if (err) return res.status(401).send(utils.messages.invalidToken);
 			else
