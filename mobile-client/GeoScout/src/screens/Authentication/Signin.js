@@ -19,10 +19,6 @@ export default class Signin extends React.Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        const {
-            email,
-            password
-        } = this.state;
 
         // Copie du state dans un nouvel objet
         const user = Object.assign({}, this.state);

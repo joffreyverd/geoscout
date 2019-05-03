@@ -11,7 +11,7 @@ import {
 import { Location } from 'expo';
 import { Icon } from 'react-native-elements';
 
-import Rate from '../components/Rate';
+import Callout from '../components/Callout';
 import api from '../config/httpMethods';
 import MapView from 'react-native-maps';
 import {mapStyle} from '../../utils/style/mapStyle';
@@ -38,8 +38,6 @@ class GeoLocation extends React.Component{
                 longitude: 0
             },
             circuits: null,
-            circuit: null,
-            iconCircuitPress: false,
             circuitReady: false
         }
     }
@@ -124,16 +122,20 @@ class GeoLocation extends React.Component{
             return (
                 <MapView.Marker
                 key={item.id_circuit}
-                coordinate={latLongCircuit}
-                onPress={() => {
-                    this.setState({
-                        circuit: item,
-                        iconCircuitPress: true
-                    })
-                }}>
+                coordinate={latLongCircuit}>
                     <View style={styles.markerCircuit}>
                         <Icon name='flag' type='font-awesome' size={15} color='white'/>
                     </View>
+                    <MapView.Callout
+                    styles={styles.callout}
+                    onPress={() => {
+                        this.props.navigation.navigate('DetailCircuit', item);
+                    }}>
+                            <Callout
+                            name={item.name}
+                            rate={2}
+                            />
+                    </MapView.Callout>
                 </MapView.Marker>
             );
         });
@@ -146,34 +148,19 @@ class GeoLocation extends React.Component{
                     <Text style={styles.errorText}>{this.state.error}</Text> 
                 :
                     (this.state.ready ? 
-                        <>
                         <MapView 
                         style={styles.map}
                         region={this.state.initialPosition}
                         customMapStyle={mapStyle}>
                             <MapView.Marker coordinate={this.state.markerPosition}>
                                 <View style={styles.radius}>
-                                    <View style={styles.marker}>
-                                    </View>
+                                    <View style={styles.marker}/>
                                 </View>
                             </MapView.Marker>
                             {(this.state.circuitReady) &&
                                 this.displayNearbyCircuits()
                             }
                         </MapView>
-                        {this.state.iconCircuitPress && 
-                            <TouchableWithoutFeedback
-                            onPress={() => {
-                                this.setState({ iconCircuitPress: false });
-                                this.props.navigation.navigate('DetailCircuit', this.state.circuit);
-                            }}>
-                                <View style={styles.bottomCircuitDetail}>
-                                    <Text style={styles.modalText}>{this.state.circuit.name}</Text>
-                                    <Rate rate={2}/>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        }
-                        </>
                     :
                         <>
                             <Image
@@ -263,5 +250,11 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         borderWidth: 0.5,
         padding: 5
+    },
+    callout: {
+        backgroundColor: '#fff',
+        borderColor: '#1abc9c',
+        borderWidth: 1,
+        padding: 15
     }
 });
