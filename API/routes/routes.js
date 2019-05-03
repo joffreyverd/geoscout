@@ -10,7 +10,8 @@ module.exports = function(app)
 	app.route('/signin').post(user.login)
 	app.route('/whoami').get(user.whoami)
 	app.route('/relations').get(user.listRelations);
-	app.route('/relations').post(user.askRelation);
+	app.route('/ask-relation/:id_user').put(user.askRelation);
+	app.route('/answer-relation/:id_user').put(user.answerRelation);
 	app.route('/evaluations/:id_circuit').get(evaluation.evaluationsCircuit);
 	app.route('/evaluations').post(evaluation.createEvaluation);	
 	
@@ -40,4 +41,6 @@ module.exports = function(app)
 	app.route('/question/:id_question').get(question.getQuestion);
 	app.route('/question').post(question.createQuestion);
 	app.route('/question/:id_question').put(question.updateQuestion);
+
+	app.route('/download-user/:id_user').get(user.downloadUser);
 }

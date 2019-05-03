@@ -5,17 +5,49 @@ import {
     StyleSheet,
     TouchableOpacity
 } from 'react-native';
+import api from '../../config/httpMethods';
+
 
 export default function Finish(props) {
 
-    const { navigation: { navigate } } = props;
+    const { 
+        navigation: { 
+            navigate,
+            state: {
+                params: {
+                    circuit,
+                    score,
+                    maxScore
+                }
+            }
+        }
+    } = props;
+
+    const finish = () => {
+        // TODO: Envoie de la requete achievedCircuit
+        // api.post('achievedcircuit', {
+        //     id_circuit: circuit.id_circuit,
+        //     statut_circuit: 1,
+        //     version: circuit.version,
+        //     id_step: null,
+        //     score: score,
+        //     max_score: maxScore,
+            
+
+        // })
+        navigate('Home');
+    }
 
     return (
         <View style={styles.container}>
             <Text style={styles.text}>Bravo.</Text>
+            <Text style={styles.text}>Vous avez {score} points.</Text>
+            { score < maxScore &&
+                <Text style={styles.text}>Mais vous auriez pu avoir {maxScore} points.</Text>
+            }
             <TouchableOpacity
                 style={styles.button}
-                onPress={() => navigate('Home')}
+                onPress={finish}
                 activeOpacity={0.8}
             >
                 <Text style={styles.textButton}>Revenir sur la carte</Text>
@@ -31,7 +63,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        fontSize: 45
+        fontSize: 35
     },
     button: {
         backgroundColor: '#2c3e50',

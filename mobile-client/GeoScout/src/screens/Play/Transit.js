@@ -10,6 +10,7 @@ import {
     Dimensions
 } from  'react-native';
 import { Location, TaskManager } from 'expo';
+import { SafeAreaView } from 'react-navigation';
 import HTML from 'react-native-render-html';
 
 // Nom de la variable dans AsyncStorage 
@@ -20,10 +21,10 @@ const DETECT_STEP = 'step-location-detection_task';
 class Transit extends React.Component {
     state = {}
     componentDidMount() {
-        const { circuit, step: stepNumber } = this.props.navigation.state.params;
+        const { circuit, step: stepNumber, score, maxScore } = this.props.navigation.state.params;
         const step = circuit.Steps[stepNumber];
         if (step){
-            //if (step.validation) {
+            if (step.validation) {
                 Location.startGeofencingAsync(DETECT_STEP, [
                     {
                         latitude: step.latitude,
@@ -34,10 +35,10 @@ class Transit extends React.Component {
                     }
                 ]);
                 this.setState({ interval: setInterval(this.enterStepLocation, 1000) });
-            //}
+            }
         }
         else {
-            this.props.navigation.navigate('Finish', { circuit });
+            this.props.navigation.navigate('Finish', { circuit, score, maxScore });
         }
         
     }
@@ -83,12 +84,13 @@ class Transit extends React.Component {
                     params: {
                         circuit,
                         step,
-                        score
+                        score,
+                        maxScore
                     }
                 }
             }
         } = this.props;
-        navigate('Etape', { circuit, step, score });
+        navigate('Etape', { circuit, step, score, maxScore });
     }
 
     componentWillUnmount() {
@@ -113,7 +115,7 @@ class Transit extends React.Component {
             return (
                 //<View style={styles.container}>
                 <>
-                    <View style={Object.assign({},styles.containerTransit, styles.container)}>
+                    <SafeAreaView style={Object.assign({},styles.containerTransit, styles.container)}>
                         <Text 
                             style={styles.title}
                         >Transit vers {
@@ -125,20 +127,22 @@ class Transit extends React.Component {
                             {/* <HTML html={step.instruction} imagesMaxWidth={Dimensions.get('window').width} /> */}
                             <Text style={styles.description}>{step.instruction}</Text>
                         </ScrollView>
-                    </View>
-                    <View style={Object.assign({},styles.containerButton, styles.container)}>
-                        {step.validation ? 
+                    </SafeAreaView>
+                    <SafeAreaView style={Object.assign({},styles.containerButton, styles.container)}>
+                        { step.validation ?
+                            <Text style={Object.assign({},styles.description, styles.detection)}>
+                                Détection automatique de votre position
+                            </Text>
+                        :
                             <TouchableOpacity
                                 onPress={this.goToStep}
                                 activeOpacity={0.8}
                                 style={styles.button}
                             >
                                 <Text style={styles.textButton}>Je suis arrivé</Text>
-                            </TouchableOpacity>
-                        :
-                            <Text style={styles.description}>Détection automatique de votre position</Text>
+                            </TouchableOpacity>  
                         }
-                    </View>
+                    </SafeAreaView>
                 </>
                 //</View>
             );
@@ -186,6 +190,9 @@ const styles = StyleSheet.create({
     description: {
         color: 'white',
         fontSize: 22
+    },
+    detection: {
+        textAlign: 'center'
     },
     button: {
         backgroundColor: '#2c3e50',

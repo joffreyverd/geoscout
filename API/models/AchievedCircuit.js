@@ -8,7 +8,8 @@ module.exports = (sequelize,DataTypes) =>
             max_score : {type : DataTypes.INTEGER, allowNull : true}, 
             statut_circuit : {type : DataTypes.ENUM('0','1','2'), allowNull : true},      
             version : {type : DataTypes.TINYINT, allowNull : true},
-            achievedDate : {type : DataTypes.DATE, allowNull : true}
+            achievedDate : {type : DataTypes.DATE, allowNull : true},
+            achievedTime :  {type : DataTypes.INTEGER, allowNull : true}, 
         },
 
         {createdAt: false, updatedAt: false}

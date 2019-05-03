@@ -12,45 +12,79 @@ import {
     Tile,
     ListItem
 } from 'react-native-elements';
+import { SafeAreaView } from 'react-navigation';
+
+import storage from '../../config/asyncStorageToken';
+import api from '../../config/httpMethods';
 
 class Me extends Component {
+    state = {}
+
+    componentDidMount() {
+        storage.getTokenAsyncStorage().then((token) => {
+            if (token) {
+                api.get('whoami').then(user => this.setState({ user }) )
+            } else {
+                this.props.navigation.navigate('Auth');
+            }
+        });
+    }
     handleSettingsPress = () => {
         this.props.navigation.navigate('Settings');
     };
 
+    handleSignout = () => {
+        storage.removeTokenAsyncStorage().then(() => {
+            this.props.navigation.navigate('Auth');
+        })
+    }
     render() {
+        const { user } = this.state;
+        
         return (
-            <View style={styles.container}>
-                <ScrollView>
-                    <Tile
-                    //Faire une condition si il y a une image d'enregistré
-                    //imageSrc={'../../../utils/img/userAnonymous.png'}
-                    featured
-                    title={'Profil'}/>
+            user ?
+                <SafeAreaView style={styles.container}>
+                    <ScrollView>
+                        <Tile
+                            //Faire une condition si il y a une image d'enregistré
+                            //imageSrc={'../../../utils/img/userAnonymous.png'}
+                            featured
+                            title={'Profil'}/>
 
-                    <ListItem
-                    title="Nom"
-                    rightTitle={'Dupond'}
-                    hideChevron/>
-                    <ListItem
-                    title="Prénom"
-                    rightTitle={'Jacques'}
-                    hideChevron/>
-                    <ListItem
-                    title="Email"
-                    rightTitle={'jacques.dupond@mail.com'}
-                    hideChevron/>
-
+                        <ListItem
+                            title="Nom"
+                            rightTitle={user.lastname}
+                            hideChevron/>
+                        <ListItem
+                            title="Prénom"
+                            rightTitle={user.firstname}
+                            hideChevron/>
+                        <ListItem
+                            title="Email"
+                            rightTitle={user.email}
+                            hideChevron/>
+                    </ScrollView>
                     <TouchableOpacity
-                    style={styles.button}
-                    onPress={this.handleSettingsPress}
-                    activeOpacity={0.8}>
-                        <Text style={styles.textButton}>
-                            Paramètres
-                        </Text>
+                        style={styles.button}
+                        onPress={this.handleSettingsPress}
+                        activeOpacity={0.8}>
+                            <Text style={styles.textButton}>
+                                Paramètres
+                            </Text>
                     </TouchableOpacity>
-                </ScrollView>
-            </View>
+                    <TouchableOpacity
+                        style={Object.assign({},styles.button,{
+                            backgroundColor: '#c0392b'
+                        })}
+                        onPress={this.handleSignout}
+                        activeOpacity={0.8}>
+                            <Text style={styles.textButton}>
+                                Déconnexion
+                            </Text>
+                    </TouchableOpacity>
+                </SafeAreaView>
+            :
+                null
         );
     }
 }
@@ -68,7 +102,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2c3e50',
         borderRadius: 5,
         padding: 8,
-        marginBottom: 5,
+        marginBottom: 10,
         width: '90%',
         alignItems: 'center'
     },
