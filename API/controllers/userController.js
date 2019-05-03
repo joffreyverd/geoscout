@@ -1,4 +1,4 @@
-'use_strict';
+
 const db = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -23,6 +23,24 @@ module.exports =
 			return res.status(201).send({token :jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400}),user : user});
 		})
 		.catch(err => res.status(500).send(utils.messages.serverError))  
+	},
+
+	updateUser : (req,res) =>
+	{
+		db.User.findOne({where : {email : req.body.email}})
+		.then((user) => 
+		{
+			db.sequelize.transaction(t =>
+			{
+				user.email = req.body.email,
+				user.password = bcrypt.hashSync(req.body.password, 12),
+				user.firstname = req.body.firstname,
+				user.lastname = req.body.lastname;
+				user.save({transaction : t})
+				.then(res.sendStatus(204));
+			})
+		})
+		.catch((err) => res.status(500).send(utils.messages.serverError));
 	},
 
 	login : (req,res) =>
@@ -128,23 +146,56 @@ module.exports =
 		let id_user = utils.verifToken(req.headers['authorization']);
 		if(id_user)
 		{
-			db.User.findByPk(req.params.id_user)
-			.then(friend =>
+			if(id_user !== req.params.id_user)
 			{
-				if(!friend)
-					throw 'Error'
-				db.User.findByPk(id_user).then(user => {user.addRelation(friend,{through : {status : '0'}}); return user})
-				.then(user => friend.addRelation(user,{through : {status : '0'}}))
-				.catch(err => console.log(err))
-			})
-			.then(() => res.sendStatus(204))
-			.catch((err) => {console.log(err)});
+				db.User.findByPk(req.params.id_user)
+				.then(friend =>
+				{
+					if(!friend)
+						throw 'Error'
+					db.User.findByPk(id_user).then(user => 
+					{
+						user.getRelations({where : {id_user : req.params.id_user}})
+						.then(rels =>
+						{
+							if(!rels.length)
+							{
+								user.addRelation(friend,{through : {status : '0'}})
+								.then(user => friend.addRelation(user,{through : {status : '0'}}))
+							}
+								
+							else 
+								throw '';
+
+							//return user;
+						});
+					})
+					.then()
+					.catch(err => console.log(err))
+				})
+				.then(() => res.sendStatus(204))
+				.catch((err) => {console.log(err)});
+			}
+
+			else
+				res.sendStatus(403)
 		}
 		else
 			res.status(401).send(utils.messages.invalidToken); 
 	},
 
 	//////////////////////////////////////////////////////////
+
+	testRel : (req,res,next) =>
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
+		{
+			db.User.findByPk(id_user)
+			.then(user =>user.getRelations({where : {id_user : 37},attributes : ['id_user','firstname','lastname']}))
+			.then(rels => console.log(JSON.stringify(rels)))
+		}
+	},
 
 	answerRelation : (req,res) =>
 	{

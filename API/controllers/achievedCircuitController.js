@@ -6,7 +6,8 @@ module.exports=
 {
     createAchievement: (req,res,next) =>
     {
-        if (utils.verifToken(req.headers['authorization']))
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if (id_user)
         {
             let date = new Date();
             db.AchievedCircuit.create(
@@ -16,7 +17,7 @@ module.exports=
                 statut_circuit : req.body.statut_circuit,
                 version: req.body.version,
                 achievedDate: date,
-                id_user: req.body.id_user,
+                id_user: id_user,
                 id_circuit: req.body.id_circuit,
                 id_step: req.body.id_step
 
