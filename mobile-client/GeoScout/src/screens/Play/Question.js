@@ -4,12 +4,12 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    Dimensions,
+    //Dimensions,
     ScrollView,
     StyleSheet,
     Alert
 } from 'react-native';
-import HTML from 'react-native-render-html';
+//import HTML from 'react-native-render-html';
 
 class Question extends React.Component {
     state = {

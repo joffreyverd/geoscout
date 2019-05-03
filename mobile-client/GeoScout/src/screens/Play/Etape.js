@@ -13,7 +13,7 @@ class Etape extends React.Component {
     /**
      * Navigue vers le transit de l'étape suivante
      */
-    nextStep = (scoreWin = 0, maxScoreWin) => {
+    nextStep = (scoreWin, maxScoreWin) => {
         const { 
             navigation: {
                 navigate,

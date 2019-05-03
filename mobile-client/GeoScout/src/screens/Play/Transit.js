@@ -1,17 +1,16 @@
 import React from 'react';
 import {
-    View,
     Text,
     TouchableOpacity,
     AsyncStorage,
     Alert,
     StyleSheet,
     ScrollView,
-    Dimensions
+    //Dimensions
 } from  'react-native';
 import { Location, TaskManager } from 'expo';
 import { SafeAreaView } from 'react-navigation';
-import HTML from 'react-native-render-html';
+//import HTML from 'react-native-render-html';
 
 // Nom de la variable dans AsyncStorage 
 const DETECTED = 'stepDetected';

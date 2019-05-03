@@ -5,8 +5,7 @@ import {
     ScrollView,
     Text,
     TouchableOpacity,
-    StyleSheet,
-    View
+    StyleSheet
 } from 'react-native';
 import {
     Tile,

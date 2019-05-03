@@ -5,8 +5,7 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    Image,
-    TouchableWithoutFeedback
+    Image
 } from 'react-native';
 import { Location } from 'expo';
 import { Icon } from 'react-native-elements';
