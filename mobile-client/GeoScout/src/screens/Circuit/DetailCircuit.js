@@ -18,7 +18,6 @@ export default class DetailCircuit extends React.Component {
         const { name, description, id_circuit } = this.props.navigation.state.params;
         return (
             <SafeAreaView style={styles.container}>
-            {console.log(this.props.navigation.state.params)}
                 <Text style={styles.title}>{name}</Text>
                 <ScrollView style={{ flex: 1 }}>
                     <HTML html={description} imagesMaxWidth={Dimensions.get('window').width} />

@@ -24,17 +24,15 @@ export default function Finish(props) {
     } = props;
 
     const finish = () => {
-        // TODO: Envoie de la requete achievedCircuit
-        // api.post('achievedcircuit', {
-        //     id_circuit: circuit.id_circuit,
-        //     statut_circuit: 1,
-        //     version: circuit.version,
-        //     id_step: null,
-        //     score: score,
-        //     max_score: maxScore,
-            
-
-        // })
+        // Envoie de la requete achievedCircuit
+        api.post('achievedcircuit', {
+            id_circuit: circuit.id_circuit,
+            statut_circuit: 1,
+            version: circuit.version,
+            id_step: null,
+            score: score,
+            max_score: maxScore
+        })
         navigate('Home');
     }
 

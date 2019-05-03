@@ -91,8 +91,6 @@ const PlaySwitch = createSwitchNavigator(
         Transit: Transit,
         EtapeStack: EtapeStack,
         Finish: Finish
-    }, {
-        headerMode: 'none'
     }
 )
 
