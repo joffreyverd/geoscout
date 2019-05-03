@@ -15,6 +15,7 @@ app.use(cors())
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname, { dotfiles: 'allow' } ));
+app.use(express.static(path.join(path.join(path.dirname(process.execPath)+'/images'))));
 app.use(express.static(path.join(__dirname + '/build')));
 require('./routes/routes')(app);
 

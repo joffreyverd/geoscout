@@ -1,4 +1,4 @@
-'use_strict';
+
 const db = require('../models')
 const utils = require('./utils');
 const Promise = require('bluebird')
