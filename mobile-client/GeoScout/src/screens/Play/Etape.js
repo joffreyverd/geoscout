@@ -9,7 +9,12 @@ import {
 } from  'react-native';
 import HTML from 'react-native-render-html';
 
+import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
+
 class Etape extends React.Component {
+    state = {
+        menuOpen: false
+    }
     /**
      * Navigue vers le transit de l'étape suivante
      */
@@ -42,18 +47,34 @@ class Etape extends React.Component {
                 state: { 
                     params: {
                         circuit,
-                        step: stepNumber
+                        step: stepNumber,
+                        score,
+                        maxScore
                     }
                 }
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
+        const { menuOpen } = this.state;
+
         return (
-            <>
+            <PlayDrawerMenu 
+                isOpen={menuOpen}
+                toggle={menuOpen => this.setState({ menuOpen })}
+                navigate={navigate}
+                circuit={{
+                    id_circuit: circuit.id_circuit,
+                    id_step: step.id_step,
+                    version: circuit.version
+                }}
+                score={score}
+                maxScore={maxScore}
+            >
+                <PlayHeader pressMenu={() => this.setState({ menuOpen: true })} />
                 <View style={Object.assign({},styles.containerStep,styles.container)}>
                     <Text style={styles.title}>{step.name}</Text>
-                    <ScrollView style={{ flex: 1, color: 'white' }}>
-                        <HTML html={step.description} imagesMaxWidth={Dimensions.get('window').width} />
+                    <ScrollView style={{ flex: 1 }}>
+                        {step.description && <HTML html={step.description} imagesMaxWidth={Dimensions.get('window').width} />}
                     </ScrollView>
                 </View>
                 <View style={Object.assign({},styles.containerButton,styles.container)}>
@@ -77,7 +98,7 @@ class Etape extends React.Component {
                         <Text style={styles.textButton}>Passer cette étape</Text>
                     </TouchableOpacity>
                 </View>
-            </>
+            </PlayDrawerMenu>
         )
     }
 }
@@ -86,7 +107,7 @@ export default Etape;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#1abc9c',
+        backgroundColor: 'white',
         justifyContent: 'center',
         padding: 20
     },  
@@ -98,14 +119,14 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        color: 'white',
+        color: '#1abc9c',
         fontSize: 28,
         marginTop: 30,
         marginBottom: 30,
         fontWeight: 'bold'
     },
     description: {
-        color: 'white',
+        color: 'black',
         fontSize: 22
     },
     button: {

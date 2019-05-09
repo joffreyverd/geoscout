@@ -82,8 +82,8 @@ const EtapeStack = createStackNavigator(
         Etape: Etape,
         Question: Question
     }, {
-        headerMode: 'none',
-        initialRouteName: 'Etape'
+        initialRouteName: 'Etape',
+        headerMode: 'none'
     }
 );
 
