@@ -3,14 +3,14 @@ const db = require('../models');
 const utils = require('./utils');
 module.exports = 
 {
-    circuit : (req,res,next) => 
+    circuit : (req,res) => 
     {
         db.Circuit.findByPk(req.params.id_circuit,{attributes : ['name','description','duration','need_internet','level']})
         .then((circuit) => res.json(circuit))
         .catch((err) => {if(err) res.status(500).send(utils.messages.invalidToken)});
     },
 
-    downloadCircuit : (req,res,next) =>
+    downloadCircuit : (req,res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
@@ -41,7 +41,7 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    nearbyCircuits : (req,res,next) =>
+    nearbyCircuits : (req,res) =>
     {
         db.Step.findAll({where : {order : 0}})
         .then((steps) =>
@@ -62,6 +62,9 @@ module.exports =
                                 model : db.Step,
                                 where : {order: 0},
                                 attributes : ['latitude','longitude']
+                            },
+                            {
+                                model : db.Evaluation
                             }
                         ]
                     });
@@ -73,20 +76,38 @@ module.exports =
         .then(circuits =>
         {
             let c = [];
-            circuits.map(circuit => 
+            let count = 0;
+            let currentCircuit = null;
+            circuits.map((circuit) => 
             {
                 if(circuit)
-                    c.push(circuit)
+                {
+                    currentCircuit = circuit.toJSON();
+                    note = 0;
+                    count = 0;
+                    currentCircuit.Evaluations.map(eval =>
+                    {
+                        note+= eval.stars;
+                        count++;
+                    });
+                    if(count)
+                        currentCircuit.note = Math.round( (note / count) * 10 ) / 10;
+                    
+                    else
+                        currentCircuit.note = 0;
+
+                    c.push(currentCircuit)   
+                }     
             });
 
             res.status(201).send(c)
         })
-        .catch((err) => {if (err) res.status(500).send(utils.messages.serverError)});
+        .catch((err) => console.log(err));
     },
 
     //////////////////////////////////////////////////////////
 
-    circuits : (req,res,next) => 
+    circuits : (req,res) => 
     {
         db.Circuit.findAll()
         .then(circuits => res.status(200).send(circuits))
@@ -95,7 +116,7 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    myCircuits : (req,res,next) => 
+    myCircuits : (req,res) => 
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
@@ -110,7 +131,7 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    createCircuit : (req,res,next) =>
+    createCircuit : (req,res) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
@@ -142,7 +163,7 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    publicationCircuit : (req,res,next) =>
+    publicationCircuit : (req,res) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
@@ -161,13 +182,13 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    deleteCircuit : (req,res,next) =>
+    deleteCircuit : (req,res) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
             db.Circuit.destroy({where : {id_circuit : req.body.id_circuit}})
-            .then(a => res.sendStatus(204))
+            .then(res.sendStatus(204))
             .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else
@@ -176,13 +197,13 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    publishedCircuits : (req,res,next) =>
+    publishedCircuits : (req,res) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
             db.Circuit.findAll({where : {published : true}})
-            .then(a => res.sendStatus(200))
+            .then(res.sendStatus(200))
             .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
         }
         else

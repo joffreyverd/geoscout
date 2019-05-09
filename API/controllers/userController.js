@@ -146,6 +146,7 @@ module.exports =
 		let id_user = utils.verifToken(req.headers['authorization']);
 		if(id_user)
 		{
+			console.log(id_user + ' ' + req.params.id_user)
 			if(id_user !== req.params.id_user)
 			{
 				db.User.findByPk(req.params.id_user)
@@ -160,14 +161,12 @@ module.exports =
 						{
 							if(!rels.length)
 							{
-								user.addRelation(friend,{through : {status : '0'}})
+								user.addRelation(friend.id_user,{through : {status : '0'}})
 								.then(user => friend.addRelation(user,{through : {status : '0'}}))
 							}
 								
 							else 
 								throw '';
-
-							//return user;
 						});
 					})
 					.then()
