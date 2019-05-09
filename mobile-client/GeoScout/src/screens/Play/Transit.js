@@ -12,14 +12,20 @@ import { Location, TaskManager } from 'expo';
 import { SafeAreaView } from 'react-navigation';
 //import HTML from 'react-native-render-html';
 
+import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu'
+
 // Nom de la variable dans AsyncStorage 
 const DETECTED = 'stepDetected';
 
 const DETECT_STEP = 'step-location-detection_task';
 
 class Transit extends React.Component {
-    state = {}
+
+    state = {
+        menuOpen: false
+    }
     componentDidMount() {
+
         const { circuit, step: stepNumber, score, maxScore } = this.props.navigation.state.params;
         const step = circuit.Steps[stepNumber];
         if (step){
@@ -39,7 +45,6 @@ class Transit extends React.Component {
         else {
             this.props.navigation.navigate('Finish', { circuit, score, maxScore });
         }
-        
     }
 
     enterStepLocation = () => {
@@ -101,19 +106,36 @@ class Transit extends React.Component {
     render() {
         const { 
             navigation: {
+                navigate,
                 state: { 
                     params: {
                         circuit,
-                        step: stepNumber
+                        step: stepNumber,
+                        score,
+                        maxScore
                     }
                 }
             }
         } = this.props;
+        const { menuOpen } = this.state;
         const step = circuit.Steps[stepNumber];
-        if(step) {
+
+
+        if (step) {
             return (
-                //<View style={styles.container}>
-                <>
+                <PlayDrawerMenu
+                    isOpen={menuOpen}
+                    toggle={menuOpen => this.setState({ menuOpen })}
+                    navigate={navigate}
+                    circuit={{
+                        id_circuit: circuit.id_circuit,
+                        id_step: step.id_step,
+                        version: circuit.version
+                    }}
+                    score={score}
+                    maxScore={maxScore}
+                >
+                    <PlayHeader pressMenu={() => this.setState({ menuOpen: true})} />
                     <SafeAreaView style={Object.assign({},styles.containerTransit, styles.container)}>
                         <Text 
                             style={styles.title}
@@ -142,8 +164,7 @@ class Transit extends React.Component {
                             </TouchableOpacity>  
                         }
                     </SafeAreaView>
-                </>
-                //</View>
+                </PlayDrawerMenu>
             );
         } else {
             return null;
@@ -168,7 +189,7 @@ export default Transit;
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#1abc9c',
+        backgroundColor: 'white',
         justifyContent: 'center',
         padding: 20
     },  
@@ -180,14 +201,14 @@ const styles = StyleSheet.create({
     },
     title: {
         textAlign: 'center',
-        color: 'white',
+        color: '#1abc9c',
         fontSize: 28,
         marginTop: 30,
         marginBottom: 30,
         fontWeight: 'bold'
     },
     description: {
-        color: 'white',
+        color: 'black',
         fontSize: 22
     },
     detection: {
