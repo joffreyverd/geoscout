@@ -543,6 +543,13 @@ h1 {
 
   .name-rate > h3 {
     color: #004C3D;
+    transition: .2s;
+  }
+
+  .name-rate > h3:hover {
+    cursor: pointer;
+    color: #1abc9c;
+    transition: .2s;
   }
   
   .opinion-wrapper > p {

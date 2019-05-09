@@ -9,13 +9,13 @@ class OpinionListItem extends Component {
 
     render() {
 
-        const { stars, comment, name } = this.props;
+        const { stars, comment, name, id_circuit, history } = this.props;
 
         return (
             <>
                 <div className='opinion-wrapper'>
                     <div className='name-rate'>
-                        <h3>{name}</h3>
+                        <h3 onClick={() => history.push(`detail/${id_circuit}`)}>{name}</h3>
                         <Rate disabled defaultValue={stars} />
                     </div>
                     <p>{`"${comment}"`}</p>

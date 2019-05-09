@@ -53,7 +53,7 @@ export default class Account extends Component {
                 currentComponent = (<RelationsFeed relations={Relations} />);
                 break;
             case 'edition':
-                currentComponent = (<ProfilEdition />);
+                currentComponent = (<ProfilEdition user={user} />);
                 break;
             default:
                 currentComponent = (<UserFeed />);
