@@ -8,12 +8,11 @@ class BasicInformations extends Component {
     render() {
 
         const { user } = this.props;
-        // {`published ${user.firstname}`}
 
         return (
             <>
                 <div className='basic-informations-wrapper'>
-                    <h2>{`${user.firstname} ${user.lastname}`}</h2>
+                    <h2> {`${user.firstname} ${user.lastname}`}</h2>
                     <p>{user.email}</p>
                     <p>Strasbourg</p>
                     <p>Inscrit depuis Mai 2017</p>

@@ -47,35 +47,45 @@ class CircuitListItem extends Component {
                 break;
         }
 
+        const nameOverview = (name != null) && name.length <= 20 ? name.substring(0, 20) : `${name.substring(0, 20)}...`;
         const overview = (description != null) && `${description.replace(/<(.|\n)*?>/g, '').substring(0, 50)}...`;
 
         return (
             <>
                 <li
                     className='list-item'
-                    onClick={() => (onHome ? history.push(`detail/${id_circuit}`) : history.push(`circuit/${id_circuit}`))}
+                    onClick={() => history.push(`detail/${id_circuit}`)}
                 >
 
-                    <h3 className='item-name'>{name}</h3>
+                    <h3 className='item-name'>{nameOverview}</h3>
 
                     {overview}
 
                     {(length && length > 0 && length !== null) ?
                         <p className='bold-info-circuit'>{length} km</p>
                         :
-                        <p className='bold-info-circuit'>- 1km</p>
+                        <p className='bold-info-circuit'>1km</p>
                     }
 
                     {(duration && length > 0 && duration !== null) ?
                         <p className='bold-info-circuit'>{duration && `${duration} heures`}</p>
                         :
-                        <p className='bold-info-circuit'>- 1heure</p>
+                        <p className='bold-info-circuit'>1heure</p>
                     }
 
-                    <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
-
                     {!onHome &&
+
                         <>
+                            <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
+                            <p
+                                className='edit-circuit-button'
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    history.push(`circuit/${id_circuit}`);
+                                }}
+                            >Editer
+                            </p>
+
                             <Tooltip
                                 placement='top'
                                 isOpen={tooltipPublicationOpen}

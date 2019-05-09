@@ -7,7 +7,7 @@
       "host": "154.49.211.218",
       "dialect": "mysql",
       "timezone": "+02:00",
-      "logging": false
+      "logging": true
     },
     "production": {
       "username": "root",

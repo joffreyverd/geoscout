@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Icon } from 'antd';
+import 'antd/dist/antd.css';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+import PreviewModal from './PreviewModal';
+
 class UpdateCircuitModal extends Component {
 
     state = {
+        previewIsOpen: false,
         name: '',
         description: '',
         length: '',
@@ -80,8 +85,14 @@ class UpdateCircuitModal extends Component {
             .catch(() => console.log('Oups, une erreur s\'est produite'));
     }
 
+    displayPreviewModal = () => {
+        this.setState(previousState => ({
+            previewIsOpen: !previousState.previewIsOpen,
+        }));
+    }
+
     render() {
-        const { name, description, length, duration } = this.state;
+        const { name, description, length, duration, previewIsOpen } = this.state;
         const { show, displayUpdateCircuit } = this.props;
 
         return (
@@ -89,6 +100,7 @@ class UpdateCircuitModal extends Component {
                 <div className={show ? 'update-circuit' : 'hidden-update-circuit'}>
                     <div className='update-title'>
                         <h3>Modification du circuit</h3>
+                        <Icon type='close' onClick={displayUpdateCircuit} className='close-icon' />
                     </div>
                     <Form className='update-form'>
                         <FormGroup>
@@ -130,19 +142,26 @@ class UpdateCircuitModal extends Component {
 
                         <div className='update-buttons'>
                             <Button
-                                color='info'
-                                onClick={this.handleSubmit}
-                            >Modifier
+                                color='warning'
+                                onClick={this.displayPreviewModal}
+                            >Preview
                             </Button>
                             <Button
-                                color='secondary'
-                                onClick={displayUpdateCircuit}
-                            >Annuler
+                                color='success'
+                                onClick={this.handleSubmit}
+                            >Valider
                             </Button>
                         </div>
 
                     </Form>
                 </div>
+
+                <PreviewModal
+                    previewIsOpen={previewIsOpen}
+                    displayPreviewModal={this.displayPreviewModal}
+                    description={description}
+                />
+
             </>
         );
     }

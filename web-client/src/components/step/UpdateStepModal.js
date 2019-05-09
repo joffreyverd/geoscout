@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { Checkbox } from 'antd';
+import { Checkbox, Icon } from 'antd';
 import 'antd/dist/antd.css';
 
 import ReactQuill from 'react-quill';
@@ -128,6 +128,7 @@ class UpdateStepModal extends Component {
                 <div className={show ? 'update-step' : 'hidden-update-step'}>
                     <div className='update-title'>
                         <h3>{'Modification de l\'étape'}</h3>
+                        <Icon type='close' onClick={displayUpdateStep} className='close-icon' />
                     </div>
                     <Form className='update-form' onSubmit={e => e.preventDefault()}>
                         <FormGroup>
@@ -177,19 +178,14 @@ class UpdateStepModal extends Component {
                         <div className='update-buttons'>
                             <Button
                                 type='submit'
-                                color='info'
+                                color='success'
                                 onClick={this.handleSubmit}
-                            >Modifier
+                            >Valider
                             </Button>
                             <Button
                                 color='danger'
                                 onClick={() => removeStep(id_step)}
                             >Supprimer
-                            </Button>
-                            <Button
-                                color='secondary'
-                                onClick={displayUpdateStep}
-                            >Annuler
                             </Button>
                         </div>
 

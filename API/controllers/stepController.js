@@ -243,7 +243,6 @@ module.exports =
                             else
                             {
                                 let match = {};
-                                console.log(req.body.step.Questions)
                                 step.Questions.map(question => 
                                 {
                                     match = {};
