@@ -47,6 +47,7 @@ class CircuitListItem extends Component {
                 break;
         }
 
+        const nameOverview = (name != null) && name.length <= 20 ? name.substring(0, 20) : `${name.substring(0, 20)}...`;
         const overview = (description != null) && `${description.replace(/<(.|\n)*?>/g, '').substring(0, 50)}...`;
 
         return (
@@ -56,7 +57,7 @@ class CircuitListItem extends Component {
                     onClick={() => (onHome ? history.push(`detail/${id_circuit}`) : history.push(`circuit/${id_circuit}`))}
                 >
 
-                    <h3 className='item-name'>{name}</h3>
+                    <h3 className='item-name'>{nameOverview}</h3>
 
                     {overview}
 
@@ -72,10 +73,10 @@ class CircuitListItem extends Component {
                         <p className='bold-info-circuit'>- 1heure</p>
                     }
 
-                    <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
-
                     {!onHome &&
+
                         <>
+                            <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
                             <Tooltip
                                 placement='top'
                                 isOpen={tooltipPublicationOpen}
