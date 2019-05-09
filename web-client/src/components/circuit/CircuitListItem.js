@@ -29,7 +29,7 @@ class CircuitListItem extends Component {
     render() {
 
         const {
-            id_circuit, name, description, length, onHome,
+            id_circuit, name, description, length, isAdmin,
             duration, version, published, level, history,
         } = this.props;
         const { tooltipPublicationOpen, tooltipLevelOpen } = this.state;
@@ -73,7 +73,7 @@ class CircuitListItem extends Component {
                         <p className='bold-info-circuit'>1heure</p>
                     }
 
-                    {!onHome &&
+                    {isAdmin === 'created' &&
 
                         <>
                             <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>

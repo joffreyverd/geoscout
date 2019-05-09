@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 
 import CircuitsView from './CircuitsView';
 
-export default class Achievement extends Component {
+export default class Circuits extends Component {
 
     state = {
-        isAdmin: 'achieved',
+        isAdmin: 'created',
     }
 
     render() {
