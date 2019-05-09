@@ -14,6 +14,12 @@ const Relations = [
     { id_user: 3, firstname: 'Joffrey', lastname: 'Verd', profil_picture: 'blablabla' },
 ];
 
+const Opinions = [
+    { id: 1, id_circuit: 36, name: 'Madrid', stars: 4, comment: 'loooool so fun' },
+    { id: 2, id_circuit: 37, name: 'Circuit Démo', stars: 3, comment: 'why not' },
+    { id: 3, id_circuit: 53, name: 'Mexico', stars: 2, comment: 'noob circuit' },
+];
+
 export default class Account extends Component {
 
     state = {
@@ -41,7 +47,7 @@ export default class Account extends Component {
         let currentComponent;
         switch (currentTab) {
             case 'opinions':
-                currentComponent = (<OpinionFeed />);
+                currentComponent = (<OpinionFeed opinions={Opinions} />);
                 break;
             case 'relations':
                 currentComponent = (<RelationsFeed relations={Relations} />);

@@ -17,7 +17,6 @@ class RelationsFeed extends Component {
                     <h2>Relations</h2>
                     <RelationsList items={relations} />
                 </div>
-
             </>
         );
     }

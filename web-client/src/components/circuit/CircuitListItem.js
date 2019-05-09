@@ -54,7 +54,7 @@ class CircuitListItem extends Component {
             <>
                 <li
                     className='list-item'
-                    onClick={() => (onHome ? history.push(`detail/${id_circuit}`) : history.push(`circuit/${id_circuit}`))}
+                    onClick={() => history.push(`detail/${id_circuit}`)}
                 >
 
                     <h3 className='item-name'>{nameOverview}</h3>
@@ -64,19 +64,28 @@ class CircuitListItem extends Component {
                     {(length && length > 0 && length !== null) ?
                         <p className='bold-info-circuit'>{length} km</p>
                         :
-                        <p className='bold-info-circuit'>- 1km</p>
+                        <p className='bold-info-circuit'>1km</p>
                     }
 
                     {(duration && length > 0 && duration !== null) ?
                         <p className='bold-info-circuit'>{duration && `${duration} heures`}</p>
                         :
-                        <p className='bold-info-circuit'>- 1heure</p>
+                        <p className='bold-info-circuit'>1heure</p>
                     }
 
                     {!onHome &&
 
                         <>
                             <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
+                            <p
+                                className='edit-circuit-button'
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    history.push(`circuit/${id_circuit}`);
+                                }}
+                            >Editer
+                            </p>
+
                             <Tooltip
                                 placement='top'
                                 isOpen={tooltipPublicationOpen}
