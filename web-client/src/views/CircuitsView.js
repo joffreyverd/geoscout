@@ -26,10 +26,24 @@ export default class CircuitsView extends Component {
     }
 
     componentDidMount = () => {
-        const { onHome, circuits } = this.props;
-        if (onHome) {
+        const { isAdmin, circuits } = this.props;
+        if (isAdmin === 'home') {
             this.setState({
                 circuits: circuits,
+            });
+        }
+        if (isAdmin === 'achieved') {
+            api.get('achievedcircuit').then((data) => {
+                this.setState({ circuits: data });
+            }).catch(() => {
+                console.log(this.props);
+            });
+        }
+        if (isAdmin === 'favorites') {
+            api.get('favoritescircuit').then((data) => {
+                this.setState({ circuits: data });
+            }).catch(() => {
+                console.log(this.props);
             });
         } else {
             api.get('my-circuits').then((data) => {
@@ -42,63 +56,64 @@ export default class CircuitsView extends Component {
 
     render() {
         const { dropdownOpen, filter, circuits } = this.state;
-        const { onHome } = this.props;
+        const { isAdmin } = this.props;
         const showPublished = (filter === 'Publiés');
 
         return (
             <>
                 <div className='my-circuits-header'>
+                    {isAdmin === 'home' && <h1>Circuits environnants</h1>}
+                    {isAdmin === 'created' && <h1>Circuits crées</h1>}
+                    {isAdmin === 'achieved' && <h1>Circuits accomplis</h1>}
+                    {isAdmin === 'favorites' && <h1>Circuits favoris</h1>}
 
-                    {onHome
-                        ?
-                        <h1>Circuits environnants</h1>
+                    {isAdmin === 'created' &&
+                        <div className='header-buttons'>
 
-                        :
-                        <>
-                            <h1>Circuits créés</h1>
-
-                            <div className='header-buttons'>
-
-                                <ButtonDropdown
-                                    direction='left'
-                                    className='button-dropdown'
-                                    isOpen={dropdownOpen}
-                                    toggle={this.toggle}
-                                >
-                                    <DropdownToggle caret color='info'>{filter}</DropdownToggle>
-                                    <DropdownMenu>
-                                        <DropdownItem
-                                            name='Tous'
-                                            onClick={this.onFilterClick}
-                                        >Tous
-                                        </DropdownItem>
-                                        <DropdownItem
-                                            name='Publiés'
-                                            onClick={this.onFilterClick}
-                                        >Publiés
-                                        </DropdownItem>
-                                        <DropdownItem
-                                            name='Non-publiés'
-                                            onClick={this.onFilterClick}
-                                        >Non-publiés
-                                        </DropdownItem>
-                                    </DropdownMenu>
-                                </ButtonDropdown>
-                            </div>
-                        </>
+                            <ButtonDropdown
+                                direction='left'
+                                className='button-dropdown'
+                                isOpen={dropdownOpen}
+                                toggle={this.toggle}
+                            >
+                                <DropdownToggle
+                                    caret
+                                    color='info'
+                                >{filter}
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem
+                                        name='Tous'
+                                        onClick={this.onFilterClick}
+                                    >Tous
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        name='Publiés'
+                                        onClick={this.onFilterClick}
+                                    >Publiés
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        name='Non-publiés'
+                                        onClick={this.onFilterClick}
+                                    >Non-publiés
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </ButtonDropdown>
+                        </div>
                     }
-
                 </div>
+
                 {filter === 'Tous' ?
                     <CreatedCircuitList
                         items={circuits}
-                        onHome={onHome}
+                        isAdmin={isAdmin}
                     />
                     :
                     <CreatedCircuitList
                         items={circuits.filter(element => element.published === (showPublished))}
                     />
                 }
+
             </>
         );
     }

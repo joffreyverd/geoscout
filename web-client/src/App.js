@@ -8,7 +8,7 @@ import Navigation from './components/Navigation';
 
 import Home from './views/Home';
 import Account from './views/Account';
-import CircuitsView from './views/CircuitsView';
+import Circuits from './views/Circuits';
 import CircuitPublisher from './views/CircuitPublisher';
 import Achievement from './views/Achievement';
 import Todo from './views/Todo';
@@ -64,7 +64,7 @@ class App extends Component {
                 {isConnected ?
                     <>
                         <Route exact path='/account' render={props => <Account {...props} user={user} />} />
-                        <Route exact path='/circuits' component={CircuitsView} />
+                        <Route exact path='/circuits' component={Circuits} />
                         <Route exact path='/circuit/:id' component={CircuitPublisher} />
                         <Route exact path='/achievements' component={Achievement} />
                         <Route exact path='/todo' component={Todo} />

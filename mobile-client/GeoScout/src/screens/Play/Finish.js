@@ -8,22 +8,22 @@ import {
 import api from '../../config/httpMethods';
 
 
-export default function Finish(props) {
+export default class Finish extends React.Component {
 
-    const { 
-        navigation: { 
-            navigate,
-            state: {
-                params: {
-                    circuit,
-                    score,
-                    maxScore
+    finish = () => {
+        const { 
+            navigation: { 
+                navigate,
+                state: {
+                    params: {
+                        circuit,
+                        score,
+                        maxScore
+                    }
                 }
             }
-        }
-    } = props;
+        } = this.props;
 
-    const finish = () => {
         // Envoie de la requete achievedCircuit
         api.post('achievedcircuit', {
             id_circuit: circuit.id_circuit,
@@ -36,22 +36,35 @@ export default function Finish(props) {
         navigate('Home');
     }
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.text}>Bravo.</Text>
-            <Text style={styles.text}>Vous avez {score} points.</Text>
-            { score < maxScore &&
-                <Text style={styles.text}>Mais vous auriez pu avoir {maxScore} points.</Text>
+    render() {
+        const { 
+            navigation: { 
+                state: {
+                    params: {
+                        score,
+                        maxScore
+                    }
+                }
             }
-            <TouchableOpacity
-                style={styles.button}
-                onPress={finish}
-                activeOpacity={0.8}
-            >
-                <Text style={styles.textButton}>Revenir sur la carte</Text>
-            </TouchableOpacity>
-        </View>
-    );
+        } = this.props;
+
+        return (
+            <View style={styles.container}>
+                <Text style={styles.text}>Bravo.</Text>
+                <Text style={styles.text}>Vous avez {score} points.</Text>
+                { score < maxScore &&
+                    <Text style={styles.text}>Mais vous auriez pu avoir {maxScore} points.</Text>
+                }
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={this.finish}
+                    activeOpacity={0.8}
+                >
+                    <Text style={styles.textButton}>Revenir sur la carte</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({

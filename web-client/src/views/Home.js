@@ -10,7 +10,7 @@ export default class Home extends Component {
     state = {
         circuits: [],
         value: false,
-        onHome: true,
+        isAdmin: 'home',
         viewport: {
             width: '100%',
             height: window.innerHeight - 50,
@@ -70,7 +70,7 @@ export default class Home extends Component {
     }
 
     render() {
-        const { circuits, value, onHome, viewport, userPosition } = this.state;
+        const { circuits, value, isAdmin, viewport, userPosition } = this.state;
 
         return (
             <>
@@ -86,7 +86,7 @@ export default class Home extends Component {
                     />
                     :
                     <CircuitsView
-                        onHome={onHome}
+                        isAdmin={isAdmin}
                         circuits={circuits}
                     />
                 }

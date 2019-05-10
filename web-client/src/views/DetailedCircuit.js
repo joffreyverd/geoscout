@@ -23,7 +23,8 @@ export default class DetailedCircuit extends Component {
 
     render() {
 
-        const { name, description } = this.state.circuit;
+        const { name, description, id_circuit } = this.state.circuit;
+        const { history } = this.props;
 
         return (
             <>
@@ -46,7 +47,7 @@ export default class DetailedCircuit extends Component {
                     <div className='circuit-comments'>
                         <h2 className='comments-title'>Commentaires</h2>
                         <Comment
-                            author={<a href='http://copainsdavant.linternaute.com/p/stevy-palarski-20002480'>Stevy Palarski</a>}
+                            author='Stevy Palarski'
                             avatar={(
                                 <Avatar
                                     src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
