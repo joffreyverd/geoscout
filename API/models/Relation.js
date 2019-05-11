@@ -15,5 +15,10 @@ module.exports = (sequelize,DataTypes) =>
         }
     );
 
+    Relation.associate = (db) =>
+    {
+        Relation.belongsTo(db.User,{foreignKey : 'last_action_user_id', targetKey : 'id_user'})
+    }
+
     return Relation;
 }
