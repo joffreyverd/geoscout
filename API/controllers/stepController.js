@@ -4,13 +4,19 @@ const utils = require('./utils');
 const Promise = require('bluebird')
 module.exports = 
 {
-    stepCircuit : (req,res,next) => 
+    stepCircuit : async (req,res) => 
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Step.findAll({where : {id_circuit : req.params.id_circuit}, order: ['order']})
-            .then(step => res.status(200).send(step));
+            try
+            {
+                res.json(await db.Step.findAll({where : {id_circuit : req.params.id_circuit}, order: ['order']}));
+            }
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
@@ -18,11 +24,13 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    step: (req,res,next) => 
+    step: async (req,res) => 
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.findOne(
+            try
+            {
+                res.json(await db.Step.findOne(
                 {
                     where : {id_step : req.params.id_step},
                     attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
@@ -33,9 +41,13 @@ module.exports =
                             attributes : ['id_question','wording','response','type_of','points']
                         }
                     ]
-                }
-            )
-            .then(step => res.status(200).send(step))
+                }));
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
         }
         else
             res.status(401).send(utils.messages.invalidToken);  
@@ -43,14 +55,14 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    createStep : (req,res,next) =>
+    createStep : async (req,res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.count({where : {id_circuit : req.body.id_circuit}})
-            .then(count =>
+            try
             {
-                db.Step.create(
+                let count = await db.Step.count({where : {id_circuit : req.body.id_circuit}});
+                let step = await db.Step.create(
                 {
                     name : req.body.name,
                     latitude : req.body.latitude,
@@ -59,11 +71,17 @@ module.exports =
                     order : count,
                     instruction : req.body.instruction,
                     id_circuit : req.body.id_circuit
-                })
-                
-                .then((step) => {utils.evaluateDistance(req.body.id_circuit);return step})
-                .then(step =>res.status(201).send(step))
-            }).catch((err) => {if(err) res.sendStatus(500)});
+                });
+
+                await utils.evaluateDistance(req.body.id_circuit);
+
+                res.json(step);
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            } 
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
@@ -71,16 +89,16 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    changeOrder : (req,res,next) =>
+    changeOrder : async (req,res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}})
-            .then((steps) =>
+            try
             {
-                return db.sequelize.transaction(t=>
-                {
-                    return Promise.map(steps,step =>
+                let steps =  await db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}});
+                let t = await db.sequelize.transaction();
+                
+                const map = steps.map(async step => 
                     {
                         if(parseInt(step.order) === parseInt(req.body.previous))
                         {
@@ -94,13 +112,19 @@ module.exports =
                         {
                             step.order -= 1;
                         }
+    
+                        return await step.save({transaction: t});
+                    });
 
-                        return step.save({transaction: t});
-                    })
-                    .then(res.sendStatus(204))
-                    .catch((err) => {if(err)res.sendStatus(500)})    
-                })
-            });
+                await Promise.all(map);
+                await t.commit();
+                res.sendStatus(204);
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            } 
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
@@ -109,30 +133,30 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    addQuestionToStep : (req,res,next) =>
+    addQuestionToStep : async (req,res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Step.findByPk(req.body.id_step)
-            .then(step =>
+            try
             {
-                if(step)
-                {
-                    db.Question.create(
+                let step = await db.Step.findByPk(req.body.id_step);
+                let t = await db.sequelize.transaction();
+                await db.Question.create(
                     {
                         wording : req.body.question,
                         response : req.body.response,
                         type_of : req.body.typeOf,
                         points : req.body.points,
                         id_step :  step.id_step
-                    })
-                    .then(question => res.status(201).send(question))
-                }
-                else
-                    throw 'err'
-                
-            })
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
+                    },{transaction : t});
+
+                await t.commit();
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }      
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
@@ -140,51 +164,43 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    deleteStep : (req, res, next) =>
+    deleteStep : async (req, res) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
 
-            db.Circuit.findOne(
+            try
             {
-                where : {id_circuit : req.params.id_circuit},
-                include :
-                [
+                let circuit = await db.Circuit.findOne(
                     {
-                        model : db.Step,
-                        where : {id_step : req.params.id_step}
-                    }
-                ]
-            })
-            .then(circuit =>
-            {
+                        where : {id_circuit : req.params.id_circuit},
+                        include :
+                        [
+                            {
+                                model : db.Step,
+                                where : {id_step : req.params.id_step}
+                            }
+                        ]
+                    });
+
                 let order = circuit.Steps[0].order;
-                db.sequelize.transaction(t =>
+                let t = await db.sequelize.transaction()
+				await circuit.Steps[0].destroy({transaction : t});
+                let steps = await db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: req.params.id_circuit, order: {[db.sequelize.Op.gt]: order}}});
+                
+                const map = steps.map(async step => 
                 {
-                    return circuit.Steps[0].destroy({transaction : t})
-                })
-                      
-                return order
-            })
-            .then((order) =>
-            {
-                db.Step.findAll({attributes: ['id_step','order'], where : {id_circuit: req.params.id_circuit, order: {[db.sequelize.Op.gt]: order}}})
-                .then((steps)=>
-                {
-                    return db.sequelize.transaction(t=>
-                    {
-                        return Promise.map(steps,step =>
-                        {
-                            step.order-= 1;
-                            return step.save({transaction: t})
-                        })
-                        .then(utils.evaluateDistance(req.params.id_circuit))
-                        .then(res.sendStatus(204))
-                        .catch((err) => { if (err) res.sendStatus(500)})
-                    })
-                })
-            })
+                    step.order-= 1;
+                    return await step.save({transaction: t})
+                });
+
+                await Promise.all(map);
+                await t.commit();
+                res.sendStatus(204);
+            }
+           
+            catch{}
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
@@ -192,98 +208,98 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    updateStep : (req, res, next) =>
+    updateStep : async (req, res) =>
     {
         let id_user = utils.verifToken(req.headers['authorization']);
-        console.log(JSON.stringify(req.body.step));
         if(id_user)
         {
-            db.Step.findOne(
-            {
-                where : {id_step : req.params.id_step},
-                include : 
-                [
-                    {
-                        model : db.Question,
-                    }
-                ]
-            })
-            .then(step => 
-            {
-                db.Circuit.findByPk(step.id_circuit).then(circuit => 
-                {
-                    if(circuit.id_user === id_user) 
-                    {
+			try
+			{
+				let step = await db.Step.findOne(
+					{
+						where : {id_step : req.params.id_step},
+						include : 
+						[
+							{
+								model : db.Question,
+							}
+						]
+					});
+	
+				let circuit = await db.Circuit.findByPk(step.id_circuit);
+	
+				if(circuit.id_user === id_user)
+				{
+					let t = await db.sequelize.transaction();
+					step.description = req.body.step.description;
+					step.instruction = req.body.step.instruction;
+					step.latitude = req.body.step.latitude;
+					step.longitude = req.body.step.longitude;
+					step.name = req.body.step.name;
+					step.order = req.body.step.order;
+					step.validation = req.body.step.validation
+					if(!step.Questions.length)
+					{
+						let map = req.body.step.Questions.map(async question =>
+						{
+							return await db.Question.create(
+							{
+								wording : question.wording,
+								response : question.response,
+								type_of : question.type_of,
+								points : question.points,
+								id_step : step.id_step
+							});
+						});
+	
+						await Promise.all(map);
+					}
+	
+					else
+					{
+						
+						let match = {};
+						let map = step.Questions.map(async question => 
+						{
+							match = {};
+							match = req.body.step.Questions.find(e =>  e.id_question === question.id_question);
+							if(match)
+							{
+								
+								question.wording = match.wording;
+								question.response = match.response;
+								question.type_of = match.type_of;
+								question.points = match.points;
+								return await question.save({transaction : t});
+							}
+						});
+	
+						await Promise.all(map);
+	
+						map = req.body.step.Questions.map(async question_body =>
+						{	
+							if(!question_body.id_question)
+							{
+								return await db.Question.create(
+								{
+									wording : question_body.wording,
+									response : question_body.response,
+									type_of : question_body.type_of,
+									points : question_body.points,
+									id_step : step.id_step
+								},{transaction : t});
+							}
+						})
+					}
+					
+					await step.save({transaction : t});
+					await t.commit();
+					await utils.evaluateDistance(step.id_circuit);
+					res.sendStatus(204);
+				}
+			}
 
-                        db.sequelize.transaction(t =>
-                        {
-                            step.description = req.body.step.description;
-                            step.instruction = req.body.step.instruction;
-                            step.latitude = req.body.step.latitude;
-                            step.longitude = req.body.step.longitude;
-                            step.name = req.body.step.name;
-                            step.order = req.body.step.order;
-                            step.validation = req.body.step.validation
-
-                            if(!step.Questions.length)
-                            {
-                                req.body.step.Questions.map(question =>
-                                {
-                                    db.Question.create(
-                                    {
-                                        wording : question.wording,
-                                        response : question.response,
-                                        type_of : question.type_of,
-                                        points : question.points,
-                                        id_step : step.id_step
-                                    },{transaction : t});
-                                });
-                            }
-
-                            else
-                            {
-                                let match = {};
-                                step.Questions.map(question => 
-                                {
-                                    match = {};
-                                    match = req.body.step.Questions.find(e =>  e.id_question === question.id_question);
-                                    if(match)
-                                    {
-                                        
-                                        question.wording = match.wording;
-                                        question.response = match.response;
-                                        question.type_of = match.type_of;
-                                        question.points = match.points;
-                                        question.save({transaction : t});
-                                    }
-                                });
-
-                                req.body.step.Questions.map(question_body =>
-                                {
-                                   
-                                    if(!question_body.id_question)
-                                    {
-                                        db.Question.create(
-                                        {
-                                            wording : question_body.wording,
-                                            response : question_body.response,
-                                            type_of : question_body.type_of,
-                                            points : question_body.points,
-                                            id_step : step.id_step
-                                        },{transaction : t});
-                                    }
-                                })
-                            }
-
-                            return step.save({transaction : t})
- 
-                        })
-                        .then((step) => {utils.evaluateDistance(step.id_circuit);return step})
-                        .then(step =>  res.status(200).send(step));
-                    }
-                })
-            })
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)})
+			catch(err){console.log(err)}
         }
         else
             res.status(401).send(utils.messages.invalidToken); 
@@ -291,10 +307,14 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    updateQuestion : (req, res, next) =>
+    updateQuestion : (req, res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
+			try
+			{
+				let question = db.Question.findByPk(req.params.id_question)
+			}
             db.Question.findByPk(req.params.id_question).then(question => {
                 question.update(req.body).then(() => res.status(200).send(question));
             }).catch(() => {res.sendStatus(500)})
