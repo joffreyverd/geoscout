@@ -44,4 +44,5 @@ module.exports = function(app)
 
 	app.route('/download-user/:id_user').get(user.downloadUser);
 	app.route('/testRel').get(user.testRel)
+	app.post('/oof',circuit.test)
 }

@@ -118,7 +118,7 @@ module.exports =
 	},
 
 	//////////////////////////////////////////////////////////
-
+	
 	listRelations : (req,res) => 
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
@@ -161,8 +161,8 @@ module.exports =
 						{
 							if(!rels.length)
 							{
-								user.addRelation(friend.id_user,{through : {status : '0'}})
-								.then(user => friend.addRelation(user,{through : {status : '0'}}))
+								user.addRelation(friend.id_user,{through : {status : '0', last_action_user_id: user.id_user }})
+								.then(user => friend.addRelation(user,{through : {status : '0',last_action_user_id: user.id_user}}))
 							}
 								
 							else 
@@ -222,7 +222,7 @@ module.exports =
 						{
 							rel.destroy({transaction : t});
 						});
-					}
+					}	
 				});
 			})
 			

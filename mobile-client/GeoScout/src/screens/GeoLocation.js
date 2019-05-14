@@ -36,6 +36,7 @@ class GeoLocation extends React.Component{
                 latitude: 0,
                 longitude: 0
             },
+            mapStyle: 'standard',
             circuits: null,
             circuitReady: false
         }
@@ -47,13 +48,23 @@ class GeoLocation extends React.Component{
         }).catch((error) => console.log(error));
     }
 
-    getCircuits = () => {
-        const { markerPosition: { longitude, latitude } } = this.state;
-        const body = {
-            user_longitude: longitude,
-            user_latitude: latitude,
-            distance: 30,
-        };
+    getCircuits = (region) => {
+        const { markerPosition: { longitude, latitude } } = this.state; 
+        let body = null;       
+
+        if(region){
+            body = {
+                user_longitude: longitude,
+                user_latitude: latitude,
+                distance: 50,
+            };
+        }else{
+            body = {
+                user_longitude: region.longitude,
+                user_latitude: region.latitude,
+                distance: 50,
+            };
+        }
 
         api.post('circuit/nearby', body).then((data) => {
             this.setState({
@@ -130,10 +141,13 @@ class GeoLocation extends React.Component{
                     onPress={() => {
                         this.props.navigation.navigate('DetailCircuit', item);
                     }}>
-                            <Callout
-                            name={item.name}
-                            rate={2}
-                            />
+                        <Callout
+                        name={item.name}
+                        rate={2}
+                        distance={14}
+                        timeInHour={1}
+                        timeInMinute={30}
+                        difficulty={[1,0,1]}/>
                     </MapView.Callout>
                 </MapView.Marker>
             );
@@ -147,11 +161,38 @@ class GeoLocation extends React.Component{
                     <Text style={styles.errorText}>{this.state.error}</Text> 
                 :
                     (this.state.ready ? 
+                        <>
+                        <View style={styles.buttonMapChange}>
+                            <Icon
+                            name='satellite'
+                            type='material'
+                            size={12}
+                            color='#FFAE23'
+                            onPress={()=>{
+                                this.setState({
+                                    mapStyle: 'standard'
+                                });
+                            }}/>
+                            <Text>|</Text>
+                            <Icon
+                            name='landscape'
+                            type='material'
+                            size={12}
+                            color='#FFAE23'
+                            onPress={()=>{
+                                this.setState({
+                                    mapStyle: 'satellite'
+                                });
+                            }}/>
+                        </View>
                         <MapView 
                         style={styles.map}
+                        mapStyle={this.state.mapStyle}
                         region={this.state.initialPosition}
-                        customMapStyle={mapStyle}>
-                            <MapView.Marker coordinate={this.state.markerPosition}>
+                        customMapStyle={mapStyle}
+                        onRegionChangeComplete={this.getCircuits}>
+                            <MapView.Marker
+                            coordinate={this.state.markerPosition}>
                                 <View style={styles.radius}>
                                     <View style={styles.marker}/>
                                 </View>
@@ -160,6 +201,7 @@ class GeoLocation extends React.Component{
                                 this.displayNearbyCircuits()
                             }
                         </MapView>
+                        </>
                     :
                         <>
                             <Image
@@ -187,8 +229,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'rgba(0,112,255,0.3)',
         alignItems: 'center',
-        justifyContent: 'center',
-        
+        justifyContent: 'center'
     },
     marker: {
         height: 20,
@@ -222,6 +263,11 @@ const styles = StyleSheet.create({
         top: 0,
         bottom: 0,
         position: 'absolute'
+    },
+    buttonMapChange: {
+        position: 'absolute',
+        left: 10,
+        top: 20
     },
     modalText: {
         color: '#1abc9c',

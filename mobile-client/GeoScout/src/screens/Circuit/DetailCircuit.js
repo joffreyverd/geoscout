@@ -24,14 +24,14 @@ export default class DetailCircuit extends React.Component {
                 <TouchableOpacity style={styles.button}
                 onPress= {() => (
                     Alert.alert(
-                        'Circuit Télécharger',
-                        'Votre circuit a été télécharger.',
+                        'Hopla',
+                        'Jetzt geht\'s los',
                         [
                             {text: 'Retour', onPress: () => {this.props.navigation.navigate('Home');}, style: 'cancel'},
                             {text: 'Commencer à jouer', onPress: () => {
                                 api.get('download-circuit/'+ id_circuit).then((data) => {
                                     this.props.navigation.navigate('Start',{circuit: data});
-                                }).catch((error) => {
+                                }).catch(() => {
                                     Alert.alert(
                                         'Erreur',
                                         'Une erreur est survenue, merci de réessayer.',

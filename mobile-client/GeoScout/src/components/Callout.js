@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Image,
   StyleSheet,
   Text,
   View,
@@ -8,25 +7,31 @@ import {
 } from 'react-native';
 
 import { Icon } from 'react-native-elements';
-
-import Rate from '../components/Rate';
+import Rate from './Rate';
+import Difficulty from './Difficulty';
 
 const {width,height} = Dimensions.get('window')
 
-export default class Callout extends Component {
-  render() {
-    const { name, rate } = this.props;
-    return (
-        <View style={styles.container}>
-            <Text style={styles.name}>{name}</Text>
-            <Rate rate={rate}/>
-            <View>
-              <Text>14 Km</Text>
-              <Icon name='star-border' type='material' size={10} color='#FFAE23'/>
-            </View>
+export default function Callout(props){
+  const { name, rate, distance, timeInHour, timeInMinute, difficulty } = props;
+  const sizeIcon = 12;
+  return (
+    <View style={styles.container}>
+      <Text style={styles.name} numberOfLines={1}>{name}</Text>
+      <Rate rate={rate}/>
+      <View style={styles.inline}>
+        <View style={{marginRight: 10}}>
+          <Icon name='directions-walk' type='material' size={sizeIcon} color='#2c3e50'/>
+          <Text style={styles.item}>{distance}km</Text>
         </View>
-    );
-  }
+        <View style={{marginRight: 10}}>
+          <Icon name='access-time' type='material' size={sizeIcon} color='#2c3e50'/>
+          <Text style={styles.item}>{timeInHour}h{timeInMinute}m</Text>
+        </View>
+        <Difficulty difficulty={difficulty}/>
+      </View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -40,5 +45,15 @@ const styles = StyleSheet.create({
     color: '#1abc9c',
     fontSize: 18,
     fontWeight: 'bold'
+  },
+  item: {
+    color: '#95a5a6',
+    fontSize: 12
+  },
+  inline: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly'
   }
 });

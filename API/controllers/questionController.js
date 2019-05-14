@@ -3,22 +3,35 @@ const db = require('../models')
 const utils = require('./utils');
 module.exports = 
 {
-    question : (req,res,next) => 
+    question : async (req,res,next) => 
     {
-        db.Question.findAll()
-        .then((question) => res.json(question));
+        try
+        {
+            releaseEvents.json(await db.Question.findAll());
+        }
+
+        catch
+        {
+            res.status(500).send(utils.messages.serverError)
+        }
     },
 
     //////////////////////////////////////////////////////////
 
-    getQuestion : (req, res, next) =>
+    getQuestion : async (req, res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points','response']})
-            
-            .then(questions => res.status(200).json(questions))
-            .catch((err) => {if(err) {console.log(err);res.sendStatus(500)}})
+
+            try
+            {
+                res.json(await db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points','response']}));
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
         }
         else
             res.status(401).send(utils.messages.invalidToken);
@@ -26,19 +39,18 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    createQuestion : (req, res, next) =>
+    createQuestion : async (req, res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Question.create(req.body)
-            .then((question) =>
+            try
             {
-                if(question)
-                    res.status(201).send(question)
-                else
-                    throw "err"
-            })
-            .catch((err) => {if(err) res.sendStatus(500)})
+                res.json(await db.Question.create(req.body));
+            }
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
         }
         else
             res.sendStatus(401);
@@ -46,13 +58,21 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    updateQuestion : (req, res, next) =>
+    updateQuestion : async (req, res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Question.findByPk(req.params.id).then(question => {
-                question.update(req.body).then(() => res.status(200).send(question));
-            }).catch(() => {res.sendStatus(500)})
+            try
+            {
+               let question = await Question.findByPk(req.params.id);
+               await question.update(req.body)
+               res.status(200).send(question);
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
         }
         else
             res.sendStatus(401);
