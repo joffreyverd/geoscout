@@ -6,7 +6,6 @@ import {
 
 export default function Difficulty(props){
   const {difficulty} = props;
-  console.log(difficulty);
   return (
     <View style={styles.inline}>
       {difficulty[0] ? <View style={styles.circle} backgroundColor={"#4CAF50"}></View> : null}

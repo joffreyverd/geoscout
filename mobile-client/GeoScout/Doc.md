@@ -18,12 +18,13 @@ Utilisation de https://flatuicolors.com/palette/defo
 # Reste à faire
 ## Mobile
 
-- Télécharger le circuit **(Stevy => En cours)**
-- Attribution d'un score pour une bonne réponse **(Thomas)**
-- Liste de circuit en cours ou fini **(Stevy)**
-- Reprendre un circuit en pause **(Thomas)**
-- Gestion du chronomètre pour le temps de réalisation d'un circuit **(Thomas)**
-- Liste de circuit favoris de l'utilisateur **(Stevy)**
-- Pouvoir commenter un circuit et attribuer un score **(Stevy & Thomas)**
-- Charger les circuits selon le zoom et l'emplacement de l'utilisateur **(Stevy & Thomas)**
-- Si la localisation n'est pas activée faire une boucle jusqu'à activation **(Stevy & Thomas)**
+- [ ] Télécharger le circuit **(Stevy => En cours)**
+- [X] Attribution d'un score pour une bonne réponse **(Thomas)**
+- [ ] Liste de circuit en cours ou fini **(Stevy => En cours)**
+- [ ] Reprendre un circuit en pause **(Thomas)**
+- [ ] Gestion du chronomètre pour le temps de réalisation d'un circuit **(Thomas => En cours)**
+- [ ] Liste de circuit favoris de l'utilisateur **(Stevy => En cours)**
+- [ ] Pouvoir commenter un circuit et attribuer un score **(Stevy & Thomas => Last)**
+- [x] Charger les circuits selon le zoom et l'emplacement de l'utilisateur **(Stevy)**
+- [x] Changer le type de map **(Stevy)**
+- [ ] Si la localisation n'est pas activée faire une boucle jusqu'à activation **(Stevy & Thomas => Last)**

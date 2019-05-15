@@ -5,14 +5,16 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    Image
+    Image,
+    Switch
 } from 'react-native';
 import { Location } from 'expo';
 import { Icon } from 'react-native-elements';
 
+import { NavigationMenu, NavigationHeader } from '../components/NavigationMenu'
 import Callout from '../components/Callout';
 import api from '../config/httpMethods';
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import {mapStyle} from '../../utils/style/mapStyle';
 
 const {width,height} = Dimensions.get('window')
@@ -26,7 +28,7 @@ class GeoLocation extends React.Component{
         this.state = {
             ready: false,
             error: null,
-            initialPosition: {
+            region: {
                 latitude: 0,
                 longitude: 0,
                 latitudeDelta: 0,
@@ -36,35 +38,24 @@ class GeoLocation extends React.Component{
                 latitude: 0,
                 longitude: 0
             },
-            mapStyle: 'standard',
+            mapType: 'standard',
             circuits: null,
-            circuitReady: false
+            circuitReady: false,
+            switchValue: false,
+            menuOpen: false
         }
     }
 
     componentDidMount() {
-        this.checkLocation().then(() => {
-            this.getCircuits();
-        }).catch((error) => console.log(error));
+        this.checkLocation();
     }
 
-    getCircuits = (region) => {
-        const { markerPosition: { longitude, latitude } } = this.state; 
-        let body = null;       
-
-        if(region){
-            body = {
-                user_longitude: longitude,
-                user_latitude: latitude,
-                distance: 50,
-            };
-        }else{
-            body = {
-                user_longitude: region.longitude,
-                user_latitude: region.latitude,
-                distance: 50,
-            };
-        }
+    getCircuits(){
+        let body = {
+            user_longitude: this.state.region.longitude,
+            user_latitude: this.state.region.latitude,
+            distance: 30,
+        };
 
         api.post('circuit/nearby', body).then((data) => {
             this.setState({
@@ -83,8 +74,14 @@ class GeoLocation extends React.Component{
         });
     }
 
+    onRegionChangeComplete = (region) => {
+        this.setState({
+            region: region
+        }, () => {this.getCircuits()});
+    }
+
     updateLocation = (location) => {
-        let initialRegion = {
+        let region = {
             latitude: parseFloat(location.coords.latitude),
             longitude: parseFloat(location.coords.longitude),
             latitudeDelta: LATITUDE_DELTA,
@@ -94,8 +91,8 @@ class GeoLocation extends React.Component{
         this.setState({
             ready: true,
             error: null,
-            initialPosition: initialRegion,
-            markerPosition: initialRegion
+            region: region,
+            markerPosition: region
         })
     }
 
@@ -114,6 +111,13 @@ class GeoLocation extends React.Component{
             this.setState({
                 error: "La localisation n'est pas autorisée sur le périphérique."
             });
+        });
+    }
+
+    toggleSwitch = value => {
+        this.setState({
+            switchValue: value,
+            mapType: (value?'satellite':'standard')
         });
     }
 
@@ -155,48 +159,55 @@ class GeoLocation extends React.Component{
     }
 
     render() {
+        const { menuOpen } = this.state;
         return (
+            <NavigationMenu
+            isOpen={menuOpen}
+            toggle={menuOpen => this.setState({ menuOpen })}
+            navigate={this.props.navigation.navigate}>
+            <NavigationHeader
+            pressMenu={() => this.setState({ menuOpen: true })}
+            titleText={'Carte'}
+            rightComponent={
+                <View style={styles.buttonMapChange}>
+                    <Icon
+                    name='satellite'
+                    type='material'
+                    size={20}
+                    color='#FFF'/>
+                    <Switch
+                    onValueChange = {this.toggleSwitch}
+                    value = {this.state.switchValue}/>
+                    <Icon
+                    name='landscape'
+                    type='material'
+                    size={20}
+                    color='#FFF'/>
+                </View>  
+            }/>
             <View style={styles.container}>
                 {((this.state.error)? 
                     <Text style={styles.errorText}>{this.state.error}</Text> 
                 :
-                    (this.state.ready ? 
-                        <>
-                        <View style={styles.buttonMapChange}>
-                            <Icon
-                            name='satellite'
-                            type='material'
-                            size={12}
-                            color='#FFAE23'
-                            onPress={()=>{
-                                this.setState({
-                                    mapStyle: 'standard'
-                                });
-                            }}/>
-                            <Text>|</Text>
-                            <Icon
-                            name='landscape'
-                            type='material'
-                            size={12}
-                            color='#FFAE23'
-                            onPress={()=>{
-                                this.setState({
-                                    mapStyle: 'satellite'
-                                });
-                            }}/>
-                        </View>
+                    (this.state.ready ?
+                        <>                       
                         <MapView 
                         style={styles.map}
-                        mapStyle={this.state.mapStyle}
-                        region={this.state.initialPosition}
+                        mapType={this.state.mapType}
+                        initialRegion={this.state.region}
                         customMapStyle={mapStyle}
-                        onRegionChangeComplete={this.getCircuits}>
-                            <MapView.Marker
+                        onRegionChangeComplete={this.onRegionChangeComplete}
+                        loadingIndicatorColor="#1abc9c"
+                        loadingBackgroundColor="#ffffff"
+                        cacheEnabled={true}
+                        zoomEnabled
+                        scrollingEnabled>
+                            <Marker
                             coordinate={this.state.markerPosition}>
                                 <View style={styles.radius}>
                                     <View style={styles.marker}/>
                                 </View>
-                            </MapView.Marker>
+                            </Marker>
                             {(this.state.circuitReady) &&
                                 this.displayNearbyCircuits()
                             }
@@ -213,6 +224,7 @@ class GeoLocation extends React.Component{
                     )
                 )}
             </View>
+            </NavigationMenu>
         );
     }
 }
@@ -265,9 +277,10 @@ const styles = StyleSheet.create({
         position: 'absolute'
     },
     buttonMapChange: {
-        position: 'absolute',
-        left: 10,
-        top: 20
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     modalText: {
         color: '#1abc9c',

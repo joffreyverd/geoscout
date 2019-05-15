@@ -20,14 +20,10 @@ export default function Callout(props){
       <Text style={styles.name} numberOfLines={1}>{name}</Text>
       <Rate rate={rate}/>
       <View style={styles.inline}>
-        <View style={{marginRight: 10}}>
-          <Icon name='directions-walk' type='material' size={sizeIcon} color='#2c3e50'/>
-          <Text style={styles.item}>{distance}km</Text>
-        </View>
-        <View style={{marginRight: 10}}>
-          <Icon name='access-time' type='material' size={sizeIcon} color='#2c3e50'/>
-          <Text style={styles.item}>{timeInHour}h{timeInMinute}m</Text>
-        </View>
+        <Icon name='directions-walk' type='material' size={sizeIcon} color='#2c3e50'/>
+        <Text style={styles.item}>{distance}km</Text>
+        <Icon name='access-time' type='material' size={sizeIcon} color='#2c3e50'/>
+        <Text style={styles.item}>{timeInHour}h{timeInMinute}m</Text>
         <Difficulty difficulty={difficulty}/>
       </View>
     </View>
