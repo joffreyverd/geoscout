@@ -52,8 +52,7 @@ module.exports =
 
 		circuit.length = dist;
 		await circuit.save({transaction: t});
-		await t.commit();
-		
+		await t.commit();	
 	},
 
 	messages : 

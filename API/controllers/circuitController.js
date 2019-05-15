@@ -189,8 +189,9 @@ module.exports =
                 res.status(401).send(utils.messages.invalidToken);
             }
 
-        catch
+        catch(err)
         {
+            console.log(err)
             res.status(500).send(utils.messages.serverError);
         }
     },

@@ -21,7 +21,6 @@ module.exports=
                     id_user: id_user,
                     id_circuit: req.body.id_circuit,
                     id_step: req.body.id_step
-    
                 });
 
                 res.status(200).send(achievement);
@@ -29,7 +28,6 @@ module.exports=
 
             catch(err)
             {
-                console.log(err)
                 res.status(500).send(utils.messages.serverError);
             }
         }
@@ -75,7 +73,6 @@ module.exports=
 
             catch(err)
             {
-                console.log(err)
                 res.status(500).send(utils.messages.serverError);
             }
         }

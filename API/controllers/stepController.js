@@ -307,17 +307,22 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    updateQuestion : (req, res) =>
+    updateQuestion : async (req, res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
 			try
 			{
-				let question = db.Question.findByPk(req.params.id_question)
-			}
-            db.Question.findByPk(req.params.id_question).then(question => {
-                question.update(req.body).then(() => res.status(200).send(question));
-            }).catch(() => {res.sendStatus(500)})
+                let question = await db.Question.findByPk(req.params.id_question);
+                let t = await db.sequelize.transaction();
+                await question.update(req.body,{transaction : t});
+                res.status(200).send(question);
+            }
+            
+            catch
+            {
+
+            }
         }
         else
             res.sendStatus(401);
