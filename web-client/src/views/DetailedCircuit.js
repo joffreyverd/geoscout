@@ -23,8 +23,7 @@ export default class DetailedCircuit extends Component {
 
     render() {
 
-        const { name, description, id_circuit } = this.state.circuit;
-        const { history } = this.props;
+        const { name, description } = this.state.circuit;
 
         return (
             <>

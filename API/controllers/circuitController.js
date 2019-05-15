@@ -3,37 +3,53 @@ const db = require('../models');
 const utils = require('./utils');
 module.exports = 
 {
-    circuit : (req,res) => 
+    circuit : async (req,res) => 
     {
-        db.Circuit.findByPk(req.params.id_circuit,{attributes : ['name','description','duration','need_internet','level']})
-        .then((circuit) => res.json(circuit))
-        .catch((err) => {if(err) res.status(500).send(utils.messages.invalidToken)});
+        try
+        {
+            let circuit = await db.Circuit.findByPk(req.params.id_circuit,{attributes : ['name','description','duration','need_internet','level']})
+            res.json(circuit);
+        }
+        
+        catch(err)
+        {
+            res.status(500).send(utils.messages.serverError);
+        }
     },
 
-    downloadCircuit : (req,res) =>
+    downloadCircuit : async (req,res) =>
     {
         if(utils.verifToken(req.headers['authorization']))
         {
-            db.Circuit.findOne(
+            try
             {
-                where : {id_circuit : req.params.id_circuit},
-                attributes : ['name','description','duration','need_internet','level'],
-                include : 
-                [
-                    {
-                        model : db.Step,
-                        attributes : ['id_step','name','latitude','longitude','description','order','instruction','validation'],
-                        include : 
-                        [
-                            {
-                                model : db.Question,
-                                attributes : ['id_question','wording','response','type_of','points']
-                            }
-                        ]
-                    }
-                ]
-            })
-            .then(circuit => res.status(200).send(circuit))
+                let circuit = await db.Circuit.findOne(
+                {
+                    where : {id_circuit : req.params.id_circuit},
+                    attributes : ['name','description','duration','need_internet','level'],
+                    include : 
+                    [
+                        {
+                            model : db.Step,
+                            attributes : ['id_step','name','latitude','longitude','description','order','instruction','validation'],
+                            include : 
+                            [
+                                {
+                                    model : db.Question,
+                                    attributes : ['id_question','wording','response','type_of','points']
+                                }
+                            ]
+                        }
+                    ]
+                });
+                
+                res.status(200).send(circuit);
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
         }
         else
             res.status(401).send(utils.messages.invalidToken);
@@ -41,19 +57,20 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    nearbyCircuits : (req,res) =>
+    nearbyCircuits : async (req,res) =>
     {
-        db.Step.findAll({where : {order : 0}})
-        .then((steps) =>
+        console.log("ah")
+        try
         {
+           
+            let steps = await db.Step.findAll({where : {order : 0}});
             let dist = 0;
-            let map = steps.map(step =>
+            const map = steps.map(async step =>
             {
-                dist = utils.distanceBetweenPoints(step.latitude,req.body.user_latitude,step.longitude,req.body.user_longitude);
+                dist = await utils.distanceBetweenPoints(step.latitude,req.body.user_latitude,step.longitude,req.body.user_longitude);
                 if(dist <= req.body.distance)
                 {
-                    
-                    return db.Circuit.findOne(
+                    return await db.Circuit.findOne(
                     {
                         where : {id_circuit : step.id_circuit, published : 1},
                         include : 
@@ -71,10 +88,8 @@ module.exports =
                 }
             });
 
-            return Promise.all(map);
-        })
-        .then(circuits =>
-        {
+            const circuits = await Promise.all(map);
+
             let c = [];
             let count = 0;
             let currentCircuit = null;
@@ -100,62 +115,46 @@ module.exports =
                 }     
             });
 
-            res.status(201).send(c)
-        })
-        .catch((err) => console.log(err));
-    },
-
-    //////////////////////////////////////////////////////////
-
-    circuits : (req,res) => 
-    {
-        db.Circuit.findAll()
-        .then(circuits => res.status(200).send(circuits))
-        .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
-    },
-
-    //////////////////////////////////////////////////////////
-
-    myCircuits : (req,res) => 
-    {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
-        {
-            db.Circuit.findAll({where : {id_user : id_user}})
-            .then((circuit) => res.json(circuit))
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
+            res.status(201).send(c);
         }
-        else
-            res.status(401).send(utils.messages.invalidToken);
+
+        catch(err)
+        {
+            res.status(500).send(utils.messages.serverError);
+        }
     },
 
     //////////////////////////////////////////////////////////
 
-    createCircuit : (req,res) =>
+    circuits : async (req,res) => 
+    {
+        try
+        {
+            res.status(200).send(await db.Circuit.findAll())
+        }
+        
+        catch
+        {
+            res.status(500).send(utils.messages.serverError);
+        }
+    },
+
+    //////////////////////////////////////////////////////////
+
+    myCircuits : async (req,res) => 
     {
         let id_user = utils.verifToken(req.headers['authorization']);
         if(id_user)
         {
-            db.Circuit.create(
+            try
             {
-                name : req.body.name,
-                description : req.body.description,
-                length : req.body.length,
-                duration : req.body.duration,
-                need_internet : req.body.need_internet,
-                published : 1,
-                version : 1,
-                level : req.body.level,
-                id_user : id_user
-            })
-            .then((circuit) =>
+               res.json(await db.Circuit.findAll({where : {id_user : id_user}}))
+            }
+            
+            catch
             {
-                if(circuit)
-                    res.status(201).send(circuit)
-                else
-                    throw 'err'
-            })
-            .catch((err) => {if(err) res.status(500).send(utils.messages.serverError)});
+                res.status(500).send(utils.messages.serverError);
+            }
         }
         else
             res.status(401).send(utils.messages.invalidToken);
@@ -163,71 +162,138 @@ module.exports =
 
     //////////////////////////////////////////////////////////
 
-    publicationCircuit : (req,res) =>
+    createCircuit : async (req,res) =>
     {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
+        try
         {
-            db.Circuit.findOne({where : {id_circuit : req.body.id_circuit}})
-            .then(circuit =>
+            let id_user = utils.verifToken(req.headers['authorization']);
+            if(id_user)
             {
-                circuit.update({published: !circuit.published})
-            })
-            .then(res.sendStatus(200))
-            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
-        }
-        else
-            res.status(401).send(utils.messages.invalidToken);
-    },
-
-    //////////////////////////////////////////////////////////
-
-    deleteCircuit : (req,res) =>
-    {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
-        {
-            db.Circuit.destroy({where : {id_circuit : req.body.id_circuit}})
-            .then(res.sendStatus(204))
-            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
-        }
-        else
-            res.status(401).send(utils.messages.invalidToken);
-    },
-
-    //////////////////////////////////////////////////////////
-
-    publishedCircuits : (req,res) =>
-    {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
-        {
-            db.Circuit.findAll({where : {published : true}})
-            .then(res.sendStatus(200))
-            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
-        }
-        else
-            res.status(401).send(utils.messages.invalidToken);
-    },
-
-    //////////////////////////////////////////////////////////
-
-    updateCircuit : (req, res, next) =>
-    {
-        let id_user = utils.verifToken(req.headers['authorization']);
-        if(id_user)
-        {
-            db.Circuit.findByPk(req.params.id_circuit).then(circuit => 
+                let circuit = await db.Circuit.create(
                 {
+                    name : req.body.name,
+                    description : req.body.description,
+                    length : req.body.length,
+                    duration : req.body.duration,
+                    need_internet : req.body.need_internet,
+                    published : 1,
+                    version : 1,
+                    level : req.body.level,
+                    id_user : id_user
+                });
+
+                await utils.createFolder(circuit.id_circuit,1)
+                res.status(201).send(circuit);
+            }
+            else
+                res.status(401).send(utils.messages.invalidToken);
+            }
+
+        catch(err)
+        {
+            console.log(err)
+            res.status(500).send(utils.messages.serverError);
+        }
+    },
+
+    //////////////////////////////////////////////////////////
+
+    publicationCircuit : async (req,res) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            try
+            {
+                let circuit = await db.Circuit.findOne({where : {id_circuit : req.body.id_circuit}});
+                await circuit.update({published: !circuit.published});
+                res.sendStatus(204)
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
+        }
+        else
+            res.status(401).send(utils.messages.invalidToken);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    deleteCircuit : async (req,res) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            try
+            {
+                await db.Circuit.destroy({where : {id_circuit : req.body.id_circuit}})
+                res.sendStatus(204);
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError);
+            }
+        }
+        else
+            res.status(401).send(utils.messages.invalidToken);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    publishedCircuits : async (req,res) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+           try
+           {
+                res.json(await db.Circuit.findAll({where : {published : true}}))
+           }
+        
+           catch
+           {
+                res.status(500).send(utils.messages.serverError);
+           }
+        }
+        else
+            res.status(401).send(utils.messages.invalidToken);
+    },
+
+    //////////////////////////////////////////////////////////
+
+    updateCircuit : async (req, res) =>
+    {
+        let id_user = utils.verifToken(req.headers['authorization']);
+        if(id_user)
+        {
+            try
+            {
+                let circuit = await db.Circuit.findByPk(req.params.id_circuit);
                 if(circuit.id_user === id_user) 
                 {
-                    circuit.update(req.body).then(() => res.status(200).send(circuit));
+                    await circuit.update(req.body);
+                    res.status(200).send(circuit);
                 }
-            })
-            .catch((err) =>{if(err) res.status(500).send(utils.messages.serverError)});
+
+                else
+                    res.sendStatus(403);
+            }
+
+            catch
+            {
+                res.status(500).send(utils.messages.serverError)
+            }
         }
         else
             res.status(401).send(utils.messages.invalidToken);
+    },
+
+    test : (req,res) =>
+    {
+        console.log(req.body)
     }
 }
 

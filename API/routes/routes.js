@@ -43,5 +43,5 @@ module.exports = function(app)
 	app.route('/question/:id_question').put(question.updateQuestion);
 
 	app.route('/download-user/:id_user').get(user.downloadUser);
-	app.route('/testRel').get(user.testRel)
+	app.post('/oof',circuit.test)
 }
