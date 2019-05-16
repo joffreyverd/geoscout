@@ -1,25 +1,17 @@
-import React, {
-    Component
-} from 'react';
-import {
-    ScrollView,
-    Text,
-    TouchableOpacity,
-    StyleSheet
-} from 'react-native';
-import {
-    Tile,
-    ListItem,
-    Icon
-} from 'react-native-elements';
+import React, { Component } from 'react';
+import { ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { Tile, ListItem, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 
-import { NavigationHeader, NavigationMenu } from '../../components/NavigationMenu';
+import {
+    NavigationHeader,
+    NavigationMenu
+} from '../../components/NavigationMenu';
 import storage from '../../config/asyncStorageToken';
 import api from '../../config/httpMethods';
 
 export default class Me extends Component {
-    constructor(){
+    constructor() {
         super();
         this.state = {
             menuOpen: false,
@@ -32,16 +24,16 @@ export default class Me extends Component {
     }
 
     componentDidMount() {
-        storage.getTokenAsyncStorage().then((token) => {
+        storage.getTokenAsyncStorage().then(token => {
             if (token) {
-                api.get('whoami').then(user => this.setUser(user) )
+                api.get('whoami').then(user => this.setUser(user));
             } else {
                 this.props.navigation.navigate('Auth');
             }
         });
     }
 
-    setUser(user){
+    setUser(user) {
         this.setState({
             user
         });
@@ -54,62 +46,67 @@ export default class Me extends Component {
     handleSignout = () => {
         storage.removeTokenAsyncStorage().then(() => {
             this.props.navigation.navigate('Auth');
-        })
-    }
+        });
+    };
     render() {
         const { user, menuOpen } = this.state;
-        
+
         return (
             <NavigationMenu
-            isOpen={menuOpen}
-            toggle={menuOpen => this.setState({ menuOpen })}
-            navigate={this.props.navigation.navigate}>
-            <NavigationHeader
-            pressMenu={() => this.setState({ menuOpen: true })}
-            titleText={'Profil'}
-            pressHome={() => this.props.navigation.navigate('GeoLocation')}/>
-            {user ?
-                <SafeAreaView style={styles.container}>
-                    <ScrollView>
-                        <Tile
-                            //Faire une condition si il y a une image d'enregistré
-                            //imageSrc={'../../../utils/img/userAnonymous.png'}
-                            featured
-                            title={'Profil'}/>
-                        <ListItem
-                            title="Nom"
-                            rightTitle={user.lastname}
-                            hideChevron/>
-                        <ListItem
-                            title="Prénom"
-                            rightTitle={user.firstname}
-                            hideChevron/>
-                        <ListItem
-                            title="Email"
-                            rightTitle={user.email}
-                            hideChevron/>
-                    </ScrollView>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={this.handleSettingsPress}
-                        activeOpacity={0.8}>
-                            <Text style={styles.textButton}>
-                                Paramètres
-                            </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={Object.assign({},styles.button,{
-                            backgroundColor: '#c0392b'
-                        })}
-                        onPress={this.handleSignout}
-                        activeOpacity={0.8}>
-                            <Text style={styles.textButton}>
-                                Déconnexion
-                            </Text>
-                    </TouchableOpacity>
-                </SafeAreaView>
-            :
-                null}
+                isOpen={menuOpen}
+                toggle={menuOpen => this.setState({ menuOpen })}
+                navigate={this.props.navigation.navigate}
+            >
+                <NavigationHeader
+                    pressMenu={() => this.setState({ menuOpen: true })}
+                    titleText={'Profil'}
+                    pressHome={() =>
+                        this.props.navigation.navigate('GeoLocation')
+                    }
+                />
+                {user ? (
+                    <SafeAreaView style={styles.container}>
+                        <ScrollView>
+                            <Tile
+                                //Faire une condition si il y a une image d'enregistré
+                                //imageSrc={'../../../utils/img/userAnonymous.png'}
+                                featured
+                                title={'Profil'}
+                            />
+                            <ListItem
+                                title="Nom"
+                                rightTitle={user.lastname}
+                                hideChevron
+                            />
+                            <ListItem
+                                title="Prénom"
+                                rightTitle={user.firstname}
+                                hideChevron
+                            />
+                            <ListItem
+                                title="Email"
+                                rightTitle={user.email}
+                                hideChevron
+                            />
+                        </ScrollView>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={this.handleSettingsPress}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.textButton}>Paramètres</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={Object.assign({}, styles.button, {
+                                backgroundColor: '#c0392b'
+                            })}
+                            onPress={this.handleSignout}
+                            activeOpacity={0.8}
+                        >
+                            <Text style={styles.textButton}>Déconnexion</Text>
+                        </TouchableOpacity>
+                    </SafeAreaView>
+                ) : null}
             </NavigationMenu>
         );
     }

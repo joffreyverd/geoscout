@@ -1,8 +1,9 @@
+/* eslint-disable no-console */
+/* eslint-disable no-undef */
 const jwt = require('jsonwebtoken');
 const config = require('./configUser');
 const db = require('../models');
-const fs = require('fs');
-const fse = require('fs-extra')
+const fse = require('fs-extra');
 const path = require('path');
 module.exports = 
 {
@@ -12,8 +13,8 @@ module.exports =
 		{
 			let id = jwt.verify(token.split(' ')[1], config.secret, (err, decoded) =>
 			{
-				if (err) return null
-				else return decoded.id_user
+				if (err) return null;
+				else return decoded.id_user;
 			});
 
 			return id;
@@ -29,7 +30,7 @@ module.exports =
 		let x1 = lat2 - lat1;
 		let dLat = Math.radians(x1);
 		let x2 = lon2 - lon1;
-		let dLon = Math.radians(x2)
+		let dLon = Math.radians(x2);
 		let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 			Math.cos(Math.radians(lat1)) * Math.cos(Math.radians(lat2)) *
 			Math.sin(dLon / 2) * Math.sin(dLon / 2);
@@ -39,13 +40,13 @@ module.exports =
 
 	evaluateDistance : async (id_circuit) =>
 	{
-		let circuit = await db.Circuit.findOne({where : {id_circuit:id_circuit},include :[{model : db.Step}]})
+		let circuit = await db.Circuit.findOne({where : {id_circuit:id_circuit},include :[{model : db.Step}]});
 		let lat = circuit.Steps[0].latitude;
 		let lon = circuit.Steps[0].longitude;
 		let dist = 0;
 		circuit.Steps.map(step => 
 		{
-			dist+= module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude)
+			dist+= module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude);
 		});
 
 		let t = await db.sequelize.transaction();
@@ -82,32 +83,15 @@ module.exports =
 
 		try
 		{
-			await fse.mkdir(p+'/'+name)
+			await fse.mkdir(p+'/'+name);
 		}
 
 		catch (err)
 		{
-			throw err;
+			console.log(err);
 		}
 	},
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+};
 
 Math.radians = function(degrees) 
 {

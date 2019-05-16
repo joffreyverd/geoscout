@@ -1,80 +1,93 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 
-const db = require('../models')
+const db = require('../models');
 const utils = require('./utils');
 module.exports = 
 {
-    question : async (req,res,next) => 
-    {
-        try
-        {
-            releaseEvents.json(await db.Question.findAll());
-        }
+	question : async (req,res) => 
+	{
+		try
+		{
+			res.json(await db.Question.findAll());
+		}
 
-        catch
-        {
-            res.status(500).send(utils.messages.serverError)
-        }
-    },
+		catch(err)
+		{
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
+		}
+	},
 
-    //////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////
 
-    getQuestion : async (req, res) =>
-    {
-        if(utils.verifToken(req.headers['authorization']))
-        {
+	getQuestion : async (req, res) =>
+	{
+		if(utils.verifToken(req.headers['authorization']))
+		{
 
-            try
-            {
-                res.json(await db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points','response']}));
-            }
+			try
+			{
+				res.json(await db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points','response']}));
+			}
 
-            catch
-            {
-                res.status(500).send(utils.messages.serverError);
-            }
-        }
-        else
-            res.status(401).send(utils.messages.invalidToken);
-    },
+			catch(err)
+			{
+				console.log(err);
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
+		else
+			res.status(401).send(utils.messages.invalidToken);
+	},
 
-    //////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////
 
-    createQuestion : async (req, res) =>
-    {
-        if(utils.verifToken(req.headers['authorization']))
-        {
-            try
-            {
-                res.json(await db.Question.create(req.body));
-            }
-            catch
-            {
-                res.status(500).send(utils.messages.serverError);
-            }
-        }
-        else
-            res.sendStatus(401);
-    },
+	createQuestion : async (req, res) =>
+	{
+		if(utils.verifToken(req.headers['authorization']))
+		{
+			let t = await db.sequelize.transaction();
+			try
+			{
+				let question = await await db.Question.create(req.body,{transaction : t});
+				await t.commit();
+				res.json(question);
+			}
+			catch(err)
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
+		else
+			res.sendStatus(401);
+	},
 
-    //////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////////
 
-    updateQuestion : async (req, res) =>
-    {
-        if(utils.verifToken(req.headers['authorization']))
-        {
-            try
-            {
-               let question = await Question.findByPk(req.params.id);
-               await question.update(req.body)
-               res.status(200).send(question);
-            }
+	updateQuestion : async (req, res) =>
+	{
+		if(utils.verifToken(req.headers['authorization']))
+		{
+			let t = await db.sequelize.transaction();
+			try
+			{
+				let question = await db.Question.findByPk(req.params.id);
+				await question.update(req.body,{transaction : t});
+				await t.commit();
+				res.status(200).send(question);
+			}
 
-            catch
-            {
-                res.status(500).send(utils.messages.serverError);
-            }
-        }
-        else
-            res.sendStatus(401);
-    }
-}
+			catch(err)
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
+		else
+			res.sendStatus(401);
+	}
+};

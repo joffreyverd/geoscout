@@ -100,6 +100,63 @@ class UpdateStepModal extends Component {
         });
     }
 
+    handleResponseChange = (event, choiceIndex, questionIndex) => {
+        const { value } = event.target;
+        const { Questions } = this.state;
+        const qcm = (Questions[questionIndex].response) && Questions[questionIndex].response.split(':');
+        const oldChoices = (qcm) && qcm[0].split(',');
+        oldChoices[choiceIndex] = value;
+        oldChoices.toString();
+        this.setState((prevState) => {
+            prevState.Questions[questionIndex].response = `${oldChoices}:${value}`;
+            return { Questions: prevState.Questions };
+        });
+    }
+
+    handleChoicesChange = (event, choiceIndex, questionIndex) => {
+        const { value } = event.target;
+        const { Questions } = this.state;
+        const qcm = (Questions[questionIndex].response) && Questions[questionIndex].response.split(':');
+        const oldChoices = (qcm) && qcm[0].split(',');
+        oldChoices[choiceIndex] = value;
+        oldChoices.toString();
+        this.setState((prevState) => {
+            prevState.Questions[questionIndex].response = `${oldChoices}:${value}`;
+            return { Questions: prevState.Questions };
+        });
+    }
+
+    handleChangeQuestionType = (event, activeTab) => {
+        const newKindOf = (event.target.value === true) ? 2 : 1;
+        this.setState((prevState) => {
+            prevState.Questions[activeTab].type_of = newKindOf;
+            return { Questions: prevState.Questions };
+        });
+    }
+
+    addNewChoice = (activeTab) => {
+        const { Questions } = this.state;
+        const splitedField = Questions[activeTab].response.split(':');
+        const newField = (Questions[activeTab].response) ? `${splitedField[0]},` : ',';
+        this.setState((prevState) => {
+            prevState.Questions[activeTab].response = newField;
+            return { Questions: prevState.Questions };
+        });
+    }
+
+    deleteChoiceInput = (choiceIndex, questionIndex, response) => {
+        const { Questions } = this.state;
+        const splitedField = Questions[questionIndex].response.split(':');
+        const oldChoices = splitedField[0].split(',');
+        const valueToDelete = oldChoices.splice(choiceIndex, 1);
+        delete oldChoices[valueToDelete];
+        oldChoices.toString();
+        this.setState((prevState) => {
+            prevState.Questions[questionIndex].response = `${oldChoices}:${response}`;
+            return { Questions: prevState.Questions };
+        });
+    }
+
     /**
      * Fonction de gestion du changement d'état de la checkbox
      * @param {Event} event : event envoyé lorsque la checkbox est cochée
@@ -171,8 +228,13 @@ class UpdateStepModal extends Component {
                         </Checkbox>
 
                         <MultipleQuestion
-                            Questions={Questions}
+                            questions={Questions}
+                            addNewChoice={this.addNewChoice}
+                            deleteChoiceInput={this.deleteChoiceInput}
+                            handleChangeQuestionType={this.handleChangeQuestionType}
                             handleChangeQuestion={this.handleChangeQuestion}
+                            handleChoicesChange={this.handleChoicesChange}
+                            handleResponseChange={this.handleResponseChange}
                         />
 
                         <div className='update-buttons'>

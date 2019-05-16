@@ -15,6 +15,7 @@ module.exports = (sequelize,DataTypes) =>
 
     User.associate = (db) =>
     {
+        User.hasMany(db.Favorite,{foreignKey : 'id_user'});
         User.belongsToMany(db.User, {through: db.Relation, as :'Relations'});
         User.hasMany(db.Circuit,{foreignKey : 'id_user',constraints : false});
         User.hasMany(db.Evaluation,{foreignKey : 'id_user'});

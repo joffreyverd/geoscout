@@ -21,7 +21,7 @@ import Transit from '../screens/Play/Transit';
 import Etape from '../screens/Play/Etape';
 import Question from '../screens/Play/Question';
 import Finish from '../screens/Play/Finish';
-    
+
 const PrincipalStack = createStackNavigator(
     {
         Me: Me, //ok
@@ -31,7 +31,8 @@ const PrincipalStack = createStackNavigator(
         FavoriteCircuit: FavoriteCircuit, //ok
         DetailCircuit: DetailCircuit, //ok
         Start: Start
-    }, {
+    },
+    {
         headerMode: 'none',
         initialRouteName: 'GeoLocation'
     }
@@ -42,7 +43,8 @@ const EtapeStack = createStackNavigator(
     {
         Etape: Etape,
         Question: Question
-    }, {
+    },
+    {
         initialRouteName: 'Etape',
         headerMode: 'none'
     }
@@ -54,17 +56,20 @@ const PlaySwitch = createSwitchNavigator(
         Transit: Transit,
         EtapeStack: EtapeStack,
         Finish: Finish
+    },
+    {
+        mode: 'card'
     }
-)
-
+);
 
 // Switch Stack de l'authentification
 const AuthStack = createStackNavigator(
     {
         Authentication: Authentication,
         Signin: Signin,
-        Signup: Signup,
-    }, {
+        Signup: Signup
+    },
+    {
         headerMode: 'none',
         initialRouteName: 'Authentication'
     }
@@ -75,7 +80,7 @@ export const RootStack = createSwitchNavigator(
     {
         Auth: AuthStack,
         Home: PrincipalStack,
-        Play: PlaySwitch,
+        Play: PlaySwitch
     },
     {
         mode: 'card',

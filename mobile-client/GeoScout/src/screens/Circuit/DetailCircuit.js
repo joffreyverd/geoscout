@@ -158,9 +158,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        marginRight: 10,
-        marginLeft: 10,
-        marginTop: 25
+        padding: 15,
+        paddingBottom: 25
     },
     title: {
         color: '#1abc9c',
