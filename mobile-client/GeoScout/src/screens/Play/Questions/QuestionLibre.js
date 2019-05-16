@@ -1,5 +1,5 @@
 import React from 'react';
-import { 
+import {
     View,
     Text,
     TextInput,
@@ -11,42 +11,63 @@ import {
 } from 'react-native';
 //import HTML from 'react-native-render-html';
 
-class Question extends React.Component {
+export default class QuestionLibre extends React.Component {
     state = {
         userResponse: ''
-    }
+    };
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         e.preventDefault();
-        const { question:{ response: trueResponse, difficulty } } = this.props.navigation.state.params;
+        const {
+            question: { response: trueResponse, difficulty }
+        } = this.props.navigation.state.params;
         const { userResponse } = this.state;
-        let isGood = '', score = 0;
-        let maxScore = 15
-        if (difficulty)
-            maxScore = difficulty * 5;
+        let isGood = '',
+            score = 0;
+        let maxScore = 15;
+        if (difficulty) maxScore = difficulty * 5;
 
-        if( userResponse && userResponse.toLowerCase().trim() === trueResponse.toLowerCase().trim()){
+        if (
+            userResponse &&
+            userResponse.toLowerCase().trim() ===
+                trueResponse.toLowerCase().trim()
+        ) {
             isGood = 'Bonne réponse';
             score = 10;
-        }else{
+        } else {
             isGood = 'Mauvaise réponse';
         }
 
         Alert.alert(
             isGood,
-            'C\'est une '+isGood+', vous avez gagnez '+score,
+            "C'est une " + isGood + ', vous avez gagnez ' + score,
             [
-                {text: 'Ok', onPress: () => this.props.navigation.state.params.nextStep(score, maxScore)}
+                {
+                    text: 'Ok',
+                    onPress: () =>
+                        this.props.navigation.state.params.nextStep(
+                            score,
+                            maxScore
+                        )
+                }
             ],
-            {cancelable: false}
-        )
-    }
+            { cancelable: false }
+        );
+    };
 
     render() {
-        const { question: { wording } } = this.props.navigation.state.params;
-        return(
+        const {
+            question: { wording }
+        } = this.props.navigation.state.params;
+        return (
             <>
-                <View style={Object.assign({},styles.container, styles.containerQuestion)}>
+                <View
+                    style={Object.assign(
+                        {},
+                        styles.container,
+                        styles.containerQuestion
+                    )}
+                >
                     <ScrollView>
                         {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
                         <Text style={styles.description}>{wording}</Text>
@@ -54,12 +75,20 @@ class Question extends React.Component {
 
                     <TextInput
                         value={this.state.userResponse}
-                        onChangeText={(userResponse) => this.setState({ userResponse })}
+                        onChangeText={userResponse =>
+                            this.setState({ userResponse })
+                        }
                         placeholder={'Réponse'}
                         style={styles.input}
                     />
                 </View>
-                <View style={Object.assign({},styles.container, styles.containerButton)}>
+                <View
+                    style={Object.assign(
+                        {},
+                        styles.container,
+                        styles.containerButton
+                    )}
+                >
                     <TouchableOpacity
                         onPress={this.handleSubmit}
                         activeOpacity={0.8}
@@ -73,21 +102,18 @@ class Question extends React.Component {
     }
 }
 
-export default Question;
-
 const styles = StyleSheet.create({
     container: {
         backgroundColor: '#1abc9c',
         alignItems: 'center',
         justifyContent: 'center',
         padding: 20
-    },  
+    },
     containerQuestion: {
         paddingTop: 40,
         paddingBottom: 50,
         flex: 1,
-        justifyContent: 'flex-start',
-
+        justifyContent: 'flex-start'
     },
     containerButton: {
         alignItems: 'center'

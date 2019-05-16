@@ -34,14 +34,16 @@ export default class CircuitsView extends Component {
         }
         if (isAdmin === 'achieved') {
             api.get('achievedcircuit').then((data) => {
-                this.setState({ circuits: data });
+                // console.log(data);
+                // this.setState({ circuits: data });
             }).catch(() => {
                 console.log(this.props);
             });
         }
         if (isAdmin === 'favorites') {
-            api.get('favoritescircuit').then((data) => {
-                this.setState({ circuits: data });
+            api.get('favorites').then((data) => {
+                const formattedCircuits = data.map(item => item.Circuit);
+                this.setState({ circuits: formattedCircuits });
             }).catch(() => {
                 console.log(this.props);
             });

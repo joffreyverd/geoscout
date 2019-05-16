@@ -11,7 +11,7 @@ export default class QuizQuestion extends React.Component {
 
     render() {
 
-        const { quiz, handleChoicesChange, deleteChoiceInput,
+        const { quiz, handleChoicesChange, deleteChoiceInput, handleQuizQuestion,
             handleResponseChange, addNewChoice, activeTab } = this.props;
         const qcm = (quiz.response) && quiz.response.split(':');
         const qcmResponse = (qcm) && qcm[1];
@@ -25,8 +25,8 @@ export default class QuizQuestion extends React.Component {
                     <Input
                         type='textarea'
                         name='wording'
-                        value={quiz.question}
-                    // onChange={}
+                        value={quiz.wording}
+                        onChange={event => handleQuizQuestion(event, activeTab)}
                     />
                 </FormGroup>
 

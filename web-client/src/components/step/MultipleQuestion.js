@@ -23,7 +23,7 @@ export default class MultipleQuestion extends React.Component {
 
         const { activeTab } = this.state;
         const { questions, handleChangeQuestionType,
-            handleChangeQuestion, handleChoicesChange,
+            handleChangeQuestion, handleChoicesChange, handleQuizQuestion,
             handleResponseChange, deleteChoiceInput, addNewChoice } = this.props;
 
         return (
@@ -62,6 +62,7 @@ export default class MultipleQuestion extends React.Component {
                     activeTab={activeTab}
                     addNewChoice={addNewChoice}
                     deleteChoiceInput={deleteChoiceInput}
+                    handleQuizQuestion={handleQuizQuestion}
                     handleChangeQuestionType={handleChangeQuestionType}
                     handleChangeQuestion={handleChangeQuestion}
                     handleChoicesChange={handleChoicesChange}

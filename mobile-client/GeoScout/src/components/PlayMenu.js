@@ -1,10 +1,10 @@
 import React from 'react';
 import { Text, StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
 import { Header, Icon } from 'react-native-elements';
 import SideMenu from 'react-native-side-menu';
 
 import api from '../config/httpMethods';
+
 export function PlayDrawerMenu({
     isOpen,
     children,
@@ -74,7 +74,6 @@ export function PlayDrawerMenu({
             ]
         );
     };
-
     return (
         <SideMenu
             isOpen={isOpen}
@@ -82,7 +81,7 @@ export function PlayDrawerMenu({
             openMenuOffset={150}
             onChange={opened => (opened !== isOpen ? toggle(opened) : null)}
             menu={
-                <SafeAreaView style={styles.container}>
+                <View style={styles.container}>
                     <TouchableOpacity
                         style={styles.button}
                         onPress={clickPause}
@@ -101,7 +100,7 @@ export function PlayDrawerMenu({
                             <Text style={styles.text}>Abandonner</Text>
                         </View>
                     </TouchableOpacity>
-                </SafeAreaView>
+                </View>
             }
         >
             {children}

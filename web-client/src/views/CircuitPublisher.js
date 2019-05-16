@@ -31,7 +31,7 @@ export default class CircuitPublisher extends Component {
         const { id } = this.props.match.params;
         if (id) {
             api.get(`download-circuit/${id}`).then((circuit) => {
-                const { longitude, latitude } = circuit.Steps[0];
+                const { longitude, latitude } = (circuit.Steps[0]) ? circuit.Steps[0] : false;
                 const { viewport } = this.state;
 
                 viewport.latitude = latitude;
