@@ -15,6 +15,7 @@ module.exports = function(app)
 	app.route('/answer-relation/:id_user').put(user.answerRelation);
 	app.route('/favorites').get(user.getFavorites);
 	app.route('/favorites/:id_circuit').put(user.setFavorite);
+	app.route('/favorites/:id_circuit').delete(user.deleteFavorite);
 	app.route('/evaluations/:id_circuit').get(evaluation.evaluationsCircuit);
 	app.route('/evaluations').post(evaluation.createEvaluation);	
 	

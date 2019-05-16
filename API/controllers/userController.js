@@ -290,27 +290,51 @@ module.exports =
 
 	setFavorite : async (req,res) =>
 	{
-		let t = await db.sequelize.transaction();
-		try
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
 		{
-			let id_user = utils.verifToken(req.headers['authorization']);
-			if(id_user)
+			let t = await db.sequelize.transaction();
+			try
 			{
-				
 				await db.Favorite.create({id_user : id_user, id_circuit : req.params.id_circuit,transaction : t});
 				await t.commit();
 				res.sendStatus(201);
 			}
 
-			else
-				res.status(401).send(utils.messages.invalidToken);
+			catch(err)
+			{
+				await t.rollback();
+				console.log(err);
+				res.status(500).send(utils.messages.serverError);
+			}	
 		}
 
-		catch(err)
+		else
+			res.status(401).send(utils.messages.invalidToken);
+	},
+
+	deleteFavorite : async (req,res) =>
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
 		{
-			await t.rollback();
-			console.log(err);
-			res.status(500).send(utils.messages.serverError);
+			let t = await db.sequelize.transaction();
+			try
+			{
+				await db.Favorite.destroy({where: { id_user : id_user,id_circuit : req.params.id_circuit},transaction : t});
+				await t.commit();
+				res.sendStatus(204);
+			}
+
+			catch(err)
+			{
+				await t.rollback();
+				console.log(err);
+				res.status(500).send(utils.messages.serverError);
+			}	
 		}
+
+		else
+			res.status(401).send(utils.messages.invalidToken);
 	}
 };

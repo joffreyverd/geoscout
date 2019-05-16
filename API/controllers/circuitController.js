@@ -79,7 +79,7 @@ module.exports =
 			let circuits = await db.Circuit.findAll(
 				{
 					where : {id_circuit : steps_within_range, published : 1},
-					attributes : ['id_circuit','name' ,'description','length','duration','need_internet','published','level'],
+					attributes : ['id_circuit','name' ,'description','length','duration','need_internet','published','level','version'],
 					include : 
 					[
 						{
