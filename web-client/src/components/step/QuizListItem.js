@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { Input } from 'reactstrap';
-import { Checkbox } from 'antd';
+import { Input, Button } from 'reactstrap';
+import { Checkbox, Icon } from 'antd';
 import 'antd/dist/antd.css';
 
 class QuizListItem extends Component {
@@ -10,7 +10,9 @@ class QuizListItem extends Component {
 
     render() {
 
-        const { choice, response, handleChoicesChange, handleResponseChange, choiceIndex, questionIndex } = this.props;
+        const { choice, response, handleChoicesChange,
+            handleResponseChange, choiceIndex,
+            deleteChoiceInput, questionIndex } = this.props;
 
         return (
             <>
@@ -28,6 +30,15 @@ class QuizListItem extends Component {
                         value={choice}
                         onChange={event => handleChoicesChange(event, choiceIndex, questionIndex)}
                     />
+                    <Button
+                        className='delete-choice-button'
+                        type='primary'
+                        color='danger'
+                        name={choice}
+                        value={choice}
+                        onClick={() => deleteChoiceInput(choiceIndex, questionIndex, response)}
+                    ><Icon type='delete' />
+                    </Button>
                 </div>
             </>
         );

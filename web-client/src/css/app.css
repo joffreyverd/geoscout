@@ -473,6 +473,53 @@ cursor: pointer;
     transition: .2s;
 }
 
+.is-quizz-checkbox {
+  justify-content: flex-start;
+  margin: 30px auto 20px auto !important;
+  display: block !important;
+  width: 80% !important;
+}
+
+.choices-list {
+  padding: 0px;
+}
+
+.choices-checkbox {
+  display: flex !important;
+  justify-content: flex-start;
+  margin: 30px auto 20px auto !important;
+  display: block !important;
+  width: 20% !important;
+}
+
+.add-choice-button {
+  padding: auto;
+  line-height: 10px;
+  height: 25px;
+  margin: auto; 
+  display: block;
+}
+
+.add-choice-button:hover {
+cursor: pointer;
+}
+
+.checkbox-input-wrapper {
+  display: flex;
+  margin: auto 40px;
+}
+
+.choice-input {
+  margin: auto;
+}
+
+.delete-choice-button {
+  line-height: 10px;
+  height: 30px;
+  margin: auto auto auto 20px;
+  display: block;
+}
+
 /************************** DETAILED-CIRCUIT **************************/
 
 .header-wrapper {

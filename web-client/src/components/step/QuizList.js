@@ -11,7 +11,8 @@ class QuizList extends Component {
 
     render() {
 
-        const { items = [], response, handleChoicesChange, handleResponseChange, activeTab } = this.props;
+        const { items = [], response, handleChoicesChange,
+            handleResponseChange, deleteChoiceInput, activeTab } = this.props;
 
         return (
             <>
@@ -22,6 +23,7 @@ class QuizList extends Component {
                         questionIndex={activeTab}
                         choice={item}
                         response={response}
+                        deleteChoiceInput={deleteChoiceInput}
                         handleChoicesChange={handleChoicesChange}
                         handleResponseChange={handleResponseChange}
                         getNewChoices={this.getNewChoices}

@@ -11,7 +11,8 @@ export default class QuizQuestion extends React.Component {
 
     render() {
 
-        const { quiz, handleChoicesChange, handleResponseChange, activeTab } = this.props;
+        const { quiz, handleChoicesChange, deleteChoiceInput,
+            handleResponseChange, addNewChoice, activeTab } = this.props;
         const qcm = (quiz.response) && quiz.response.split(':');
         const qcmResponse = (qcm) && qcm[1];
         const qcmChoices = (qcm) && qcm[0].split(',');
@@ -31,7 +32,7 @@ export default class QuizQuestion extends React.Component {
 
                 <Button
                     className='add-choice-button'
-                    onClick={this.addResponse}
+                    onClick={() => addNewChoice(activeTab)}
                     color='info'
                 >Ajout choix
                 </Button>
@@ -40,6 +41,7 @@ export default class QuizQuestion extends React.Component {
                     <QuizList
                         items={qcmChoices}
                         response={qcmResponse}
+                        deleteChoiceInput={deleteChoiceInput}
                         handleChoicesChange={handleChoicesChange}
                         handleResponseChange={handleResponseChange}
                         activeTab={activeTab}
