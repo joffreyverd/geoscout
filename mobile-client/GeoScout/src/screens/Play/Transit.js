@@ -132,7 +132,14 @@ class Transit extends React.Component {
             navigation: {
                 navigate,
                 state: {
-                    params: { circuit, step: stepNumber, score, maxScore }
+                    params: {
+                        circuit,
+                        step: stepNumber,
+                        score,
+                        maxScore,
+                        time,
+                        startingTime
+                    }
                 }
             }
         } = this.props;
@@ -152,6 +159,8 @@ class Transit extends React.Component {
                     }}
                     score={score}
                     maxScore={maxScore}
+                    time={time}
+                    startingTime={startingTime}
                 >
                     <PlayHeader
                         pressMenu={() => this.setState({ menuOpen: true })}

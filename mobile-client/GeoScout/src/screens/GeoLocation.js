@@ -23,7 +23,7 @@ const ASPECT_RATIO = width / height;
 const LATITUDE_DELTA = 0.5;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class GeoLocation extends React.Component {
+export default class GeoLocation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -263,8 +263,6 @@ class GeoLocation extends React.Component {
         );
     }
 }
-
-export default GeoLocation;
 
 const styles = StyleSheet.create({
     radius: {

@@ -8,7 +8,7 @@ export default class Finish extends React.Component {
             navigation: {
                 navigate,
                 state: {
-                    params: { circuit, score, maxScore }
+                    params: { circuit, score, maxScore, time }
                 }
             }
         } = this.props;
@@ -20,7 +20,8 @@ export default class Finish extends React.Component {
             version: circuit.version,
             id_step: null,
             score: score,
-            max_score: maxScore
+            max_score: maxScore,
+            achievedTime: time
         });
         navigate('Home');
     };
@@ -34,18 +35,26 @@ export default class Finish extends React.Component {
             }
         } = this.props;
 
+        let minutes = Math.floor(time);
+        let sec = ((time - minutes) * 60).toFixed(0);
+
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>Bravo !</Text>
-                <Text style={styles.text}>
-                    Vous avez terminé le circuit en {time} minutes avec {score}{' '}
-                    points.
+                <Text style={Object.assign({}, styles.text, styles.textBravo)}>
+                    Bravo !
                 </Text>
-                {score < maxScore && (
+                <View>
                     <Text style={styles.text}>
-                        Mais vous auriez pu avoir {maxScore} points.
+                        Vous avez terminé le circuit en {minutes} minute
+                        {minutes > 1 && 's'} et {sec} seconde
+                        {sec > 1 && 's'} avec {score} points.
                     </Text>
-                )}
+                    {score < maxScore && (
+                        <Text style={styles.text}>
+                            Mais vous auriez pu avoir {maxScore} points.
+                        </Text>
+                    )}
+                </View>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={this.finish}
@@ -61,11 +70,22 @@ export default class Finish extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#1abc9c',
+        padding: 15,
+        paddingTop: 40
+    },
+    textContainer: {
         alignItems: 'center'
     },
-    text: {
+    textBravo: {
         fontSize: 35
+    },
+    text: {
+        fontSize: 25,
+        color: 'white',
+        textAlign: 'center'
     },
     button: {
         backgroundColor: '#2c3e50',
