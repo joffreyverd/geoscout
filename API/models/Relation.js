@@ -5,7 +5,7 @@ module.exports = (sequelize,DataTypes) =>
         {
             status : 
             {
-                type : DataTypes.ENUM('0','1','2'),
+                type : DataTypes.TINYINT,
                 allowNull : false,
             },
         },
