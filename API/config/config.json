@@ -7,7 +7,14 @@
       "host": "154.49.211.218",
       "dialect": "mysql",
       "timezone": "+02:00",
-      "logging": true
+      "logging": true,
+      "pool": 
+      {
+        "max": 100,
+        "min": 0,
+        "idle": 500,
+        "acquire": 500
+      }
     },
     "production": {
       "username": "root",

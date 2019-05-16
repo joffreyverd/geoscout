@@ -1,57 +1,70 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-console */
 
 const db = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const config = require('./configUser');
-const utils = require('./utils')
+const utils = require('./utils');
 module.exports = 
 {
 	//////////////////////////////////////////////////////////
 
 	createUser : async (req,res) => 
 	{
+		let t = await db.sequelize.transaction();
 		try
 		{
-			let t = await db.sequelize.transaction();
 			let user = await db.User.create(
-			{
-				'email' : req.body.email,
-				'password' : bcrypt.hashSync(req.body.password, 12),
-				'firstname' : req.body.firstname,
-				'lastname' : req.body.lastname,
-				'picture' : req.body.picture
-			},{transaction : t});
+				{
+					'email' : req.body.email,
+					'password' : await bcrypt.hash(req.body.password, 12),
+					'firstname' : req.body.firstname,
+					'lastname' : req.body.lastname,
+					'picture' : req.body.picture
+				},{transaction : t});
 
 			await t.commit();
-			
 			res.status(201).send({token :jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400}),user : user});
 		}
 
-		catch
+		catch(err)
 		{
-			res.status(500).send(utils.messages.serverError)
+			console.log(err);
+			await t.rollback();
+			res.status(500).send(utils.messages.serverError);
 		}
 	},
 
 	updateUser : async (req,res) =>
 	{
-		try
+		if(utils.verifToken(req.headers['authorization']))
 		{
-			let user = await db.User.findOne({where : {email : req.body.email}});
 			let t = await db.sequelize.transaction();
-			user.email = req.body.email;
-			user.password = bcrypt.hashSync(req.body.password, 12);
-			user.firstname = req.body.firstname;
-			user.lastname = req.body.lastname;
-			await user.save({transaction : t});
-			await t.commit();
-			res.sendStatus(204);
+			try
+			{
+				let user = await db.User.findOne({where : {email : req.body.email}});
+				
+				user.email = req.body.email;
+				user.password = await bcrypt.hash(req.body.password, 12);
+				user.firstname = req.body.firstname;
+				user.lastname = req.body.lastname;
+				await user.save({transaction : t});
+				await t.commit();
+				res.sendStatus(204);
+			}
+
+			catch(err)
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
 		}
 
-		catch
-		{
-			res.status(500).send(utils.messages.serverError)
-		}
+		else
+			return res.status(401).send(utils.messages.invalidToken);
+		
 	},
 
 	login : async (req,res) =>
@@ -70,7 +83,7 @@ module.exports =
 				res.status(401).send(utils.messages.incorrectPassword);
 		}
 
-		catch
+		catch(err)
 		{
 			res.status(500).send(utils.messages.serverError);
 		}
@@ -83,7 +96,7 @@ module.exports =
 			let token = req.headers['authorization'];
 			if (!token) 
 				return res.status(401).send(utils.messages.invalidToken);
-			jwt.verify(token.split(' ')[1], config.secret, async (err, decoded) =>
+			await jwt.verify(token.split(' ')[1], config.secret, async (err, decoded) =>
 			{
 				if (err) 
 					return res.status(401).send(utils.messages.invalidToken);
@@ -92,8 +105,9 @@ module.exports =
 			});
 		}
 
-		catch
+		catch(err)
 		{
+			console.log(err);
 			res.status(500).send(utils.messages.serverError);
 		}
 		
@@ -108,33 +122,34 @@ module.exports =
 			if(utils.verifToken(req.headers['authorization']))
 			{
 				res.status(200).send(await b.User.findByPk(req.params.id_user,
-				{
-					attributes : ['id_user','firstname','lastname','picture','email'],
-					include : 
-					[
-						{
-							model : db.Circuit,
-							attributes : ['id_circuit','name','description']
-						},
-						{
-							model : db.Evaluation
-						},
-						{ 
-							model: db.User,
-							as: 'Relations',
-							attributes : ['id_user','firstname','lastname','picture','email'],
-						}
-					]
-				}));
+					{
+						attributes : ['id_user','firstname','lastname','picture','email'],
+						include : 
+						[
+							{
+								model : db.Circuit,
+								attributes : ['id_circuit','name','description']
+							},
+							{
+								model : db.Evaluation
+							},
+							{ 
+								model: db.User,
+								as: 'Relations',
+								attributes : ['id_user','firstname','lastname','picture','email'],
+							}
+						]
+					}));
 			}
 
 			else
 				res.status(401).send(utils.messages.invalidToken);
 		}
 
-		catch
+		catch(err)
 		{
-			res.status(500).send(utils.messages.serverError)
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
 		}
 	},
 
@@ -154,9 +169,10 @@ module.exports =
 				res.status(401).send(utils.messages.invalidToken);
 		}
 
-		catch
+		catch(err)
 		{
-			res.status(500).send(utils.messages.serverError)
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
 		}
 	},
 
@@ -164,36 +180,40 @@ module.exports =
 
 	askRelation : async (req,res) => 
 	{
-		try
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
 		{
-			let id_user = utils.verifToken(req.headers['authorization']);
-			if(id_user)
+			let t = await db.sequelize.transaction();
+			try
 			{
 				if(id_user !== req.params.id_user)
 				{
-					let t = await db.sequelize.transaction();
 					let user = await db.User.findByPk(id_user);
 					let friend = await db.User.findByPk(req.params.id_user);
 					let relations_user = await user.getRelations({where : {id_user : req.params.id_user}});
 					if(!friend || relations_user)
-							throw 'Error';
+						throw 'Error';
 					await user.addRelation(friend.id_user,{through : {status : '0', last_action_user_id: user.id_user }},{transaction : t});
 					await friend.addRelation(user,{through : {status : '0',last_action_user_id: user.id_user}},{transaction : t});
 					await t.commit();
-					res.sendStatus(204);
+					res.sendStatus(204);	
 				}
 
 				else
-					res.sendStatus(403)
+					res.sendStatus(403);
+				
 			}
-			else
-				res.status(401).send(utils.messages.invalidToken); 
-		}
+			
+			catch(err)
+			{
+				console.log(err);
+				await t.commit();
+				res.status(500).send(utils.messages.serverError);
+			}
 
-		catch
-		{
-			res.status(500).send(utils.messages.serverError)
 		}
+		else
+			res.status(401).send(utils.messages.invalidToken); 
 		
 	},
 
@@ -202,12 +222,12 @@ module.exports =
 
 	answerRelation : async (req,res) =>
 	{
-		try
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
 		{
-			let id_user = utils.verifToken(req.headers['authorization']);
-			if(id_user)
-			{
-				let t = await db.sequelize.transaction();
+			let t = await db.sequelize.transaction();
+			try
+			{	
 				let rel = await db.Relation.findOne({where : {RelationIdUser : id_user}});
 				if(req.params.accepted)
 				{
@@ -217,19 +237,80 @@ module.exports =
 				}
 
 				else
+				{
 					await rel.destroy({transaction : t});
 					await t.commit();
+				}
 					
-				res.sendStatus(204)
-
+				res.sendStatus(204);
 			}
-			else
-				res.status(401).send(utils.messages.invalidToken); 
+
+			catch(err)
+			{
+				console.log(err);
+				await t.rollback();
+			}
 		}
 
-		catch
+		else
+			res.status(401).send(utils.messages.invalidToken); 
+	},
+
+	getFavorites : async (req,res) =>
+	{
+		try 
 		{
-			res.status(500).send(utils.messages.serverError)
+			let id_user = utils.verifToken(req.headers['authorization']);
+			if(id_user)
+			{
+				let users = await db.Favorite.findAll(
+					{
+						attributes : [],
+						where : {id_user : id_user},
+						include : 
+						[
+							{
+								model : db.Circuit,
+								attributes : ['id_circuit','name' ,'description','length','duration','need_internet','published','version','level']		
+							}
+						]
+					});
+				res.status(200).send(users);
+			}
+
+			else
+				res.status(401).send(utils.messages.invalidToken);
+		} 
+		
+		catch(err)
+		{
+			console.log(error);
+		}
+	},
+
+	setFavorite : async (req,res) =>
+	{
+		let t = await db.sequelize.transaction();
+		try
+		{
+			let id_user = utils.verifToken(req.headers['authorization']);
+			if(id_user)
+			{
+				
+				await db.Favorite.create({id_user : id_user, id_circuit : req.params.id_circuit,transaction : t});
+				await t.commit();
+				res.sendStatus(201);
+			}
+
+			else
+				res.status(401).send(utils.messages.invalidToken);
+		}
+
+		catch(err)
+		{
+			await t.rollback();
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
 		}
 	}
-}
+};
