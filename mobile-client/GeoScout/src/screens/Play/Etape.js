@@ -49,7 +49,14 @@ class Etape extends React.Component {
             navigation: {
                 navigate,
                 state: {
-                    params: { circuit, step: stepNumber, score, maxScore }
+                    params: {
+                        circuit,
+                        step: stepNumber,
+                        score,
+                        maxScore,
+                        startingTime,
+                        time
+                    }
                 }
             }
         } = this.props;
@@ -68,6 +75,8 @@ class Etape extends React.Component {
                 }}
                 score={score}
                 maxScore={maxScore}
+                startingTime={startingTime}
+                time={time}
             >
                 <PlayHeader
                     pressMenu={() => this.setState({ menuOpen: true })}
@@ -98,23 +107,35 @@ class Etape extends React.Component {
                 >
                     {step.Questions &&
                         step.Questions.length > 0 &&
-                        step.Questions.map(item => (
-                            <TouchableOpacity
-                                key={item.id_question}
-                                onPress={() =>
-                                    navigate('Question', {
-                                        question: item,
-                                        nextStep: this.nextStep
-                                    })
-                                }
-                                activeOpacity={0.8}
-                                style={styles.button}
-                            >
-                                <Text style={styles.textButton}>
-                                    Question {item.difficulty}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
+                        step.Questions.map(item => {
+                            let screen = '';
+                            switch (item.type_of) {
+                                case 1:
+                                    screen = 'QuestionQCM';
+                                    break;
+                                case 2:
+                                    screen = 'QuestionLibre';
+                                    break;
+                            }
+                            console.log(screen);
+                            return (
+                                <TouchableOpacity
+                                    key={item.id_question}
+                                    onPress={() =>
+                                        navigate(screen, {
+                                            question: item,
+                                            nextStep: this.nextStep
+                                        })
+                                    }
+                                    activeOpacity={0.8}
+                                    style={styles.button}
+                                >
+                                    <Text style={styles.textButton}>
+                                        Question {item.difficulty}
+                                    </Text>
+                                </TouchableOpacity>
+                            );
+                        })}
 
                     <TouchableOpacity
                         onPress={() => this.nextStep(0, 15)}
