@@ -19,7 +19,8 @@ import Me from '../screens/Profil/Me';
 import Start from '../screens/Play/Start';
 import Transit from '../screens/Play/Transit';
 import Etape from '../screens/Play/Etape';
-import Question from '../screens/Play/Question';
+import QuestionLibre from '../screens/Play/Questions/QuestionLibre';
+import QuestionQCM from '../screens/Play/Questions/QuestionQCM';
 import Finish from '../screens/Play/Finish';
 
 const PrincipalStack = createStackNavigator(
@@ -42,7 +43,8 @@ const PrincipalStack = createStackNavigator(
 const EtapeStack = createStackNavigator(
     {
         Etape: Etape,
-        Question: Question
+        QuestionLibre: QuestionLibre,
+        QuestionQCM: QuestionQCM
     },
     {
         initialRouteName: 'Etape',
@@ -51,16 +53,11 @@ const EtapeStack = createStackNavigator(
 );
 
 // Switch Stack du jeu
-const PlaySwitch = createSwitchNavigator(
-    {
-        Transit: Transit,
-        EtapeStack: EtapeStack,
-        Finish: Finish
-    },
-    {
-        mode: 'card'
-    }
-);
+const PlaySwitch = createSwitchNavigator({
+    Transit: Transit,
+    EtapeStack: EtapeStack,
+    Finish: Finish
+});
 
 // Switch Stack de l'authentification
 const AuthStack = createStackNavigator(

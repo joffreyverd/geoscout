@@ -25,12 +25,59 @@ export default class DetailCircuit extends React.Component {
         };
     }
 
-    render() {
+    download = () => {
         const {
-            name,
-            description,
-            id_circuit
-        } = this.props.navigation.state.params;
+            navigate,
+            state: {
+                params: { id_circuit }
+            }
+        } = this.props.navigation;
+        api.get('download-circuit/' + id_circuit)
+            .then(data => {
+                data.Steps.sort((a, b) => a.order - b.order);
+                Alert.alert(
+                    'Hopla',
+                    "Jetzt geht's los",
+                    [
+                        {
+                            text: 'Retour',
+                            onPress: () => {
+                                navigate('Home');
+                            },
+                            style: 'cancel'
+                        },
+                        {
+                            text: 'Commencer à jouer',
+                            onPress: () => {
+                                navigate('Start', {
+                                    circuit: data
+                                });
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            })
+            .catch(() => {
+                Alert.alert(
+                    'Erreur',
+                    'Une erreur est survenue, merci de réessayer.',
+                    [
+                        {
+                            text: 'Ok',
+                            onPress: () => {
+                                navigate('Home');
+                            },
+                            style: 'cancel'
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            });
+    };
+
+    render() {
+        const { name, description } = this.props.navigation.state.params;
         const { menuOpen } = this.state;
         return (
             <NavigationMenu
@@ -89,62 +136,7 @@ export default class DetailCircuit extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() =>
-                            Alert.alert(
-                                'Hopla',
-                                "Jetzt geht's los",
-                                [
-                                    {
-                                        text: 'Retour',
-                                        onPress: () => {
-                                            this.props.navigation.navigate(
-                                                'Home'
-                                            );
-                                        },
-                                        style: 'cancel'
-                                    },
-                                    {
-                                        text: 'Commencer à jouer',
-                                        onPress: () => {
-                                            api.get(
-                                                'download-circuit/' + id_circuit
-                                            )
-                                                .then(data => {
-                                                    this.props.navigation.navigate(
-                                                        'Start',
-                                                        {
-                                                            circuit: data
-                                                        }
-                                                    );
-                                                })
-                                                .catch(() => {
-                                                    Alert.alert(
-                                                        'Erreur',
-                                                        'Une erreur est survenue, merci de réessayer.',
-                                                        [
-                                                            {
-                                                                text: 'Ok',
-                                                                onPress: () => {
-                                                                    this.props.navigation.navigate(
-                                                                        'Home'
-                                                                    );
-                                                                },
-                                                                style: 'cancel'
-                                                            }
-                                                        ],
-                                                        {
-                                                            cancelable: false
-                                                        }
-                                                    );
-                                                });
-                                        }
-                                    }
-                                ],
-                                {
-                                    cancelable: false
-                                }
-                            )
-                        }
+                        onPress={this.download}
                     >
                         <Text style={styles.textButton}>Télécharger </Text>
                     </TouchableOpacity>
