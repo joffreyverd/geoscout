@@ -1,8 +1,5 @@
 import React from 'react';
-import { 
-    Text, StyleSheet,
-    TouchableOpacity, Alert
-} from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Header } from 'react-native-elements';
 import SideMenu from 'react-native-side-menu';
@@ -29,14 +26,12 @@ export function PlayDrawerMenu({
             id_step,
             score,
             max_score
-        }).then(() => navigate('Home'))
-        .catch(error => {
-            Alert.alert(
-                'Erreur',
-                error.text
-            )
         })
-    }
+            .then(() => navigate('Home'))
+            .catch(error => {
+                Alert.alert('Erreur', error.text);
+            });
+    };
 
     /**
      * Fonction d'abandon d'un circuit
@@ -49,43 +44,38 @@ export function PlayDrawerMenu({
             id_step,
             score,
             max_score
-        }).then(() => navigate('Home'))
-        .catch(error => {
-            Alert.alert(
-                'Erreur',
-                error.text
-            )
         })
-    }
+            .then(() => navigate('Home'))
+            .catch(error => {
+                Alert.alert('Erreur', error.text);
+            });
+    };
 
     const clickPause = () => {
         Alert.alert(
             'Pauser',
             'Voulez vous vraiment mettre en pause le circuit ?',
-            [
-                {text: 'Reprendre'},
-                {text: 'Mettre en pause', onPress: pause}
-            ]
-        )
-    }
+            [{ text: 'Reprendre' }, { text: 'Mettre en pause', onPress: pause }]
+        );
+    };
 
     const clickAbandon = () => {
         Alert.alert(
             'Abandonner',
             'Voulez vous vraiment abandonner le circuit ?',
             [
-                {text: 'Reprendre'},
-                {text: 'Abandonner', onPress: abandon, style: 'cancel'}
+                { text: 'Reprendre' },
+                { text: 'Abandonner', onPress: abandon, style: 'cancel' }
             ]
-        )
-    }
+        );
+    };
 
     return (
         <SideMenu
             isOpen={isOpen}
             disableGestures={true}
             openMenuOffset={150}
-            onChange={opened => opened !== isOpen ? toggle(opened): null}
+            onChange={opened => (opened !== isOpen ? toggle(opened) : null)}
             menu={
                 <SafeAreaView style={styles.container}>
                     <TouchableOpacity
@@ -129,7 +119,7 @@ export function PlayHeader({ pressMenu }) {
                 color: 'white',
                 onPress: pressMenu
             }}
-            backgroundColor='#1abc9c'
+            backgroundColor="#1abc9c"
         />
-    )
+    );
 }
