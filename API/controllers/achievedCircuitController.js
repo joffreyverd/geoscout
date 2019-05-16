@@ -17,9 +17,10 @@ module.exports=
                     max_score : req.body.max_score,
                     statut_circuit : req.body.statut_circuit,
                     version: req.body.version,
-                    achievedDate: date,
+                    achievedDate: Date.now(),
+                    achievedTime: req.body.achievedTime,
                     id_user: id_user,
-                    id_circuit: req.body.id_circuit,
+                    id_circuit: req.body.id_circuit,    
                     id_step: req.body.id_step
                 });
 
@@ -45,7 +46,7 @@ module.exports=
         {
             try
             {
-                await db.AchievedCircuit.destroy({where : {id_route : req.params.id_route}});
+                await db.AchievedCircuit.destroy({where : {id_achievement : req.params.id_achievement}});
                 res.sendStatus(204);
             }
 

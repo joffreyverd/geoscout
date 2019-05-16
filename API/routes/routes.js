@@ -36,7 +36,7 @@ module.exports = function(app)
 
 	app.route('/achievedcircuit').get(achievements.getAchievements)
 	app.route('/achievedcircuit').post(achievements.createAchievement)
-	app.route('/achievedcircuit/:id_route').delete(achievements.deleteAchievement)
+	app.route('/achievedcircuit/:id_achievement').delete(achievements.deleteAchievement)
 
 	app.route('/question/:id_question').get(question.getQuestion);
 	app.route('/question').post(question.createQuestion);
