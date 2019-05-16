@@ -1,25 +1,14 @@
 import React from 'react';
-import {
-    Text,
-    View,
-    StyleSheet,
-    TouchableOpacity
-} from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import api from '../../config/httpMethods';
 
-
 export default class Finish extends React.Component {
-
     finish = () => {
-        const { 
-            navigation: { 
+        const {
+            navigation: {
                 navigate,
                 state: {
-                    params: {
-                        circuit,
-                        score,
-                        maxScore
-                    }
+                    params: { circuit, score, maxScore }
                 }
             }
         } = this.props;
@@ -32,29 +21,31 @@ export default class Finish extends React.Component {
             id_step: null,
             score: score,
             max_score: maxScore
-        })
+        });
         navigate('Home');
-    }
+    };
 
     render() {
-        const { 
-            navigation: { 
+        const {
+            navigation: {
                 state: {
-                    params: {
-                        score,
-                        maxScore
-                    }
+                    params: { score, maxScore, time }
                 }
             }
         } = this.props;
 
         return (
             <View style={styles.container}>
-                <Text style={styles.text}>Bravo.</Text>
-                <Text style={styles.text}>Vous avez {score} points.</Text>
-                { score < maxScore &&
-                    <Text style={styles.text}>Mais vous auriez pu avoir {maxScore} points.</Text>
-                }
+                <Text style={styles.text}>Bravo !</Text>
+                <Text style={styles.text}>
+                    Vous avez terminé le circuit en {time} minutes avec {score}{' '}
+                    points.
+                </Text>
+                {score < maxScore && (
+                    <Text style={styles.text}>
+                        Mais vous auriez pu avoir {maxScore} points.
+                    </Text>
+                )}
                 <TouchableOpacity
                     style={styles.button}
                     onPress={this.finish}
@@ -87,5 +78,5 @@ const styles = StyleSheet.create({
     textButton: {
         color: '#fff',
         fontSize: 22
-    },
+    }
 });

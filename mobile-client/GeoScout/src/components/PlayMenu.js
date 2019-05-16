@@ -5,7 +5,6 @@ import { Header } from 'react-native-elements';
 import SideMenu from 'react-native-side-menu';
 
 import api from '../config/httpMethods';
-
 export function PlayDrawerMenu({
     isOpen,
     children,

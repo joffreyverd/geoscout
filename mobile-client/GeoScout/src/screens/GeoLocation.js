@@ -1,6 +1,7 @@
 import React from 'react';
 import {
     ActivityIndicator,
+    Alert,
     Text,
     StyleSheet,
     View,
@@ -11,20 +12,20 @@ import {
 import { Location } from 'expo';
 import { Icon } from 'react-native-elements';
 
-import { NavigationMenu, NavigationHeader } from '../components/NavigationMenu'
+import { NavigationMenu, NavigationHeader } from '../components/NavigationMenu';
 import Callout from '../components/Callout';
 import api from '../config/httpMethods';
 import MapView, { Marker } from 'react-native-maps';
-import {mapStyle} from '../../utils/style/mapStyle';
+import { mapStyle } from '../../utils/style/mapStyle';
 
-const {width,height} = Dimensions.get('window')
-const ASPECT_RATIO = width/height
-const LATITUDE_DELTA = 0.5
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.5;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-class GeoLocation extends React.Component{
-    constructor(props){
-        super(props)
+class GeoLocation extends React.Component {
+    constructor(props) {
+        super(props);
         this.state = {
             ready: false,
             error: null,
@@ -43,115 +44,137 @@ class GeoLocation extends React.Component{
             circuitReady: false,
             switchValue: false,
             menuOpen: false
-        }
+        };
     }
 
     componentDidMount() {
         this.checkLocation();
     }
 
-    getCircuits(){
+    getCircuits() {
         let body = {
             user_longitude: this.state.region.longitude,
             user_latitude: this.state.region.latitude,
-            distance: 30,
+            distance: 30
         };
 
-        api.post('circuit/nearby', body).then((data) => {
-            this.setState({
-                circuits: data,
-                circuitReady: true
+        api.post('circuit/nearby', body)
+            .then(data => {
+                this.setState({
+                    circuits: data,
+                    circuitReady: true
+                });
+            })
+            .catch(error => {
+                Alert.alert(
+                    'Erreur',
+                    error,
+                    [{ text: 'Retour', style: 'cancel' }],
+                    { cancelable: true }
+                );
             });
-        }).catch((error) => {
-            Alert.alert(
-                'Erreur',
-                error,
-                [
-                    {text: 'Retour', style: 'cancel'},
-                ],
-                { cancelable: true }
-            )
-        });
     }
 
-    onRegionChangeComplete = (region) => {
-        this.setState({
-            region: region
-        }, () => {this.getCircuits()});
-    }
+    onRegionChangeComplete = region => {
+        this.setState(
+            {
+                region: region
+            },
+            () => {
+                this.getCircuits();
+            }
+        );
+    };
 
-    updateLocation = (location) => {
+    updateLocation = location => {
         let region = {
             latitude: parseFloat(location.coords.latitude),
             longitude: parseFloat(location.coords.longitude),
             latitudeDelta: LATITUDE_DELTA,
             longitudeDelta: LONGITUDE_DELTA
-        }
+        };
 
         this.setState({
             ready: true,
             error: null,
             region: region,
             markerPosition: region
-        })
-    }
+        });
+    };
 
     checkLocation = async () => {
-        return Location.requestPermissionsAsync().then(async () => {
-            let locationEnabled = await Location.hasServicesEnabledAsync();
-            if (locationEnabled) {
-                let location = await Location.getCurrentPositionAsync({accuracy: 5});
-                this.updateLocation(location);
-            } else {
+        return Location.requestPermissionsAsync()
+            .then(async () => {
+                let locationEnabled = await Location.hasServicesEnabledAsync();
+                if (locationEnabled) {
+                    let location = await Location.getCurrentPositionAsync({
+                        accuracy: 5
+                    });
+                    this.updateLocation(location);
+                } else {
+                    this.setState({
+                        error:
+                            "La localisation n'est pas activée sur le périphérique."
+                    });
+                }
+            })
+            .catch(() => {
                 this.setState({
-                    error: "La localisation n'est pas activée sur le périphérique."
-                })
-            }
-        }).catch(() => {
-            this.setState({
-                error: "La localisation n'est pas autorisée sur le périphérique."
+                    error:
+                        "La localisation n'est pas autorisée sur le périphérique."
+                });
             });
-        });
-    }
+    };
 
     toggleSwitch = value => {
         this.setState({
             switchValue: value,
-            mapType: (value?'satellite':'standard')
+            mapType: value ? 'satellite' : 'standard'
         });
-    }
+    };
 
     componentWillUnmount() {
         //Je ne sais pas si c'est encore utile !
-        navigator.geolocation.clearWatch(this.state)
+        navigator.geolocation.clearWatch(this.state);
     }
 
-    displayNearbyCircuits(){
+    displayNearbyCircuits() {
         const { circuits } = this.state;
-        return circuits.map((item) => {
+        return circuits.map(item => {
             let latLongCircuit = {
                 latitude: parseFloat(item.Steps[0].latitude),
                 longitude: parseFloat(item.Steps[0].longitude)
-            }
+            };
             return (
                 <MapView.Marker
-                key={item.id_circuit}
-                coordinate={latLongCircuit}>
+                    key={item.id_circuit}
+                    coordinate={latLongCircuit}
+                >
                     <View style={styles.markerCircuit}>
-                        <Icon name='flag' type='font-awesome' size={15} color='white'/>
+                        <Icon
+                            name="flag"
+                            type="font-awesome"
+                            size={15}
+                            color="white"
+                        />
                     </View>
                     <MapView.Callout
-                    styles={styles.callout}
-                    onPress={() => {
-                        this.props.navigation.navigate('DetailCircuit', item);
-                    }}>
+                        styles={styles.callout}
+                        onPress={() => {
+                            this.props.navigation.navigate(
+                                'DetailCircuit',
+                                item
+                            );
+                        }}
+                    >
                         <Callout
-                        name={item.name}
-                        rate={2}
-                        distance={14}
-                        timeInHour={1}
-                        timeInMinute={30}
-                        difficulty={[1,0,1]}/>
+                            name={item.name}
+                            rate={2}
+                            distance={14}
+                            timeInHour={1}
+                            timeInMinute={30}
+                            difficulty={[1, 0, 1]}
+                        />
                     </MapView.Callout>
                 </MapView.Marker>
             );
@@ -162,68 +185,80 @@ class GeoLocation extends React.Component{
         const { menuOpen } = this.state;
         return (
             <NavigationMenu
-            isOpen={menuOpen}
-            toggle={menuOpen => this.setState({ menuOpen })}
-            navigate={this.props.navigation.navigate}>
-            <NavigationHeader
-            pressMenu={() => this.setState({ menuOpen: true })}
-            titleText={'Carte'}
-            rightComponent={
-                <View style={styles.buttonMapChange}>
-                    <Icon
-                    name='satellite'
-                    type='material'
-                    size={20}
-                    color='#FFF'/>
-                    <Switch
-                    onValueChange = {this.toggleSwitch}
-                    value = {this.state.switchValue}/>
-                    <Icon
-                    name='landscape'
-                    type='material'
-                    size={20}
-                    color='#FFF'/>
-                </View>  
-            }/>
-            <View style={styles.container}>
-                {((this.state.error)? 
-                    <Text style={styles.errorText}>{this.state.error}</Text> 
-                :
-                    (this.state.ready ?
-                        <>                       
-                        <MapView 
-                        style={styles.map}
-                        mapType={this.state.mapType}
-                        initialRegion={this.state.region}
-                        customMapStyle={mapStyle}
-                        onRegionChangeComplete={this.onRegionChangeComplete}
-                        loadingIndicatorColor="#1abc9c"
-                        loadingBackgroundColor="#ffffff"
-                        cacheEnabled={true}
-                        zoomEnabled
-                        scrollingEnabled>
-                            <Marker
-                            coordinate={this.state.markerPosition}>
-                                <View style={styles.radius}>
-                                    <View style={styles.marker}/>
-                                </View>
-                            </Marker>
-                            {(this.state.circuitReady) &&
-                                this.displayNearbyCircuits()
-                            }
-                        </MapView>
+                isOpen={menuOpen}
+                toggle={menuOpen => this.setState({ menuOpen })}
+                navigate={this.props.navigation.navigate}
+            >
+                <NavigationHeader
+                    pressMenu={() => this.setState({ menuOpen: true })}
+                    titleText={'Carte'}
+                    rightComponent={
+                        <View style={styles.buttonMapChange}>
+                            <Icon
+                                name="satellite"
+                                type="material"
+                                size={20}
+                                color="#FFF"
+                            />
+                            <Switch
+                                onValueChange={this.toggleSwitch}
+                                value={this.state.switchValue}
+                            />
+                            <Icon
+                                name="landscape"
+                                type="material"
+                                size={20}
+                                color="#FFF"
+                            />
+                        </View>
+                    }
+                />
+                <View style={styles.container}>
+                    {this.state.error ? (
+                        <Text style={styles.errorText}>{this.state.error}</Text>
+                    ) : this.state.ready ? (
+                        <>
+                            <MapView
+                                style={styles.map}
+                                mapType={this.state.mapType}
+                                initialRegion={this.state.region}
+                                customMapStyle={mapStyle}
+                                onRegionChangeComplete={
+                                    this.onRegionChangeComplete
+                                }
+                                loadingIndicatorColor="#1abc9c"
+                                loadingBackgroundColor="#ffffff"
+                                cacheEnabled={true}
+                                zoomEnabled
+                                scrollingEnabled
+                            >
+                                <Marker coordinate={this.state.markerPosition}>
+                                    <View style={styles.radius}>
+                                        <View style={styles.marker} />
+                                    </View>
+                                </Marker>
+                                {this.state.circuitReady &&
+                                    this.displayNearbyCircuits()}
+                            </MapView>
                         </>
-                    :
+                    ) : (
                         <>
                             <Image
-                            style={{width: (width*0.8), height: (height*0.1)}}
-                            source={require('../../utils/img/logoGeoScoutGreen.png')}/>
+                                style={{
+                                    width: width * 0.8,
+                                    height: height * 0.1
+                                }}
+                                source={require('../../utils/img/logoGeoScoutGreen.png')}
+                            />
 
-                            <ActivityIndicator style={styles.loaderMargin} size='large' color='#1abc9c'/>
+                            <ActivityIndicator
+                                style={styles.loaderMargin}
+                                size="large"
+                                color="#1abc9c"
+                            />
                         </>
-                    )
-                )}
-            </View>
+                    )}
+                </View>
             </NavigationMenu>
         );
     }
@@ -248,7 +283,7 @@ const styles = StyleSheet.create({
         width: 20,
         borderWidth: 3,
         borderColor: 'white',
-        borderRadius: 20/2,
+        borderRadius: 20 / 2,
         overflow: 'hidden',
         backgroundColor: '#007aff'
     },
@@ -257,11 +292,11 @@ const styles = StyleSheet.create({
         width: 30,
         borderWidth: 0,
         borderColor: '#2c3e50',
-        borderRadius: 30/2,
+        borderRadius: 30 / 2,
         overflow: 'hidden',
         backgroundColor: '#1abc9c',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     container: {
         flex: 1,

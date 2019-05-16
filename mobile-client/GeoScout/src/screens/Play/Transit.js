@@ -23,12 +23,15 @@ class Transit extends React.Component {
     state = {
         menuOpen: false
     };
+
     componentDidMount() {
         const {
             circuit,
             step: stepNumber,
             score,
-            maxScore
+            maxScore,
+            startingTime,
+            time
         } = this.props.navigation.state.params;
         const step = circuit.Steps[stepNumber];
         if (step) {
@@ -47,10 +50,12 @@ class Transit extends React.Component {
                 });
             }
         } else {
+            let finishTime = time + (new Date() - startingTime) / (1000 * 60);
             this.props.navigation.navigate('Finish', {
                 circuit,
                 score,
-                maxScore
+                maxScore,
+                time: finishTime
             });
         }
     }
@@ -89,15 +94,32 @@ class Transit extends React.Component {
      */
     goToStep = e => {
         e.preventDefault();
-        const {
+        let {
             navigation: {
                 navigate,
                 state: {
-                    params: { circuit, step, score, maxScore }
+                    params: {
+                        circuit,
+                        step,
+                        score,
+                        maxScore,
+                        startingTime,
+                        time
+                    }
                 }
             }
         } = this.props;
-        navigate('Etape', { circuit, step, score, maxScore });
+        if (step === 0) {
+            startingTime = new Date();
+        }
+        navigate('Etape', {
+            circuit,
+            step,
+            score,
+            maxScore,
+            startingTime,
+            time
+        });
     };
 
     componentWillUnmount() {

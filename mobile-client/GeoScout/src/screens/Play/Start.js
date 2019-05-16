@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-    Text,
-    TouchableOpacity,
-    StyleSheet
-} from  'react-native';
+import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 
 function Start(props) {
@@ -11,16 +7,26 @@ function Start(props) {
     const { circuit } = navigation.state.params;
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>Le circuit {circuit.name} est chargé !</Text>
+            <Text style={styles.title}>
+                Le circuit {circuit.name} est chargé !
+            </Text>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Transit', { circuit: circuit, step: 0, score: 0, maxScore: 0 })}
+                onPress={() =>
+                    navigation.navigate('Transit', {
+                        circuit: circuit,
+                        step: 0,
+                        score: 0,
+                        maxScore: 0,
+                        time: 0
+                    })
+                }
                 activeOpacity={0.8}
                 style={styles.button}
             >
                 <Text style={styles.textButton}>Débuter le circuit</Text>
             </TouchableOpacity>
         </SafeAreaView>
-    )
+    );
 }
 
 export default Start;
