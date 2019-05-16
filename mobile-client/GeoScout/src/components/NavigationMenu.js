@@ -57,7 +57,7 @@ export function NavigationMenu({
                             numberOfLines={1}
                             style={styles.item}
                             onPress={() => {
-                                navigate('Profil');
+                                navigate('Me');
                             }}>
                                 Profil
                             </Text>
@@ -115,7 +115,18 @@ const styles = StyleSheet.create({
     }
 });
 
-export function NavigationHeader({ pressMenu, titleText, rightComponent }) {
+export function NavigationHeader({ pressMenu, titleText, rightComponent, pressHome }) {
+    let homeNavigate = null;
+    if(pressHome != null){
+        homeNavigate={
+            icon: 'home',
+            color: 'white',
+            onPress: pressHome
+        }
+    }
+    else{
+        homeNavigate = rightComponent;
+    }
     return (
         <Header
         placement="left"
@@ -125,7 +136,7 @@ export function NavigationHeader({ pressMenu, titleText, rightComponent }) {
             onPress: pressMenu
         }}
         centerComponent={{ text: titleText, style: { color: '#fff', fontSize: 18 } }}
-        rightComponent={rightComponent}
+        rightComponent={homeNavigate}
         backgroundColor='#1abc9c'/>
     )
 }

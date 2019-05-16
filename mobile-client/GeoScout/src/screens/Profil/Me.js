@@ -9,25 +9,44 @@ import {
 } from 'react-native';
 import {
     Tile,
-    ListItem
+    ListItem,
+    Icon
 } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 
+import { NavigationHeader, NavigationMenu } from '../../components/NavigationMenu';
 import storage from '../../config/asyncStorageToken';
 import api from '../../config/httpMethods';
 
-class Me extends Component {
-    state = {}
+export default class Me extends Component {
+    constructor(){
+        super();
+        this.state = {
+            menuOpen: false,
+            user: {
+                lastname: '',
+                firstname: '',
+                email: ''
+            }
+        };
+    }
 
     componentDidMount() {
         storage.getTokenAsyncStorage().then((token) => {
             if (token) {
-                api.get('whoami').then(user => this.setState({ user }) )
+                api.get('whoami').then(user => this.setUser(user) )
             } else {
                 this.props.navigation.navigate('Auth');
             }
         });
     }
+
+    setUser(user){
+        this.setState({
+            user
+        });
+    }
+
     handleSettingsPress = () => {
         this.props.navigation.navigate('Settings');
     };
@@ -38,10 +57,18 @@ class Me extends Component {
         })
     }
     render() {
-        const { user } = this.state;
+        const { user, menuOpen } = this.state;
         
         return (
-            user ?
+            <NavigationMenu
+            isOpen={menuOpen}
+            toggle={menuOpen => this.setState({ menuOpen })}
+            navigate={this.props.navigation.navigate}>
+            <NavigationHeader
+            pressMenu={() => this.setState({ menuOpen: true })}
+            titleText={'Profil'}
+            pressHome={() => this.props.navigation.navigate('GeoLocation')}/>
+            {user ?
                 <SafeAreaView style={styles.container}>
                     <ScrollView>
                         <Tile
@@ -49,7 +76,6 @@ class Me extends Component {
                             //imageSrc={'../../../utils/img/userAnonymous.png'}
                             featured
                             title={'Profil'}/>
-
                         <ListItem
                             title="Nom"
                             rightTitle={user.lastname}
@@ -83,12 +109,11 @@ class Me extends Component {
                     </TouchableOpacity>
                 </SafeAreaView>
             :
-                null
+                null}
+            </NavigationMenu>
         );
     }
 }
-
-export default Me;
 
 //Feuille de style
 const styles = StyleSheet.create({

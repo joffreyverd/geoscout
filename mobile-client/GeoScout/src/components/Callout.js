@@ -24,7 +24,9 @@ export default function Callout(props){
         <Text style={styles.item}>{distance}km</Text>
         <Icon name='access-time' type='material' size={sizeIcon} color='#2c3e50'/>
         <Text style={styles.item}>{timeInHour}h{timeInMinute}m</Text>
-        <Difficulty difficulty={difficulty}/>
+        {/* <View>
+          <Difficulty difficulty={difficulty}/>
+        </View> */}
       </View>
     </View>
   );
@@ -44,12 +46,13 @@ const styles = StyleSheet.create({
   },
   item: {
     color: '#95a5a6',
-    fontSize: 12
+    fontSize: 12,
+    marginRight: 8,
+    marginLeft: 1
   },
   inline: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-evenly'
+    alignItems: 'center'
   }
 });

@@ -28,3 +28,9 @@ Utilisation de https://flatuicolors.com/palette/defo
 - [x] Charger les circuits selon le zoom et l'emplacement de l'utilisateur **(Stevy)**
 - [x] Changer le type de map **(Stevy)**
 - [ ] Si la localisation n'est pas activée faire une boucle jusqu'à activation **(Stevy & Thomas => Last)**
+
+### Jeudi 16 Mai : 
+
+- Bouton pour ajouter un circuit à ses favoris.
+- Liste des circuits favoris.
+- Liste des circuits téléchargés.

@@ -22,7 +22,7 @@ const ASPECT_RATIO = width/height
 const LATITUDE_DELTA = 0.5
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 
-class GeoLocation extends React.Component{
+export default class GeoLocation extends React.Component{
     constructor(props){
         super(props)
         this.state = {
@@ -163,7 +163,7 @@ class GeoLocation extends React.Component{
         return (
             <NavigationMenu
             isOpen={menuOpen}
-            toggle={menuOpen => this.setState({ menuOpen })}
+            toggle={menuOpen => this.setState({ menuOpen: menuOpen })}
             navigate={this.props.navigation.navigate}>
             <NavigationHeader
             pressMenu={() => this.setState({ menuOpen: true })}
@@ -228,8 +228,6 @@ class GeoLocation extends React.Component{
         );
     }
 }
-
-export default GeoLocation;
 
 const styles = StyleSheet.create({
     radius: {

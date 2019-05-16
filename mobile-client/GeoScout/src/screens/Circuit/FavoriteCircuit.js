@@ -4,13 +4,32 @@ import {
     StyleSheet
 } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import { Icon } from 'react-native-elements';
+
+import { NavigationHeader, NavigationMenu } from '../../components/NavigationMenu';
 
 export default class FavoriteCircuit extends React.Component {
+    constructor(){
+        super();
+        this.state = {
+            menuOpen: false
+        };
+    }
     render() {
+        const { menuOpen } = this.state;
         return (
-            <SafeAreaView style={styles.container}>
-                <Text style={styles.title}>En construction</Text>
-            </SafeAreaView>
+            <NavigationMenu
+            isOpen={menuOpen}
+            toggle={menuOpen => this.setState({ menuOpen })}
+            navigate={this.props.navigation.navigate}>
+            <NavigationHeader
+            pressMenu={() => this.setState({ menuOpen: true })}
+            titleText={'Favoris'}
+            pressHome={() => this.props.navigation.navigate('GeoLocation')}/>
+                <SafeAreaView style={styles.container}>
+                    <Text style={styles.title}>En construction</Text>
+                </SafeAreaView>
+            </NavigationMenu>
         );
     }
 }

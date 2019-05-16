@@ -24,13 +24,12 @@ import Finish from '../screens/Play/Finish';
     
 const PrincipalStack = createStackNavigator(
     {
-        Me: Me,
-        Settings: Settings,
-        GeoLocation: GeoLocation,
-        Profil: Me,
-        DownloadCircuit: DownloadCircuit,
-        FavoriteCircuit: FavoriteCircuit,
-        DetailCircuit: DetailCircuit,
+        Me: Me, //ok
+        Settings: Settings, //ok
+        GeoLocation: GeoLocation, //ok
+        DownloadCircuit: DownloadCircuit, //ok
+        FavoriteCircuit: FavoriteCircuit, //ok
+        DetailCircuit: DetailCircuit, //ok
         Start: Start
     }, {
         headerMode: 'none',
