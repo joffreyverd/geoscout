@@ -17,7 +17,10 @@ class ProfilEdition extends Component {
     render() {
 
         const { user } = this.props;
-        console.log(user);
+        // {user.firstname}
+        // {user.lastname}
+        // {user.email}
+
 
         return (
             <>
@@ -31,7 +34,7 @@ class ProfilEdition extends Component {
                                 <Input
                                     type='text'
                                     name='text'
-                                    value={user.firstname}
+                                    value='Joffrey'
                                 />
                             </FormGroup>
                             <FormGroup>
@@ -39,7 +42,7 @@ class ProfilEdition extends Component {
                                 <Input
                                     type='text'
                                     name='text'
-                                    value={user.lastname}
+                                    value='Verd'
                                 />
                             </FormGroup>
                             <FormGroup>
@@ -47,7 +50,7 @@ class ProfilEdition extends Component {
                                 <Input
                                     type='text'
                                     name='text'
-                                    value={user.email}
+                                    value='jverd@protonmail.com'
                                 />
                             </FormGroup>
                             <FormGroup>

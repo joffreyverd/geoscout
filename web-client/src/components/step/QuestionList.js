@@ -14,7 +14,7 @@ export default class QuestionList extends React.Component {
 
 
         const { activeTab, handleChangeQuestionType,
-            handleChangeQuestion, handleChoicesChange,
+            handleChangeQuestion, handleChoicesChange, handleQuizQuestion,
             handleResponseChange, deleteChoiceInput, items, addNewChoice } = this.props;
         const { wording, response } = (this.props.items[activeTab]) ? this.props.items[activeTab] : '';
         const quizQuestion = (this.props.items[activeTab]
@@ -45,6 +45,7 @@ export default class QuestionList extends React.Component {
                                             wording={wording}
                                             response={response}
                                             addNewChoice={addNewChoice}
+                                            handleQuizQuestion={handleQuizQuestion}
                                             deleteChoiceInput={deleteChoiceInput}
                                             handleChangeQuestionType={handleChangeQuestionType}
                                             handleChoicesChange={handleChoicesChange}

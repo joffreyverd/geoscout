@@ -43,7 +43,7 @@ class UpdateStepModal extends Component {
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
-                    validation: step.validation || true,
+                    validation: step.validation || false,
                     Questions: (step.Questions && step.Questions.length !== 0) ? step.Questions :
                         [{
                             wording: '',
@@ -157,12 +157,24 @@ class UpdateStepModal extends Component {
         });
     }
 
+    handleQuizQuestion = (event, activeTab) => {
+        const { value } = event.target;
+        this.setState((prevState) => {
+            prevState.Questions[activeTab].wording = value;
+            return { Questions: prevState.Questions };
+        });
+    }
+
     /**
      * Fonction de gestion du changement d'état de la checkbox
      * @param {Event} event : event envoyé lorsque la checkbox est cochée
      */
     handleCheckboxChange = (event) => {
-        this.setState({ validation: event.target.checked });
+        const { checked } = event.target;
+        this.setState((prevState) => {
+            prevState.validation = checked;
+            return { validation: prevState.validation };
+        });
     }
 
     handleSubmit = () => {
@@ -224,11 +236,12 @@ class UpdateStepModal extends Component {
                             name='validation'
                             value={validation}
                             onChange={this.handleCheckboxChange}
-                        >Validation par position GPS
+                        >Validation position GPS
                         </Checkbox>
 
                         <MultipleQuestion
                             questions={Questions}
+                            handleQuizQuestion={this.handleQuizQuestion}
                             addNewChoice={this.addNewChoice}
                             deleteChoiceInput={this.deleteChoiceInput}
                             handleChangeQuestionType={this.handleChangeQuestionType}
