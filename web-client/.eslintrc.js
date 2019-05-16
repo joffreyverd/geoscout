@@ -15,7 +15,10 @@ module.exports = {
                     "id_circuit",
                     "need_internet",
                     "type_of",
-                    "profil_picture"
+                    "profil_picture",
+                    "user_latitude",
+                    "user_longitude",
+                    "kind_of"
                 ]
             }
         ],
