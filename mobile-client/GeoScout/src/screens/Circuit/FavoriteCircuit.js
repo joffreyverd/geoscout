@@ -1,12 +1,12 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import { Icon } from 'react-native-elements';
 
 import {
     NavigationHeader,
     NavigationMenu
 } from '../../components/NavigationMenu';
+import ListCircuit from '../../components/ListCircuit';
 
 export default class FavoriteCircuit extends React.Component {
     constructor() {
@@ -15,6 +15,7 @@ export default class FavoriteCircuit extends React.Component {
             menuOpen: false
         };
     }
+
     render() {
         const { menuOpen } = this.state;
         return (
@@ -31,7 +32,10 @@ export default class FavoriteCircuit extends React.Component {
                     }
                 />
                 <SafeAreaView style={styles.container}>
-                    <Text style={styles.title}>En construction</Text>
+                    <ListCircuit
+                        root={'favorites'}
+                        navigate={this.props.navigation.navigate}
+                    />
                 </SafeAreaView>
             </NavigationMenu>
         );
@@ -41,9 +45,8 @@ export default class FavoriteCircuit extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        padding: 15,
-        paddingBottom: 25
+        backgroundColor: '#dedede',
+        padding: 10
     },
     title: {
         color: '#1abc9c',

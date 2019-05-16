@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Alert,
     ScrollView,
-    Dimensions
+    Dimensions,
+    ToastAndroid
 } from 'react-native';
 import {
     NavigationHeader,
@@ -13,7 +14,6 @@ import {
 } from '../../components/NavigationMenu';
 import { SafeAreaView } from 'react-navigation';
 import HTML from 'react-native-render-html';
-import { Icon } from 'react-native-elements';
 
 import api from '../../config/httpMethods';
 
@@ -35,24 +35,58 @@ export default class DetailCircuit extends React.Component {
         return (
             <NavigationMenu
                 isOpen={menuOpen}
-                toggle={menuOpen => this.setState({ menuOpen })}
+                toggle={menuOpen =>
+                    this.setState({
+                        menuOpen
+                    })
+                }
                 navigate={this.props.navigation.navigate}
             >
                 <NavigationHeader
-                    pressMenu={() => this.setState({ menuOpen: true })}
+                    pressMenu={() =>
+                        this.setState({
+                            menuOpen: true
+                        })
+                    }
                     titleText={'Détail circuit'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
                     }
                 />
                 <SafeAreaView style={styles.container}>
-                    <Text style={styles.title}>{name}</Text>
-                    <ScrollView style={{ flex: 1 }}>
+                    <Text style={styles.title}> {name} </Text>
+                    <ScrollView
+                        style={{
+                            flex: 1
+                        }}
+                    >
                         <HTML
                             html={description}
                             imagesMaxWidth={Dimensions.get('window').width}
                         />
                     </ScrollView>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => {
+                            api.put('favorites/' + id_circuit)
+                                .then(
+                                    ToastAndroid.show(
+                                        'Circuit Ajouté à vos favoris',
+                                        ToastAndroid.SHORT
+                                    )
+                                )
+                                .catch(
+                                    ToastAndroid.show(
+                                        'Circuit déjà présent dans vos favoris',
+                                        ToastAndroid.SHORT
+                                    )
+                                );
+                        }}
+                    >
+                        <Text style={styles.textButton}>
+                            Ajouter au favoris
+                        </Text>
+                    </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
                         onPress={() =>
@@ -78,7 +112,9 @@ export default class DetailCircuit extends React.Component {
                                                 .then(data => {
                                                     this.props.navigation.navigate(
                                                         'Start',
-                                                        { circuit: data }
+                                                        {
+                                                            circuit: data
+                                                        }
                                                     );
                                                 })
                                                 .catch(() => {
@@ -96,17 +132,21 @@ export default class DetailCircuit extends React.Component {
                                                                 style: 'cancel'
                                                             }
                                                         ],
-                                                        { cancelable: false }
+                                                        {
+                                                            cancelable: false
+                                                        }
                                                     );
                                                 });
                                         }
                                     }
                                 ],
-                                { cancelable: false }
+                                {
+                                    cancelable: false
+                                }
                             )
                         }
                     >
-                        <Text style={styles.textButton}>Télécharger</Text>
+                        <Text style={styles.textButton}>Télécharger </Text>
                     </TouchableOpacity>
                 </SafeAreaView>
             </NavigationMenu>

@@ -1,29 +1,19 @@
 import React from 'react';
-import { 
-    View,
-    Text,
-    StyleSheet,
-    Dimensions
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Header, Icon } from 'react-native-elements';
 import SideMenu from 'react-native-side-menu';
 import { ScrollView } from 'react-native-gesture-handler';
 
-const {width,height} = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
 
-export function NavigationMenu({
-    isOpen,
-    children,
-    toggle,
-    navigate
-}) {
+export function NavigationMenu({ isOpen, children, toggle, navigate }) {
     return (
         <SideMenu
             isOpen={isOpen}
             disableGestures={true}
-            openMenuOffset={width*0.7}
-            onChange={opened => opened !== isOpen ? toggle(opened): null}
+            openMenuOffset={width * 0.7}
+            onChange={opened => (opened !== isOpen ? toggle(opened) : null)}
             menu={
                 <SafeAreaView style={styles.container}>
                     <ScrollView>
@@ -32,63 +22,100 @@ export function NavigationMenu({
                             </View>
                             <Text style={styles.item}>Nom & prénom</Text>
                         </View> */}
-                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'baseline', paddingLeft: 20, marginTop: 40}}>
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignItems: 'baseline',
+                                paddingLeft: 20,
+                                marginTop: 40
+                            }}
+                        >
                             <Icon
-                            name='map'
-                            type='font-awesome'
-                            size={24}
-                            color='#1abc9c'/>
+                                name="map"
+                                type="font-awesome"
+                                size={24}
+                                color="#1abc9c"
+                            />
                             <Text
-                            numberOfLines={1}
-                            style={styles.item}
-                            onPress={() => {
-                                navigate('GeoLocation');
-                            }}>
+                                numberOfLines={1}
+                                style={styles.item}
+                                onPress={() => {
+                                    navigate('GeoLocation');
+                                }}
+                            >
                                 Carte
                             </Text>
                         </View>
-                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'baseline', paddingLeft: 20}}>
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignItems: 'baseline',
+                                paddingLeft: 20
+                            }}
+                        >
                             <Icon
-                            name='user-circle'
-                            type='font-awesome'
-                            size={24}
-                            color='#1abc9c'/>
+                                name="user-circle"
+                                type="font-awesome"
+                                size={24}
+                                color="#1abc9c"
+                            />
                             <Text
-                            numberOfLines={1}
-                            style={styles.item}
-                            onPress={() => {
-                                navigate('Me');
-                            }}>
+                                numberOfLines={1}
+                                style={styles.item}
+                                onPress={() => {
+                                    navigate('Me');
+                                }}
+                            >
                                 Profil
                             </Text>
                         </View>
-                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'baseline', paddingLeft: 20}}>
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignItems: 'baseline',
+                                paddingLeft: 20
+                            }}
+                        >
                             <Icon
-                            name='cloud-download'
-                            type='material'
-                            size={24}
-                            color='#1abc9c'/>
+                                name="get-app"
+                                type="material"
+                                size={24}
+                                color="#1abc9c"
+                            />
                             <Text
-                            numberOfLines={1}
-                            style={styles.item}
-                            onPress={() => {
-                                navigate('DownloadCircuit');
-                            }}>
+                                numberOfLines={1}
+                                style={styles.item}
+                                onPress={() => {
+                                    navigate('DownloadCircuit');
+                                }}
+                            >
                                 Circuit téléchargé
                             </Text>
                         </View>
-                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'baseline', paddingLeft: 20}}>
+                        <View
+                            style={{
+                                flex: 1,
+                                flexDirection: 'row',
+                                alignItems: 'baseline',
+                                paddingLeft: 20
+                            }}
+                        >
                             <Icon
-                            name='favorite'
-                            type='material'
-                            size={24}
-                            color='#1abc9c'/>
+                                name="favorite"
+                                type="material"
+                                size={24}
+                                color="#1abc9c"
+                            />
                             <Text
-                            numberOfLines={1}
-                            style={styles.item}
-                            onPress={() => {
-                                navigate('FavoriteCircuit');
-                            }}>
+                                numberOfLines={1}
+                                style={styles.item}
+                                onPress={() => {
+                                    navigate('FavoriteCircuit');
+                                }}
+                            >
                                 Circuit favoris
                             </Text>
                         </View>
@@ -105,7 +132,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#ffffff',
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     item: {
         color: '#2c3e50',
@@ -115,28 +142,36 @@ const styles = StyleSheet.create({
     }
 });
 
-export function NavigationHeader({ pressMenu, titleText, rightComponent, pressHome }) {
+export function NavigationHeader({
+    pressMenu,
+    titleText,
+    rightComponent,
+    pressHome
+}) {
     let homeNavigate = null;
-    if(pressHome != null){
-        homeNavigate={
+    if (pressHome != null) {
+        homeNavigate = {
             icon: 'home',
             color: 'white',
             onPress: pressHome
-        }
-    }
-    else{
+        };
+    } else {
         homeNavigate = rightComponent;
     }
     return (
         <Header
-        placement="left"
-        leftComponent={{
-            icon: 'menu',
-            color: 'white',
-            onPress: pressMenu
-        }}
-        centerComponent={{ text: titleText, style: { color: '#fff', fontSize: 18 } }}
-        rightComponent={homeNavigate}
-        backgroundColor='#1abc9c'/>
-    )
+            placement="left"
+            leftComponent={{
+                icon: 'menu',
+                color: 'white',
+                onPress: pressMenu
+            }}
+            centerComponent={{
+                text: titleText,
+                style: { color: '#fff', fontSize: 18 }
+            }}
+            rightComponent={homeNavigate}
+            backgroundColor="#1abc9c"
+        />
+    );
 }

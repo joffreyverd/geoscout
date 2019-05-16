@@ -136,6 +136,9 @@ export default class GeoLocation extends React.Component {
     componentWillUnmount() {
         //Je ne sais pas si c'est encore utile !
         navigator.geolocation.clearWatch(this.state);
+        this.setState({
+            menuOpen: false
+        });
     }
 
     displayNearbyCircuits() {
@@ -168,12 +171,17 @@ export default class GeoLocation extends React.Component {
                         }}
                     >
                         <Callout
+                            styleCallout={{
+                                flexDirection: 'column',
+                                alignSelf: 'flex-start',
+                                width: width / 2,
+                                height: height * 0.09
+                            }}
                             name={item.name}
                             rate={2}
-                            distance={14}
-                            timeInHour={1}
-                            timeInMinute={30}
-                            difficulty={[1, 0, 1]}
+                            distance={item.length}
+                            time={150}
+                            // difficulty={[1,0,1]}
                         />
                     </MapView.Callout>
                 </MapView.Marker>
@@ -186,7 +194,7 @@ export default class GeoLocation extends React.Component {
         return (
             <NavigationMenu
                 isOpen={menuOpen}
-                toggle={menuOpen => this.setState({ menuOpen })}
+                toggle={menuOpen => this.setState({ menuOpen: menuOpen })}
                 navigate={this.props.navigation.navigate}
             >
                 <NavigationHeader
