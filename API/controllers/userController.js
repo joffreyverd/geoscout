@@ -208,7 +208,7 @@ module.exports =
 			if(id_user)
 			{
 				let t = await db.sequelize.transaction();
-				let rel = db.Relation.findOne({where : {RelationIdUser : id_user}});
+				let rel = await db.Relation.findOne({where : {RelationIdUser : id_user}});
 				if(req.params.accepted)
 				{
 					rel.status = 1;
