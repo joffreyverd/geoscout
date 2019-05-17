@@ -17,6 +17,7 @@ import HTML from 'react-native-render-html';
 import { Icon } from 'react-native-elements';
 
 import api from '../../config/httpMethods';
+import fileSystem from '../../config/fileSystem';
 
 export default class DetailCircuit extends React.Component {
     constructor() {
@@ -35,6 +36,7 @@ export default class DetailCircuit extends React.Component {
         } = this.props.navigation;
         api.get('download-circuit/' + id_circuit)
             .then(data => {
+                // fileSystem.writeFile(id_circuit, data);
                 data.Steps.sort((a, b) => a.order - b.order);
                 Alert.alert(
                     'Hopla',
@@ -78,7 +80,11 @@ export default class DetailCircuit extends React.Component {
     };
 
     render() {
-        const { name, description } = this.props.navigation.state.params;
+        const {
+            name,
+            description,
+            id_circuit
+        } = this.props.navigation.state.params;
         const { menuOpen } = this.state;
         return (
             <NavigationMenu
@@ -117,13 +123,13 @@ export default class DetailCircuit extends React.Component {
                         style={styles.button}
                         onPress={() => {
                             api.put('favorites/' + id_circuit)
-                                .then(
+                                .then(() =>
                                     ToastAndroid.show(
                                         'Circuit Ajouté à vos favoris',
                                         ToastAndroid.SHORT
                                     )
                                 )
-                                .catch(
+                                .catch(() =>
                                     ToastAndroid.show(
                                         'Circuit déjà présent dans vos favoris',
                                         ToastAndroid.SHORT

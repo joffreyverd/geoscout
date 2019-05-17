@@ -8,6 +8,7 @@ import { FileSystem } from 'expo';
 //FileSystem.getInfoAsync(fileUri, options) //information sur un fichier ou dossier
 
 const rootDirectoryPath = FileSystem.documentDirectory + 'circuit';
+
 const getCircuitsExist = async () => {
     try {
         const res = await FileSystem.getInfoAsync(rootDirectoryPath); //information sur un fichier ou dossier
@@ -17,9 +18,11 @@ const getCircuitsExist = async () => {
             ); //Lire un répertoire
 
             let circuitInfo = '';
-            if(nameCircuit){
+            if (nameCircuit) {
                 nameCircuit.map(uriFile => {
-                    const infoCircuit = await FileSystem.readAsStringAsync(rootDirectoryPath+'/'+uriFile) //Lire un fichier
+                    const infoCircuit = FileSystem.readAsStringAsync(
+                        rootDirectoryPath + '/' + uriFile
+                    ); //Lire un fichier
                     circuitInfo += infoCircuit.id_circuit;
                     circuitInfo += infoCircuit.name;
                     circuitInfo += infoCircuit.description;
@@ -36,42 +39,54 @@ const getCircuitsExist = async () => {
     }
 };
 
-const checkCircuitExist = async (fileUri) => {
+const checkCircuitExist = async fileUri => {
     try {
-        const res = FileSystem.getInfoAsync(rootDirectoryPath+'/'+fileUri) //info sur un fichier
-        if(res.exist){
+        const res = FileSystem.getInfoAsync(rootDirectoryPath + '/' + fileUri); //info sur un fichier
+        if (res.exist) {
             return true;
-        }else{
+        } else {
             return false;
         }
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 const writeFile = async (fileUri, fileContent) => {
     try {
-        FileSystem.writeAsStringAsync(rootDirectoryPath+'/'+fileUri, fileContent) //Ecrire un fichier
+        const res = await FileSystem.getInfoAsync(rootDirectoryPath); //information sur un fichier ou dossier
+        if (res.exist) {
+            FileSystem.writeAsStringAsync(
+                rootDirectoryPath + '/' + fileUri,
+                fileContent
+            ); //Ecrire un fichier
+        } else {
+            await FileSystem.makeDirectoryAsync(rootDirectoryPath); //créer un dossier
+            FileSystem.writeAsStringAsync(
+                rootDirectoryPath + '/' + fileUri,
+                fileContent
+            ); //Ecrire un fichier
+        }
     } catch (error) {
         console.log(error);
     }
-}
+};
 
-const readFile = async (fileUri) => {
+const readFile = async fileUri => {
     try {
-        return FileSystem.readAsStringAsync(rootDirectoryPath+'/'+fileUri) //lire un fichier
+        return FileSystem.readAsStringAsync(rootDirectoryPath + '/' + fileUri); //lire un fichier
     } catch (error) {
         console.log(error);
     }
-}
+};
 
-const deleteFile = async (fileUri) => {
+const deleteFile = async fileUri => {
     try {
-        FileSystem.deleteAsync(rootDirectoryPath+'/'+fileUri) //Supprimer un fichier
+        FileSystem.deleteAsync(rootDirectoryPath + '/' + fileUri); //Supprimer un fichier
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 export default {
     getCircuitsExist,
@@ -79,4 +94,4 @@ export default {
     writeFile,
     readFile,
     deleteFile
-}
+};
