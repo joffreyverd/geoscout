@@ -59,6 +59,7 @@ class Transit extends React.Component {
         const step = circuit.Steps[stepNumber];
         if (step) {
             if (step.validation) {
+                console.log('searching geoloc');
                 Location.startGeofencingAsync(DETECT_STEP, [
                     {
                         latitude: step.latitude,
@@ -95,6 +96,9 @@ class Transit extends React.Component {
     componentWillUnmount() {
         this._didFocusSubscription && this._didFocusSubscription.remove();
         this._willBlurSubscription && this._willBlurSubscription.remove();
+        const { interval } = this.state;
+        if (interval) clearInterval(interval);
+        Location.stopGeofencingAsync(DETECT_STEP);
     }
 
     enterStepLocation = () => {
@@ -130,7 +134,7 @@ class Transit extends React.Component {
      * Fonction pour passer sur la vue de l'étape
      */
     goToStep = e => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         let {
             navigation: {
                 navigate,
@@ -158,11 +162,6 @@ class Transit extends React.Component {
             time
         });
     };
-
-    componentWillUnmount() {
-        const { interval } = this.state;
-        if (interval) clearInterval(interval);
-    }
 
     render() {
         const {
