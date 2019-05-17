@@ -5,16 +5,57 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-    ScrollView
+    ScrollView,
+    BackHandler
 } from 'react-native';
 import HTML from 'react-native-render-html';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
 
 class Etape extends React.Component {
-    state = {
-        menuOpen: false
+    didFocusSubscription;
+    _willBlurSubscription;
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuOpen: false
+        };
+        this._didFocusSubscription = props.navigation.addListener(
+            'didFocus',
+            payload =>
+                BackHandler.addEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+    }
+
+    componentDidMount() {
+        this._willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload =>
+                BackHandler.removeEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+    }
+
+    onBackButtonPressAndroid = () => {
+        this.setState(prevState => {
+            return {
+                menuOpen: !prevState.menuOpen
+            };
+        });
+        return true;
     };
+
+    componentWillUnmount() {
+        this._didFocusSubscription && this._didFocusSubscription.remove();
+        this._willBlurSubscription && this._willBlurSubscription.remove();
+    }
+
     /**
      * Navigue vers le transit de l'étape suivante
      */
