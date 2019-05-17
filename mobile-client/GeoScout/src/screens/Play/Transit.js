@@ -6,7 +6,8 @@ import {
     Alert,
     StyleSheet,
     ScrollView,
-    View
+    View,
+    BackHandler
     //Dimensions
 } from 'react-native';
 import { Location, TaskManager } from 'expo';
@@ -20,11 +21,33 @@ const DETECTED = 'stepDetected';
 const DETECT_STEP = 'step-location-detection_task';
 
 class Transit extends React.Component {
-    state = {
-        menuOpen: false
-    };
+    didFocusSubscription;
+    _willBlurSubscription;
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuOpen: false
+        };
+        this._didFocusSubscription = props.navigation.addListener(
+            'didFocus',
+            payload =>
+                BackHandler.addEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+    }
 
     componentDidMount() {
+        this._willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload =>
+                BackHandler.removeEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
         const {
             circuit,
             step: stepNumber,
@@ -58,6 +81,20 @@ class Transit extends React.Component {
                 time: finishTime
             });
         }
+    }
+
+    onBackButtonPressAndroid = () => {
+        this.setState(prevState => {
+            return {
+                menuOpen: !prevState.menuOpen
+            };
+        });
+        return true;
+    };
+
+    componentWillUnmount() {
+        this._didFocusSubscription && this._didFocusSubscription.remove();
+        this._willBlurSubscription && this._willBlurSubscription.remove();
     }
 
     enterStepLocation = () => {

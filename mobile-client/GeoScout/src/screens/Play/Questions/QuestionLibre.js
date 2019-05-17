@@ -7,7 +7,8 @@ import {
     //Dimensions,
     ScrollView,
     StyleSheet,
-    Alert
+    Alert,
+    KeyboardAvoidingView
 } from 'react-native';
 //import HTML from 'react-native-render-html';
 
@@ -60,14 +61,11 @@ export default class QuestionLibre extends React.Component {
             question: { wording }
         } = this.props.navigation.state.params;
         return (
-            <>
-                <View
-                    style={Object.assign(
-                        {},
-                        styles.container,
-                        styles.containerQuestion
-                    )}
-                >
+            <KeyboardAvoidingView
+                style={{ flex: 1, backgroundColor: '#1abc9c' }}
+                behavior="padding"
+            >
+                <View style={[styles.container, styles.containerQuestion]}>
                     <ScrollView>
                         {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
                         <Text style={styles.description}>{wording}</Text>
@@ -80,15 +78,10 @@ export default class QuestionLibre extends React.Component {
                         }
                         placeholder={'Réponse'}
                         style={styles.input}
+                        onSubmitEditing={this.handleSubmit}
                     />
                 </View>
-                <View
-                    style={Object.assign(
-                        {},
-                        styles.container,
-                        styles.containerButton
-                    )}
-                >
+                <View style={[styles.container, styles.containerButton]}>
                     <TouchableOpacity
                         onPress={this.handleSubmit}
                         activeOpacity={0.8}
@@ -97,7 +90,7 @@ export default class QuestionLibre extends React.Component {
                         <Text style={styles.textButton}>Valider</Text>
                     </TouchableOpacity>
                 </View>
-            </>
+            </KeyboardAvoidingView>
         );
     }
 }
