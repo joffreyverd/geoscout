@@ -14,6 +14,7 @@ import {
 } from '../../components/NavigationMenu';
 import { SafeAreaView } from 'react-navigation';
 import HTML from 'react-native-render-html';
+import { Icon } from 'react-native-elements';
 
 import api from '../../config/httpMethods';
 
@@ -138,6 +139,7 @@ export default class DetailCircuit extends React.Component {
                         style={styles.button}
                         onPress={this.download}
                     >
+                        <Icon name="get-app" color="white" />
                         <Text style={styles.textButton}>Télécharger </Text>
                     </TouchableOpacity>
                 </SafeAreaView>
@@ -172,7 +174,9 @@ const styles = StyleSheet.create({
         padding: 8,
         marginBottom: 5,
         width: '100%',
-        alignItems: 'center'
+        justifyContent: 'center',
+        alignItems: 'baseline',
+        flexDirection: 'row'
     },
     textButton: {
         color: '#fff',
