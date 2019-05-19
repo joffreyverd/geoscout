@@ -5,11 +5,12 @@ import {
     AsyncStorage,
     Alert,
     StyleSheet,
-    ScrollView
+    ScrollView,
+    View,
+    BackHandler
     //Dimensions
 } from 'react-native';
 import { Location, TaskManager } from 'expo';
-import { SafeAreaView } from 'react-navigation';
 //import HTML from 'react-native-render-html';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
@@ -20,11 +21,33 @@ const DETECTED = 'stepDetected';
 const DETECT_STEP = 'step-location-detection_task';
 
 class Transit extends React.Component {
-    state = {
-        menuOpen: false
-    };
+    didFocusSubscription;
+    _willBlurSubscription;
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuOpen: false
+        };
+        this._didFocusSubscription = props.navigation.addListener(
+            'didFocus',
+            payload =>
+                BackHandler.addEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+    }
 
     componentDidMount() {
+        this._willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload =>
+                BackHandler.removeEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
         const {
             circuit,
             step: stepNumber,
@@ -36,6 +59,7 @@ class Transit extends React.Component {
         const step = circuit.Steps[stepNumber];
         if (step) {
             if (step.validation) {
+                console.log('searching geoloc');
                 Location.startGeofencingAsync(DETECT_STEP, [
                     {
                         latitude: step.latitude,
@@ -58,6 +82,23 @@ class Transit extends React.Component {
                 time: finishTime
             });
         }
+    }
+
+    onBackButtonPressAndroid = () => {
+        this.setState(prevState => {
+            return {
+                menuOpen: !prevState.menuOpen
+            };
+        });
+        return true;
+    };
+
+    componentWillUnmount() {
+        this._didFocusSubscription && this._didFocusSubscription.remove();
+        this._willBlurSubscription && this._willBlurSubscription.remove();
+        const { interval } = this.state;
+        if (interval) clearInterval(interval);
+        Location.stopGeofencingAsync(DETECT_STEP);
     }
 
     enterStepLocation = () => {
@@ -93,7 +134,7 @@ class Transit extends React.Component {
      * Fonction pour passer sur la vue de l'étape
      */
     goToStep = e => {
-        e.preventDefault();
+        if (e) e.preventDefault();
         let {
             navigation: {
                 navigate,
@@ -121,11 +162,6 @@ class Transit extends React.Component {
             time
         });
     };
-
-    componentWillUnmount() {
-        const { interval } = this.state;
-        if (interval) clearInterval(interval);
-    }
 
     render() {
         const {
@@ -159,13 +195,13 @@ class Transit extends React.Component {
                     }}
                     score={score}
                     maxScore={maxScore}
-                    time={time}
+                    time={time || 0}
                     startingTime={startingTime}
                 >
                     <PlayHeader
                         pressMenu={() => this.setState({ menuOpen: true })}
                     />
-                    <SafeAreaView
+                    <View
                         style={Object.assign(
                             {},
                             styles.containerTransit,
@@ -185,8 +221,8 @@ class Transit extends React.Component {
                                 {step.instruction}
                             </Text>
                         </ScrollView>
-                    </SafeAreaView>
-                    <SafeAreaView
+                    </View>
+                    <View
                         style={Object.assign(
                             {},
                             styles.containerButton,
@@ -194,15 +230,26 @@ class Transit extends React.Component {
                         )}
                     >
                         {step.validation ? (
-                            <Text
-                                style={Object.assign(
-                                    {},
-                                    styles.description,
-                                    styles.detection
-                                )}
-                            >
-                                Détection automatique de votre position
-                            </Text>
+                            <>
+                                <Text
+                                    style={Object.assign(
+                                        {},
+                                        styles.description,
+                                        styles.detection
+                                    )}
+                                >
+                                    Détection automatique de votre position
+                                </Text>
+                                <TouchableOpacity
+                                    onPress={this.goToStep}
+                                    activeOpacity={0.8}
+                                    style={styles.button}
+                                >
+                                    <Text style={styles.textButton}>
+                                        Je suis arrivé
+                                    </Text>
+                                </TouchableOpacity>
+                            </>
                         ) : (
                             <TouchableOpacity
                                 onPress={this.goToStep}
@@ -214,7 +261,7 @@ class Transit extends React.Component {
                                 </Text>
                             </TouchableOpacity>
                         )}
-                    </SafeAreaView>
+                    </View>
                 </PlayDrawerMenu>
             );
         } else {

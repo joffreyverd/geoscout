@@ -14,8 +14,10 @@ import {
 } from '../../components/NavigationMenu';
 import { SafeAreaView } from 'react-navigation';
 import HTML from 'react-native-render-html';
+import { Icon } from 'react-native-elements';
 
 import api from '../../config/httpMethods';
+import fileSystem from '../../config/fileSystem';
 
 export default class DetailCircuit extends React.Component {
     constructor() {
@@ -24,6 +26,58 @@ export default class DetailCircuit extends React.Component {
             menuOpen: false
         };
     }
+
+    download = () => {
+        const {
+            navigate,
+            state: {
+                params: { id_circuit }
+            }
+        } = this.props.navigation;
+        api.get('download-circuit/' + id_circuit)
+            .then(data => {
+                // fileSystem.writeFile(id_circuit, data);
+                data.Steps.sort((a, b) => a.order - b.order);
+                Alert.alert(
+                    'Hopla',
+                    "Jetzt geht's los",
+                    [
+                        {
+                            text: 'Retour',
+                            onPress: () => {
+                                navigate('Home');
+                            },
+                            style: 'cancel'
+                        },
+                        {
+                            text: 'Commencer à jouer',
+                            onPress: () => {
+                                navigate('Start', {
+                                    circuit: data
+                                });
+                            }
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            })
+            .catch(() => {
+                Alert.alert(
+                    'Erreur',
+                    'Une erreur est survenue, merci de réessayer.',
+                    [
+                        {
+                            text: 'Ok',
+                            onPress: () => {
+                                navigate('Home');
+                            },
+                            style: 'cancel'
+                        }
+                    ],
+                    { cancelable: false }
+                );
+            });
+    };
 
     render() {
         const {
@@ -69,13 +123,13 @@ export default class DetailCircuit extends React.Component {
                         style={styles.button}
                         onPress={() => {
                             api.put('favorites/' + id_circuit)
-                                .then(
+                                .then(() =>
                                     ToastAndroid.show(
                                         'Circuit Ajouté à vos favoris',
                                         ToastAndroid.SHORT
                                     )
                                 )
-                                .catch(
+                                .catch(() =>
                                     ToastAndroid.show(
                                         'Circuit déjà présent dans vos favoris',
                                         ToastAndroid.SHORT
@@ -89,63 +143,9 @@ export default class DetailCircuit extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() =>
-                            Alert.alert(
-                                'Hopla',
-                                "Jetzt geht's los",
-                                [
-                                    {
-                                        text: 'Retour',
-                                        onPress: () => {
-                                            this.props.navigation.navigate(
-                                                'Home'
-                                            );
-                                        },
-                                        style: 'cancel'
-                                    },
-                                    {
-                                        text: 'Commencer à jouer',
-                                        onPress: () => {
-                                            api.get(
-                                                'download-circuit/' + id_circuit
-                                            )
-                                                .then(data => {
-                                                    this.props.navigation.navigate(
-                                                        'Start',
-                                                        {
-                                                            circuit: data
-                                                        }
-                                                    );
-                                                })
-                                                .catch(() => {
-                                                    Alert.alert(
-                                                        'Erreur',
-                                                        'Une erreur est survenue, merci de réessayer.',
-                                                        [
-                                                            {
-                                                                text: 'Ok',
-                                                                onPress: () => {
-                                                                    this.props.navigation.navigate(
-                                                                        'Home'
-                                                                    );
-                                                                },
-                                                                style: 'cancel'
-                                                            }
-                                                        ],
-                                                        {
-                                                            cancelable: false
-                                                        }
-                                                    );
-                                                });
-                                        }
-                                    }
-                                ],
-                                {
-                                    cancelable: false
-                                }
-                            )
-                        }
+                        onPress={this.download}
                     >
+                        <Icon name="get-app" color="white" />
                         <Text style={styles.textButton}>Télécharger </Text>
                     </TouchableOpacity>
                 </SafeAreaView>
@@ -180,7 +180,9 @@ const styles = StyleSheet.create({
         padding: 8,
         marginBottom: 5,
         width: '100%',
-        alignItems: 'center'
+        justifyContent: 'center',
+        alignItems: 'baseline',
+        flexDirection: 'row'
     },
     textButton: {
         color: '#fff',

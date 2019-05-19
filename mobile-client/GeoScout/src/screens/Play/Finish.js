@@ -12,6 +12,7 @@ export default class Finish extends React.Component {
                 }
             }
         } = this.props;
+        console.log(time);
 
         // Envoie de la requete achievedCircuit
         api.post('achievedcircuit', {
@@ -74,7 +75,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#1abc9c',
         padding: 15,
-        paddingTop: 40
+        paddingTop: 60
     },
     textContainer: {
         alignItems: 'center'

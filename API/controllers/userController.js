@@ -121,9 +121,9 @@ module.exports =
 		{
 			if(utils.verifToken(req.headers['authorization']))
 			{
-				res.status(200).send(await b.User.findByPk(req.params.id_user,
+				res.status(200).send(await db.User.findByPk(req.params.id_user,
 					{
-						attributes : ['id_user','firstname','lastname','picture','email'],
+						attributes : ['id_user','firstname','lastname','email'],
 						include : 
 						[
 							{
@@ -136,7 +136,7 @@ module.exports =
 							{ 
 								model: db.User,
 								as: 'Relations',
-								attributes : ['id_user','firstname','lastname','picture','email'],
+								attributes : ['id_user','firstname','lastname','email'],
 							}
 						]
 					}));

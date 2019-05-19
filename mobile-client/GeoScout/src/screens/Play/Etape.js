@@ -5,16 +5,57 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-    ScrollView
+    ScrollView,
+    BackHandler
 } from 'react-native';
 import HTML from 'react-native-render-html';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
 
 class Etape extends React.Component {
-    state = {
-        menuOpen: false
+    didFocusSubscription;
+    _willBlurSubscription;
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            menuOpen: false
+        };
+        this._didFocusSubscription = props.navigation.addListener(
+            'didFocus',
+            payload =>
+                BackHandler.addEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+    }
+
+    componentDidMount() {
+        this._willBlurSubscription = this.props.navigation.addListener(
+            'willBlur',
+            payload =>
+                BackHandler.removeEventListener(
+                    'hardwareBackPress',
+                    this.onBackButtonPressAndroid
+                )
+        );
+    }
+
+    onBackButtonPressAndroid = () => {
+        this.setState(prevState => {
+            return {
+                menuOpen: !prevState.menuOpen
+            };
+        });
+        return true;
     };
+
+    componentWillUnmount() {
+        this._didFocusSubscription && this._didFocusSubscription.remove();
+        this._willBlurSubscription && this._willBlurSubscription.remove();
+    }
+
     /**
      * Navigue vers le transit de l'étape suivante
      */
@@ -49,7 +90,14 @@ class Etape extends React.Component {
             navigation: {
                 navigate,
                 state: {
-                    params: { circuit, step: stepNumber, score, maxScore }
+                    params: {
+                        circuit,
+                        step: stepNumber,
+                        score,
+                        maxScore,
+                        startingTime,
+                        time
+                    }
                 }
             }
         } = this.props;
@@ -68,6 +116,8 @@ class Etape extends React.Component {
                 }}
                 score={score}
                 maxScore={maxScore}
+                startingTime={startingTime}
+                time={time}
             >
                 <PlayHeader
                     pressMenu={() => this.setState({ menuOpen: true })}
@@ -98,23 +148,35 @@ class Etape extends React.Component {
                 >
                     {step.Questions &&
                         step.Questions.length > 0 &&
-                        step.Questions.map(item => (
-                            <TouchableOpacity
-                                key={item.id_question}
-                                onPress={() =>
-                                    navigate('Question', {
-                                        question: item,
-                                        nextStep: this.nextStep
-                                    })
-                                }
-                                activeOpacity={0.8}
-                                style={styles.button}
-                            >
-                                <Text style={styles.textButton}>
-                                    Question {item.difficulty}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
+                        step.Questions.map(item => {
+                            let screen = '';
+                            switch (item.type_of) {
+                                case 1:
+                                    screen = 'QuestionQCM';
+                                    break;
+                                case 2:
+                                    screen = 'QuestionLibre';
+                                    break;
+                            }
+                            console.log(screen);
+                            return (
+                                <TouchableOpacity
+                                    key={item.id_question}
+                                    onPress={() =>
+                                        navigate(screen, {
+                                            question: item,
+                                            nextStep: this.nextStep
+                                        })
+                                    }
+                                    activeOpacity={0.8}
+                                    style={styles.button}
+                                >
+                                    <Text style={styles.textButton}>
+                                        Question {item.difficulty}
+                                    </Text>
+                                </TouchableOpacity>
+                            );
+                        })}
 
                     <TouchableOpacity
                         onPress={() => this.nextStep(0, 15)}
