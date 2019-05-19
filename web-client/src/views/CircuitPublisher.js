@@ -254,11 +254,14 @@ export default class CircuitPublisher extends Component {
 
                 </div>
 
+                {/*
                 <p
                     className='come-back-button'
                     onClick={() => history.goBack()}
                 >Valider
                 </p>
+                */}
+
 
                 <UpdateStepModal
                     step={stepFocus}

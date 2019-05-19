@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Modal, ModalHeader } from 'reactstrap';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Button } from 'antd';
 import 'antd/dist/antd.css';
 
 import Connect from './Connect';
@@ -51,7 +51,12 @@ export default class Authentication extends React.Component {
                     :
 
                     <>
-                        <p onClick={this.displayModal} className='auth-text'>Authentification</p>
+
+                        <Button
+                            onClick={this.displayModal}
+                            className='auth-text'
+                        >Authentification
+                        </Button>
 
                         <Modal isOpen={modal} fade={false} toggle={this.displayModal}>
 

@@ -27,6 +27,8 @@ h1 {
 }
 
 .ml-auto {
+  margin-left: 30px !important;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   font-size: .7em;
@@ -50,14 +52,7 @@ h1 {
 .auth-text {
   display: block;
   margin: auto 30px auto auto;
-  color: #004C3D;
-  cursor: pointer;
-  font-size: .7em;
-  font-weight: bold;
-  background-color: white;
-  border-radius: 2px;
-  width: 140px;
-  text-align: center;
+  color: #004C3D !important;
   transition: .1s;
 }
 

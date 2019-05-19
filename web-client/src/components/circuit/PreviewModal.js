@@ -16,6 +16,7 @@ class PreviewModal extends Component {
                     visible={previewIsOpen}
                     onOk={displayPreviewModal}
                     onCancel={displayPreviewModal}
+                    footer={null}
                 >
                     <div className='circuit-infos'>
                         <div dangerouslySetInnerHTML={{ __html: description }} />
