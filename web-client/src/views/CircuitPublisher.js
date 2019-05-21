@@ -216,7 +216,7 @@ export default class CircuitPublisher extends Component {
         const { steps, stepFocus, circuit, circuitIsDisplayed,
             stepIsDisplayed, userPosition, viewport,
         } = this.state;
-        const { history } = this.props;
+        // const { history } = this.props;
 
         return (
             <div className='view-wrapper'>
@@ -238,7 +238,7 @@ export default class CircuitPublisher extends Component {
                             className='update-circuit-button'
                             onClick={this.displayUpdateCircuit}
                             color='info'
-                        >Modifier
+                        >Editer
                         </Button>
                     </div>
 

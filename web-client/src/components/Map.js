@@ -20,6 +20,7 @@ export default class Map extends React.Component {
             steps, circuits, onClickMap, onClickMarker,
             className, viewport, userPosition, changeViewport,
         } = this.props;
+        const step = (this.props.step) ? this.props.step : false;
 
         return (
             <div className={className}>
@@ -57,6 +58,17 @@ export default class Map extends React.Component {
                             }}
                         />
                     </Marker>)}
+
+                    {step &&
+                        <Marker
+                            latitude={step.latitude}
+                            longitude={step.longitude}
+                            offsetLeft={-10}
+                            offsetTop={-20}
+                        >
+                            <Pin color='#0066cc' />
+                        </Marker>
+                    }
                     { /* Affichage des circuits dans le cas de la map de la homepage */}
                     {circuits && circuits.map((c, idx) => {
                         if (c != null && c.Steps[0].latitude && c.Steps[0].longitude) {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ToggleButton from 'react-toggle-button';
+import { Button } from 'reactstrap';
 
 import Map from '../components/Map';
 import api from '../utils/httpMethods';
@@ -69,6 +69,12 @@ export default class Home extends Component {
         }
     }
 
+    changeViewStyle = () => {
+        this.setState(prevState => ({
+            value: !prevState.value,
+        }));
+    }
+
     render() {
         const { circuits, value, isAdmin, viewport, userPosition } = this.state;
 
@@ -91,17 +97,14 @@ export default class Home extends Component {
                     />
                 }
 
-                <div className='toggle-button'>
-                    <p>Liste</p>
-                    <ToggleButton
-                        value={value || false}
-                        onToggle={(value) => {
-                            this.setState({
-                                value: !value,
-                            });
-                        }}
-                    />
-                </div>
+                <Button
+                    className='toggle-button'
+                    color='primary'
+                    type='submit'
+                    value={value}
+                    onClick={this.changeViewStyle}
+                >{(value) ? 'Voir la carte' : 'Voir la liste'}
+                </Button>
             </>
         );
     }

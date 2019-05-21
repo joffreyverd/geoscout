@@ -17,10 +17,6 @@ class ProfilEdition extends Component {
     render() {
 
         const { user } = this.props;
-        // {user.firstname}
-        // {user.lastname}
-        // {user.email}
-
 
         return (
             <>
@@ -30,7 +26,7 @@ class ProfilEdition extends Component {
                     <Form onSubmit={this.handleSubmit}>
                         <ModalBody>
                             <FormGroup>
-                                <Label>Prénom</Label>
+                                <Label>{user.firstname}</Label>
                                 <Input
                                     type='text'
                                     name='text'
@@ -38,7 +34,7 @@ class ProfilEdition extends Component {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Nom</Label>
+                                <Label>{user.lastname}</Label>
                                 <Input
                                     type='text'
                                     name='text'
@@ -46,7 +42,7 @@ class ProfilEdition extends Component {
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>Email</Label>
+                                <Label>{user.email}</Label>
                                 <Input
                                     type='text'
                                     name='text'

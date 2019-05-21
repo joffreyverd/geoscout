@@ -468,6 +468,12 @@ cursor: pointer;
     transition: .2s;
 }
 
+.flex-checkboxes {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+}
+
 .is-quizz-checkbox {
   justify-content: flex-start;
   margin: 30px auto 20px auto !important;
@@ -557,10 +563,16 @@ cursor: pointer;
 }
 
 .circuit-infos {
+  display: flex;
+  justify-content: space-between;
   background-color: #ecf0f1;
   border-radius: 3px;
   padding: 15px;
   margin: 20px;
+}
+
+.detailed-circuit-map {
+  width: 50%;
 }
 
 .circuit-comments {

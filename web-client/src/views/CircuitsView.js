@@ -27,20 +27,21 @@ export default class CircuitsView extends Component {
 
     componentDidMount = () => {
         const { isAdmin, circuits } = this.props;
+
         if (isAdmin === 'home') {
             this.setState({
                 circuits: circuits,
             });
-        }
-        if (isAdmin === 'achieved') {
+
+        } else if (isAdmin === 'achieved') {
             api.get('achievedcircuit').then((data) => {
                 // console.log(data);
                 // this.setState({ circuits: data });
             }).catch(() => {
                 console.log(this.props);
             });
-        }
-        if (isAdmin === 'favorites') {
+
+        } else if (isAdmin === 'favorites') {
             api.get('favorites').then((data) => {
                 const formattedCircuits = data.map(item => item.Circuit);
                 this.setState({ circuits: formattedCircuits });
