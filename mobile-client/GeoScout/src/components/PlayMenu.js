@@ -1,14 +1,13 @@
 import React from 'react';
 import { Text, StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
-import SideMenu from 'react-native-side-menu';
+import Drawer from 'react-native-drawer-menu';
 
 import api from '../config/httpMethods';
 
 export function PlayDrawerMenu({
-    isOpen,
+    setRefMenu,
     children,
-    toggle,
     navigate,
     circuit: { id_circuit, version, id_step },
     score,
@@ -75,12 +74,12 @@ export function PlayDrawerMenu({
         );
     };
     return (
-        <SideMenu
-            isOpen={isOpen}
-            disableGestures={true}
-            openMenuOffset={150}
-            onChange={opened => (opened !== isOpen ? toggle(opened) : null)}
-            menu={
+        <Drawer
+            responderNegotiate={_ => false}
+            ref={ref => setRefMenu(ref)}
+            type="overlay"
+            drawerWidth={150}
+            drawerContent={
                 <View style={styles.container}>
                     <TouchableOpacity
                         style={styles.button}
@@ -104,7 +103,7 @@ export function PlayDrawerMenu({
             }
         >
             {children}
-        </SideMenu>
+        </Drawer>
     );
 }
 
