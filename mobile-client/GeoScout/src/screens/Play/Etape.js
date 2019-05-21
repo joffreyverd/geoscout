@@ -5,56 +5,22 @@ import {
     TouchableOpacity,
     StyleSheet,
     Dimensions,
-    ScrollView,
-    BackHandler
+    ScrollView
 } from 'react-native';
 import HTML from 'react-native-render-html';
+import { AndroidBackHandler } from 'react-navigation-backhandler';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
 
 class Etape extends React.Component {
-    didFocusSubscription;
-    _willBlurSubscription;
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            menuOpen: false
-        };
-        this._didFocusSubscription = props.navigation.addListener(
-            'didFocus',
-            payload =>
-                BackHandler.addEventListener(
-                    'hardwareBackPress',
-                    this.onBackButtonPressAndroid
-                )
-        );
-    }
-
-    componentDidMount() {
-        this._willBlurSubscription = this.props.navigation.addListener(
-            'willBlur',
-            payload =>
-                BackHandler.removeEventListener(
-                    'hardwareBackPress',
-                    this.onBackButtonPressAndroid
-                )
-        );
-    }
-
-    onBackButtonPressAndroid = () => {
-        this.setState(prevState => {
-            return {
-                menuOpen: !prevState.menuOpen
-            };
-        });
+    onBackPress = () => {
+        this.refMenu.openDrawer();
         return true;
     };
 
-    componentWillUnmount() {
-        this._didFocusSubscription && this._didFocusSubscription.remove();
-        this._willBlurSubscription && this._willBlurSubscription.remove();
-    }
+    setRefMenu = ref => {
+        this.refMenu = ref;
+    };
 
     /**
      * Navigue vers le transit de l'étape suivante
@@ -102,93 +68,93 @@ class Etape extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
-        const { menuOpen } = this.state;
 
         return (
-            <PlayDrawerMenu
-                isOpen={menuOpen}
-                toggle={menuOpen => this.setState({ menuOpen })}
-                navigate={navigate}
-                circuit={{
-                    id_circuit: circuit.id_circuit,
-                    id_step: step.id_step,
-                    version: circuit.version
-                }}
-                score={score}
-                maxScore={maxScore}
-                startingTime={startingTime}
-                time={time}
-            >
-                <PlayHeader
-                    pressMenu={() => this.setState({ menuOpen: true })}
-                />
-                <View
-                    style={Object.assign(
-                        {},
-                        styles.containerStep,
-                        styles.container
-                    )}
+            <AndroidBackHandler onBackPress={this.onBackPress}>
+                <PlayDrawerMenu
+                    setRefMenu={this.setRefMenu}
+                    navigate={navigate}
+                    circuit={{
+                        id_circuit: circuit.id_circuit,
+                        id_step: step.id_step,
+                        version: circuit.version
+                    }}
+                    score={score}
+                    maxScore={maxScore}
+                    startingTime={startingTime}
+                    time={time}
                 >
-                    <Text style={styles.title}>{step.name}</Text>
-                    <ScrollView style={{ flex: 1 }}>
-                        {step.description && (
-                            <HTML
-                                html={step.description}
-                                imagesMaxWidth={Dimensions.get('window').width}
-                            />
+                    <PlayHeader pressMenu={() => this.refMenu.openDrawer()} />
+                    <View
+                        style={Object.assign(
+                            {},
+                            styles.containerStep,
+                            styles.container
                         )}
-                    </ScrollView>
-                </View>
-                <View
-                    style={Object.assign(
-                        {},
-                        styles.containerButton,
-                        styles.container
-                    )}
-                >
-                    {step.Questions &&
-                        step.Questions.length > 0 &&
-                        step.Questions.map(item => {
-                            let screen = '';
-                            switch (item.type_of) {
-                                case 1:
-                                    screen = 'QuestionQCM';
-                                    break;
-                                case 2:
-                                    screen = 'QuestionLibre';
-                                    break;
-                            }
-                            console.log(screen);
-                            return (
-                                <TouchableOpacity
-                                    key={item.id_question}
-                                    onPress={() =>
-                                        navigate(screen, {
-                                            question: item,
-                                            nextStep: this.nextStep
-                                        })
-                                    }
-                                    activeOpacity={0.8}
-                                    style={styles.button}
-                                >
-                                    <Text style={styles.textButton}>
-                                        Question {item.difficulty}
-                                    </Text>
-                                </TouchableOpacity>
-                            );
-                        })}
-
-                    <TouchableOpacity
-                        onPress={() => this.nextStep(0, 15)}
-                        activeOpacity={0.8}
-                        style={styles.button}
                     >
-                        <Text style={styles.textButton}>
-                            Passer cette étape
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-            </PlayDrawerMenu>
+                        <Text style={styles.title}>{step.name}</Text>
+                        <ScrollView style={{ flex: 1 }}>
+                            {step.description && (
+                                <HTML
+                                    html={step.description}
+                                    imagesMaxWidth={
+                                        Dimensions.get('window').width
+                                    }
+                                />
+                            )}
+                        </ScrollView>
+                    </View>
+                    <View
+                        style={Object.assign(
+                            {},
+                            styles.containerButton,
+                            styles.container
+                        )}
+                    >
+                        {step.Questions &&
+                            step.Questions.length > 0 &&
+                            step.Questions.map(item => {
+                                let screen = '';
+                                switch (item.type_of) {
+                                    case 1:
+                                        screen = 'QuestionQCM';
+                                        break;
+                                    case 2:
+                                        screen = 'QuestionLibre';
+                                        break;
+                                }
+                                console.log(screen);
+                                return (
+                                    <TouchableOpacity
+                                        key={item.id_question}
+                                        onPress={() => {
+                                            navigate(screen, {
+                                                question: item,
+                                                nextStep: this.nextStep
+                                            });
+                                        }}
+                                        activeOpacity={0.8}
+                                        style={styles.button}
+                                    >
+                                        <Text style={styles.textButton}>
+                                            Question {item.difficulty}
+                                        </Text>
+                                    </TouchableOpacity>
+                                );
+                            })}
+
+                        <TouchableOpacity
+                            onPress={() => this.nextStep(0, 15)}
+                            activeOpacity={0.8}
+                            style={styles.button}
+                        >
+                            <Text style={styles.textButton}>
+                                Passer cette étape
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
+                </PlayDrawerMenu>
+            </AndroidBackHandler>
         );
     }
 }

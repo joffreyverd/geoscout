@@ -6,11 +6,11 @@ import {
     Alert,
     StyleSheet,
     ScrollView,
-    View,
-    BackHandler
+    View
     //Dimensions
 } from 'react-native';
 import { Location, TaskManager } from 'expo';
+import { AndroidBackHandler } from 'react-navigation-backhandler';
 //import HTML from 'react-native-render-html';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
@@ -21,33 +21,9 @@ const DETECTED = 'stepDetected';
 const DETECT_STEP = 'step-location-detection_task';
 
 class Transit extends React.Component {
-    didFocusSubscription;
-    _willBlurSubscription;
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            menuOpen: false
-        };
-        this._didFocusSubscription = props.navigation.addListener(
-            'didFocus',
-            payload =>
-                BackHandler.addEventListener(
-                    'hardwareBackPress',
-                    this.onBackButtonPressAndroid
-                )
-        );
-    }
+    state = {};
 
     componentDidMount() {
-        this._willBlurSubscription = this.props.navigation.addListener(
-            'willBlur',
-            payload =>
-                BackHandler.removeEventListener(
-                    'hardwareBackPress',
-                    this.onBackButtonPressAndroid
-                )
-        );
         const {
             circuit,
             step: stepNumber,
@@ -84,22 +60,19 @@ class Transit extends React.Component {
         }
     }
 
-    onBackButtonPressAndroid = () => {
-        this.setState(prevState => {
-            return {
-                menuOpen: !prevState.menuOpen
-            };
-        });
+    componentWillUnmount() {
+        const { interval } = this.state;
+        if (interval) clearInterval(interval);
+    }
+
+    onBackPress = () => {
+        this.refMenu.openDrawer();
         return true;
     };
 
-    componentWillUnmount() {
-        this._didFocusSubscription && this._didFocusSubscription.remove();
-        this._willBlurSubscription && this._willBlurSubscription.remove();
-        const { interval } = this.state;
-        if (interval) clearInterval(interval);
-        Location.stopGeofencingAsync(DETECT_STEP);
-    }
+    setRefMenu = ref => {
+        this.refMenu = ref;
+    };
 
     enterStepLocation = () => {
         // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
@@ -110,6 +83,7 @@ class Transit extends React.Component {
             AsyncStorage.removeItem(DETECTED);
             // Arrêt de l'intervalle
             clearInterval(interval);
+            Location.stopGeofencingAsync(DETECT_STEP);
 
             const {
                 navigation: {
@@ -179,67 +153,77 @@ class Transit extends React.Component {
                 }
             }
         } = this.props;
-        const { menuOpen } = this.state;
         const step = circuit.Steps[stepNumber];
 
         if (step) {
             return (
-                <PlayDrawerMenu
-                    isOpen={menuOpen}
-                    toggle={menuOpen => this.setState({ menuOpen })}
-                    navigate={navigate}
-                    circuit={{
-                        id_circuit: circuit.id_circuit,
-                        id_step: step.id_step,
-                        version: circuit.version
-                    }}
-                    score={score}
-                    maxScore={maxScore}
-                    time={time || 0}
-                    startingTime={startingTime}
-                >
-                    <PlayHeader
-                        pressMenu={() => this.setState({ menuOpen: true })}
-                    />
-                    <View
-                        style={Object.assign(
-                            {},
-                            styles.containerTransit,
-                            styles.container
-                        )}
+                <AndroidBackHandler onBackPress={this.onBackPress}>
+                    <PlayDrawerMenu
+                        setRefMenu={this.setRefMenu}
+                        navigate={navigate}
+                        circuit={{
+                            id_circuit: circuit.id_circuit,
+                            id_step: step.id_step,
+                            version: circuit.version
+                        }}
+                        score={score}
+                        maxScore={maxScore}
+                        time={time || 0}
+                        startingTime={startingTime}
                     >
-                        <Text style={styles.title}>
-                            Transit vers{' '}
-                            {step.order === 0
-                                ? 'le point de départ'
-                                : `l'étape ${step.order} sur ${circuit.Steps
-                                      .length - 1}`}
-                        </Text>
-                        <ScrollView style={{ flex: 1 }}>
-                            {/* <HTML html={step.instruction} imagesMaxWidth={Dimensions.get('window').width} /> */}
-                            <Text style={styles.description}>
-                                {step.instruction}
+                        <PlayHeader
+                            pressMenu={() => this.refMenu.openDrawer()}
+                        />
+                        <View
+                            style={Object.assign(
+                                {},
+                                styles.containerTransit,
+                                styles.container
+                            )}
+                        >
+                            <Text style={styles.title}>
+                                Transit vers{' '}
+                                {step.order === 0
+                                    ? 'le point de départ'
+                                    : `l'étape ${step.order} sur ${circuit.Steps
+                                          .length - 1}`}
                             </Text>
-                        </ScrollView>
-                    </View>
-                    <View
-                        style={Object.assign(
-                            {},
-                            styles.containerButton,
-                            styles.container
-                        )}
-                    >
-                        {step.validation ? (
-                            <>
-                                <Text
-                                    style={Object.assign(
-                                        {},
-                                        styles.description,
-                                        styles.detection
-                                    )}
-                                >
-                                    Détection automatique de votre position
+                            <ScrollView style={{ flex: 1 }}>
+                                {/* <HTML html={step.instruction} imagesMaxWidth={Dimensions.get('window').width} /> */}
+                                <Text style={styles.description}>
+                                    {step.instruction}
                                 </Text>
+                            </ScrollView>
+                        </View>
+                        <View
+                            style={Object.assign(
+                                {},
+                                styles.containerButton,
+                                styles.container
+                            )}
+                        >
+                            {step.validation ? (
+                                <>
+                                    <Text
+                                        style={Object.assign(
+                                            {},
+                                            styles.description,
+                                            styles.detection
+                                        )}
+                                    >
+                                        Détection automatique de votre position
+                                    </Text>
+                                    <TouchableOpacity
+                                        onPress={this.goToStep}
+                                        activeOpacity={0.8}
+                                        style={styles.button}
+                                    >
+                                        <Text style={styles.textButton}>
+                                            Je suis arrivé
+                                        </Text>
+                                    </TouchableOpacity>
+                                </>
+                            ) : (
                                 <TouchableOpacity
                                     onPress={this.goToStep}
                                     activeOpacity={0.8}
@@ -249,20 +233,10 @@ class Transit extends React.Component {
                                         Je suis arrivé
                                     </Text>
                                 </TouchableOpacity>
-                            </>
-                        ) : (
-                            <TouchableOpacity
-                                onPress={this.goToStep}
-                                activeOpacity={0.8}
-                                style={styles.button}
-                            >
-                                <Text style={styles.textButton}>
-                                    Je suis arrivé
-                                </Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </PlayDrawerMenu>
+                            )}
+                        </View>
+                    </PlayDrawerMenu>
+                </AndroidBackHandler>
             );
         } else {
             return null;
