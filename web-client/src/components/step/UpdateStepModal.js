@@ -235,6 +235,7 @@ class UpdateStepModal extends Component {
                         <Checkbox
                             name='validation'
                             value={validation}
+                            checked={validation}
                             onChange={this.handleCheckboxChange}
                         >Validation position GPS
                         </Checkbox>
