@@ -65,6 +65,7 @@ export default class DetailedCircuit extends Component {
 
         const { name, description } = this.state.circuit;
         const { viewport, userPosition, step } = this.state;
+        const { isConnected } = this.props;
 
         return (
             <>
@@ -76,7 +77,9 @@ export default class DetailedCircuit extends Component {
                             <p>(256)</p>
                         </div>
                     </div>
-                    <Button type='primary' className='favoris-button'>Favoris</Button>
+                    {isConnected &&
+                        <Button type='primary' className='favoris-button'>Favoris</Button>
+                    }
                 </div>
 
                 <div className='bottom-wrapper'>
