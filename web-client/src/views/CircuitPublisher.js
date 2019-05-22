@@ -28,22 +28,37 @@ export default class CircuitPublisher extends Component {
     }
 
     componentDidMount() {
+        // eslint-disable-next-line no-undef
+        if (navigator.geolocation) {
+            // eslint-disable-next-line no-undef
+            navigator.geolocation.getCurrentPosition((data) => {
+                const { viewport } = this.state;
+                viewport.latitude = data.coords.latitude;
+                viewport.longitude = data.coords.longitude;
+
+                this.setState({
+                    viewport: viewport,
+                    userPosition: data.coords,
+                });
+            });
+        }
         const { id } = this.props.match.params;
         if (id) {
             api.get(`download-circuit/${id}`).then((circuit) => {
                 const { longitude, latitude } = (circuit.Steps[0]) ? circuit.Steps[0] : false;
                 const { viewport } = this.state;
 
-                viewport.latitude = latitude;
-                viewport.longitude = longitude;
-                circuit.Steps.sort((a, b) => a.order - b.order);
-
-                this.setState({
-                    circuit: circuit,
-                    steps: circuit.Steps,
-                    viewport: viewport,
-                });
-                circuit.id_circuit = id;
+                if (latitude && longitude) {
+                    viewport.latitude = latitude;
+                    viewport.longitude = longitude;
+                    circuit.Steps.sort((a, b) => a.order - b.order);
+                    this.setState({
+                        circuit: circuit,
+                        steps: circuit.Steps,
+                        viewport: viewport,
+                    });
+                    circuit.id_circuit = id;
+                }
             }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
@@ -213,8 +228,8 @@ export default class CircuitPublisher extends Component {
     }
 
     render() {
-        const { steps, stepFocus, circuit, circuitIsDisplayed,
-            stepIsDisplayed, userPosition, viewport,
+        const { steps, stepFocus, userPosition, circuit, circuitIsDisplayed,
+            stepIsDisplayed, viewport,
         } = this.state;
         // const { history } = this.props;
 

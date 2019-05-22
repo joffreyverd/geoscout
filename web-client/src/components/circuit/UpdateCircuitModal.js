@@ -144,7 +144,7 @@ class UpdateCircuitModal extends Component {
                             <Button
                                 color='warning'
                                 onClick={this.displayPreviewModal}
-                            >Preview
+                            >Aperçu
                             </Button>
                             <Button
                                 color='success'
