@@ -29,32 +29,27 @@ module.exports =
 
 	step: async (req,res) => 
 	{
-		if(utils.verifToken(req.headers['authorization']))
+		try
 		{
-			try
+			res.json(await db.Step.findOne(
 			{
-				res.json(await db.Step.findOne(
+				where : {id_step : req.params.id_step},
+				attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
+				include : 
+				[
 					{
-						where : {id_step : req.params.id_step},
-						attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
-						include : 
-						[
-							{
-								model : db.Question,
-								attributes : ['id_question','wording','response','type_of','points']
-							}
-						]
-					}));
-			}
-
-			catch(err)
-			{
-				console.log(err);
-				res.status(500).send(utils.messages.serverError);
-			}
+						model : db.Question,
+						attributes : ['id_question','wording','response','type_of','points']
+					}
+				]
+			}));
 		}
-		else
-			res.status(401).send(utils.messages.invalidToken);  
+
+		catch(err)
+		{
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
+		}
 	},
 
 	//////////////////////////////////////////////////////////

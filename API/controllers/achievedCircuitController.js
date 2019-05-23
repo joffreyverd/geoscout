@@ -76,8 +76,6 @@ module.exports=
 		{
 			try
 			{
-				//let achievements = await  db.AchievedCircuit.findAll({where : {id_user : id}});
-				//res.status(200).send(achievements);
 				res.status(200).send(await db.AchievedCircuit.findAll(
 					{
 						where : {id_user : id},
