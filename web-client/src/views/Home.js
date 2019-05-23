@@ -62,6 +62,12 @@ export default class Home extends Component {
         });
     }
 
+    onMapMouv = (event) => {
+        // console.log(event.lngLat);
+        // setTimeout(() => console.log(this.state.viewport), 3000);
+        // this.getCircuits();
+    }
+
     onClickItem = (id_circuit) => {
         const { history } = this.props;
         if (id_circuit) {
@@ -88,6 +94,7 @@ export default class Home extends Component {
                         viewport={viewport}
                         userPosition={userPosition}
                         changeViewport={this.changeViewport}
+                        onMapMouv={this.onMapMouv}
                         onClickMarker={this.onClickItem}
                     />
                     :

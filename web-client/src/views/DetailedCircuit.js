@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Rate, Comment, Tooltip, Avatar, Button } from 'antd';
+import { Rate, Comment, Tooltip, Avatar, Button, Icon } from 'antd';
 import 'antd/dist/antd.css';
 
 import Map from '../components/Map';
@@ -24,6 +24,26 @@ export default class DetailedCircuit extends Component {
         this.setState({
             viewport: viewport,
         });
+    }
+
+    changeFavoriteStatus = () => {
+        const { id } = this.props.match.params;
+        const { circuit } = this.state;
+        this.setState((prevState) => {
+            prevState.circuit.Favorites = !prevState.circuit.Favorites;
+            return { Favorites: prevState.circuit.Favorites };
+        });
+        if (circuit.Favorites) {
+            console.log('just removed');
+            api.delete(`favorites/${id}`).catch(() => {
+                console.log('Oups, une erreur s\'est produite');
+            });
+        } else {
+            console.log('just added');
+            api.post(`favorites/${id}`).catch(() => {
+                console.log('Oups, une erreur s\'est produite');
+            });
+        }
     }
 
     componentDidMount = () => {
@@ -63,7 +83,7 @@ export default class DetailedCircuit extends Component {
 
     render() {
 
-        const { name, description } = this.state.circuit;
+        const { name, description, Favorites } = this.state.circuit;
         const { viewport, userPosition, step } = this.state;
         const { isConnected } = this.props;
 
@@ -78,7 +98,16 @@ export default class DetailedCircuit extends Component {
                         </div>
                     </div>
                     {isConnected &&
-                        <Button type='primary' className='favoris-button'>Favoris</Button>
+                        <Button
+                            type='primary'
+                            className='favoris-button'
+                            onClick={this.changeFavoriteStatus}
+                        >
+                            {Favorites ?
+                                <Icon type='heart' theme='filled' /> :
+                                <Icon type='heart' />
+                            }
+                        </Button>
                     }
                 </div>
 

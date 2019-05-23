@@ -18,7 +18,7 @@ export default class Map extends React.Component {
     render() {
         const {
             steps, circuits, onClickMap, onClickMarker,
-            className, viewport, userPosition, changeViewport,
+            className, viewport, userPosition, changeViewport, onMapMouv,
         } = this.props;
         const step = (this.props.step) ? this.props.step : false;
 
@@ -29,6 +29,7 @@ export default class Map extends React.Component {
                     {...viewport}
                     mapStyle={MAP_STYLE}
                     onViewportChange={changeViewport}
+                    onMouseUp={onMapMouv}
                     onClick={onClickMap}
                 >
                     {userPosition &&
@@ -57,7 +58,7 @@ export default class Map extends React.Component {
                                 this.centerStep(s);
                             }}
                         />
-                    </Marker>)}
+                                             </Marker>)}
 
                     {step &&
                         <Marker

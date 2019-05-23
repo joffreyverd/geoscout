@@ -57,7 +57,14 @@ export default class CircuitPublisher extends Component {
                         steps: circuit.Steps,
                         viewport: viewport,
                     });
+                    console.log(this.state);
                     circuit.id_circuit = id;
+                } else {
+                    circuit.Steps.sort((a, b) => a.order - b.order);
+                    this.setState({
+                        circuit: circuit,
+                        steps: circuit.Steps,
+                    });
                 }
             }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
@@ -68,6 +75,18 @@ export default class CircuitPublisher extends Component {
     changeViewport = (viewport) => {
         this.setState({
             viewport: viewport,
+        });
+    }
+
+    publishCircuit = () => {
+        const { circuit } = this.state;
+        api.put('publish-circuit', { id_circuit: circuit.id_circuit }).then(() => {
+            this.setState((prevState) => {
+                prevState.circuit.published = !prevState.circuit.published;
+                return { circuit: prevState.circuit };
+            });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
         });
     }
 
@@ -231,6 +250,7 @@ export default class CircuitPublisher extends Component {
         const { steps, stepFocus, userPosition, circuit, circuitIsDisplayed,
             stepIsDisplayed, viewport,
         } = this.state;
+        console.log(circuit);
         // const { history } = this.props;
 
         return (
@@ -249,12 +269,22 @@ export default class CircuitPublisher extends Component {
 
                     <div className='circuit-title'>
                         <h3>{circuit.name}</h3>
-                        <Button
-                            className='update-circuit-button'
-                            onClick={this.displayUpdateCircuit}
-                            color='info'
-                        >Editer
-                        </Button>
+                        <div className='circuit-buttons'>
+                            <Button
+                                className='update-circuit-button'
+                                onClick={this.displayUpdateCircuit}
+                                color='info'
+                            >Editer
+                            </Button>
+                            {!circuit.published &&
+                                <Button
+                                    className='update-circuit-button'
+                                    onClick={this.publishCircuit}
+                                    color='warning'
+                                >Publier
+                                </Button>
+                            }
+                        </div>
                     </div>
 
                     <DragDropContext

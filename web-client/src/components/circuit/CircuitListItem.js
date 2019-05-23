@@ -22,10 +22,6 @@ class CircuitListItem extends Component {
         });
     }
 
-    test = () => {
-
-    };
-
     render() {
 
         const {
