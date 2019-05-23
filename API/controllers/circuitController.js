@@ -9,7 +9,17 @@ module.exports =
 	{
 		try
 		{
-			let circuit = await db.Circuit.findByPk(req.params.id_circuit,{attributes : ['name','description','duration','need_internet','level']});
+			let circuit = await db.Circuit.findByPk(req.params.id_circuit,
+				{
+					attributes : ['name','description','duration','need_internet','level'],
+					include : 
+					[
+						{
+							model : db.Favorite
+						}
+					]
+				}
+			);
 			res.json(circuit);
 		}
 		
@@ -29,7 +39,6 @@ module.exports =
 				let circuit = await db.Circuit.findOne(
 					{
 						where : {id_circuit : req.params.id_circuit},
-						attributes : ['id_circuit','name','description','duration','need_internet','level','version'],
 						include : 
 						[
 							{

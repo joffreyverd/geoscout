@@ -14,7 +14,7 @@ module.exports = function(app)
 	app.route('/ask-relation/:id_user').put(user.askRelation);
 	app.route('/answer-relation/:id_user').put(user.answerRelation);
 	app.route('/favorites').get(user.getFavorites);
-	app.route('/favorites/:id_circuit').put(user.setFavorite);
+	app.route('/favorites/:id_circuit').post(user.setFavorite);
 	app.route('/favorites/:id_circuit').delete(user.deleteFavorite);
 	app.route('/evaluations/:id_circuit').get(evaluation.evaluationsCircuit);
 	app.route('/evaluations').post(evaluation.createEvaluation);	
@@ -41,6 +41,7 @@ module.exports = function(app)
 	app.route('/achievedcircuit').get(achievements.getAchievements);
 	app.route('/achievedcircuit').post(achievements.createAchievement);
 	app.route('/achievedcircuit/:id_achievement').delete(achievements.deleteAchievement);
+	app.route('/achievedcircuit/:id_achievement').put(achievements.updateAchievement);
 
 	app.route('/question/:id_question').get(question.getQuestion);
 	app.route('/question').post(question.createQuestion);
