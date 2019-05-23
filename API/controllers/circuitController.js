@@ -29,7 +29,6 @@ module.exports =
 				let circuit = await db.Circuit.findOne(
 					{
 						where : {id_circuit : req.params.id_circuit},
-						attributes : ['id_circuit','name','description','duration','need_internet','level','version'],
 						include : 
 						[
 							{
