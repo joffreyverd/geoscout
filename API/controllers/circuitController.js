@@ -15,7 +15,9 @@ module.exports =
 					include : 
 					[
 						{
-							model : db.Favorite
+							model : db.Favorite,
+							where : {id_circuit : req.params.id_circuit},
+							attributes : ['id']
 						}
 					]
 				}
