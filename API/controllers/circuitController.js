@@ -7,22 +7,39 @@ module.exports =
 {
 	circuit : async (req,res) => 
 	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		console.log(id_user);
 		try
 		{
-			let circuit = await db.Circuit.findByPk(req.params.id_circuit,
-				{
-					attributes : ['name','description','duration','need_internet','level'],
-					include : 
-					[
-						{
-							model : db.Favorite,
-							where : {id_circuit : req.params.id_circuit},
-							attributes : ['id']
-						}
-					]
-				}
-			);
-			res.json(circuit);
+			if (id_user) 
+			{
+				let circuit = await db.Circuit.findByPk(req.params.id_circuit,
+					{
+						attributes : ['name','description','duration','need_internet','level'],
+						include : 
+						[
+							{
+								model : db.Favorite,
+								where : {id_user : id_user},
+								attributes : ['id'],
+								required : false
+							}
+						]
+					}
+				);
+				res.json(circuit);
+			}
+			else
+			{
+
+				let circuit = await db.Circuit.findByPk(req.params.id_circuit,
+					{
+						attributes : ['name','description','duration','need_internet','level']
+					}
+				);
+				res.json(circuit);
+			}
+
 		}
 		
 		catch(err)
