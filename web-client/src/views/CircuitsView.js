@@ -71,7 +71,7 @@ export default class CircuitsView extends Component {
             <>
                 <div className='my-circuits-header'>
                     {isAdmin === 'home' && <h1>Circuits environnants</h1>}
-                    {isAdmin === 'created' && <h1>Circuits crées</h1>}
+                    {isAdmin === 'created' && <h1>Circuits créés</h1>}
                     {isAdmin === 'achieved' && <h1>Circuits accomplis</h1>}
                     {isAdmin === 'favorites' && <h1>Circuits favoris</h1>}
 

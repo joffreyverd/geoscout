@@ -16,10 +16,11 @@ export default class Home extends Component {
             height: window.innerHeight - 50,
             latitude: 48.582651,
             longitude: 7.749534,
-            distance: 30,
             zoom: 12,
         },
     }
+
+    DISTANCE = 30;
 
     componentDidMount() {
         // Récupération de la position de l'utilisateur
@@ -41,11 +42,11 @@ export default class Home extends Component {
     }
 
     getCircuits = () => {
-        const { viewport: { longitude, latitude, distance } } = this.state;
+        const { viewport: { longitude, latitude } } = this.state;
         const body = {
             user_longitude: longitude,
             user_latitude: latitude,
-            distance: distance,
+            distance: this.DISTANCE,
         };
         api.post('circuit/nearby', body).then((data) => {
             this.setState({
@@ -65,7 +66,7 @@ export default class Home extends Component {
     onMapMouv = (event) => {
         // console.log(event.lngLat);
         // setTimeout(() => console.log(this.state.viewport), 3000);
-        // this.getCircuits();
+        this.getCircuits();
     }
 
     onClickItem = (id_circuit) => {
