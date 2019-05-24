@@ -57,7 +57,6 @@ export default class CircuitPublisher extends Component {
                         steps: circuit.Steps,
                         viewport: viewport,
                     });
-                    console.log(this.state);
                     circuit.id_circuit = id;
                 } else {
                     circuit.Steps.sort((a, b) => a.order - b.order);
@@ -250,7 +249,6 @@ export default class CircuitPublisher extends Component {
         const { steps, stepFocus, userPosition, circuit, circuitIsDisplayed,
             stepIsDisplayed, viewport,
         } = this.state;
-        console.log(circuit);
         // const { history } = this.props;
 
         return (
@@ -276,7 +274,7 @@ export default class CircuitPublisher extends Component {
                                 color='info'
                             >Editer
                             </Button>
-                            {!circuit.published &&
+                            {(circuit.published && circuit.published !== true) &&
                                 <Button
                                     className='update-circuit-button'
                                     onClick={this.publishCircuit}

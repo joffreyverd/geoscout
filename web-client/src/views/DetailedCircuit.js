@@ -34,12 +34,10 @@ export default class DetailedCircuit extends Component {
             return { Favorites: prevState.circuit.Favorites };
         });
         if (circuit.Favorites) {
-            console.log('just removed');
             api.delete(`favorites/${id}`).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
         } else {
-            console.log('just added');
             api.post(`favorites/${id}`).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });

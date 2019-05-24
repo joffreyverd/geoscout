@@ -64,8 +64,6 @@ export default class Home extends Component {
     }
 
     onMapMouv = (event) => {
-        // console.log(event.lngLat);
-        // setTimeout(() => console.log(this.state.viewport), 3000);
         this.getCircuits();
     }
 

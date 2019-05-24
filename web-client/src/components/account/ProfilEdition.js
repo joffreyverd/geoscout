@@ -10,10 +10,6 @@ class ProfilEdition extends Component {
 
     state = {}
 
-    lol = () => {
-        console.log('lol');
-    }
-
     render() {
 
         const { user } = this.props;

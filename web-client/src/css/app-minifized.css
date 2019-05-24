@@ -463,7 +463,7 @@ h1 {
     display: flex !important;
     justify-content: center;
     margin : 20px auto !important;
-    width: 210px !important;
+    width: 80% !important;
   }
   
   .bold-info-circuit {

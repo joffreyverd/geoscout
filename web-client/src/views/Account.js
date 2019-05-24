@@ -29,7 +29,6 @@ export default class Account extends Component {
 
     componentDidMount() {
         const { user } = this.props;
-        console.log(user);
         api.get(`download-user/${user.id_user}`).then((data) => {
             this.setState({ user: data });
         }).catch(() => {
