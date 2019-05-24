@@ -13,7 +13,7 @@ module.exports =
 			let t = await db.sequelize.transaction();
 			try
 			{
-				await db.Evaluation.create(
+				let evaluation = await db.Evaluation.create(
 					{
 						comment : req.body.comment,
 						stars : req.body.stars,
@@ -21,7 +21,7 @@ module.exports =
 						id_user : id_user
 					},{transaction : t});
 				await t.commit();
-				res.sendStatus(201);
+				res.status(201).send(evaluation);
 			}
 
 			catch(err)
