@@ -288,9 +288,9 @@ module.exports =
 			let t = await db.sequelize.transaction();
 			try
 			{
-				await db.Favorite.create({id_user : id_user, id_circuit : req.params.id_circuit,transaction : t});
+				let favorite = await db.Favorite.create({id_user : id_user, id_circuit : req.params.id_circuit,transaction : t});
 				await t.commit();
-				res.sendStatus(201);
+				res.status(201).send(favorite);
 			}
 
 			catch(err)
