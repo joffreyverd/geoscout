@@ -264,6 +264,11 @@ h1 {
   margin: 0px auto;
 }
 
+.circuit-buttons {
+  display: flex;
+  justify-content: center;
+}
+
 .step-wrapper {
   height: 85%;
   overflow: scroll;
@@ -458,7 +463,7 @@ cursor: pointer;
   display: flex !important;
   justify-content: center;
   margin : 20px auto !important;
-  width: 210px !important;
+  width: 80% !important;
 }
 
 .bold-info-circuit {
@@ -553,6 +558,10 @@ cursor: pointer;
 
 .favoris-button {
     margin: 30px 20px 20px 20px;
+}
+
+.anticon-heart {
+  display: block !important;
 }
 
 .bottom-wrapper {

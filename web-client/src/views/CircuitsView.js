@@ -48,8 +48,7 @@ export default class CircuitsView extends Component {
 
         } else if (isAdmin === 'favorites') {
             api.get('favorites').then((data) => {
-                const formattedCircuits = data.map(item => item.Circuit);
-                this.setState({ circuits: formattedCircuits });
+                this.setState({ circuits: data });
             }).catch(() => {
                 console.log(this.props);
             });

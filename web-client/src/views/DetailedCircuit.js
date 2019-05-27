@@ -29,16 +29,22 @@ export default class DetailedCircuit extends Component {
     changeFavoriteStatus = () => {
         const { id } = this.props.match.params;
         const { circuit } = this.state;
-        this.setState((prevState) => {
-            prevState.circuit.Favorites = !prevState.circuit.Favorites;
-            return { Favorites: prevState.circuit.Favorites };
-        });
-        if (circuit.Favorites) {
-            api.delete(`favorites/${id}`).catch(() => {
+        if (circuit.Favorites && circuit.Favorites[0]) {
+            api.delete(`favorites/${id}`).then(() => {
+                this.setState((prevState) => {
+                    prevState.circuit.Favorites = [];
+                    return { Favorites: prevState.circuit.Favorites };
+                });
+            }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
         } else {
-            api.post(`favorites/${id}`).catch(() => {
+            api.post(`favorites/${id}`).then(() => {
+                this.setState((prevState) => {
+                    prevState.circuit.Favorites = [{ id: 0 }];
+                    return { Favorites: prevState.circuit.Favorites };
+                });
+            }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
         }
@@ -101,7 +107,7 @@ export default class DetailedCircuit extends Component {
                             className='favoris-button'
                             onClick={this.changeFavoriteStatus}
                         >
-                            {Favorites ?
+                            {(Favorites && Favorites[0]) ?
                                 <Icon type='heart' theme='filled' /> :
                                 <Icon type='heart' />
                             }
