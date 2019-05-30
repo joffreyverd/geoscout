@@ -89,9 +89,6 @@ export default class CircuitsView extends Component {
                 break;
         }
 
-        console.log(circuits);
-        console.log(showAchievedStatus);
-
         return (
             <>
                 <div className='my-circuits-header'>
