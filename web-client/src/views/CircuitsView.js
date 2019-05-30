@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
 import '../css/app-minifized.css';
+import { copyFile } from 'fs';
 import CreatedCircuitList from '../components/circuit/CircuitList';
 
 import api from '../utils/httpMethods';
@@ -11,7 +12,6 @@ export default class CircuitsView extends Component {
     state = {
         dropdownOpen: false,
         filter: 'Tous',
-        achievedFilter: 'Tous',
         circuits: [],
     };
 
@@ -26,10 +26,6 @@ export default class CircuitsView extends Component {
         this.setState({ filter: event.target.name });
     }
 
-    onAchievedFilterClick = (event) => {
-        this.setState({ filter: event.target.name });
-    }
-
     componentDidMount = () => {
         const { isAdmin, circuits } = this.props;
 
@@ -41,30 +37,60 @@ export default class CircuitsView extends Component {
         } else if (isAdmin === 'achieved') {
             api.get('achievedcircuit').then((data) => {
                 const formattedCircuits = data.map(item => item.Circuit);
-                this.setState({ circuits: formattedCircuits });
+                const achievementStatus = data.map(item => item.statut_circuit);
+
+                for (let i = 0; i < achievementStatus.length; i++) {
+                    formattedCircuits[i].statut_circuit = achievementStatus[i];
+                }
+
+                this.setState({
+                    circuits: formattedCircuits,
+                });
             }).catch(() => {
-                console.log(this.props);
+                console.log('error');
             });
 
         } else if (isAdmin === 'favorites') {
             api.get('favorites').then((data) => {
                 this.setState({ circuits: data });
             }).catch(() => {
-                console.log(this.props);
+                console.log('error');
             });
         } else {
             api.get('my-circuits').then((data) => {
                 this.setState({ circuits: data });
             }).catch(() => {
-                console.log(this.props);
+                console.log('error');
             });
         }
     }
 
     render() {
-        const { dropdownOpen, filter, achievedFilter, circuits } = this.state;
+        const { dropdownOpen, filter, circuits } = this.state;
         const { isAdmin } = this.props;
         const showPublished = (filter === 'Publiés');
+
+        let showAchievedStatus;
+        switch (filter) {
+            case 'En cours':
+                showAchievedStatus = 0;
+                break;
+            case 'En pause':
+                showAchievedStatus = 1;
+                break;
+            case 'Achevés':
+                showAchievedStatus = 2;
+                break;
+            case 'Abandonnés':
+                showAchievedStatus = 3;
+                break;
+            default:
+                showAchievedStatus = 'Tous';
+                break;
+        }
+
+        console.log(circuits);
+        console.log(showAchievedStatus);
 
         return (
             <>
@@ -85,32 +111,32 @@ export default class CircuitsView extends Component {
                                 <DropdownToggle
                                     caret
                                     color='info'
-                                >{achievedFilter}
+                                >{filter}
                                 </DropdownToggle>
                                 <DropdownMenu>
                                     <DropdownItem
                                         name='Tous'
-                                        onClick={this.onAchievedFilterClick}
+                                        onClick={this.onFilterClick}
                                     >Tous
                                     </DropdownItem>
                                     <DropdownItem
-                                        name='Publiés'
-                                        onClick={this.onAchievedFilterClick}
+                                        name='En cours'
+                                        onClick={this.onFilterClick}
                                     >En cours
                                     </DropdownItem>
                                     <DropdownItem
-                                        name='Non-publiés'
-                                        onClick={this.onAchievedFilterClick}
+                                        name='En pause'
+                                        onClick={this.onFilterClick}
                                     >En pause
                                     </DropdownItem>
                                     <DropdownItem
-                                        name='Non-publiés'
-                                        onClick={this.onAchievedFilterClick}
+                                        name='Abandonnés'
+                                        onClick={this.onFilterClick}
                                     >Abandonnés
                                     </DropdownItem>
                                     <DropdownItem
-                                        name='Non-publiés'
-                                        onClick={this.onAchievedFilterClick}
+                                        name='Achevés'
+                                        onClick={this.onFilterClick}
                                     >Achevés
                                     </DropdownItem>
                                 </DropdownMenu>
@@ -162,7 +188,9 @@ export default class CircuitsView extends Component {
                     />
                     :
                     <CreatedCircuitList
-                        items={circuits.filter(element => element.published === (showPublished))}
+                        items={(isAdmin === 'achieved') ?
+                            circuits.filter(element => element.statut_circuit === showAchievedStatus) :
+                            circuits.filter(element => element.published === (showPublished))}
                         isAdmin={isAdmin}
                     />
                 }
