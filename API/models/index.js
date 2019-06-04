@@ -9,7 +9,6 @@ const basename  = path.basename(__filename);
 const env       = process.env.NODE_ENV || 'development';
 const config    = require('../config/config.json')[env];
 const db        = {};
-const utils = require('../controllers/utils');
 
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
 
@@ -30,7 +29,7 @@ Object.keys(db).forEach(modelName => {
 });
 
 db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+//db.Sequelize = Sequelize;
 
 sequelize.sync(/*{force : true }*/); // ATTENTION !!!
 
