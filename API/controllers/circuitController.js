@@ -345,6 +345,41 @@ module.exports =
 		else
 			res.status(401).send(utils.messages.invalidToken);
 	},
+
+	patch : async (req,res) =>
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
+		{
+			let t = await db.sequelize.transaction();
+			try
+			{
+				let circuit = await db.Circuit.findByPk(req.params.id_circuit);
+				if(circuit.id_user === id_user) 
+				{
+					await circuit.update({version : circuit.version + 1},{transaction : t});
+					await t.commit();
+					res.status(200).send(circuit);
+				}
+
+				else
+				{
+					res.sendStatus(403);
+					await t.rollback();
+				}
+					
+			}
+
+			catch(err)
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
+		else
+			res.status(401).send(utils.messages.invalidToken);
+	}
 };
 
 
