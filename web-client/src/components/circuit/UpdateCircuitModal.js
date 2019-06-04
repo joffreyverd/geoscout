@@ -125,6 +125,9 @@ class UpdateCircuitModal extends Component {
         } = this.state;
         const { show, displayUpdateCircuit } = this.props;
 
+        const timeHour = Math.floor(duration / 60);
+        const timeMinute = duration % 60;
+
         let formattedLevel;
         switch (level) {
             case '1':
@@ -205,7 +208,7 @@ class UpdateCircuitModal extends Component {
                         {duration > 0 &&
                             <FormGroup>
                                 <Label>Durée estimée</Label>
-                                <p>{`${duration} heure(s)`}</p>
+                                <p>{`${timeHour}h${timeMinute}m`}</p>
                             </FormGroup>
                         }
 

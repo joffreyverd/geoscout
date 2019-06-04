@@ -58,7 +58,7 @@ export default class Map extends React.Component {
                                 this.centerStep(s);
                             }}
                         />
-                                             </Marker>)}
+                    </Marker>)}
 
                     {step &&
                         <Marker

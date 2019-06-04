@@ -30,6 +30,9 @@ class CircuitListItem extends Component {
         } = this.props;
         const { tooltipPublicationOpen, tooltipLevelOpen } = this.state;
 
+        const timeHour = Math.floor(duration / 60);
+        const timeMinute = duration % 60;
+
         let classLevel;
         switch (level) {
             case '1':
@@ -57,16 +60,12 @@ class CircuitListItem extends Component {
 
                     {overview}
 
-                    {(length && length > 0 && length !== null) ?
+                    {(length && length > 0 && length !== null) &&
                         <p className='bold-info-circuit'>{length} km</p>
-                        :
-                        <p className='bold-info-circuit'>1km</p>
                     }
 
-                    {(duration && length > 0 && duration !== null) ?
-                        <p className='bold-info-circuit'>{duration && `${duration} heures`}</p>
-                        :
-                        <p className='bold-info-circuit'>1heure</p>
+                    {(duration && duration > 0 && duration !== null) &&
+                        <p className='bold-info-circuit'>{duration && `${timeHour}h${timeMinute}m`}</p>
                     }
 
                     {isAdmin === 'created' &&

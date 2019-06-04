@@ -170,9 +170,9 @@ export default class CircuitPublisher extends Component {
      * Modification du circuit
      * @param {Object} circuit : L'objet circuit modifié
      */
-    updateCircuit = circuit => api.put(`circuit/${circuit.id_circuit}`, circuit).then(() => {
+    updateCircuit = circuit => api.put(`circuit/${circuit.id_circuit}`, circuit).then((data) => {
         this.setState({
-            circuit,
+            circuit: data,
         });
     })
 
