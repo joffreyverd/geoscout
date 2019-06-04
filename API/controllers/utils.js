@@ -24,6 +24,24 @@ module.exports =
 			return null;
 	},
 
+	ownCircuit : async (id_user,id_circuit) =>
+	{
+		try
+		{
+			let circuit = await db.Circuit.findByPk(id_circuit);
+			if(circuit.id_user === id_user)	
+				return true;
+			else
+				return false;
+		}
+
+		catch(err)
+		{
+			console.log(err);
+		}
+		
+	},
+
 	distanceBetweenPoints : (lat1,lat2,lon1,lon2) =>
 	{
 		let R = 6371; // km
@@ -65,21 +83,55 @@ module.exports =
 
 	///////////////////////////////////////////////////////////////////////
 
-	pathFinder : (type) =>
+	root : () => 
 	{
-		if(type === 1)
-			return path.join(path.dirname(process.execPath)+'/images/circuits');
-		else
-			return path.join(path.dirname(process.execPath)+'/images/users');
+		return path.join(path.dirname(process.execPath));
+	},
+
+	getFiles : async (type,id) =>
+	{
+		if(type === 'user')
+		{
+			try
+			{
+				let files = await fse.readdir(module.exports.root() + '/images/users/' + id + '/');
+				return files.map(file =>
+				{
+					return '/images/users/' + id  + '/' + file;
+				});
+			}
+
+			catch(err)
+			{
+				console.log(err);
+			}
+		}
+
+		else if(type === 'circuit')
+		{
+			try
+			{
+				let files = await fse.readdir(module.exports.root() + '/images/circuits/' + id + '/');
+				return files.map(file =>
+				{
+					return '/images/circuits/' + id  + '/' + file;
+				});
+			}
+
+			catch(err)
+			{
+				console.log(err);
+			}
+		}
 	},
 
 	createFolder : async (name,type) =>  
 	{
 		let p = '';
 		if(type === 1)
-			p = path.join(path.dirname(process.execPath)+'/images/circuits');
+			p =  module.exports.root() + '/images/circuits';
 		else
-			p = path.join(path.dirname(process.execPath)+'/images/users');
+			p = module.exports.root() + '/images/users';
 
 		try
 		{

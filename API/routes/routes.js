@@ -5,8 +5,15 @@ const step = require('../controllers/stepController');
 const evaluation = require('../controllers/evaluationController');
 const question = require('../controllers/questionController');
 const achievements = require('../controllers/achievedCircuitController');
+const images = require('../controllers/imageController');
+//const path = require('path');
+const multer = require('multer');
+const upload = multer({dest : './images/awaiting'});
 module.exports = function(app)
 {
+	app.route('/upload').post(upload.single('file'),images.upload);
+	app.route('/download').post(images.download);
+	app.route('/signup').post(user.createUser);
 	app.route('/signup').post(user.createUser);
 	app.route('/signin').post(user.login);
 	app.route('/whoami').get(user.whoami);
@@ -35,6 +42,7 @@ module.exports = function(app)
 	app.route('/circuit').post(circuit.createCircuit);
 	app.route('/publish-circuit').put(circuit.publicationCircuit);
 	app.route('/circuit/:id_circuit').put(circuit.updateCircuit);
+	app.route('/circuit/patch/:id_circuit').put(circuit.patch);
 	app.route('/circuit').delete(circuit.deleteCircuit);
 	app.route('/circuit/nearby').post(circuit.nearbyCircuits);
 
