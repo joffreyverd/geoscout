@@ -3,18 +3,21 @@ import { ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Tile, ListItem, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 
-import {
-    NavigationHeader,
-    NavigationMenu
-} from '../../components/NavigationMenu';
+import NavigationHeader from '../../components/NavigationHeader';
 import storage from '../../config/asyncStorageToken';
 import api from '../../config/httpMethods';
 
 export default class Me extends Component {
+    static navigationOptions = {
+        drawerLabel: 'Profil',
+        drawerIcon: ({ tintColor }) => (
+            <Icon name="user-circle" type="font-awesome" color="#1abc9c" />
+        )
+    };
+
     constructor() {
         super();
         this.state = {
-            menuOpen: false,
             user: {
                 lastname: '',
                 firstname: '',
@@ -26,16 +29,10 @@ export default class Me extends Component {
     componentDidMount() {
         storage.getTokenAsyncStorage().then(token => {
             if (token) {
-                api.get('whoami').then(user => this.setUser(user));
+                api.get('whoami').then(user => this.setState({ user }));
             } else {
                 this.props.navigation.navigate('Auth');
             }
-        });
-    }
-
-    setUser(user) {
-        this.setState({
-            user
         });
     }
 
@@ -49,16 +46,12 @@ export default class Me extends Component {
         });
     };
     render() {
-        const { user, menuOpen } = this.state;
+        const { user } = this.state;
 
         return (
-            <NavigationMenu
-                isOpen={menuOpen}
-                toggle={menuOpen => this.setState({ menuOpen })}
-                navigate={this.props.navigation.navigate}
-            >
+            <>
                 <NavigationHeader
-                    pressMenu={() => this.setState({ menuOpen: true })}
+                    pressMenu={this.props.navigation.openDrawer}
                     titleText={'Profil'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
@@ -107,7 +100,7 @@ export default class Me extends Component {
                         </TouchableOpacity>
                     </SafeAreaView>
                 ) : null}
-            </NavigationMenu>
+            </>
         );
     }
 }
