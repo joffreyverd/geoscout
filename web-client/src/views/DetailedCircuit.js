@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Rate, Comment, Tooltip, Avatar, Button, Icon } from 'antd';
+import { Rate, Button, Icon } from 'antd';
 import 'antd/dist/antd.css';
 
 import Map from '../components/Map';
+import CommentList from '../components/comment/CommentList';
 
 import api from '../utils/httpMethods';
 
@@ -67,7 +68,14 @@ export default class DetailedCircuit extends Component {
         const { id } = this.props.match.params;
         api.get(`circuit/${id}`).then((circuit) => {
             this.setState({
-                circuit: circuit,
+                circuit,
+            });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
+        api.get(`evaluations/${id}`).then((comments) => {
+            this.setState({
+                comments,
             });
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
@@ -88,7 +96,7 @@ export default class DetailedCircuit extends Component {
     render() {
 
         const { name, description, Favorites } = this.state.circuit;
-        const { viewport, userPosition, step } = this.state;
+        const { viewport, userPosition, step, comments } = this.state;
         const { isConnected } = this.props;
 
         return (
@@ -127,34 +135,11 @@ export default class DetailedCircuit extends Component {
                         />
                     </div>
 
-                    <div className='circuit-comments'>
-                        <h2 className='comments-title'>Commentaires</h2>
-                        <Comment
-                            author='Stevy Palarski'
-                            avatar={(
-                                <Avatar
-                                    src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                                    alt='Stevy Palarski'
-                                />
-                            )}
-                            content={(
-                                <p>
-                                    J‘ai pris beaucoup de plaisir à effectuer ce circuit.
-                                    Il m‘a permis de découvrir le centre-ville de Strasbourg.
-                                    Etant originaire de Caen, je n‘avais rarement eu l‘occasion
-                                    de voir une aussi belle ville !
-                                </p>
-                            )}
-                            datetime={(
-                                <Tooltip>
-                                    <span>Il y a deux jours</span>
-                                </Tooltip>
-                            )}
-                        />
-                    </div>
+                    <CommentList
+                        className='circuit-comments'
+                        items={comments}
+                    />
                 </div>
-
-
             </>
         );
     }

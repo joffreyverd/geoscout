@@ -36,7 +36,12 @@ export default class DetailCircuit extends React.Component {
         } = this.props.navigation;
         api.get('download-circuit/' + id_circuit)
             .then(data => {
-                // fileSystem.writeFile(id_circuit, data);
+                let goodVersion = true;
+                if (fileSystem.checkCircuitExist(id_circuit)) {
+                    fileSystem.deleteFile(id_circuit);
+                } else {
+                    fileSystem.writeFile(id_circuit, data);
+                }
                 data.Steps.sort((a, b) => a.order - b.order);
                 Alert.alert(
                     'Hopla',
@@ -52,8 +57,12 @@ export default class DetailCircuit extends React.Component {
                         {
                             text: 'Commencer à jouer',
                             onPress: () => {
-                                navigate('Start', {
-                                    circuit: data
+                                navigate('Transit', {
+                                    circuit: data,
+                                    step: 0,
+                                    score: 0,
+                                    maxScore: 0,
+                                    time: 0
                                 });
                             }
                         }

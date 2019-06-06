@@ -207,6 +207,7 @@ class UpdateStepModal extends Component {
     render() {
         const { id_step, name, description, instruction, validation, compass, Questions } = this.state;
         const { show, displayUpdateStep, removeStep } = this.props;
+        console.log(compass);
 
         return (
             <>

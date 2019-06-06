@@ -591,6 +591,8 @@ cursor: pointer;
 }
 
 .comments-title {
+  margin-left: 20px;
+  margin-top: 20px;
   font-size: 1.5em;
   color: #1abc9c;
 }
@@ -617,6 +619,12 @@ cursor: pointer;
 
 .opinion-wrapper > p {
   margin: 0px;
+}
+
+.comment-starts-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
 }
 
   /************************** ACCOUNT **************************/
