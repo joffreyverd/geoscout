@@ -123,7 +123,7 @@ class UpdateCircuitModal extends Component {
         const { name, description, length, duration,
             level, previewIsOpen, difficultyDropdown,
         } = this.state;
-        const { show, displayUpdateCircuit } = this.props;
+        const { show, displayUpdateCircuit, img } = this.props;
 
         const timeHour = Math.floor(duration / 60);
         const timeMinute = duration % 60;
@@ -240,6 +240,7 @@ class UpdateCircuitModal extends Component {
                     previewIsOpen={previewIsOpen}
                     displayPreviewModal={this.displayPreviewModal}
                     description={description}
+                    img={img}
                 />
 
             </>

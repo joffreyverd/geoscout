@@ -38,37 +38,29 @@ module.exports =
 	////////////////////////////////////////////////////////////////////////////
 
 	evaluationsCircuit : async (req,res) =>
-	{
-		let id_user = utils.verifToken(req.headers['authorization']);
-		if(id_user)
+	{			
+		try
 		{
-
-			
-			try
+			let evaluations = await db.Evaluation.findAll(
 			{
-				let evaluations = await db.Evaluation.findAll(
+				include :
+				[
 					{
-						include :
-						[
-							{
-								model : db.User,
-								attributes : ['id_user','firstname','lastname']
-							}
-						],
-						where : {id_circuit : req.params.id_circuit}
-					});
+						model : db.User,
+						attributes : ['id_user','firstname','lastname']
+					}
+				],
+				where : {id_circuit : req.params.id_circuit}
+			});
 
-				res.json(evaluations);
-			}
-
-			catch(err)
-			{
-				console.log(err);
-				res.status(500).send(utils.messages.serverError);
-			}
+			res.json(evaluations);
 		}
-		else
-			res.status(401).send(utils.messages.invalidToken);
+
+		catch(err)
+		{
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
+		}
 	},
 
 	////////////////////////////////////////////////////////////////////////////

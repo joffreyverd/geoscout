@@ -11,7 +11,6 @@ class CommentListItem extends Component {
 
         const { comment, stars, User } = this.props;
         const { firstname, lastname } = User;
-        console.log(this.props.id);
 
         return (
             <div className='comment-starts-wrapper'>
