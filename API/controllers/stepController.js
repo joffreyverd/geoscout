@@ -8,53 +8,42 @@ module.exports =
 {
 	stepCircuit : async (req,res) => 
 	{
-		let id_user = utils.verifToken(req.headers['authorization']);
-		if(id_user)
+		try
 		{
-			try
-			{
-				res.json(await db.Step.findAll({where : {id_circuit : req.params.id_circuit}, order: ['order']}));
-			}
-			catch(err)
-			{
-				console.log(err);
-				res.status(500).send(utils.messages.serverError);
-			}
+			res.json(await db.Step.findAll({where : {id_circuit : req.params.id_circuit}, order: ['order']}));
 		}
-		else
-			res.status(401).send(utils.messages.invalidToken); 
+		catch(err)
+		{
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
+		}
 	},
 
 	//////////////////////////////////////////////////////////
 
 	step: async (req,res) => 
 	{
-		if(utils.verifToken(req.headers['authorization']))
+		try
 		{
-			try
-			{
-				res.json(await db.Step.findOne(
-					{
-						where : {id_step : req.params.id_step},
-						attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
-						include : 
-						[
-							{
-								model : db.Question,
-								attributes : ['id_question','wording','response','type_of','points']
-							}
-						]
-					}));
-			}
-
-			catch(err)
-			{
-				console.log(err);
-				res.status(500).send(utils.messages.serverError);
-			}
+			res.json(await db.Step.findOne(
+				{
+					where : {id_step : req.params.id_step},
+					attributes : ['id_step','name','latitude','longitude','description','order','instruction','compass'],
+					include : 
+					[
+						{
+							model : db.Question,
+							attributes : ['id_question','wording','response','type_of','points']
+						}
+					]
+				}));
 		}
-		else
-			res.status(401).send(utils.messages.invalidToken);  
+
+		catch(err)
+		{
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
+		}
 	},
 
 	//////////////////////////////////////////////////////////

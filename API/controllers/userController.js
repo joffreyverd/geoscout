@@ -258,34 +258,26 @@ module.exports =
 
 	getFavorites : async (req,res) =>
 	{
-		try 
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
 		{
-			let id_user = utils.verifToken(req.headers['authorization']);
-			if(id_user)
-			{
-				let users = await db.Favorite.findAll(
-					{
-						attributes : [],
-						where : {id_user : id_user},
-						include : 
-						[
-							{
-								model : db.Circuit,
-								attributes : ['id_circuit','name' ,'description','length','duration','need_internet','published','version','level']		
-							}
-						]
-					});
-				res.status(200).send(users);
-			}
-
-			else
-				res.status(401).send(utils.messages.invalidToken);
-		} 
-		
-		catch(err)
-		{
-			console.log(error);
+			let favoris = await db.Circuit.findAll(
+				{
+					include : 
+					[
+						{
+							model : db.Favorite,
+							where : {id_user : id_user},
+							attributes : []
+						}
+					]
+				}
+			);
+			res.status(200).send(favoris);
 		}
+
+		else
+			res.status(401).send(utils.messages.invalidToken);
 	},
 
 	setFavorite : async (req,res) =>
@@ -296,9 +288,9 @@ module.exports =
 			let t = await db.sequelize.transaction();
 			try
 			{
-				await db.Favorite.create({id_user : id_user, id_circuit : req.params.id_circuit,transaction : t});
+				let favorite = await db.Favorite.create({id_user : id_user, id_circuit : req.params.id_circuit,transaction : t});
 				await t.commit();
-				res.sendStatus(201);
+				res.status(201).send(favorite);
 			}
 
 			catch(err)

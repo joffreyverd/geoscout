@@ -5,8 +5,15 @@ const step = require('../controllers/stepController');
 const evaluation = require('../controllers/evaluationController');
 const question = require('../controllers/questionController');
 const achievements = require('../controllers/achievedCircuitController');
+const images = require('../controllers/imageController');
+//const path = require('path');
+const multer = require('multer');
+const upload = multer({dest : './images/awaiting'});
 module.exports = function(app)
 {
+	app.route('/upload').post(upload.single('file'),images.upload);
+	app.route('/download').post(images.download);
+	app.route('/signup').post(user.createUser);
 	app.route('/signup').post(user.createUser);
 	app.route('/signin').post(user.login);
 	app.route('/whoami').get(user.whoami);
@@ -14,7 +21,7 @@ module.exports = function(app)
 	app.route('/ask-relation/:id_user').put(user.askRelation);
 	app.route('/answer-relation/:id_user').put(user.answerRelation);
 	app.route('/favorites').get(user.getFavorites);
-	app.route('/favorites/:id_circuit').put(user.setFavorite);
+	app.route('/favorites/:id_circuit').post(user.setFavorite);
 	app.route('/favorites/:id_circuit').delete(user.deleteFavorite);
 	app.route('/evaluations/:id_circuit').get(evaluation.evaluationsCircuit);
 	app.route('/evaluations').post(evaluation.createEvaluation);	
@@ -35,12 +42,14 @@ module.exports = function(app)
 	app.route('/circuit').post(circuit.createCircuit);
 	app.route('/publish-circuit').put(circuit.publicationCircuit);
 	app.route('/circuit/:id_circuit').put(circuit.updateCircuit);
+	app.route('/circuit/patch/:id_circuit').put(circuit.patch);
 	app.route('/circuit').delete(circuit.deleteCircuit);
 	app.route('/circuit/nearby').post(circuit.nearbyCircuits);
 
 	app.route('/achievedcircuit').get(achievements.getAchievements);
 	app.route('/achievedcircuit').post(achievements.createAchievement);
 	app.route('/achievedcircuit/:id_achievement').delete(achievements.deleteAchievement);
+	app.route('/achievedcircuit/:id_achievement').put(achievements.updateAchievement);
 
 	app.route('/question/:id_question').get(question.getQuestion);
 	app.route('/question').post(question.createQuestion);

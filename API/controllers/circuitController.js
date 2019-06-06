@@ -7,10 +7,39 @@ module.exports =
 {
 	circuit : async (req,res) => 
 	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		console.log(id_user);
 		try
 		{
-			let circuit = await db.Circuit.findByPk(req.params.id_circuit,{attributes : ['name','description','duration','need_internet','level']});
-			res.json(circuit);
+			if (id_user) 
+			{
+				let circuit = await db.Circuit.findByPk(req.params.id_circuit,
+					{
+						attributes : ['name','description','duration','need_internet','level'],
+						include : 
+						[
+							{
+								model : db.Favorite,
+								where : {id_user : id_user},
+								attributes : ['id'],
+								required : false
+							}
+						]
+					}
+				);
+				res.json(circuit);
+			}
+			else
+			{
+
+				let circuit = await db.Circuit.findByPk(req.params.id_circuit,
+					{
+						attributes : ['name','description','duration','need_internet','level']
+					}
+				);
+				res.json(circuit);
+			}
+
 		}
 		
 		catch(err)
@@ -29,7 +58,6 @@ module.exports =
 				let circuit = await db.Circuit.findOne(
 					{
 						where : {id_circuit : req.params.id_circuit},
-						attributes : ['id_circuit','name','description','duration','need_internet','level','version'],
 						include : 
 						[
 							{
@@ -317,6 +345,41 @@ module.exports =
 		else
 			res.status(401).send(utils.messages.invalidToken);
 	},
+
+	patch : async (req,res) =>
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
+		{
+			let t = await db.sequelize.transaction();
+			try
+			{
+				let circuit = await db.Circuit.findByPk(req.params.id_circuit);
+				if(circuit.id_user === id_user) 
+				{
+					await circuit.update({version : circuit.version + 1},{transaction : t});
+					await t.commit();
+					res.status(200).send(circuit);
+				}
+
+				else
+				{
+					res.sendStatus(403);
+					await t.rollback();
+				}
+					
+			}
+
+			catch(err)
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
+		else
+			res.status(401).send(utils.messages.invalidToken);
+	}
 };
 
 

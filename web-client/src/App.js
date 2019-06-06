@@ -70,7 +70,7 @@ class App extends Component {
                         <Route exact path='/todo' component={Todo} />
                     </>
                     : null}
-                <Route exact path='/detail/:id' component={DetailedCircuit} />
+                <Route exact path='/detail/:id' render={props => <DetailedCircuit {...props} isConnected={isConnected} />} />
             </>
         );
     }

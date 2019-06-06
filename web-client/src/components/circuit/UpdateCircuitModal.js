@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import {
+    Button, Form, FormGroup, Label, Input, ButtonDropdown,
+    DropdownMenu, DropdownToggle, DropdownItem,
+} from 'reactstrap';
 import { Icon } from 'antd';
 import 'antd/dist/antd.css';
 
@@ -12,6 +15,7 @@ import PreviewModal from './PreviewModal';
 class UpdateCircuitModal extends Component {
 
     state = {
+        difficultyDropdown: false,
         previewIsOpen: false,
         name: '',
         description: '',
@@ -69,13 +73,15 @@ class UpdateCircuitModal extends Component {
     }
 
     handleSubmit = () => {
-        const { name, description } = this.state;
+        const { name, description, level, version } = this.state;
         const { displayUpdateCircuit, alert, updateCircuit } = this.props;
         const { id_circuit } = this.props.circuit;
         const circuit = {
             id_circuit: id_circuit,
             name: name || null,
             description: description || null,
+            level: level || null,
+            version: version + 1,
         };
         updateCircuit(circuit)
             .then(() => {
@@ -91,9 +97,48 @@ class UpdateCircuitModal extends Component {
         }));
     }
 
+    displayDifficultyDropdown = () => {
+        this.setState(previousState => ({
+            difficultyDropdown: !previousState.difficultyDropdown,
+        }));
+    }
+
+    onDifficultyFilterClick = (event) => {
+        const { name } = event.target;
+        let formattedLevel;
+        switch (name) {
+            case 'intermédiaire':
+                formattedLevel = '1';
+                break;
+            case 'difficile':
+                formattedLevel = '2';
+                break;
+            default:
+                formattedLevel = '0';
+        }
+        this.setState({ level: formattedLevel });
+    }
+
     render() {
-        const { name, description, length, duration, previewIsOpen } = this.state;
+        const { name, description, length, duration,
+            level, previewIsOpen, difficultyDropdown,
+        } = this.state;
         const { show, displayUpdateCircuit } = this.props;
+
+        const timeHour = Math.floor(duration / 60);
+        const timeMinute = duration % 60;
+
+        let formattedLevel;
+        switch (level) {
+            case '1':
+                formattedLevel = 'Intermédiaire';
+                break;
+            case '2':
+                formattedLevel = 'Difficile';
+                break;
+            default:
+                formattedLevel = 'Facile';
+        }
 
         return (
             <>
@@ -125,10 +170,45 @@ class UpdateCircuitModal extends Component {
                             />
                         </FormGroup>
 
+                        <FormGroup>
+                            <ButtonDropdown
+                                isOpen={difficultyDropdown}
+                                toggle={this.displayDifficultyDropdown}
+                            >
+                                <DropdownToggle
+                                    caret
+                                    color='info'
+                                >
+                                    {formattedLevel}
+                                </DropdownToggle>
+                                <DropdownMenu>
+                                    <DropdownItem
+                                        name='facile'
+                                        value='1'
+                                        onClick={this.onDifficultyFilterClick}
+                                    >Facile
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        name='intermédiaire'
+                                        value='2'
+                                        onClick={this.onDifficultyFilterClick}
+                                    >Intermédiaire
+                                    </DropdownItem>
+                                    <DropdownItem
+                                        name='difficile'
+                                        value='3'
+                                        onClick={this.onDifficultyFilterClick}
+                                    >Difficile
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </ButtonDropdown>
+                        </FormGroup>
+
+
                         {duration > 0 &&
                             <FormGroup>
                                 <Label>Durée estimée</Label>
-                                <p>{`${duration} heure(s)`}</p>
+                                <p>{`${timeHour}h${timeMinute}m`}</p>
                             </FormGroup>
                         }
 
@@ -144,7 +224,7 @@ class UpdateCircuitModal extends Component {
                             <Button
                                 color='warning'
                                 onClick={this.displayPreviewModal}
-                            >Preview
+                            >Aperçu
                             </Button>
                             <Button
                                 color='success'

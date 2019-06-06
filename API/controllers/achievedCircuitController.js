@@ -76,8 +76,17 @@ module.exports=
 		{
 			try
 			{
-				let achievements = await  db.AchievedCircuit.findAll({where : {id_user : id}});
-				res.status(200).send(achievements);
+				res.status(200).send(await db.AchievedCircuit.findAll(
+					{
+						where : {id_user : id},
+						include : 
+						[
+							{
+								model : db.Circuit
+							}
+						]
+					}
+				));
 			}
 
 			catch(err)
@@ -88,5 +97,38 @@ module.exports=
 		}
 		else
 			res.status(401).send(utils.messages.invalidToken);
+	},
+
+	//////////////////////////////////////////////////////////
+
+	updateAchievement: async (req,res) =>
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if (id_user)
+		{
+			let t = await db.sequelize.transaction();
+			try 
+			{
+				let achievement = await db.AchievedCircuit.findByPk(req.params.id_achievement);
+				if(achievement.id_user === id_user)
+				{
+					await achievement.update(req.body,{transaction : t});
+					await t.commit();
+					res.status(200).send(achievement);
+				}
+				else
+				{
+					res.sendStatus(403);
+					await t.rollback();
+				}
+			} 
+			
+			catch (err) 
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
 	}
 };

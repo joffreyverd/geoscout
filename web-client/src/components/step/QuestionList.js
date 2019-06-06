@@ -28,14 +28,25 @@ export default class QuestionList extends React.Component {
                         <Row>
                             <Col sm='12'>
 
-                                <Checkbox
-                                    className='is-quizz-checkbox'
-                                    name='quizQuestion'
-                                    checked={quizQuestion}
-                                    value={quizQuestion}
-                                    onChange={event => handleChangeQuestionType(event, activeTab)}
-                                >{(quizQuestion) ? 'Quiz' : 'Question libre'}
-                                </Checkbox>
+                                <div className='flex-checkboxes'>
+                                    <Checkbox
+                                        className='is-quizz-checkbox'
+                                        name='quizQuestion'
+                                        checked={quizQuestion}
+                                        value={quizQuestion}
+                                        onChange={event => handleChangeQuestionType(event, activeTab)}
+                                    >Quiz
+                                    </Checkbox>
+
+                                    <Checkbox
+                                        className='is-quizz-checkbox'
+                                        name='quizQuestion'
+                                        checked={!quizQuestion}
+                                        value={quizQuestion}
+                                        onChange={event => handleChangeQuestionType(event, activeTab)}
+                                    >Question libre
+                                    </Checkbox>
+                                </div>
 
                                 {quizQuestion ?
                                     <>
