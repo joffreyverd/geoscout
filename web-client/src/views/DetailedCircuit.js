@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Rate, Button, Icon } from 'antd';
+import { Rate, Button, Icon, Carousel } from 'antd';
 import 'antd/dist/antd.css';
 
 import Map from '../components/Map';
@@ -91,12 +91,20 @@ export default class DetailedCircuit extends Component {
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
+        api.post('download', {
+            id,
+            type: 'circuit',
+        }).then((img) => {
+            this.setState({ img });
+        }).catch(() => {
+            console.log('error');
+        });
     }
 
     render() {
 
         const { name, description, Favorites } = this.state.circuit;
-        const { viewport, userPosition, step, comments } = this.state;
+        const { viewport, userPosition, step, comments, img } = this.state;
         const { isConnected } = this.props;
 
         return (
@@ -124,6 +132,7 @@ export default class DetailedCircuit extends Component {
                 </div>
 
                 <div className='bottom-wrapper'>
+                    <h2 className='comments-title'>Informations générales</h2>
                     <div className='circuit-infos'>
                         <div dangerouslySetInnerHTML={{ __html: description }} />
                         <Map
@@ -134,6 +143,17 @@ export default class DetailedCircuit extends Component {
                             changeViewport={this.changeViewport}
                         />
                     </div>
+
+                    {img === undefined || img.length === 0 ?
+                        <p>Aucune photo disponible pour ce circuit</p>
+                        :
+                        <>
+                            <h2 className='comments-title'>Photos du circuit</h2>
+                            <Carousel className='carousel-style'>
+                                {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={name} />)}
+                            </Carousel>
+                        </>
+                    }
 
                     <CommentList
                         className='circuit-comments'

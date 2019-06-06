@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'reactstrap';
+import { Rate } from 'antd';
+import 'antd/dist/antd.css';
+
+import api from '../../utils/httpMethods';
 
 class CircuitListItem extends Component {
 
@@ -9,6 +13,18 @@ class CircuitListItem extends Component {
         tooltipPublicationOpen: false,
         tooltipLevelOpen: false,
     };
+
+    componentDidMount = () => {
+        const { id_circuit } = this.props;
+        api.post('download', {
+            id: id_circuit,
+            type: 'circuit',
+        }).then((img) => {
+            this.setState({ img });
+        }).catch(() => {
+            console.log('error');
+        });
+    }
 
     publishedStatusToggler = () => {
         this.setState({
@@ -28,8 +44,8 @@ class CircuitListItem extends Component {
             id_circuit, name, description, length, isAdmin,
             duration, version, published, level, history,
         } = this.props;
-        const { tooltipPublicationOpen, tooltipLevelOpen } = this.state;
-
+        const { tooltipPublicationOpen, tooltipLevelOpen, img } = this.state;
+        console.log(img);
         const timeHour = Math.floor(duration / 60);
         const timeMinute = duration % 60;
 
@@ -58,15 +74,26 @@ class CircuitListItem extends Component {
 
                     <h3 className='item-name'>{nameOverview}</h3>
 
-                    {overview}
+                    {overview && overview !== '' &&
+                        <p className='smart-description-circuit'>{overview}</p>
+                    }
 
-                    {(length && length > 0 && length !== null) &&
+                    {length > 0 && length !== null &&
                         <p className='bold-info-circuit'>{length} km</p>
                     }
 
-                    {(duration && duration > 0 && duration !== null) &&
+                    {duration > 0 && duration !== null &&
                         <p className='bold-info-circuit'>{duration && `${timeHour}h${timeMinute}m`}</p>
                     }
+
+                    <Rate disabled defaultValue={3} />
+
+                    <img
+                        className='picture-circuit-minature'
+                        src={img === undefined || img.length === 0 ? 'https://i.ytimg.com/vi/yWYBIYD4JNo/maxresdefault.jpg' : `http://www.geoscout.fr:5555${img}`}
+                        alt={name}
+                    />
+
 
                     {isAdmin === 'created' &&
 
