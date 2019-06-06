@@ -84,7 +84,10 @@ class Etape extends React.Component {
                     startingTime={startingTime}
                     time={time}
                 >
-                    <PlayHeader pressMenu={() => this.refMenu.openDrawer()} />
+                    <PlayHeader
+                        pressMenu={() => this.refMenu.openDrawer()}
+                        title={`Etape ${stepNumber}`}
+                    />
                     <View
                         style={Object.assign(
                             {},
@@ -111,37 +114,41 @@ class Etape extends React.Component {
                             styles.container
                         )}
                     >
-                        {step.Questions &&
-                            step.Questions.length > 0 &&
-                            step.Questions.map(item => {
-                                let screen = '';
-                                switch (item.type_of) {
-                                    case 1:
-                                        screen = 'QuestionQCM';
-                                        break;
-                                    case 2:
-                                        screen = 'QuestionLibre';
-                                        break;
-                                }
-                                console.log(screen);
-                                return (
-                                    <TouchableOpacity
-                                        key={item.id_question}
-                                        onPress={() => {
-                                            navigate(screen, {
-                                                question: item,
-                                                nextStep: this.nextStep
-                                            });
-                                        }}
-                                        activeOpacity={0.8}
-                                        style={styles.button}
-                                    >
-                                        <Text style={styles.textButton}>
-                                            Question {item.difficulty}
-                                        </Text>
-                                    </TouchableOpacity>
-                                );
-                            })}
+                        {step.Questions && step.Questions.length > 0 && (
+                            <>
+                                <Text style={styles.tip}>
+                                    Répondez à une question
+                                </Text>
+                                {step.Questions.map(item => {
+                                    let screen = '';
+                                    switch (item.type_of) {
+                                        case 1:
+                                            screen = 'QuestionQCM';
+                                            break;
+                                        case 2:
+                                            screen = 'QuestionLibre';
+                                            break;
+                                    }
+                                    return (
+                                        <TouchableOpacity
+                                            key={item.id_question}
+                                            onPress={() => {
+                                                navigate(screen, {
+                                                    question: item,
+                                                    nextStep: this.nextStep
+                                                });
+                                            }}
+                                            activeOpacity={0.8}
+                                            style={styles.button}
+                                        >
+                                            <Text style={styles.textButton}>
+                                                Question {item.difficulty}
+                                            </Text>
+                                        </TouchableOpacity>
+                                    );
+                                })}
+                            </>
+                        )}
 
                         <TouchableOpacity
                             onPress={() => this.nextStep(0, 15)}
@@ -181,9 +188,10 @@ const styles = StyleSheet.create({
         marginBottom: 30,
         fontWeight: 'bold'
     },
-    description: {
-        color: 'black',
-        fontSize: 22
+    tip: {
+        color: '#1abc9c',
+        fontSize: 18,
+        marginBottom: 10
     },
     button: {
         backgroundColor: '#2c3e50',

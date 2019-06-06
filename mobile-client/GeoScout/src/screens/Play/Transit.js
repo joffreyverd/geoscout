@@ -182,11 +182,11 @@ class Transit extends React.Component {
                             )}
                         >
                             <Text style={styles.title}>
-                                Transit vers{' '}
+                                Transit vers
                                 {step.order === 0
-                                    ? 'le point de départ'
-                                    : `l'étape ${step.order} sur ${circuit.Steps
-                                          .length - 1}`}
+                                    ? ' le point de départ'
+                                    : ` l'étape ${step.order} sur ${circuit
+                                          .Steps.length - 1}`}
                             </Text>
                             <ScrollView style={{ flex: 1 }}>
                                 {/* <HTML html={step.instruction} imagesMaxWidth={Dimensions.get('window').width} /> */}
