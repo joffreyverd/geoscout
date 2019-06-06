@@ -6,6 +6,8 @@ import {
     createAppContainer
 } from 'react-navigation';
 
+import { DrawerContent } from '../components/NavigationDrawer';
+
 import Authentication from '../screens/Authentication/Authentication';
 import Signin from '../screens/Authentication/Signin';
 import Signup from '../screens/Authentication/Signup';
@@ -25,20 +27,21 @@ import Finish from '../screens/Play/Finish';
 
 const PrincipalStack = createDrawerNavigator(
     {
+        GeoLocation: GeoLocation,
         Me: Me,
         Settings: Settings,
-        GeoLocation: GeoLocation,
         DownloadCircuit: DownloadCircuit,
         FavoriteCircuit: FavoriteCircuit,
         DetailCircuit: DetailCircuit
     },
     {
-        drawerWidth: 300,
+        drawerWidth: 220,
         initialRouteName: 'GeoLocation',
-        order: ['GeoLocation', 'Me', 'DownloadCircuit', 'FavoriteCircuit'],
         contentOptions: {
-            labelStyle: { width: '100%' }
-        }
+            labelStyle: { width: '100%' },
+            itemsContainerStyle: { marginTop: 30 }
+        },
+        contentComponent: DrawerContent
     }
 );
 

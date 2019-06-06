@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import NavigationHeader from '../../components/NavigationHeader';
+import { NavigationHeader } from '../../components/NavigationDrawer';
 import ListCircuit from '../../components/ListCircuit';
 
 export default class FavoriteCircuit extends React.Component {

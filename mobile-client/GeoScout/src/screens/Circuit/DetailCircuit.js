@@ -8,7 +8,7 @@ import {
     Dimensions,
     ToastAndroid
 } from 'react-native';
-import NavigationHeader from '../../components/NavigationHeader';
+import { NavigationHeader } from '../../components/NavigationDrawer';
 import { SafeAreaView } from 'react-navigation';
 import HTML from 'react-native-render-html';
 import { Icon } from 'react-native-elements';
