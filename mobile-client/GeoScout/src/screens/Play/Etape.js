@@ -51,6 +51,22 @@ class Etape extends React.Component {
         });
     };
 
+    passStep = () => {
+        const {
+            navigation: {
+                state: {
+                    params: { circuit, step: stepNumber }
+                }
+            }
+        } = this.props;
+        const step = circuit.Steps[stepNumber];
+        if (step.Questions) {
+            this.nextStep(0, 15);
+        } else {
+            this.nextStep(0, 0);
+        }
+    };
+
     render() {
         const {
             navigation: {
@@ -151,7 +167,7 @@ class Etape extends React.Component {
                         )}
 
                         <TouchableOpacity
-                            onPress={() => this.nextStep(0, 15)}
+                            onPress={this.passStep}
                             activeOpacity={0.8}
                             style={styles.button}
                         >

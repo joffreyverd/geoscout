@@ -57,8 +57,12 @@ export default class DetailCircuit extends React.Component {
                         {
                             text: 'Commencer à jouer',
                             onPress: () => {
-                                navigate('Start', {
-                                    circuit: data
+                                navigate('Transit', {
+                                    circuit: data,
+                                    step: 0,
+                                    score: 0,
+                                    maxScore: 0,
+                                    time: 0
                                 });
                             }
                         }
