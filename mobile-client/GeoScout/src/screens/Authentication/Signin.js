@@ -6,49 +6,60 @@ import {
     View,
     TextInput
 } from 'react-native';
-
+import { Input, Icon } from 'react-native-elements';
 
 export default class Signin extends React.Component {
-    constructor(props){
-        super(props)
+    constructor(props) {
+        super(props);
         this.state = {
             email: '',
             password: ''
-        }
+        };
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         e.preventDefault();
 
         // Copie du state dans un nouvel objet
         const user = Object.assign({}, this.state);
 
-        this.props.navigation.state.params.signin(user)
-        .catch((error) => console.log(error));
-    }
+        this.props.navigation.state.params
+            .signin(user)
+            .catch(error => console.log(error));
+    };
 
     render() {
         return (
             <View style={styles.container}>
-                <TextInput
+                <Input
                     value={this.state.email}
-                    onChangeText={(email) => this.setState({ email })}
+                    onChangeText={email => this.setState({ email })}
                     placeholder={'Email'}
-                    style={styles.input}
+                    inputContainerStyle={styles.input}
+                    containerStyle={styles.width}
+                    inputStyle={styles.textInput}
+                    shake={true}
+                    leftIcon={<Icon name="email" size={24} color="white" />}
+                    leftIconContainerStyle={styles.iconInput}
+                />
+                <Input
+                    value={this.state.password}
+                    onChangeText={password => this.setState({ password })}
+                    placeholder={'Mot de passe'}
+                    inputContainerStyle={styles.input}
+                    containerStyle={styles.width}
+                    inputStyle={styles.textInput}
+                    secureTextEntry={true}
+                    shake={true}
+                    leftIcon={<Icon name="lock" size={24} color="white" />}
+                    leftIconContainerStyle={styles.iconInput}
                 />
 
-                <TextInput
-                    value={this.state.password}
-                    onChangeText={(password) => this.setState({ password })}
-                    placeholder={'Mot de passe'}
-                    secureTextEntry={true}
-                    style={styles.input}
-                />
-                
                 <TouchableOpacity
-                style={styles.button}
-                onPress={this.handleSubmit}
-                activeOpacity={0.8}>
+                    style={styles.button}
+                    onPress={this.handleSubmit}
+                    activeOpacity={0.8}
+                >
                     <Text style={styles.textButton}>Connexion</Text>
                 </TouchableOpacity>
             </View>
@@ -64,7 +75,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1abc9c'
     },
     button: {
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#006A55',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
@@ -75,13 +86,21 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18
     },
+    textInput: {
+        color: 'white'
+    },
     input: {
-        width: '90%',
-        padding: 8,
         borderWidth: 1,
-        borderColor: '#2c3e50',
+        borderColor: '#006A55',
         borderRadius: 5,
-        backgroundColor: '#fff',
-        marginBottom: 10
+        marginBottom: 15,
+        color: 'white',
+        backgroundColor: '#03876D'
+    },
+    iconInput: {
+        marginRight: 10
+    },
+    width: {
+        width: '95%'
     }
 });

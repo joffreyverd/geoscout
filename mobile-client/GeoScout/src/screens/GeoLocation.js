@@ -202,21 +202,12 @@ export default class GeoLocation extends React.Component {
                     titleText={'Carte'}
                     rightComponent={
                         <View style={styles.buttonMapChange}>
-                            <Icon
-                                name="satellite"
-                                type="material"
-                                size={20}
-                                color="#FFF"
-                            />
+                            <Text style={{ color: 'white' }}>
+                                Vue satellite
+                            </Text>
                             <Switch
                                 onValueChange={this.toggleSwitch}
                                 value={this.state.switchValue}
-                            />
-                            <Icon
-                                name="landscape"
-                                type="material"
-                                size={20}
-                                color="#FFF"
                             />
                         </View>
                     }

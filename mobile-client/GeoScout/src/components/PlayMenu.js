@@ -129,13 +129,19 @@ const styles = StyleSheet.create({
     }
 });
 
-export function PlayHeader({ pressMenu }) {
+export function PlayHeader({ pressMenu, title }) {
     return (
         <Header
+            barStyle="light-content"
             leftComponent={{
                 icon: 'menu',
                 color: 'white',
-                onPress: pressMenu
+                onPress: pressMenu,
+                size: 36
+            }}
+            centerComponent={{
+                text: title,
+                style: { color: 'white', fontSize: 20 }
             }}
             backgroundColor="#1abc9c"
         />

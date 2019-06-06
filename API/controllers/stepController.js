@@ -28,7 +28,7 @@ module.exports =
 			res.json(await db.Step.findOne(
 				{
 					where : {id_step : req.params.id_step},
-					attributes : ['id_step','name','latitude','longitude','description','order','instruction'],
+					attributes : ['id_step','name','latitude','longitude','description','order','instruction','compass'],
 					include : 
 					[
 						{

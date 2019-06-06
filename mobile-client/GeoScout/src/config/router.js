@@ -16,7 +16,6 @@ import DetailCircuit from '../screens/Circuit/DetailCircuit';
 import Settings from '../screens/Profil/Settings.js';
 import Me from '../screens/Profil/Me';
 
-import Start from '../screens/Play/Start';
 import Transit from '../screens/Play/Transit';
 import Etape from '../screens/Play/Etape';
 import QuestionLibre from '../screens/Play/Questions/QuestionLibre';
@@ -30,8 +29,7 @@ const PrincipalStack = createStackNavigator(
         GeoLocation: GeoLocation, //ok
         DownloadCircuit: DownloadCircuit, //ok
         FavoriteCircuit: FavoriteCircuit, //ok
-        DetailCircuit: DetailCircuit, //ok
-        Start: Start
+        DetailCircuit: DetailCircuit //ok
     },
     {
         headerMode: 'none',

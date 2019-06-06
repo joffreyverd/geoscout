@@ -58,20 +58,29 @@ module.exports =
 
 	evaluateDistance : async (id_circuit) =>
 	{
-		let circuit = await db.Circuit.findOne({where : {id_circuit:id_circuit},include :[{model : db.Step}]});
-		let lat = circuit.Steps[0].latitude;
-		let lon = circuit.Steps[0].longitude;
-		let dist = 0;
-		circuit.Steps.map(step => 
-		{
-			dist+= module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude);
-		});
-
 		let t = await db.sequelize.transaction();
+		try
+		{
+			let circuit = await db.Circuit.findOne({where : {id_circuit:id_circuit},include :[{model : db.Step}]});
+			let lat = circuit.Steps[0].latitude;
+			let lon = circuit.Steps[0].longitude;
+			let dist = 0;
+			circuit.Steps.map(step => 
+			{
+				dist+= module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude);
+			});
 
-		circuit.length = dist;
-		await circuit.save({transaction: t});
-		await t.commit();	
+			circuit.length = dist;
+			await circuit.save({transaction: t});
+			await t.commit();	
+		}
+
+		catch(err)
+		{
+			console.log(err);
+			t.rollback();
+		}
+		
 	},
 
 	messages : 
