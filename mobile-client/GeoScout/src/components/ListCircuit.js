@@ -6,6 +6,7 @@ import {
     Dimensions
 } from 'react-native';
 import api from '../config/httpMethods';
+import fileSystem from '../config/fileSystem';
 import Callout from './Callout';
 
 const { height, width } = Dimensions.get('window');
@@ -13,16 +14,22 @@ const { height, width } = Dimensions.get('window');
 export default class ListCircuit extends React.Component {
     state = {};
     componentDidMount() {
-        const { root } = this.props;
-        api.get(root)
-            .then(circuits => {
-                this.setState({ circuits });
-                console.log(circuits);
-            })
-            .catch(error => {
-                console.log(error);
-                return null;
-            });
+        const { type, root } = this.props;
+        if (type == 'local') {
+            console.log('local');
+            circuitsJSON = fileSystem.getCircuitsExist();
+            this.setState({ circuits: circuitsJSON });
+        } else {
+            console.log('api');
+            api.get(root)
+                .then(circuits => {
+                    this.setState({ circuits });
+                })
+                .catch(() => {
+                    return null;
+                });
+        }
+        console.log(this.state.circuits);
     }
 
     render() {
@@ -33,9 +40,9 @@ export default class ListCircuit extends React.Component {
                 {circuits &&
                     circuits.map(item => (
                         <TouchableWithoutFeedback
-                            key={item.Circuit.id_circuit}
+                            key={item.id_circuit}
                             onPress={() => {
-                                //navigate('DetailCircuit', item);
+                                navigate('DetailCircuit', item);
                             }}
                         >
                             <View>
@@ -49,9 +56,10 @@ export default class ListCircuit extends React.Component {
                                         marginBottom: 10,
                                         borderRadius: 5
                                     }}
-                                    name={item.Circuit.name}
-                                    description={item.Circuit.description}
-                                    distance={item.Circuit.length}
+                                    name={item.name}
+                                    description={item.description}
+                                    distance={item.length}
+                                    time={item.duration}
                                     // difficulty={[1, 0, 1]}
                                 />
                             </View>
