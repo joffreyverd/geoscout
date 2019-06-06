@@ -28,22 +28,43 @@ export default class CircuitPublisher extends Component {
     }
 
     componentDidMount() {
+        // eslint-disable-next-line no-undef
+        if (navigator.geolocation) {
+            // eslint-disable-next-line no-undef
+            navigator.geolocation.getCurrentPosition((data) => {
+                const { viewport } = this.state;
+                viewport.latitude = data.coords.latitude;
+                viewport.longitude = data.coords.longitude;
+
+                this.setState({
+                    viewport: viewport,
+                    userPosition: data.coords,
+                });
+            });
+        }
         const { id } = this.props.match.params;
         if (id) {
             api.get(`download-circuit/${id}`).then((circuit) => {
                 const { longitude, latitude } = (circuit.Steps[0]) ? circuit.Steps[0] : false;
                 const { viewport } = this.state;
 
-                viewport.latitude = latitude;
-                viewport.longitude = longitude;
-                circuit.Steps.sort((a, b) => a.order - b.order);
-
-                this.setState({
-                    circuit: circuit,
-                    steps: circuit.Steps,
-                    viewport: viewport,
-                });
-                circuit.id_circuit = id;
+                if (latitude && longitude) {
+                    viewport.latitude = latitude;
+                    viewport.longitude = longitude;
+                    circuit.Steps.sort((a, b) => a.order - b.order);
+                    this.setState({
+                        circuit: circuit,
+                        steps: circuit.Steps,
+                        viewport: viewport,
+                    });
+                    circuit.id_circuit = id;
+                } else {
+                    circuit.Steps.sort((a, b) => a.order - b.order);
+                    this.setState({
+                        circuit: circuit,
+                        steps: circuit.Steps,
+                    });
+                }
             }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
@@ -53,6 +74,18 @@ export default class CircuitPublisher extends Component {
     changeViewport = (viewport) => {
         this.setState({
             viewport: viewport,
+        });
+    }
+
+    publishCircuit = () => {
+        const { circuit } = this.state;
+        api.put('publish-circuit', { id_circuit: circuit.id_circuit }).then(() => {
+            this.setState((prevState) => {
+                prevState.circuit.published = !prevState.circuit.published;
+                return { circuit: prevState.circuit };
+            });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
         });
     }
 
@@ -124,19 +157,22 @@ export default class CircuitPublisher extends Component {
      * @param {Object} step : L'objet étape modifié
      */
     updateStep = step => api.put(`step/${step.id_step}`, { step }).then(() => {
+        const { circuit } = this.state;
         this.setState((prev) => {
             const index = prev.steps.findIndex(s => s.id_step === step.id_step);
             prev.steps[index] = step;
+            circuit.version += 1;
         });
+        this.updateCircuit();
     })
 
     /**
      * Modification du circuit
      * @param {Object} circuit : L'objet circuit modifié
      */
-    updateCircuit = circuit => api.put(`circuit/${circuit.id_circuit}`, circuit).then(() => {
+    updateCircuit = circuit => api.put(`circuit/${circuit.id_circuit}`, circuit).then((data) => {
         this.setState({
-            circuit,
+            circuit: data,
         });
     })
 
@@ -213,10 +249,10 @@ export default class CircuitPublisher extends Component {
     }
 
     render() {
-        const { steps, stepFocus, circuit, circuitIsDisplayed,
-            stepIsDisplayed, userPosition, viewport,
+        const { steps, stepFocus, userPosition, circuit, circuitIsDisplayed,
+            stepIsDisplayed, viewport,
         } = this.state;
-        const { history } = this.props;
+        // const { history } = this.props;
 
         return (
             <div className='view-wrapper'>
@@ -234,12 +270,22 @@ export default class CircuitPublisher extends Component {
 
                     <div className='circuit-title'>
                         <h3>{circuit.name}</h3>
-                        <Button
-                            className='update-circuit-button'
-                            onClick={this.displayUpdateCircuit}
-                            color='info'
-                        >Modifier
-                        </Button>
+                        <div className='circuit-buttons'>
+                            <Button
+                                className='update-circuit-button'
+                                onClick={this.displayUpdateCircuit}
+                                color='info'
+                            >Editer
+                            </Button>
+                            {(circuit.published && circuit.published !== true) &&
+                                <Button
+                                    className='update-circuit-button'
+                                    onClick={this.publishCircuit}
+                                    color='warning'
+                                >Publier
+                                </Button>
+                            }
+                        </div>
                     </div>
 
                     <DragDropContext
@@ -254,11 +300,14 @@ export default class CircuitPublisher extends Component {
 
                 </div>
 
+                {/*
                 <p
                     className='come-back-button'
                     onClick={() => history.goBack()}
                 >Valider
                 </p>
+                */}
+
 
                 <UpdateStepModal
                     step={stepFocus}

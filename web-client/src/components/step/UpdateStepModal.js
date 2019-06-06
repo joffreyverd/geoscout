@@ -15,6 +15,7 @@ class UpdateStepModal extends Component {
         name: '',
         description: '',
         instruction: '',
+        compass: false,
         validation: false,
         Questions: [],
     };
@@ -171,9 +172,24 @@ class UpdateStepModal extends Component {
      */
     handleCheckboxChange = (event) => {
         const { checked } = event.target;
+        const { compass } = this.state;
+        if (!compass) {
+            this.setState((prevState) => {
+                prevState.validation = checked;
+                return { validation: prevState.validation };
+            });
+        }
+    }
+
+    handleCheckboxCompassChange = (event) => {
+        const { validation } = this.state;
+        if (!validation) {
+            this.handleCheckboxChange(event);
+        }
+        const { checked } = event.target;
         this.setState((prevState) => {
-            prevState.validation = checked;
-            return { validation: prevState.validation };
+            prevState.compass = checked;
+            return { compass: prevState.compass };
         });
     }
 
@@ -189,7 +205,7 @@ class UpdateStepModal extends Component {
     }
 
     render() {
-        const { id_step, name, description, instruction, validation, Questions } = this.state;
+        const { id_step, name, description, instruction, validation, compass, Questions } = this.state;
         const { show, displayUpdateStep, removeStep } = this.props;
 
         return (
@@ -235,8 +251,17 @@ class UpdateStepModal extends Component {
                         <Checkbox
                             name='validation'
                             value={validation}
+                            checked={validation}
                             onChange={this.handleCheckboxChange}
-                        >Validation position GPS
+                        >Validation du transit par détection GPS
+                        </Checkbox>
+
+                        <Checkbox
+                            name='validation'
+                            value={compass}
+                            checked={compass}
+                            onChange={this.handleCheckboxCompassChange}
+                        >Parcours du transit en mode boussole
                         </Checkbox>
 
                         <MultipleQuestion

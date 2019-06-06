@@ -22,10 +22,6 @@ class CircuitListItem extends Component {
         });
     }
 
-    test = () => {
-
-    };
-
     render() {
 
         const {
@@ -33,6 +29,9 @@ class CircuitListItem extends Component {
             duration, version, published, level, history,
         } = this.props;
         const { tooltipPublicationOpen, tooltipLevelOpen } = this.state;
+
+        const timeHour = Math.floor(duration / 60);
+        const timeMinute = duration % 60;
 
         let classLevel;
         switch (level) {
@@ -61,16 +60,12 @@ class CircuitListItem extends Component {
 
                     {overview}
 
-                    {(length && length > 0 && length !== null) ?
+                    {(length && length > 0 && length !== null) &&
                         <p className='bold-info-circuit'>{length} km</p>
-                        :
-                        <p className='bold-info-circuit'>1km</p>
                     }
 
-                    {(duration && length > 0 && duration !== null) ?
-                        <p className='bold-info-circuit'>{duration && `${duration} heures`}</p>
-                        :
-                        <p className='bold-info-circuit'>1heure</p>
+                    {(duration && duration > 0 && duration !== null) &&
+                        <p className='bold-info-circuit'>{duration && `${timeHour}h${timeMinute}m`}</p>
                     }
 
                     {isAdmin === 'created' &&

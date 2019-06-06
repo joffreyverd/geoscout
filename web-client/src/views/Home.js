@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ToggleButton from 'react-toggle-button';
+import { Button } from 'reactstrap';
 
 import Map from '../components/Map';
 import api from '../utils/httpMethods';
@@ -16,10 +16,11 @@ export default class Home extends Component {
             height: window.innerHeight - 50,
             latitude: 48.582651,
             longitude: 7.749534,
-            distance: 30,
             zoom: 12,
         },
     }
+
+    DISTANCE = 30;
 
     componentDidMount() {
         // Récupération de la position de l'utilisateur
@@ -41,11 +42,11 @@ export default class Home extends Component {
     }
 
     getCircuits = () => {
-        const { viewport: { longitude, latitude, distance } } = this.state;
+        const { viewport: { longitude, latitude } } = this.state;
         const body = {
             user_longitude: longitude,
             user_latitude: latitude,
-            distance: distance,
+            distance: this.DISTANCE,
         };
         api.post('circuit/nearby', body).then((data) => {
             this.setState({
@@ -62,11 +63,21 @@ export default class Home extends Component {
         });
     }
 
+    onMapMouv = (event) => {
+        this.getCircuits();
+    }
+
     onClickItem = (id_circuit) => {
         const { history } = this.props;
         if (id_circuit) {
             history.push(`detail/${id_circuit}`);
         }
+    }
+
+    changeViewStyle = () => {
+        this.setState(prevState => ({
+            value: !prevState.value,
+        }));
     }
 
     render() {
@@ -82,6 +93,7 @@ export default class Home extends Component {
                         viewport={viewport}
                         userPosition={userPosition}
                         changeViewport={this.changeViewport}
+                        onMapMouv={this.onMapMouv}
                         onClickMarker={this.onClickItem}
                     />
                     :
@@ -91,17 +103,14 @@ export default class Home extends Component {
                     />
                 }
 
-                <div className='toggle-button'>
-                    <p>Liste</p>
-                    <ToggleButton
-                        value={value || false}
-                        onToggle={(value) => {
-                            this.setState({
-                                value: !value,
-                            });
-                        }}
-                    />
-                </div>
+                <Button
+                    className='toggle-button'
+                    color='primary'
+                    type='submit'
+                    value={value}
+                    onClick={this.changeViewStyle}
+                >{(value) ? 'Voir la carte' : 'Voir la liste'}
+                </Button>
             </>
         );
     }

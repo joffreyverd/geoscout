@@ -1,3 +1,7 @@
+/* eslint-disable no-console */
+/* eslint-disable global-require */
+/* eslint-disable no-undef */
+/* eslint-disable indent */
 var request = require('supertest');
 describe('loading express', function () 
 {

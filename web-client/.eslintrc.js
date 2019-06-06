@@ -18,7 +18,8 @@ module.exports = {
                     "profil_picture",
                     "user_latitude",
                     "user_longitude",
-                    "kind_of"
+                    "kind_of",
+                    "statut_circuit"
                 ]
             }
         ],

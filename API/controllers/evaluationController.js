@@ -13,7 +13,7 @@ module.exports =
 			let t = await db.sequelize.transaction();
 			try
 			{
-				await db.Evaluation.create(
+				let evaluation = await db.Evaluation.create(
 					{
 						comment : req.body.comment,
 						stars : req.body.stars,
@@ -21,7 +21,7 @@ module.exports =
 						id_user : id_user
 					},{transaction : t});
 				await t.commit();
-				res.sendStatus(201);
+				res.status(201).send(evaluation);
 			}
 
 			catch(err)
@@ -71,4 +71,62 @@ module.exports =
 		else
 			res.status(401).send(utils.messages.invalidToken);
 	},
+
+	////////////////////////////////////////////////////////////////////////////
+
+	updateEvaluation : async (req,res) =>
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if (id_user)
+		{
+			let t = await db.sequelize.transaction();
+			try 
+			{
+				let evaluation = await db.Evaluation.findByPK(req.params.id_comment);
+				if(evaluation.id_user === id_user)
+				{
+					await evaluation.update(req.body,{transaction : t});
+					await t.commit();
+					res.status(200).send(evaluation);
+				}
+				else
+				{
+					res.sendStatus(403);
+					await t.rollback();
+				}
+			} 
+			
+			catch (error) 
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
+	},
+
+	//////////////////////////////////////////////////////////
+
+	deleteEvaluation : async (req,res) =>
+	{
+		if (utils.verifToken(req.headers['authorization']))
+		{
+			let t = await db.sequelize.transaction();
+			try
+			{
+				await db.Evaluation.destroy({where : {id : req.params.id_evaluation}}, {transaction: t});
+				await t.commit();
+				res.sendStatus(204);
+			}
+
+			catch(err)
+			{
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+				console.log(err);
+			}
+		}
+		else
+		res.status(401).send(utils.messages.invalidToken);
+	}
 };

@@ -27,6 +27,8 @@ h1 {
 }
 
 .ml-auto {
+  margin-left: 30px !important;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   font-size: .7em;
@@ -50,14 +52,7 @@ h1 {
 .auth-text {
   display: block;
   margin: auto 30px auto auto;
-  color: #004C3D;
-  cursor: pointer;
-  font-size: .7em;
-  font-weight: bold;
-  background-color: white;
-  border-radius: 2px;
-  width: 140px;
-  text-align: center;
+  color: #004C3D !important;
   transition: .1s;
 }
 
@@ -269,6 +264,11 @@ h1 {
   margin: 0px auto;
 }
 
+.circuit-buttons {
+  display: flex;
+  justify-content: center;
+}
+
 .step-wrapper {
   height: 85%;
   overflow: scroll;
@@ -463,7 +463,7 @@ cursor: pointer;
   display: flex !important;
   justify-content: center;
   margin : 20px auto !important;
-  width: 210px !important;
+  width: 80% !important;
 }
 
 .bold-info-circuit {
@@ -471,6 +471,12 @@ cursor: pointer;
     color: #004C3D;
     margin: 20px 0px 20px 0px;
     transition: .2s;
+}
+
+.flex-checkboxes {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
 }
 
 .is-quizz-checkbox {
@@ -554,6 +560,10 @@ cursor: pointer;
     margin: 30px 20px 20px 20px;
 }
 
+.anticon-heart {
+  display: block !important;
+}
+
 .bottom-wrapper {
   color: #2c3e50;
   display: flex;
@@ -562,10 +572,16 @@ cursor: pointer;
 }
 
 .circuit-infos {
+  display: flex;
+  justify-content: space-between;
   background-color: #ecf0f1;
   border-radius: 3px;
   padding: 15px;
   margin: 20px;
+}
+
+.detailed-circuit-map {
+  width: 50%;
 }
 
 .circuit-comments {
