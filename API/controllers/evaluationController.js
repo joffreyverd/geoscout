@@ -48,7 +48,6 @@ module.exports =
 			{
 				let evaluations = await db.Evaluation.findAll(
 					{
-						attributes : ['comment','stars'],
 						include :
 						[
 							{
