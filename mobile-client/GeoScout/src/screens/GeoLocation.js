@@ -12,7 +12,7 @@ import {
 import { Location } from 'expo';
 import { Icon } from 'react-native-elements';
 
-import { NavigationMenu, NavigationHeader } from '../components/NavigationMenu';
+import NavigationHeader from '../components/NavigationHeader';
 import Callout from '../components/Callout';
 import api from '../config/httpMethods';
 import MapView, { Marker } from 'react-native-maps';
@@ -24,6 +24,13 @@ const LATITUDE_DELTA = 0.5;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 export default class GeoLocation extends React.Component {
+    static navigationOptions = {
+        drawerLabel: 'Carte',
+        drawerIcon: ({ tintColor }) => (
+            <Icon name="map" type="font-awesome" color="#1abc9c" />
+        )
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -42,8 +49,7 @@ export default class GeoLocation extends React.Component {
             mapType: 'standard',
             circuits: null,
             circuitReady: false,
-            switchValue: false,
-            menuOpen: false
+            switchValue: false
         };
     }
 
@@ -136,9 +142,6 @@ export default class GeoLocation extends React.Component {
     componentWillUnmount() {
         //Je ne sais pas si c'est encore utile !
         navigator.geolocation.clearWatch(this.state);
-        this.setState({
-            menuOpen: false
-        });
     }
 
     displayNearbyCircuits() {
@@ -190,15 +193,10 @@ export default class GeoLocation extends React.Component {
     }
 
     render() {
-        const { menuOpen } = this.state;
         return (
-            <NavigationMenu
-                isOpen={menuOpen}
-                toggle={menuOpen => this.setState({ menuOpen: menuOpen })}
-                navigate={this.props.navigation.navigate}
-            >
+            <>
                 <NavigationHeader
-                    pressMenu={() => this.setState({ menuOpen: true })}
+                    pressMenu={this.props.navigation.openDrawer}
                     titleText={'Carte'}
                     rightComponent={
                         <View style={styles.buttonMapChange}>
@@ -258,7 +256,7 @@ export default class GeoLocation extends React.Component {
                         </>
                     )}
                 </View>
-            </NavigationMenu>
+            </>
         );
     }
 }

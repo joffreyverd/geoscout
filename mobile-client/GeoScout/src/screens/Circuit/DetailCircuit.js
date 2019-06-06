@@ -8,10 +8,7 @@ import {
     Dimensions,
     ToastAndroid
 } from 'react-native';
-import {
-    NavigationHeader,
-    NavigationMenu
-} from '../../components/NavigationMenu';
+import NavigationHeader from '../../components/NavigationHeader';
 import { SafeAreaView } from 'react-navigation';
 import HTML from 'react-native-render-html';
 import { Icon } from 'react-native-elements';
@@ -20,12 +17,7 @@ import api from '../../config/httpMethods';
 import fileSystem from '../../config/fileSystem';
 
 export default class DetailCircuit extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            menuOpen: false
-        };
-    }
+    state = {};
 
     download = () => {
         const {
@@ -94,23 +86,10 @@ export default class DetailCircuit extends React.Component {
             description,
             id_circuit
         } = this.props.navigation.state.params;
-        const { menuOpen } = this.state;
         return (
-            <NavigationMenu
-                isOpen={menuOpen}
-                toggle={menuOpen =>
-                    this.setState({
-                        menuOpen
-                    })
-                }
-                navigate={this.props.navigation.navigate}
-            >
+            <>
                 <NavigationHeader
-                    pressMenu={() =>
-                        this.setState({
-                            menuOpen: true
-                        })
-                    }
+                    pressMenu={this.props.navigation.openDrawer}
                     titleText={'Détail circuit'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
@@ -158,7 +137,7 @@ export default class DetailCircuit extends React.Component {
                         <Text style={styles.textButton}>Télécharger </Text>
                     </TouchableOpacity>
                 </SafeAreaView>
-            </NavigationMenu>
+            </>
         );
     }
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import {
     createStackNavigator,
     createSwitchNavigator,
+    createDrawerNavigator,
     createAppContainer
 } from 'react-navigation';
 
@@ -22,18 +23,22 @@ import QuestionLibre from '../screens/Play/Questions/QuestionLibre';
 import QuestionQCM from '../screens/Play/Questions/QuestionQCM';
 import Finish from '../screens/Play/Finish';
 
-const PrincipalStack = createStackNavigator(
+const PrincipalStack = createDrawerNavigator(
     {
-        Me: Me, //ok
-        Settings: Settings, //ok
-        GeoLocation: GeoLocation, //ok
-        DownloadCircuit: DownloadCircuit, //ok
-        FavoriteCircuit: FavoriteCircuit, //ok
-        DetailCircuit: DetailCircuit //ok
+        Me: Me,
+        Settings: Settings,
+        GeoLocation: GeoLocation,
+        DownloadCircuit: DownloadCircuit,
+        FavoriteCircuit: FavoriteCircuit,
+        DetailCircuit: DetailCircuit
     },
     {
-        headerMode: 'none',
-        initialRouteName: 'GeoLocation'
+        drawerWidth: 300,
+        initialRouteName: 'GeoLocation',
+        order: ['GeoLocation', 'Me', 'DownloadCircuit', 'FavoriteCircuit'],
+        contentOptions: {
+            labelStyle: { width: '100%' }
+        }
     }
 );
 
