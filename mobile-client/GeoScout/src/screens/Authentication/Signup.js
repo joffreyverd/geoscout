@@ -4,22 +4,23 @@ import {
     Text,
     StyleSheet,
     View,
-    TextInput
+    KeyboardAvoidingView
 } from 'react-native';
+import { Input, Icon } from 'react-native-elements';
 
 export default class Signup extends React.Component {
-    constructor(props){
-        super(props)
+    constructor(props) {
+        super(props);
         this.state = {
             firstname: '',
             lastname: '',
             email: '',
             password: '',
             rePassword: ''
-        }
+        };
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = e => {
         e.preventDefault();
 
         //FAIRE LES VERIF
@@ -28,62 +29,95 @@ export default class Signup extends React.Component {
         const user = Object.assign({}, this.state);
         delete user.rePassword;
 
-        this.props.navigation.state.params.signup(user).then(() => {
-            console.log("Connecté");
-            // success
-        }).catch((error) => {
-            // error
-            console.log("Erreur");
-        });
-    }
+        this.props.navigation.state.params
+            .signup(user)
+            .then(() => {
+                console.log('Connecté');
+                // success
+            })
+            .catch(error => {
+                // error
+                console.log('Erreur');
+            });
+    };
 
     render() {
         return (
-            <View style={styles.container}>
-                <TextInput
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior="padding"
+                enabled
+            >
+                <Input
                     value={this.state.firstname}
-                    onChangeText={(firstname) => this.setState({ firstname })}
+                    onChangeText={firstname => this.setState({ firstname })}
                     placeholder={'Prénom'}
-                    style={styles.input}
+                    inputContainerStyle={styles.input}
+                    containerStyle={styles.width}
+                    inputStyle={styles.textInput}
+                    shake={true}
+                    leftIcon={<Icon name="person" size={24} color="white" />}
+                    leftIconContainerStyle={styles.iconInput}
                 />
 
-                <TextInput
+                <Input
                     value={this.state.lastname}
-                    onChangeText={(lastname) => this.setState({ lastname })}
+                    onChangeText={lastname => this.setState({ lastname })}
                     placeholder={'Nom'}
-                    style={styles.input}
+                    inputContainerStyle={styles.input}
+                    containerStyle={styles.width}
+                    inputStyle={styles.textInput}
+                    shake={true}
+                    leftIcon={<Icon name="person" size={24} color="white" />}
+                    leftIconContainerStyle={styles.iconInput}
                 />
 
-                <TextInput
+                <Input
                     value={this.state.email}
-                    onChangeText={(email) => this.setState({ email })}
+                    onChangeText={email => this.setState({ email })}
                     placeholder={'Email'}
-                    style={styles.input}
+                    inputContainerStyle={styles.input}
+                    containerStyle={styles.width}
+                    inputStyle={styles.textInput}
+                    shake={true}
+                    leftIcon={<Icon name="email" size={24} color="white" />}
+                    leftIconContainerStyle={styles.iconInput}
                 />
 
-                <TextInput
+                <Input
                     value={this.state.password}
-                    onChangeText={(password) => this.setState({ password })}
+                    onChangeText={password => this.setState({ password })}
                     placeholder={'Mot de passe'}
+                    inputContainerStyle={styles.input}
+                    containerStyle={styles.width}
+                    inputStyle={styles.textInput}
                     secureTextEntry={true}
-                    style={styles.input}
+                    shake={true}
+                    leftIcon={<Icon name="lock" size={24} color="white" />}
+                    leftIconContainerStyle={styles.iconInput}
                 />
 
-                <TextInput
+                <Input
                     value={this.state.repassword}
-                    onChangeText={(repassword) => this.setState({ rePassword })}
+                    onChangeText={rePassword => this.setState({ rePassword })}
                     placeholder={'Répétez votre mot de passe'}
+                    inputContainerStyle={styles.input}
+                    containerStyle={styles.width}
+                    inputStyle={styles.textInput}
                     secureTextEntry={true}
-                    style={styles.input}
+                    shake={true}
+                    leftIcon={<Icon name="lock" size={24} color="white" />}
+                    leftIconContainerStyle={styles.iconInput}
                 />
-                
+
                 <TouchableOpacity
-                style={styles.button}
-                onPress={this.handleSubmit}
-                activeOpacity={0.8}>
+                    style={styles.button}
+                    onPress={this.handleSubmit}
+                    activeOpacity={0.8}
+                >
                     <Text style={styles.textButton}>Inscription</Text>
                 </TouchableOpacity>
-            </View>
+            </KeyboardAvoidingView>
         );
     }
 }
@@ -96,7 +130,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1abc9c'
     },
     button: {
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#006A55',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
@@ -107,13 +141,21 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 18
     },
+    textInput: {
+        color: 'white'
+    },
     input: {
-        width: '90%',
-        padding: 8,
         borderWidth: 1,
-        borderColor: '#2c3e50',
+        borderColor: '#006A55',
         borderRadius: 5,
-        backgroundColor: '#fff',
-        marginBottom: 10
+        marginBottom: 15,
+        backgroundColor: '#03876D',
+        color: 'white'
+    },
+    iconInput: {
+        marginRight: 10
+    },
+    width: {
+        width: '95%'
     }
 });
