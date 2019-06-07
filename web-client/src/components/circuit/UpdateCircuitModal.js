@@ -4,7 +4,7 @@ import {
     Button, Form, FormGroup, Label, Input, ButtonDropdown,
     DropdownMenu, DropdownToggle, DropdownItem,
 } from 'reactstrap';
-import { Icon } from 'antd';
+import { Icon, Carousel } from 'antd';
 import 'antd/dist/antd.css';
 
 import ReactQuill from 'react-quill';
@@ -222,6 +222,17 @@ class UpdateCircuitModal extends Component {
                         }
 
                         <Uploader id={circuit} />
+
+
+                        {img && img !== undefined &&
+                            <>
+                                <p className='my-pictures'>Photos du circuit</p>
+                                <Carousel>
+                                    {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={`http://www.geoscout.fr:5555${item}`} />)}
+                                </Carousel>
+                            </>
+                        }
+
 
                         <div className='update-buttons'>
                             <Button

@@ -3,7 +3,7 @@ import { Route, withRouter } from 'react-router-dom';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUser, faPen, faAlignJustify } from '@fortawesome/free-solid-svg-icons';
 
-import './css/app-minifized.css';
+import './css/app-minified.css';
 import Navigation from './components/Navigation';
 
 import Home from './views/Home';

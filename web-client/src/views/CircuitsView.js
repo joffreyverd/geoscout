@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-import '../css/app-minifized.css';
+import '../css/app-minified.css';
 import CreatedCircuitList from '../components/circuit/CircuitList';
 
 import api from '../utils/httpMethods';

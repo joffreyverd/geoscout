@@ -150,6 +150,10 @@ h1 {
   position: relative;
 }
 
+.list-item.unpublished {
+  background-color: #efc77d87;
+}
+
 .list-item > h3 {
   transition: .2s;
 }
@@ -161,7 +165,7 @@ h1 {
   transition: .2s;
 }
 
-.list-item:hover > .picture-circuit-minature {
+.list-item:hover > .picture-circuit-minature, .list-item.unpublished:hover > .picture-circuit-minature {
   transition: .2s;
   background-color: #65D8C1;
   opacity: .5;
@@ -202,12 +206,6 @@ h1 {
   transition: .2s;
 }
 
-.published-item {
-  position: absolute;
-  top: 15px;
-  right: 40px;
-}
-
 .level-item {
   position: absolute;
   top: 15px;
@@ -243,6 +241,12 @@ h1 {
   transition: .2s;
 }
 
+.km-and-time {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
 /************************** CIRCUIT-PUBLISHER **************************/
 .view-wrapper {
   display: flex;
@@ -260,19 +264,26 @@ h1 {
 }
 
 .circuit-title {
+  position: absolute;
+  top: 70px;
+  left: 20px;
   color: #2c3e50;
-  width: 100%;
+  background-color: #e1e9ea;
+  border-radius: 3px;
+  width: auto;
   text-align: center;
   padding: 10px;
   margin: 0px;
-  height: 15%;
+  height: 59px;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
 }
 
 .circuit-title > h3 {
   font-size: 1.3em;
+  height: 100%;
+  line-height: 40px;
+  padding-right: 20px;
 }
 
 .circuit-title > button {
@@ -287,7 +298,7 @@ h1 {
 }
 
 .step-wrapper {
-  height: 85%;
+  height: 100%;
   overflow: scroll;
   padding: 7px;
   margin: auto;
@@ -343,6 +354,18 @@ cursor: pointer;
 .update-circuit {
   display: block;
   background-color: white;
+}
+
+.uploader-wrapper {
+    display: block;
+    margin: auto;
+    width: 80%;
+}
+
+.my-pictures {
+  margin: 35px;
+  font-weight: bold;
+  color: #1abc9c;
 }
 
 .hidden-update-circuit {
@@ -497,6 +520,7 @@ cursor: pointer;
   margin: 5px 0px;
   padding-left: 15px;
   transition: .2s;
+  width: 50%;
   }
 
 .flex-checkboxes {
@@ -656,23 +680,40 @@ cursor: pointer;
 .comment-starts-wrapper {
     display: flex;
     justify-content: space-between;
-    width: 40%;
+    width: 80%;
+}
+
+.ant-comment {
+  width: 30% !important;
+}
+
+.version-tag {
+  background-color: white;
+  color: #2c3e50;
+  height: 30px;
+  width: 70px;
+  border-radius: 3px;
+  text-align: center;
+  line-height: 30px;
 }
 
 .carousel-style {
   margin: 20px;
 }
 
-.ant-carousel .slick-slide {
-  text-align: center;
-  height: 600px;
-  line-height: 600px;
-  background: #e1e9ea;
-  overflow: hidden;
-}
-
 .ant-carousel .slick-slide h3 {
   color: #1abc9c;
+}
+
+.no-pictures {
+  margin-left: 20px;
+  background-color: #1abc9c;
+  padding: 10px;
+  border-radius: 3px;
+  width: 50%;
+  font-weight: bold;
+  text-align: center;
+  color: white;
 }
 
   /************************** ACCOUNT **************************/
