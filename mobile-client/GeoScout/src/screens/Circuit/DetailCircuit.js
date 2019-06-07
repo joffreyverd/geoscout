@@ -20,7 +20,6 @@ export default class DetailCircuit extends React.Component {
     constructor() {
         super();
         this.state = {
-            menuOpen: false,
             isDownload: null
         };
     }
@@ -140,7 +139,7 @@ export default class DetailCircuit extends React.Component {
             description,
             id_circuit
         } = this.props.navigation.state.params;
-        const { menuOpen, isDownload } = this.state;
+        const { isDownload } = this.state;
         return (
             <>
                 <NavigationHeader
