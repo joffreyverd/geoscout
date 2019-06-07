@@ -8,7 +8,6 @@ module.exports =
 	circuit : async (req,res) => 
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
-		console.log(id_user);
 		try
 		{
 			if (id_user) 
@@ -62,12 +61,11 @@ module.exports =
 						[
 							{
 								model : db.Step,
-								attributes : ['id_step','name','latitude','longitude','description','order','instruction','validation'],
+								attributes : ['id_step','name','latitude','longitude','description','order','instruction','validation','compass'],
 								include : 
 								[
 									{
-										model : db.Question,
-										attributes : ['id_question','wording','response','type_of','points']
+										model : db.Question
 									}
 								]
 							}
@@ -125,6 +123,7 @@ module.exports =
 			let count = 0;
 			let note = 0;
 			let currentCircuit = null;
+
 			circuits.map((circuit) => 
 			{
 				if(circuit)
@@ -132,6 +131,7 @@ module.exports =
 					currentCircuit = circuit.toJSON();
 					note = 0;
 					count = 0;
+					
 					currentCircuit.Evaluations.map(evaluation =>
 					{
 						note+= evaluation.stars;

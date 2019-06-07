@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 
@@ -26,15 +27,21 @@ module.exports =
 		{
 			try
 			{
-				let dest = '';
-				let fileNumber = await utils.getFiles(req.body.type,req.body.id);
-				fileNumber = fileNumber.length + 1;
+				let dest = utils.root() + '/images/users/' + req.body.id + '/';
+				let fileExist = await utils.getFiles(req.body.type,req.body.id);
+				
 				if(req.body.type === 'user')
 				{
-					if(id_user === req.body.id)
+					if(id_user === parseInt(req.body.id))
 					{
-						dest = utils.root() + '/images/users/' + req.body.id + '/';
-						await fs.rename(utils.root() + '/images/awaiting/'+req.file.filename, dest + fileNumber + '.' + req.file.originalname.split('.')[1],(a) => {console.log(a);});
+						
+						if(fileExist[0])
+						{
+							let split = fileExist[0].split('/');
+							await fs.unlink(dest + split[split.length -1]);
+						}
+						
+						await fs.rename(utils.root() + '/images/awaiting/'+req.files[0].filename, dest + 'user.' + req.files[0].originalname.split('.')[1],(a) => {console.log(a);});
 						res.sendStatus(201);
 					}
 
@@ -45,11 +52,16 @@ module.exports =
 					
 				else if(req.body.type === 'circuit')
 				{
-					let circuitOk = await utils.ownCircuit(id_user,req.body.id);
+					let circuitOk = await utils.ownCircuit(id_user,req.body.id,require('../models'));
 					if(circuitOk)
 					{
+						//console.log(req.files);
 						dest = utils.root() + '/images/circuits/' + req.body.id + '/';
-						await fs.rename(utils.root() + '/images/awaiting/'+req.file.filename, dest + fileNumber + '.' + req.file.originalname.split('.')[1],(a) => {console.log(a);});
+						req.files.map(async (file,i) =>
+						{
+							await fs.rename(utils.root() + '/images/awaiting/'+ file.filename, dest + i + '.' + file.originalname.split('.')[1],(a) => {console.log(a);});
+						});
+
 						res.sendStatus(201);
 					}
 						
@@ -60,6 +72,7 @@ module.exports =
 
 			catch(err)
 			{
+				console.log(err);
 				res.status(500).send(utils.messages.serverError);
 			}
 			

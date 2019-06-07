@@ -12,32 +12,39 @@ import Callout from './Callout';
 const { height, width } = Dimensions.get('window');
 
 export default class ListCircuit extends React.Component {
-    state = {};
+    constructor() {
+        super();
+        this.state = {
+            circuits: null,
+            isReady: false
+        };
+    }
     componentDidMount() {
         const { type, root } = this.props;
         if (type == 'local') {
             console.log('local');
             circuitsJSON = fileSystem.getCircuitsExist();
-            this.setState({ circuits: circuitsJSON });
+            console.log(circuitsJSON);
+            if (circuitsJSON != null || circuitsJSON != '')
+                this.setState({ circuits: circuitsJSON, isReady: true });
         } else {
             console.log('api');
             api.get(root)
                 .then(circuits => {
-                    this.setState({ circuits });
+                    this.setState({ circuits: circuits, isReady: true });
                 })
-                .catch(() => {
-                    return null;
+                .catch(error => {
+                    console.log(error);
                 });
         }
-        console.log(this.state.circuits);
     }
 
     render() {
-        const { circuits } = this.state;
+        const { circuits, isReady } = this.state;
         const { navigate } = this.props;
         return (
             <ScrollView>
-                {circuits &&
+                {isReady &&
                     circuits.map(item => (
                         <TouchableWithoutFeedback
                             key={item.id_circuit}

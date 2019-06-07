@@ -12,7 +12,7 @@ import {
 import { Location } from 'expo';
 import { Icon } from 'react-native-elements';
 
-import NavigationHeader from '../components/NavigationHeader';
+import { NavigationHeader } from '../components/NavigationDrawer';
 import Callout from '../components/Callout';
 import api from '../config/httpMethods';
 import MapView, { Marker } from 'react-native-maps';

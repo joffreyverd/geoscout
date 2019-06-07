@@ -42,16 +42,16 @@ module.exports =
 		try
 		{
 			let evaluations = await db.Evaluation.findAll(
-			{
-				include :
-				[
-					{
-						model : db.User,
-						attributes : ['id_user','firstname','lastname']
-					}
-				],
-				where : {id_circuit : req.params.id_circuit}
-			});
+				{
+					include :
+					[
+						{
+							model : db.User,
+							attributes : ['id_user','firstname','lastname']
+						}
+					],
+					where : {id_circuit : req.params.id_circuit}
+				});
 
 			res.json(evaluations);
 		}
@@ -118,6 +118,6 @@ module.exports =
 			}
 		}
 		else
-		res.status(401).send(utils.messages.invalidToken);
+			res.status(401).send(utils.messages.invalidToken);
 	}
 };

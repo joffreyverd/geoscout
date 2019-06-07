@@ -3,7 +3,7 @@ import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import NavigationHeader from '../../components/NavigationHeader';
+import { NavigationHeader } from '../../components/NavigationDrawer';
 import ListCircuit from '../../components/ListCircuit';
 import fileSystem from '../../config/fileSystem';
 
@@ -16,7 +16,7 @@ export default class DownloadCircuit extends React.Component {
     };
 
     componentDidMount() {
-        console.log(fileSystem.readDirectory());
+        console.log('directory have : ' + fileSystem.readDirectory());
     }
 
     render() {

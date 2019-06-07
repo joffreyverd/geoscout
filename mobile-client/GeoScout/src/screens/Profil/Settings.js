@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
-import NavigationHeader from '../../components/NavigationHeader';
+import { NavigationHeader } from '../../components/NavigationDrawer';
 
 export default class Settings extends Component {
     render() {

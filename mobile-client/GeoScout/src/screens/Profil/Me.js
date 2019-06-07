@@ -3,7 +3,7 @@ import { ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Tile, ListItem, Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 
-import NavigationHeader from '../../components/NavigationHeader';
+import { NavigationHeader } from '../../components/NavigationDrawer';
 import storage from '../../config/asyncStorageToken';
 import api from '../../config/httpMethods';
 

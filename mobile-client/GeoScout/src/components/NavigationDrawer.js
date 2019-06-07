@@ -1,7 +1,20 @@
 import React from 'react';
 import { Header } from 'react-native-elements';
+import { DrawerItems } from 'react-navigation';
 
-export default function NavigationHeader({
+export const DrawerContent = ({ items, ...props }) => {
+    const drawerItems = [
+        'GeoLocation',
+        'Me',
+        'DownloadCircuit',
+        'FavoriteCircuit'
+    ];
+    const filteredItems = items.filter(item => drawerItems.includes(item.key));
+
+    return <DrawerItems items={filteredItems} {...props} />;
+};
+
+export function NavigationHeader({
     pressMenu,
     titleText,
     rightComponent,

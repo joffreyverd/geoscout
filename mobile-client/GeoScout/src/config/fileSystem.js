@@ -9,46 +9,48 @@ import { FileSystem } from 'expo';
 
 const rootDirectoryPath = FileSystem.documentDirectory + 'Circuit';
 
-const getCircuitsExist = async () => {
+async function getCircuitsExist() {
     try {
         const res = await FileSystem.getInfoAsync(rootDirectoryPath); //Information sur le dossier Circuit
         if (res.exists) {
             const nameCircuits = await FileSystem.readDirectoryAsync(
                 rootDirectoryPath
             ); //Lire un répertoire
+            console.log('[fileSystem] Nom des circuits');
+            console.log(nameCircuits);
 
             let circuitsJSON = '';
             if (nameCircuits) {
                 nameCircuits.map(async uriFile => {
-                    const infoCircuit = await FileSystem.readAsStringAsync(
-                        rootDirectoryPath + '/' + uriFile + '.txt'
-                    );
-                    infoCircuitJSON = JSON.parse(infoCircuit);
+                    const infoCircuitJSON = await readFile(uriFile + '.txt');
+                    console.log('info circuit parse');
                     console.log(infoCircuitJSON);
                     circuitsJSON +=
-                        '{"id_circuit":"' +
+                        '{"id_circuit": "' +
                         infoCircuitJSON.id_circuit +
-                        '","name":"' +
+                        '","name": "' +
                         infoCircuitJSON.name +
-                        '","description":"' +
+                        '","description": "' +
                         infoCircuitJSON.description +
-                        '","duration":"' +
+                        '","duration": "' +
                         infoCircuitJSON.duration +
-                        '","length":"' +
+                        '","length": "' +
                         infoCircuitJSON.length +
-                        '"}';
+                        '"},';
                 });
-                circuitsJSON += '';
+                console.log('[fileSystem] circuit en json');
                 console.log(circuitsJSON);
-                return JSON.parse(circuitsJSON);
+                return JSON.parse(
+                    circuitsJSON.substr(0, circuitsJSON.length - 1)
+                );
             }
         }
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-const checkCircuitExist = async fileUri => {
+async function checkCircuitExist(fileUri) {
     try {
         const res = await FileSystem.getInfoAsync(
             rootDirectoryPath + '/' + fileUri + '.txt'
@@ -57,13 +59,12 @@ const checkCircuitExist = async fileUri => {
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-const checkCircuitVersionUp = async (fileUri, version) => {
+async function checkCircuitVersionUp(fileUri, version) {
     try {
         const contentFileExist = await readFile(fileUri + '.txt');
-        const contentFileExistJSON = JSON.parse(contentFileExist);
-        if (contentFileExistJSON.version < version) {
+        if (contentFileExist.version < version) {
             console.log('circuit version supérieur');
             return true;
         } else {
@@ -73,9 +74,9 @@ const checkCircuitVersionUp = async (fileUri, version) => {
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-const writeFile = async (fileUri, fileContent) => {
+async function writeFile(fileUri, fileContent) {
     try {
         FileSystem.writeAsStringAsync(
             rootDirectoryPath + '/' + fileUri + '.txt',
@@ -84,33 +85,35 @@ const writeFile = async (fileUri, fileContent) => {
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-const readFile = async fileUri => {
+async function readFile(fileUri) {
     try {
-        return FileSystem.readAsStringAsync(
-            rootDirectoryPath + '/' + fileUri + '.txt'
+        return JSON.parse(
+            FileSystem.readAsStringAsync(
+                rootDirectoryPath + '/' + fileUri + '.txt'
+            )
         ); //lire un fichier
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-const deleteFile = async fileUri => {
+async function deleteFile(fileUri) {
     try {
         FileSystem.deleteAsync(rootDirectoryPath + '/' + fileUri + '.txt'); //Supprimer un fichier
     } catch (error) {
         console.log(error);
     }
-};
+}
 
-const readDirectory = async () => {
+async function readDirectory() {
     try {
-        FileSystem.readDirectoryAsync(rootDirectoryPath);
+        return FileSystem.readDirectoryAsync(rootDirectoryPath);
     } catch (error) {
         console.log(error);
     }
-};
+}
 
 export default {
     getCircuitsExist,

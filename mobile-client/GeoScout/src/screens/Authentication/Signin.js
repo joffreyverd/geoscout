@@ -94,7 +94,6 @@ const styles = StyleSheet.create({
         borderColor: '#006A55',
         borderRadius: 5,
         marginBottom: 15,
-        color: 'white',
         backgroundColor: '#03876D'
     },
     iconInput: {
