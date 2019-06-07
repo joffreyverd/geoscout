@@ -9,6 +9,7 @@ const basename  = path.basename(__filename);
 const env       = process.env.NODE_ENV || 'development';
 const config    = require('../config/config.json')[env];
 const db        = {};
+const utils = require('../controllers/utils');
 
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
 
@@ -28,16 +29,15 @@ Object.keys(db).forEach(modelName => {
 	}
 });
 
-db.sequelize = sequelize;
-//db.Sequelize = Sequelize;
-
 sequelize.sync(/*{force : true }*/); // ATTENTION !!!
 
-const lol = async () =>
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+const cf = async () =>
 {
 	let c = await db.Circuit.findAll({attributes : ['id_circuit']});
 	let u = await db.User.findAll({attributes : ['id_user']});
-
 	c.map(async c =>
 	{
 		await utils.createFolder(c.id_circuit,1);
@@ -49,6 +49,7 @@ const lol = async () =>
 	});
 };
 
-lol();
+cf()
+
 
 module.exports = db;

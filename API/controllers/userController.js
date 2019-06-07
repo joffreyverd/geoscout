@@ -73,14 +73,19 @@ module.exports =
 		{
 			let user = await db.User.findOne({where : {email : req.body.email}});
 
-			if(await bcrypt.compare(req.body.password,user.password))
+			if(user)
 			{
-				let token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
-				res.status(200).send({ auth: true, token: token,User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}});
+				if(await bcrypt.compare(req.body.password,user.password))
+				{
+					let token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
+					res.status(200).send({ auth: true, token: token,User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}});
+				}
+				else
+					res.status(401).send(utils.messages.incorrectPassword);
 			}
 
 			else
-				res.status(401).send(utils.messages.incorrectPassword);
+				res.status(401).send(utils.messages.incorrectUserName);
 		}
 
 		catch(err)

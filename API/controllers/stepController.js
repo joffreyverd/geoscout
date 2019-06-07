@@ -68,7 +68,7 @@ module.exports =
 						id_circuit : req.body.id_circuit
 					},{transaction : t});
 				await t.commit();
-				await utils.evaluateDistance(req.body.id_circuit);
+				await utils.evaluateDistance(req.body.id_circuit,db);
 				res.json(step);
 			}
 
@@ -93,8 +93,6 @@ module.exports =
 			try
 			{
 				let steps =  await db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}});
-				let t = await db.sequelize.transaction();
-				
 				const map = steps.map(async step => 
 				{
 					if(parseInt(step.order) === parseInt(req.body.previous))
@@ -245,6 +243,7 @@ module.exports =
 					step.name = req.body.step.name;
 					step.order = req.body.step.order;
 					step.validation = req.body.step.validation;
+					step.compass = req.body.step.compass;
 					if(!step.Questions.length)
 					{
 						let map = req.body.step.Questions.map(async question =>
@@ -300,7 +299,7 @@ module.exports =
 					
 					await step.save({transaction : t});
 					await t.commit();
-					await utils.evaluateDistance(step.id_circuit);
+					await utils.evaluateDistance(step.id_circuit,db);
 					res.sendStatus(204);
 				}
 			}

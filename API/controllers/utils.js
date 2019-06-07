@@ -2,7 +2,6 @@
 /* eslint-disable no-undef */
 const jwt = require('jsonwebtoken');
 const config = require('./configUser');
-const db = require('../models');
 const fse = require('fs-extra');
 const path = require('path');
 module.exports = 
@@ -24,7 +23,7 @@ module.exports =
 			return null;
 	},
 
-	ownCircuit : async (id_user,id_circuit) =>
+	ownCircuit : async (id_user,id_circuit,db) =>
 	{
 		try
 		{
@@ -56,7 +55,7 @@ module.exports =
 		return Math.round(R * c);
 	},
 
-	evaluateDistance : async (id_circuit) =>
+	evaluateDistance : async (id_circuit,db) =>
 	{
 		let t = await db.sequelize.transaction();
 		try
@@ -86,6 +85,7 @@ module.exports =
 	messages : 
 	{
 		serverError : 'Il y a eu un problème avec le serveur',
+		incorrectUserName : 'Le nom d\'utilisateur est inconnu',
 		incorrectPassword : 'Le mot de passe est incorrect',
 		invalidToken : 'Vous n\'avez pas fourni vos informations de connexion'
 	},
@@ -106,7 +106,7 @@ module.exports =
 				let files = await fse.readdir(module.exports.root() + '/images/users/' + id + '/');
 				return files.map(file =>
 				{
-					return '/images/users/' + id  + '/' + file;
+					return '/users/' + id  + '/' + file;
 				});
 			}
 
@@ -123,7 +123,7 @@ module.exports =
 				let files = await fse.readdir(module.exports.root() + '/images/circuits/' + id + '/');
 				return files.map(file =>
 				{
-					return '/images/circuits/' + id  + '/' + file;
+					return '/circuits/' + id  + '/' + file;
 				});
 			}
 
@@ -149,7 +149,10 @@ module.exports =
 
 		catch (err)
 		{
-			console.log(err);
+			if(err.code === 'EPERM')
+				console.log('Droits insufisants');
+			else if (err.code === 'EEXIST')
+				console.log('Le dossier existe déjà');
 		}
 	},
 };

@@ -118,6 +118,6 @@ module.exports =
 			}
 		}
 		else
-		res.status(401).send(utils.messages.invalidToken);
+			res.status(401).send(utils.messages.invalidToken);
 	}
 };
