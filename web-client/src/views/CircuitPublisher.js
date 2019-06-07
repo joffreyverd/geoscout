@@ -68,6 +68,14 @@ export default class CircuitPublisher extends Component {
             }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
+            api.post('download', {
+                id,
+                type: 'circuit',
+            }).then((img) => {
+                this.setState({ img });
+            }).catch(() => {
+                console.log('error');
+            });
         }
     }
 
@@ -163,7 +171,7 @@ export default class CircuitPublisher extends Component {
             prev.steps[index] = step;
             circuit.version += 1;
         });
-        this.updateCircuit();
+        this.updateCircuit(circuit);
     })
 
     /**
@@ -250,7 +258,7 @@ export default class CircuitPublisher extends Component {
 
     render() {
         const { steps, stepFocus, userPosition, circuit, circuitIsDisplayed,
-            stepIsDisplayed, viewport,
+            stepIsDisplayed, viewport, img,
         } = this.state;
         // const { history } = this.props;
 
@@ -322,6 +330,7 @@ export default class CircuitPublisher extends Component {
                     show={circuitIsDisplayed}
                     displayUpdateCircuit={this.displayUpdateCircuit}
                     updateCircuit={this.updateCircuit}
+                    img={img}
                 />
 
             </div>

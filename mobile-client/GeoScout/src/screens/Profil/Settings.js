@@ -1,44 +1,27 @@
 import React, { Component } from 'react';
 import { ScrollView } from 'react-native';
-import { ListItem, Icon } from 'react-native-elements';
+import { ListItem } from 'react-native-elements';
 
-import { NavigationHeader, NavigationMenu } from '../../components/NavigationMenu';
+import { NavigationHeader } from '../../components/NavigationDrawer';
 
 export default class Settings extends Component {
-  constructor(){
-    super();
-    this.state = {
-        menuOpen: false
-    };
-  }
-
-  render() {
-    const { menuOpen } = this.state;
-    return (
-      <NavigationMenu
-      isOpen={menuOpen}
-      toggle={menuOpen => this.setState({ menuOpen })}
-      navigate={this.props.navigation.navigate}>
-      <NavigationHeader
-      pressMenu={() => this.setState({ menuOpen: true })}
-      titleText={'Paramètres'}
-      pressHome={() => this.props.navigation.navigate('GeoLocation')}/>
-        <ScrollView>
-            <ListItem
-              title="Notifications"
-            />
-            <ListItem
-              title="Profile"
-            />
-            <ListItem
-              title="Password"
-            />
-            <ListItem
-              title="Sign Out"
-              rightIcon={{ name: 'cancel' }}
-            />
-        </ScrollView>
-      </NavigationMenu>
-    );
-  }
+    render() {
+        return (
+            <>
+                <NavigationHeader
+                    pressMenu={this.props.navigation.openDrawer}
+                    titleText={'Paramètres'}
+                    pressHome={() =>
+                        this.props.navigation.navigate('GeoLocation')
+                    }
+                />
+                <ScrollView>
+                    <ListItem title="Notifications" />
+                    <ListItem title="Profile" />
+                    <ListItem title="Password" />
+                    <ListItem title="Sign Out" rightIcon={{ name: 'cancel' }} />
+                </ScrollView>
+            </>
+        );
+    }
 }

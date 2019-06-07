@@ -1,31 +1,24 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
+import { Icon } from 'react-native-elements';
 
-import {
-    NavigationHeader,
-    NavigationMenu
-} from '../../components/NavigationMenu';
+import { NavigationHeader } from '../../components/NavigationDrawer';
 import ListCircuit from '../../components/ListCircuit';
 
 export default class FavoriteCircuit extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            menuOpen: false
-        };
-    }
+    static navigationOptions = {
+        drawerLabel: 'Favoris',
+        drawerIcon: () => (
+            <Icon name="favorite" type="material" color="#1abc9c" />
+        )
+    };
 
     render() {
-        const { menuOpen } = this.state;
         return (
-            <NavigationMenu
-                isOpen={menuOpen}
-                toggle={menuOpen => this.setState({ menuOpen })}
-                navigate={this.props.navigation.navigate}
-            >
+            <>
                 <NavigationHeader
-                    pressMenu={() => this.setState({ menuOpen: true })}
+                    pressMenu={this.props.navigation.openDrawer}
                     titleText={'Favoris'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
@@ -37,7 +30,7 @@ export default class FavoriteCircuit extends React.Component {
                         navigate={this.props.navigation.navigate}
                     />
                 </SafeAreaView>
-            </NavigationMenu>
+            </>
         );
     }
 }

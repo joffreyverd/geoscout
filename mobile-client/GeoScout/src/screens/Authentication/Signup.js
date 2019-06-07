@@ -149,8 +149,7 @@ const styles = StyleSheet.create({
         borderColor: '#006A55',
         borderRadius: 5,
         marginBottom: 15,
-        backgroundColor: '#03876D',
-        color: 'white'
+        backgroundColor: '#03876D'
     },
     iconInput: {
         marginRight: 10

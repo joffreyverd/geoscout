@@ -138,12 +138,14 @@ h1 {
 
 
 .list-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
   background-color: #ecf0f1;
   border-radius: 5px;
   width: 30%;
-  height: 200px;
+  height: 300px;
   margin: 20px;
-  padding: 15px;
   transition: .2s;
   position: relative;
 }
@@ -157,6 +159,12 @@ h1 {
   background-color: #65D8C1;
   color: #fff;
   transition: .2s;
+}
+
+.list-item:hover > .picture-circuit-minature {
+  transition: .2s;
+  background-color: #65D8C1;
+  opacity: .5;
 }
 
 .list-item:hover > h3, .list-item:hover > .bold-info-circuit {
@@ -224,6 +232,15 @@ h1 {
 .html-reformat {
   max-height: 50px;
   overflow: hidden;
+}
+
+.picture-circuit-minature {
+  width: 100%;
+  height: 100%;
+  min-height: 100px;
+  object-fit: cover;
+  border-radius: 0px 0px 3px 3px;
+  transition: .2s;
 }
 
 /************************** CIRCUIT-PUBLISHER **************************/
@@ -466,12 +483,21 @@ cursor: pointer;
   width: 80% !important;
 }
 
-.bold-info-circuit {
-    font-weight: bold;
-    color: #004C3D;
-    margin: 20px 0px 20px 0px;
-    transition: .2s;
+.item-name {
+    padding: 10px 0px 0px 15px;
 }
+
+.smart-description-circuit {
+    padding-left: 15px; 
+}
+
+.bold-info-circuit {
+  font-weight: bold;
+  color: #004C3D;
+  margin: 5px 0px;
+  padding-left: 15px;
+  transition: .2s;
+  }
 
 .flex-checkboxes {
     display: flex;
@@ -591,6 +617,8 @@ cursor: pointer;
 }
 
 .comments-title {
+  margin-left: 20px;
+  margin-top: 20px;
   font-size: 1.5em;
   color: #1abc9c;
 }
@@ -617,6 +645,34 @@ cursor: pointer;
 
 .opinion-wrapper > p {
   margin: 0px;
+}
+
+.comments-wrapper {
+  background-color: #ecf0f1;
+  margin: 20px;
+  padding-top: 20px;
+}
+
+.comment-starts-wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: 40%;
+}
+
+.carousel-style {
+  margin: 20px;
+}
+
+.ant-carousel .slick-slide {
+  text-align: center;
+  height: 600px;
+  line-height: 600px;
+  background: #ecf0f1;
+  overflow: hidden;
+}
+
+.ant-carousel .slick-slide h3 {
+  color: #1abc9c;
 }
 
   /************************** ACCOUNT **************************/

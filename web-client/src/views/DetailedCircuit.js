@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Rate, Comment, Tooltip, Avatar, Button, Icon } from 'antd';
+import { Rate, Button, Icon, Carousel } from 'antd';
 import 'antd/dist/antd.css';
 
 import Map from '../components/Map';
+import CommentList from '../components/comment/CommentList';
 
 import api from '../utils/httpMethods';
 
@@ -67,7 +68,14 @@ export default class DetailedCircuit extends Component {
         const { id } = this.props.match.params;
         api.get(`circuit/${id}`).then((circuit) => {
             this.setState({
-                circuit: circuit,
+                circuit,
+            });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
+        api.get(`evaluations/${id}`).then((comments) => {
+            this.setState({
+                comments,
             });
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
@@ -83,12 +91,20 @@ export default class DetailedCircuit extends Component {
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
+        api.post('download', {
+            id,
+            type: 'circuit',
+        }).then((img) => {
+            this.setState({ img });
+        }).catch(() => {
+            console.log('error');
+        });
     }
 
     render() {
 
         const { name, description, Favorites } = this.state.circuit;
-        const { viewport, userPosition, step } = this.state;
+        const { viewport, userPosition, step, comments, img } = this.state;
         const { isConnected } = this.props;
 
         return (
@@ -116,6 +132,7 @@ export default class DetailedCircuit extends Component {
                 </div>
 
                 <div className='bottom-wrapper'>
+                    <h2 className='comments-title'>Informations générales</h2>
                     <div className='circuit-infos'>
                         <div dangerouslySetInnerHTML={{ __html: description }} />
                         <Map
@@ -127,34 +144,22 @@ export default class DetailedCircuit extends Component {
                         />
                     </div>
 
-                    <div className='circuit-comments'>
-                        <h2 className='comments-title'>Commentaires</h2>
-                        <Comment
-                            author='Stevy Palarski'
-                            avatar={(
-                                <Avatar
-                                    src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
-                                    alt='Stevy Palarski'
-                                />
-                            )}
-                            content={(
-                                <p>
-                                    J‘ai pris beaucoup de plaisir à effectuer ce circuit.
-                                    Il m‘a permis de découvrir le centre-ville de Strasbourg.
-                                    Etant originaire de Caen, je n‘avais rarement eu l‘occasion
-                                    de voir une aussi belle ville !
-                                </p>
-                            )}
-                            datetime={(
-                                <Tooltip>
-                                    <span>Il y a deux jours</span>
-                                </Tooltip>
-                            )}
-                        />
-                    </div>
+                    {img === undefined || img.length === 0 ?
+                        <p>Aucune photo disponible pour ce circuit</p>
+                        :
+                        <>
+                            <h2 className='comments-title'>Photos du circuit</h2>
+                            <Carousel className='carousel-style'>
+                                {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={name} />)}
+                            </Carousel>
+                        </>
+                    }
+
+                    <CommentList
+                        className='circuit-comments'
+                        items={comments}
+                    />
                 </div>
-
-
             </>
         );
     }

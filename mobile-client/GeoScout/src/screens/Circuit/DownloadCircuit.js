@@ -1,35 +1,29 @@
 import React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
-import {
-    NavigationHeader,
-    NavigationMenu
-} from '../../components/NavigationMenu';
+import { Icon } from 'react-native-elements';
+
+import { NavigationHeader } from '../../components/NavigationDrawer';
 import ListCircuit from '../../components/ListCircuit';
 import fileSystem from '../../config/fileSystem';
 
 export default class DownloadCircuit extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            menuOpen: false
-        };
-    }
+    static navigationOptions = {
+        drawerLabel: 'Circuits téléchargés',
+        drawerIcon: ({ tintColor }) => (
+            <Icon name="get-app" type="material" color="#1abc9c" />
+        )
+    };
 
     componentDidMount() {
         console.log('directory have : ' + fileSystem.readDirectory());
     }
 
     render() {
-        const { menuOpen } = this.state;
         return (
-            <NavigationMenu
-                isOpen={menuOpen}
-                toggle={menuOpen => this.setState({ menuOpen })}
-                navigate={this.props.navigation.navigate}
-            >
+            <>
                 <NavigationHeader
-                    pressMenu={() => this.setState({ menuOpen: true })}
+                    pressMenu={this.props.navigation.openDrawer}
                     titleText={'Téléchargé'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
@@ -41,7 +35,7 @@ export default class DownloadCircuit extends React.Component {
                         navigate={this.props.navigation.navigate}
                     />
                 </SafeAreaView>
-            </NavigationMenu>
+            </>
         );
     }
 }
