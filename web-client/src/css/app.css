@@ -141,7 +141,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: #ecf0f1;
+  background-color: #e1e9ea;
   border-radius: 5px;
   width: 30%;
   height: 300px;
@@ -256,7 +256,7 @@ h1 {
 .scroll-menu {
   height: 100%;
   width: 20%;
-  background-color: #ecf0f1;
+  background-color: #e1e9ea;
 }
 
 .circuit-title {
@@ -600,7 +600,7 @@ cursor: pointer;
 .circuit-infos {
   display: flex;
   justify-content: space-between;
-  background-color: #ecf0f1;
+  background-color: #e1e9ea;
   border-radius: 3px;
   padding: 15px;
   margin: 20px;
@@ -648,7 +648,7 @@ cursor: pointer;
 }
 
 .comments-wrapper {
-  background-color: #ecf0f1;
+  background-color: #e1e9ea;
   margin: 20px;
   padding-top: 20px;
 }
@@ -667,7 +667,7 @@ cursor: pointer;
   text-align: center;
   height: 600px;
   line-height: 600px;
-  background: #ecf0f1;
+  background: #e1e9ea;
   overflow: hidden;
 }
 
@@ -736,7 +736,7 @@ cursor: pointer;
   }
 
   .basic-informations-wrapper {
-      background-color: #ecf0f1;
+      background-color: #e1e9ea;
       margin: 20px;
       border-radius: 3px;
       width: 25%;
@@ -747,7 +747,7 @@ cursor: pointer;
   .feed-wrapper {
       top: -115px;
       position: relative;
-      background-color: #ecf0f1;
+      background-color: #e1e9ea;
       margin: 20px;
       border-radius: 3px;
       width: 75%;

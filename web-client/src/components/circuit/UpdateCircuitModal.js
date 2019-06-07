@@ -11,6 +11,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import PreviewModal from './PreviewModal';
+import Uploader from '../Uploader';
 
 class UpdateCircuitModal extends Component {
 
@@ -28,7 +29,7 @@ class UpdateCircuitModal extends Component {
             [{ header: [1, 2, false] }],
             ['bold', 'italic', 'underline', 'strike', 'blockquote'],
             [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-            ['link', 'image'],
+            ['link'],
             ['clean'],
         ],
     };
@@ -123,7 +124,7 @@ class UpdateCircuitModal extends Component {
         const { name, description, length, duration,
             level, previewIsOpen, difficultyDropdown,
         } = this.state;
-        const { show, displayUpdateCircuit, img } = this.props;
+        const { show, displayUpdateCircuit, img, circuit } = this.props;
 
         const timeHour = Math.floor(duration / 60);
         const timeMinute = duration % 60;
@@ -219,6 +220,8 @@ class UpdateCircuitModal extends Component {
                                 <p>{`${length} km`}</p>
                             </FormGroup>
                         }
+
+                        <Uploader id={circuit} />
 
                         <div className='update-buttons'>
                             <Button

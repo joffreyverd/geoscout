@@ -29,7 +29,7 @@ export default class Navigation extends React.Component {
                     <Link to='/circuits'>Créés</Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <Link to='/achievements'>Accomplis</Link>
+                    <Link to='/achievements'>Réalisés</Link>
                 </Menu.Item>
                 <Menu.Item>
                     <Link to='/todo'>Favoris</Link>

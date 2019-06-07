@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { Icon, Tooltip } from 'antd';
+import 'antd/dist/antd.css';
 
 import Map from '../components/Map';
 import StepList from '../components/step/StepList';
@@ -279,13 +281,17 @@ export default class CircuitPublisher extends Component {
                     <div className='circuit-title'>
                         <h3>{circuit.name}</h3>
                         <div className='circuit-buttons'>
-                            <Button
-                                className='update-circuit-button'
-                                onClick={this.displayUpdateCircuit}
-                                color='info'
-                            >Editer
-                            </Button>
-                            {(circuit.published && circuit.published !== true) &&
+                            <Tooltip
+                                placement='right'
+                                title='Editer les informations du circuit'
+                            >
+                                <Button
+                                    onClick={this.displayUpdateCircuit}
+                                    color='info'
+                                ><Icon type='edit' />
+                                </Button>
+                            </Tooltip>
+                            {(circuit.published !== true) &&
                                 <Button
                                     className='update-circuit-button'
                                     onClick={this.publishCircuit}

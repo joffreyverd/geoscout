@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from 'reactstrap';
 import { Rate } from 'antd';
 import 'antd/dist/antd.css';
@@ -41,11 +40,11 @@ class CircuitListItem extends Component {
     render() {
 
         const {
-            id_circuit, name, description, length, isAdmin,
+            id_circuit, name, description, stars, length, isAdmin,
             duration, version, published, level, history,
         } = this.props;
-        const { tooltipPublicationOpen, tooltipLevelOpen, img } = this.state;
-        console.log(img);
+        const { tooltipLevelOpen, img } = this.state;
+
         const timeHour = Math.floor(duration / 60);
         const timeMinute = duration % 60;
 
@@ -68,7 +67,7 @@ class CircuitListItem extends Component {
         return (
             <>
                 <li
-                    className='list-item'
+                    className={published === true ? 'list-item' : 'list-item unpublished'}
                     onClick={() => history.push(`detail/${id_circuit}`)}
                 >
 
@@ -78,15 +77,17 @@ class CircuitListItem extends Component {
                         <p className='smart-description-circuit'>{overview}</p>
                     }
 
-                    {length > 0 && length !== null &&
-                        <p className='bold-info-circuit'>{length} km</p>
-                    }
+                    <div className='km-and-time'>
+                        {length > 0 && length !== null &&
+                            <p className='bold-info-circuit'>{length} km</p>
+                        }
 
-                    {duration > 0 && duration !== null &&
-                        <p className='bold-info-circuit'>{duration && `${timeHour}h${timeMinute}m`}</p>
-                    }
+                        {duration > 0 && duration !== null &&
+                            <p className='bold-info-circuit'>{duration && `${timeHour}h${timeMinute}m`}</p>
+                        }
+                    </div>
 
-                    <Rate disabled defaultValue={3} />
+                    <Rate disabled defaultValue={stars} />
 
                     <img
                         className='picture-circuit-minature'
@@ -96,7 +97,6 @@ class CircuitListItem extends Component {
 
 
                     {isAdmin === 'created' &&
-
                         <>
                             <p className='version-item'>{version >= 0 && `Version : ${version}`}</p>
                             <p
@@ -107,22 +107,6 @@ class CircuitListItem extends Component {
                                 }}
                             >Editer
                             </p>
-
-                            <Tooltip
-                                placement='top'
-                                isOpen={tooltipPublicationOpen}
-                                autohide={false}
-                                target={`published${id_circuit}`}
-                                toggle={this.publishedStatusToggler}
-                            >
-                                {published === true ? 'Publié' : 'Non-publié'}
-                            </Tooltip>
-                            <FontAwesomeIcon
-                                id={`published${id_circuit}`}
-                                icon='align-justify'
-                                className='published-item'
-                                color={published === true ? '#27ae60' : 'white'}
-                            />
                         </>
                     }
                     <Tooltip

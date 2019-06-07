@@ -129,6 +129,7 @@ class UpdateStepModal extends Component {
 
     handleChangeQuestionType = (event, activeTab) => {
         const newKindOf = (event.target.value === true) ? 2 : 1;
+        // Check if type_of !==  undefined
         this.setState((prevState) => {
             prevState.Questions[activeTab].type_of = newKindOf;
             return { Questions: prevState.Questions };

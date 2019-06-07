@@ -3,8 +3,6 @@ import { withRouter } from 'react-router-dom';
 import { Modal, Carousel } from 'antd';
 import 'antd/dist/antd.css';
 
-import api from '../../utils/httpMethods';
-
 class PreviewModal extends Component {
 
     state = {}
@@ -26,7 +24,7 @@ class PreviewModal extends Component {
                     </div>
 
                     {img === undefined || img.length === 0 ?
-                        <p>Aucune photo disponible pour ce circuit</p>
+                        <p className='no-pictures'>Aucune photo n`a été ajouté par l`administrateur de ce circuit !</p>
                         :
                         <>
                             <h2 className='comments-title'>Photos du circuit</h2>

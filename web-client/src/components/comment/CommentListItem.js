@@ -9,8 +9,9 @@ class CommentListItem extends Component {
 
     render() {
 
-        const { comment, stars, User } = this.props;
+        const { comment, stars, User, createdAt, version } = this.props;
         const { firstname, lastname } = User;
+        const formattedDate = new Date(createdAt).toLocaleDateString();
 
         return (
             <div className='comment-starts-wrapper'>
@@ -23,8 +24,12 @@ class CommentListItem extends Component {
                         />
                     )}
                     content={comment}
+                    datetime={
+                        <span>{formattedDate}</span>
+                    }
                 />
                 <Rate disabled defaultValue={stars} />
+                <p className='version-tag'>{(version && version !== undefined) ? `Version ${version}` : 'Version 1'}</p>
             </div>
         );
     }
