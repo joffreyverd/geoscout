@@ -23,8 +23,62 @@ export default class DetailCircuit extends React.Component {
     constructor() {
         super();
         this.state = {
-            menuOpen: false
+            menuOpen: false,
+            isDownload: null
         };
+    }
+
+    componentDidMount() {
+        fileSystem.deleteFile(37);
+        const {
+            state: {
+                params: { id_circuit }
+            }
+        } = this.props.navigation;
+        fileSystem.checkCircuitExist(id_circuit).then(isDownload => {
+            this.setState({ isDownload: isDownload });
+        });
+    }
+
+    alertUser(playOrDownload) {
+        const {
+            navigate,
+            state: {
+                params: { id_circuit }
+            }
+        } = this.props.navigation;
+        Alert.alert(
+            playOrDownload ? 'Hopla' : 'Télécharger',
+            playOrDownload
+                ? "Jetzt geht's los"
+                : 'Voulez vous vraiment télécharger ce circuit ?',
+            [
+                {
+                    text: 'Retour',
+                    onPress: () => {
+                        navigate('Home');
+                    },
+                    style: 'cancel'
+                },
+                {
+                    text: playOrDownload ? 'Jouer' : 'Oui',
+                    onPress: async () => {
+                        if (playOrDownload) {
+                            navigate('Transit', {
+                                circuit: await fileSystem.readFile(id_circuit),
+                                step: 0,
+                                score: 0,
+                                maxScore: 0,
+                                time: 0
+                            });
+                        } else {
+                            this.download();
+                        }
+                    }
+                }
+            ],
+            { cancelable: false }
+        );
     }
 
     download = () => {
@@ -35,27 +89,22 @@ export default class DetailCircuit extends React.Component {
             }
         } = this.props.navigation;
         api.get('download-circuit/' + id_circuit)
-            .then(data => {
-                let goodVersion = true;
-                if (fileSystem.checkCircuitExist(id_circuit)) {
-                    fileSystem.deleteFile(id_circuit);
-                } else {
-                    fileSystem.writeFile(id_circuit, data);
-                }
+            .then(async data => {
                 data.Steps.sort((a, b) => a.order - b.order);
+                await fileSystem.writeFile(id_circuit, data);
                 Alert.alert(
-                    'Hopla',
-                    "Jetzt geht's los",
+                    'Circuit télécharger !',
+                    "Partons à l'aventure ?",
                     [
                         {
-                            text: 'Retour',
+                            text: 'Non',
                             onPress: () => {
                                 navigate('Home');
                             },
                             style: 'cancel'
                         },
                         {
-                            text: 'Commencer à jouer',
+                            text: 'Oui',
                             onPress: () => {
                                 navigate('Transit', {
                                     circuit: data,
@@ -67,13 +116,13 @@ export default class DetailCircuit extends React.Component {
                             }
                         }
                     ],
-                    { cancelable: false }
+                    { cancelable: true }
                 );
             })
             .catch(() => {
                 Alert.alert(
-                    'Erreur',
-                    'Une erreur est survenue, merci de réessayer.',
+                    'Oh mince...',
+                    'Une erreur est survenue, merci de réessayer et de vérifier votre connexion internet.',
                     [
                         {
                             text: 'Ok',
@@ -94,7 +143,7 @@ export default class DetailCircuit extends React.Component {
             description,
             id_circuit
         } = this.props.navigation.state.params;
-        const { menuOpen } = this.state;
+        const { menuOpen, isDownload } = this.state;
         return (
             <NavigationMenu
                 isOpen={menuOpen}
@@ -152,10 +201,21 @@ export default class DetailCircuit extends React.Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={this.download}
+                        onPress={() => this.alertUser(isDownload)}
                     >
-                        <Icon name="get-app" color="white" />
-                        <Text style={styles.textButton}>Télécharger </Text>
+                        {isDownload ? (
+                            <>
+                                <Icon name="play-circle-filled" color="white" />
+                                <Text style={styles.textButton}>Jouer</Text>
+                            </>
+                        ) : (
+                            <>
+                                <Icon name="get-app" color="white" />
+                                <Text style={styles.textButton}>
+                                    Télécharger
+                                </Text>
+                            </>
+                        )}
                     </TouchableOpacity>
                 </SafeAreaView>
             </NavigationMenu>

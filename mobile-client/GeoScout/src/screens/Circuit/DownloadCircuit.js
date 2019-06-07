@@ -17,7 +17,7 @@ export default class DownloadCircuit extends React.Component {
     }
 
     componentDidMount() {
-        console.log(fileSystem.readDirectory());
+        console.log('directory have : ' + fileSystem.readDirectory());
     }
 
     render() {
