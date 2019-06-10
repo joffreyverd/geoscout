@@ -6,6 +6,8 @@ const evaluation = require('../controllers/evaluationController');
 const question = require('../controllers/questionController');
 const achievements = require('../controllers/achievedCircuitController');
 const images = require('../controllers/imageController');
+const admin = require('../controllers/adminController');
+
 const path = require('path');
 const multer = require('multer');
 const upload = multer({dest : path.join(path.dirname(process.execPath)) + '/images/awaiting'});
@@ -51,4 +53,6 @@ module.exports = function(app)
 	app.route('/question').post(question.createQuestion);
 	app.route('/question/:id_question').put(question.updateQuestion);
 	app.route('/download-user/:id_user').get(user.downloadUser);
+
+	app.route('/circuits-admin').get(admin.circuitsAdmin);
 };

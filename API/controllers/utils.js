@@ -82,6 +82,49 @@ module.exports =
 		
 	},
 
+	countStars : (circuit) =>
+	{
+		let count = 0;
+		let note = 0;
+		note = 0;
+		count = 0;
+
+		if(circuit.Evaluations.length)
+		{
+			circuit.Evaluations.map(evaluation =>
+			{
+				note+= evaluation.stars;
+				count++;
+			});
+
+			circuit.Evaluations = [];
+
+			circuit.avgStars = Math.round( (note / count) * 10 ) / 10;
+		}
+			
+		else
+			circuit.avgStars = 0;
+
+		return circuit;
+	},
+
+	averageStars : (circuits) =>
+	{
+		if(circuits instanceof Array)
+		{
+			return circuits.map((circuit) => 
+			{
+				if(circuit)
+				{
+					return module.exports.countStars(circuit);
+				}     
+			});
+		}
+
+		else
+			return module.exports.countStars(circuits);	
+	},
+
 	messages : 
 	{
 		serverError : 'Il y a eu un problème avec le serveur',
@@ -154,6 +197,15 @@ module.exports =
 			else if (err.code === 'EEXIST')
 				console.log('Le dossier existe déjà');
 		}
+	},
+
+	isAdmin : async (id_user,db) =>
+	{
+		let user = await db.User.findByPk(id_user);
+		if(user.is_admin)
+			return true;
+		else
+			return false;
 	},
 };
 

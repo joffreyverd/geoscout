@@ -76,17 +76,30 @@ module.exports=
 		{
 			try
 			{
-				res.status(200).send(await db.AchievedCircuit.findAll(
+				let achieved = await db.AchievedCircuit.findAll(
 					{
 						where : {id_user : id},
 						include : 
 						[
 							{
-								model : db.Circuit
+								model : db.Circuit,
+								include : 
+								[
+									{
+										model : db.Evaluation
+									}
+								]
 							}
 						]
 					}
-				));
+				);
+
+				achieved.map(item => 
+				{
+					return item.Circuit = utils.averageStars(item.Circuit);
+				});
+
+				res.status(200).send(achieved);
 			}
 
 			catch(err)
