@@ -19,7 +19,8 @@ module.exports = {
                     "user_latitude",
                     "user_longitude",
                     "kind_of",
-                    "statut_circuit"
+                    "statut_circuit",
+                    "real_duration"
                 ]
             }
         ],

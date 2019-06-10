@@ -576,6 +576,15 @@ cursor: pointer;
   display: block;
 }
 
+.info-response {
+  color: grey;
+  font-size: .8em;
+  text-align: justify;
+  border: solid 1px #e1e9ea;
+  margin-top: 10px;
+  padding: 5px;
+}
+
 /************************** DETAILED-CIRCUIT **************************/
 
 .header-wrapper {
@@ -731,9 +740,8 @@ cursor: pointer;
       border-radius: 100px;
       width: 170px;
       height: 170px;
-      background-color: #1abc9c;
+      background-color: white;
       margin: auto;
-      border: 3px solid #15202b;
   }
 
   .avatar-wrapper {

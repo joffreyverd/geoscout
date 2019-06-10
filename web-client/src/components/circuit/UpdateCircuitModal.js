@@ -74,7 +74,7 @@ class UpdateCircuitModal extends Component {
     }
 
     handleSubmit = () => {
-        const { name, description, level, version } = this.state;
+        const { name, description, level, version, real_duration } = this.state;
         const { displayUpdateCircuit, alert, updateCircuit } = this.props;
         const { id_circuit } = this.props.circuit;
         const circuit = {
@@ -82,6 +82,7 @@ class UpdateCircuitModal extends Component {
             name: name || null,
             description: description || null,
             level: level || null,
+            real_duration: real_duration || null,
             version: version + 1,
         };
         updateCircuit(circuit)
@@ -121,7 +122,7 @@ class UpdateCircuitModal extends Component {
     }
 
     render() {
-        const { name, description, length, duration,
+        const { name, description, length, duration, real_duration,
             level, previewIsOpen, difficultyDropdown,
         } = this.state;
         const { show, displayUpdateCircuit, img, circuit } = this.props;
@@ -203,6 +204,16 @@ class UpdateCircuitModal extends Component {
                                     </DropdownItem>
                                 </DropdownMenu>
                             </ButtonDropdown>
+                        </FormGroup>
+
+                        <FormGroup>
+                            <Label>Durée réelle - en minutes</Label>
+                            <Input
+                                type='text'
+                                name='real_duration'
+                                value={!real_duration || real_duration === undefined ? '' : real_duration}
+                                onChange={this.handleChange}
+                            />
                         </FormGroup>
 
 
