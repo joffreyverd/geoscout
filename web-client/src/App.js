@@ -13,6 +13,7 @@ import CircuitPublisher from './views/CircuitPublisher';
 import Achievement from './views/Achievement';
 import Todo from './views/Todo';
 import DetailedCircuit from './views/DetailedCircuit';
+import Administration from './views/Administration';
 
 import api from './utils/httpMethods';
 
@@ -63,6 +64,7 @@ class App extends Component {
                 <Route exact path='/' component={Home} />
                 {isConnected ?
                     <>
+                        <Route exact path='/administration' component={Administration} />
                         <Route exact path='/account' render={props => <Account {...props} user={user} />} />
                         <Route exact path='/circuits' component={Circuits} />
                         <Route exact path='/circuit/:id' component={CircuitPublisher} />
