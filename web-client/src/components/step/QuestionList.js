@@ -76,13 +76,18 @@ export default class QuestionList extends React.Component {
                                         </FormGroup>
 
                                         <FormGroup>
-                                            <Label>Réponse</Label>
+                                            <Label>Réponse *</Label>
                                             <Input
                                                 type='textarea'
                                                 name='response'
                                                 value={(response) || ''}
                                                 onChange={event => handleChangeQuestion(event, activeTab)}
                                             />
+                                            <p className='info-response'>* Pour laisser au joueur plusieurs possibilités,
+                                                vous pouvez les séparer par des virgules.
+                                                Exemple : Comment s`appelle le club qui joue au stade de la Meinau ?
+                                                Réponse : Le RSCA, RCSA, le Racing Club de Strasbourg, le Racing Club.
+                                            </p>
                                         </FormGroup>
                                     </>
                                 }

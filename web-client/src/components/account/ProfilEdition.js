@@ -22,27 +22,27 @@ class ProfilEdition extends Component {
                     <Form onSubmit={this.handleSubmit}>
                         <ModalBody>
                             <FormGroup>
-                                <Label>{user.firstname}</Label>
+                                <Label>Prénom</Label>
                                 <Input
                                     type='text'
                                     name='text'
-                                    value='Joffrey'
+                                    value={user.firstname}
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>{user.lastname}</Label>
+                                <Label>Nom</Label>
                                 <Input
                                     type='text'
                                     name='text'
-                                    value='Verd'
+                                    value={user.lastname}
                                 />
                             </FormGroup>
                             <FormGroup>
-                                <Label>{user.email}</Label>
+                                <Label>Email</Label>
                                 <Input
                                     type='text'
                                     name='text'
-                                    value='jverd@protonmail.com'
+                                    value={user.email}
                                 />
                             </FormGroup>
                             <FormGroup>

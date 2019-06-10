@@ -40,7 +40,7 @@ class CircuitListItem extends Component {
     render() {
 
         const {
-            id_circuit, name, description, stars, length, isAdmin,
+            id_circuit, name, description, avgStars, length, isAdmin,
             duration, version, published, level, history,
         } = this.props;
         const { tooltipLevelOpen, img } = this.state;
@@ -87,7 +87,7 @@ class CircuitListItem extends Component {
                         }
                     </div>
 
-                    <Rate disabled defaultValue={stars} />
+                    <Rate disabled defaultValue={avgStars} />
 
                     <img
                         className='picture-circuit-minature'

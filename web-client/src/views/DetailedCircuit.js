@@ -103,7 +103,7 @@ export default class DetailedCircuit extends Component {
 
     render() {
 
-        const { name, description, Favorites, stars } = this.state.circuit;
+        const { name, description, Favorites, avgStars } = this.state.circuit;
         const { viewport, userPosition, step, comments, img } = this.state;
         const { isConnected } = this.props;
 
@@ -113,7 +113,7 @@ export default class DetailedCircuit extends Component {
                     <div className='name-score'>
                         <h1>{name}</h1>
                         <div className='rating-wrapper'>
-                            <Rate disabled defaultValue={stars} />
+                            <Rate disabled defaultValue={avgStars} />
                         </div>
                     </div>
                     {isConnected &&

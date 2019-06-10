@@ -3,15 +3,31 @@ import { withRouter } from 'react-router-dom';
 import { Comment, Avatar, Rate } from 'antd';
 import 'antd/dist/antd.css';
 
+import api from '../../utils/httpMethods';
+
 class CommentListItem extends Component {
 
     state = {}
 
+    componentDidMount() {
+        const { User } = this.props;
+        api.post('download', {
+            id: User.id_user,
+            type: 'user',
+        }).then((img) => {
+            this.setState({ img });
+        }).catch(() => {
+            console.log('error');
+        });
+    }
+
     render() {
 
         const { comment, stars, User, createdAt, version } = this.props;
+        const { img } = this.state;
         const { firstname, lastname } = User;
         const formattedDate = new Date(createdAt).toLocaleDateString();
+        const defaultImg = '/img/earth.png';
 
         return (
             <div className='comment-starts-wrapper'>
@@ -19,7 +35,7 @@ class CommentListItem extends Component {
                     author={`${firstname} ${lastname}`}
                     avatar={(
                         <Avatar
-                            src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+                            src={!img || img.length < 1 || img === undefined ? defaultImg : `http://www.geoscout.fr:5555${img}`}
                             alt={`${firstname} ${lastname}`}
                         />
                     )}

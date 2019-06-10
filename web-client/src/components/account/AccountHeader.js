@@ -9,14 +9,19 @@ class AccountHeader extends Component {
 
     render() {
 
-        const { changeCurrentTab, currentTab } = this.props;
+        const { changeCurrentTab, currentTab, user, img } = this.props;
+        const defaultImg = '/img/earth.png';
 
         return (
             <>
                 <div className='account-header-wrapper'>
 
                     <div className='avatar-wrapper'>
-                        <div className='avatar-picture' />
+                        <img
+                            className='avatar-picture'
+                            src={!img || img.length < 1 || img === undefined ? defaultImg : `http://www.geoscout.fr:5555${img}`}
+                            alt={user.firstname}
+                        />
                     </div>
 
                     <div className='user-activity'>
