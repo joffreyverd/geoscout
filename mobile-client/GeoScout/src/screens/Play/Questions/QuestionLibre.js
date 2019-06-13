@@ -41,7 +41,7 @@ export default class QuestionLibre extends React.Component {
 
         Alert.alert(
             isGood,
-            "C'est une " + isGood + ', vous avez gagnez ' + score,
+            `C'est une ${isGood} , vous avez gagnez ${score} point(s)`,
             [
                 {
                     text: 'Ok',
