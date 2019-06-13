@@ -40,11 +40,6 @@ export default class Me extends Component {
         this.props.navigation.navigate('Settings');
     };
 
-    handleSignout = () => {
-        storage.removeTokenAsyncStorage().then(() => {
-            this.props.navigation.navigate('Auth');
-        });
-    };
     render() {
         const { user } = this.state;
 
@@ -88,15 +83,6 @@ export default class Me extends Component {
                             activeOpacity={0.8}
                         >
                             <Text style={styles.textButton}>Paramètres</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={Object.assign({}, styles.button, {
-                                backgroundColor: '#c0392b'
-                            })}
-                            onPress={this.handleSignout}
-                            activeOpacity={0.8}
-                        >
-                            <Text style={styles.textButton}>Déconnexion</Text>
                         </TouchableOpacity>
                     </SafeAreaView>
                 ) : null}
