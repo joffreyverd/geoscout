@@ -184,7 +184,10 @@ class Etape extends React.Component {
                             activeOpacity={0.8}
                             style={[
                                 styles.button,
-                                { marginTop: 10, backgroundColor: '#e74c3c' }
+                                {
+                                    marginTop: 10,
+                                    backgroundColor: '#e74c3c'
+                                }
                             ]}
                         >
                             <Text style={styles.textButton}>
@@ -204,7 +207,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         justifyContent: 'center',
-        padding: 20
+        padding: 15
     },
     containerStep: {
         flex: 1
@@ -235,6 +238,6 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color: '#fff',
-        fontSize: 22
+        fontSize: 18
     }
 });

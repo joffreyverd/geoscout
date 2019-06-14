@@ -205,11 +205,10 @@ class Transit extends React.Component {
                             {step.validation ? (
                                 <>
                                     <Text
-                                        style={Object.assign(
-                                            {},
+                                        style={[
                                             styles.description,
                                             styles.detection
-                                        )}
+                                        ]}
                                     >
                                         Détection automatique de votre position
                                     </Text>
@@ -244,21 +243,18 @@ class Transit extends React.Component {
     }
 }
 
-TaskManager.defineTask(
-    DETECT_STEP,
-    ({ data: { eventType, region }, error }) => {
-        if (error) {
-            console.log(error);
-            return;
-        }
-        if (eventType === Location.GeofencingEventType.Enter) {
-            console.log('Arrivé');
-            AsyncStorage.setItem(DETECTED, 'true').then(() => {
-                // Notifier l'utilisateur (Vibration ?)
-            });
-        }
+TaskManager.defineTask(DETECT_STEP, ({ data: { eventType }, error }) => {
+    if (error) {
+        console.log(error);
+        return;
     }
-);
+    if (eventType === Location.GeofencingEventType.Enter) {
+        console.log('Arrivé');
+        AsyncStorage.setItem(DETECTED, 'true').then(() => {
+            // Notifier l'utilisateur (Vibration ?)
+        });
+    }
+});
 
 export default Transit;
 
@@ -266,7 +262,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: 'white',
         justifyContent: 'center',
-        padding: 20
+        padding: 15
     },
     containerTransit: {
         flex: 1
@@ -287,7 +283,10 @@ const styles = StyleSheet.create({
         fontSize: 22
     },
     detection: {
-        textAlign: 'center'
+        textAlign: 'center',
+        color: '#1abc9c',
+        fontSize: 18,
+        marginBottom: 10
     },
     button: {
         backgroundColor: '#2c3e50',
@@ -299,6 +298,6 @@ const styles = StyleSheet.create({
     },
     textButton: {
         color: '#fff',
-        fontSize: 22
+        fontSize: 18
     }
 });
