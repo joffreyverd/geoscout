@@ -5,7 +5,8 @@ module.exports = (sequelize,DataTypes) =>
 		'Evaluation',
 		{
 			comment : {type : DataTypes.STRING, allowNull : true},
-			stars :{type : DataTypes.TINYINT, allowNull : true}
+			stars :{type : DataTypes.TINYINT, allowNull : true},
+			version : {type : DataTypes.TINYINT, allowNull : true,defaultValue : 0}
 		},
 	);
 

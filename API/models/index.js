@@ -38,6 +38,7 @@ const cf = async () =>
 {
 	let c = await db.Circuit.findAll({attributes : ['id_circuit']});
 	let u = await db.User.findAll({attributes : ['id_user']});
+	let e = await db.Step.findAll({attributes : ['id_step']});
 	c.map(async c =>
 	{
 		await utils.createFolder(c.id_circuit,1);
@@ -47,9 +48,13 @@ const cf = async () =>
 	{
 		await utils.createFolder(u.id_user,0);
 	});
+
+	e.map(async c =>
+	{
+		await utils.createFolder(c.id_step,2);
+	});
 };
 
-cf()
-
+cf();
 
 module.exports = db;

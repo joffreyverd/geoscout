@@ -41,6 +41,22 @@ module.exports =
 		
 	},
 
+	ownStep : async (id_user,id_step,db) =>
+	{
+		try
+		{
+			let step = await db.Step.findByPk(id_step);
+			if(module.exports.ownCircuit(id_user,step.id_circuit,db))
+				return true;
+			else
+				return false;
+		}
+		catch(err)
+		{
+			console.log(err);
+		}
+	},
+
 	distanceBetweenPoints : (lat1,lat2,lon1,lon2) =>
 	{
 		let R = 6371; // km
@@ -82,6 +98,49 @@ module.exports =
 		
 	},
 
+	countStars : (circuit) =>
+	{
+		let count = 0;
+		let note = 0;
+		note = 0;
+		count = 0;
+
+		if(circuit.Evaluations.length)
+		{
+			circuit.Evaluations.map(evaluation =>
+			{
+				note+= evaluation.stars;
+				count++;
+			});
+
+			circuit.Evaluations = [];
+
+			circuit.avgStars = Math.round( (note / count) * 10 ) / 10;
+		}
+			
+		else
+			circuit.avgStars = 0;
+
+		return circuit;
+	},
+
+	averageStars : (circuits) =>
+	{
+		if(circuits instanceof Array)
+		{
+			return circuits.map((circuit) => 
+			{
+				if(circuit)
+				{
+					return module.exports.countStars(circuit);
+				}     
+			});
+		}
+
+		else
+			return module.exports.countStars(circuits);	
+	},
+
 	messages : 
 	{
 		serverError : 'Il y a eu un problème avec le serveur',
@@ -99,9 +158,9 @@ module.exports =
 
 	getFiles : async (type,id) =>
 	{
-		if(type === 'user')
-		{
-			try
+		try
+		{	
+			if(type === 'user')
 			{
 				let files = await fse.readdir(module.exports.root() + '/images/users/' + id + '/');
 				return files.map(file =>
@@ -110,15 +169,7 @@ module.exports =
 				});
 			}
 
-			catch(err)
-			{
-				console.log(err);
-			}
-		}
-
-		else if(type === 'circuit')
-		{
-			try
+			else if(type === 'circuit')
 			{
 				let files = await fse.readdir(module.exports.root() + '/images/circuits/' + id + '/');
 				return files.map(file =>
@@ -127,11 +178,21 @@ module.exports =
 				});
 			}
 
-			catch(err)
+			else
 			{
-				console.log(err);
+				let files = await fse.readdir(module.exports.root() + '/images/steps/' + id + '/');
+				return files.map(file =>
+				{
+					return '/steps/' + id  + '/' + file;
+				});
 			}
 		}
+
+		catch(err)
+		{
+			console.log(err);
+		}
+
 	},
 
 	createFolder : async (name,type) =>  
@@ -139,8 +200,10 @@ module.exports =
 		let p = '';
 		if(type === 1)
 			p =  module.exports.root() + '/images/circuits';
-		else
+		else if (type === 0)
 			p = module.exports.root() + '/images/users';
+		else
+			p = module.exports.root() + '/images/steps';
 
 		try
 		{
@@ -154,6 +217,15 @@ module.exports =
 			else if (err.code === 'EEXIST')
 				console.log('Le dossier existe déjà');
 		}
+	},
+
+	isAdmin : async (id_user,db) =>
+	{
+		let user = await db.User.findByPk(id_user);
+		if(user.is_admin)
+			return true;
+		else
+			return false;
 	},
 };
 

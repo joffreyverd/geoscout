@@ -89,7 +89,7 @@ module.exports =
 	{
 		if(utils.verifToken(req.headers['authorization']))
 		{
-			let t = db.sequelize.transaction();
+			let t = await db.sequelize.transaction();
 			try
 			{
 				let steps =  await db.Step.findAll({attributes : ['id_step','order'],where : {id_circuit : req.body.id_circuit}});

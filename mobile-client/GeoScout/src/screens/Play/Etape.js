@@ -60,10 +60,19 @@ class Etape extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
-        if (step.Questions) {
-            this.nextStep(0, 15);
-        } else {
-            this.nextStep(0, 0);
+        this.nextStep(0, step.Questions.length * 5);
+    };
+
+    formatDifficulty = difficulty => {
+        switch (difficulty) {
+            case 1:
+                return 'facile - 5pts';
+            case 2:
+                return 'intermédiaire - 10pts';
+            case 3:
+                return 'difficile - 15pts';
+            default:
+                return '';
         }
     };
 
@@ -136,6 +145,7 @@ class Etape extends React.Component {
                                     Répondez à une question
                                 </Text>
                                 {step.Questions.map(item => {
+                                    if (!item.wording) return null;
                                     let screen = '';
                                     switch (item.type_of) {
                                         case 1:
@@ -158,7 +168,10 @@ class Etape extends React.Component {
                                             style={styles.button}
                                         >
                                             <Text style={styles.textButton}>
-                                                Question {item.difficulty}
+                                                Question{' '}
+                                                {this.formatDifficulty(
+                                                    item.difficulty
+                                                )}
                                             </Text>
                                         </TouchableOpacity>
                                     );
@@ -169,7 +182,10 @@ class Etape extends React.Component {
                         <TouchableOpacity
                             onPress={this.passStep}
                             activeOpacity={0.8}
-                            style={styles.button}
+                            style={[
+                                styles.button,
+                                { marginTop: 10, backgroundColor: '#e74c3c' }
+                            ]}
                         >
                             <Text style={styles.textButton}>
                                 Passer cette étape

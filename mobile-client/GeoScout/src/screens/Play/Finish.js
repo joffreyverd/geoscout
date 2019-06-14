@@ -12,7 +12,8 @@ import api from '../../config/httpMethods';
 
 export default class Finish extends React.Component {
     state = {
-        rate: undefined
+        stars: undefined,
+        comment: undefined
     };
     finish = () => {
         const {
@@ -23,7 +24,7 @@ export default class Finish extends React.Component {
                 }
             }
         } = this.props;
-        const { rate } = this.state;
+        const { stars, comment } = this.state;
 
         // Envoie de la requete achievedCircuit
         api.post('achievedcircuit', {
@@ -35,10 +36,11 @@ export default class Finish extends React.Component {
             max_score: maxScore,
             achievedTime: time
         });
-        if (rate)
+        if (stars)
             api.post('evaluations', {
                 id_circuit: circuit.id_circuit,
-                stars: rate
+                stars: stars,
+                comment
             });
         navigate('Home');
     };
@@ -51,7 +53,7 @@ export default class Finish extends React.Component {
                 }
             }
         } = this.props;
-        const { rate, comment } = this.state;
+        const { stars, comment } = this.state;
 
         let minutes = Math.floor(time);
         let sec = ((time - minutes) * 60).toFixed(0);
@@ -93,8 +95,8 @@ export default class Finish extends React.Component {
                         Donnez votre avis
                     </Text>
                     <StarRating
-                        rating={rate}
-                        selectedStar={rate => this.setState({ rate })}
+                        rating={stars}
+                        selectedStar={stars => this.setState({ stars })}
                         fullStarColor="white"
                         emptyStarColor="white"
                     />
@@ -114,7 +116,7 @@ export default class Finish extends React.Component {
                     onPress={this.finish}
                     activeOpacity={0.8}
                 >
-                    <Text style={styles.textButton}>Revenir sur la carte</Text>
+                    <Text style={styles.textButton}>Publier vos résultats</Text>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
         );
