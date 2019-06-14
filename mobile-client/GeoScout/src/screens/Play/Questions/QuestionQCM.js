@@ -11,49 +11,38 @@ import {
 import { CheckBox } from 'react-native-elements';
 
 export default class QuestionQCM extends React.Component {
-    state = {};
-
-    componentDidMount() {
-        const {
-            question: { response }
-        } = this.props.navigation.state.params;
-
-        const choix = response.split(':')[0].split(',');
-        const state = {};
-        choix.forEach(element => {
-            state[element] = false;
-        });
-
-        this.setState(state);
-    }
+    state = {
+        selected: null
+    };
 
     handleSubmit = e => {
         e.preventDefault();
         const {
             question: { response, difficulty }
         } = this.props.navigation.state.params;
+        const { selected } = this.state;
+
         let isGood = '',
-            score = 0;
+            score = 0,
+            gain = '';
         let maxScore = 15;
         if (difficulty) maxScore = difficulty * 5;
 
-        const [strChoix, reponse] = response.split(':');
-        const choix = strChoix.split(',');
-        let selected;
-        choix.forEach(element => {
-            if (this.state[element]) selected = element;
-        });
+        // Récupération de la bonne réponse
+        const [__, reponse] = response.split(':');
 
         if (selected === reponse) {
-            isGood = 'Bonne réponse';
-            score = 10;
+            isGood = 'bonne réponse';
+            score = maxScore;
+            gain = `vous avez gagnez ${score} points`;
         } else {
-            isGood = 'Mauvaise réponse';
+            isGood = 'mauvaise réponse';
+            gain = 'vous ne gagnez pas de point';
         }
 
         Alert.alert(
-            isGood,
-            `C'est une ${isGood} , vous avez gagnez ${score} point(s)`,
+            isGood[0].toUpperCase() + isGood.slice(1),
+            `C'est une ${isGood} , ${gain}.`,
             [
                 {
                     text: 'Ok',
@@ -72,6 +61,7 @@ export default class QuestionQCM extends React.Component {
         const {
             question: { wording, response }
         } = this.props.navigation.state.params;
+        const { selected } = this.state;
 
         const choix = response.split(':')[0].split(',');
 
@@ -79,7 +69,6 @@ export default class QuestionQCM extends React.Component {
             <>
                 <View style={[styles.container, styles.containerQuestion]}>
                     <ScrollView>
-                        {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
                         <Text style={styles.description}>{wording}</Text>
                     </ScrollView>
 
@@ -88,13 +77,9 @@ export default class QuestionQCM extends React.Component {
                             <CheckBox
                                 key={idx}
                                 title={item}
-                                checked={this.state[item]}
+                                checked={item === selected}
                                 onPress={() =>
-                                    this.setState(prevState => {
-                                        return {
-                                            [item]: !prevState[item]
-                                        };
-                                    })
+                                    this.setState({ selected: item })
                                 }
                             />
                         ))}
