@@ -358,12 +358,22 @@ h1 {
   
   .uploader-wrapper {
       display: block;
-      margin: auto;
+      margin: 20px 0px;
       width: 80%;
   }
   
+  .difficulty-field {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: flex-start !important;
+  }
+
+  .ant-rate-star-zero *, .ant-rate-star-half .ant-rate-star-second {
+    color: #fff !important;
+  }
+  
   .my-pictures {
-    margin: 35px;
+    margin-left: 35px;
     font-weight: bold;
     color: #1abc9c;
   }
@@ -585,6 +595,23 @@ h1 {
     padding: 5px;
   }
   
+  .pictures-handler {
+    margin: 20px;
+  }
+
+  .delete-pictures-button {
+    height: 32px;
+    width: 168px;
+    margin: auto;
+  }
+
+  .ant-carousel div div div div div img {
+    width: 100% !important;
+    height: 300px !important;
+    min-height: 100px !important;
+    object-fit: cover !important;
+  }
+
   /************************** DETAILED-CIRCUIT **************************/
   
   .header-wrapper {

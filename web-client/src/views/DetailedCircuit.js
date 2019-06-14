@@ -81,13 +81,16 @@ export default class DetailedCircuit extends Component {
             console.log('Oups, une erreur s\'est produite');
         });
         api.get(`steps/${id}`).then((steps) => {
-            const { viewport } = this.state;
-            viewport.latitude = steps[0].latitude;
-            viewport.longitude = steps[0].longitude;
-            this.setState({
-                step: steps[0],
-                viewport: viewport,
-            });
+            if (steps[0].latitude || steps[0].longitude) {
+                const { viewport } = this.state;
+                viewport.latitude = steps[0].latitude;
+                viewport.longitude = steps[0].longitude;
+                this.setState({
+                    step: steps[0],
+                    viewport: viewport,
+                });
+            }
+
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
@@ -106,14 +109,14 @@ export default class DetailedCircuit extends Component {
         const { name, description, Favorites, avgStars } = this.state.circuit;
         const { viewport, userPosition, step, comments, img } = this.state;
         const { isConnected } = this.props;
-
+        const formattedStar = Math.round(avgStars * 2) / 2;
         return (
             <>
                 <div className='header-wrapper'>
                     <div className='name-score'>
                         <h1>{name}</h1>
                         <div className='rating-wrapper'>
-                            <Rate disabled defaultValue={avgStars} />
+                            <Rate disabled allowHalf defaultValue={0} value={formattedStar} />
                         </div>
                     </div>
                     {isConnected &&
@@ -153,7 +156,7 @@ export default class DetailedCircuit extends Component {
                         :
                         <>
                             <h2 className='comments-title'>Photos du circuit</h2>
-                            <Carousel className='carousel-style'>
+                            <Carousel className='carousel-style' autoplay>
                                 {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={name} />)}
                             </Carousel>
                         </>

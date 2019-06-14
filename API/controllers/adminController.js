@@ -17,7 +17,8 @@ module.exports=
 				{
 					let circuits = await db.Circuit.findAll(
 						{
-							attributes : ['id_circuit','name','published','version','id_user','blocked'],
+							where : {published : true},
+							attributes : ['id_circuit','name','version','id_user','blocked'],
 							include : 
 							[
 								{
@@ -46,14 +47,16 @@ module.exports=
 		let id_user = utils.verifToken(req.headers['authorization']);
 		if(id_user)
 		{
+			let t = await db.sequelize.transaction();
 			try
 			{
 				if(await utils.isAdmin(id_user,db))
 				{
 					let circuit = await db.Circuit.findByPk(req.params.id_circuit);
-					circuit.blocked = true;
-					await circuit.update();
-					res.sendStatus(201);
+					circuit.blocked = !circuit.blocked;
+					await circuit.save({transaction : t});
+					await t.commit();
+					res.sendStatus(204);
 				}
 
 				else
@@ -63,6 +66,7 @@ module.exports=
 			catch(err)
 			{
 				console.log(err);
+				await t.rollback();
 				res.status(500).send(utils.messages.serverError);
 			}
 		}

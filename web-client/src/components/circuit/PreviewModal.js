@@ -28,7 +28,7 @@ class PreviewModal extends Component {
                         :
                         <>
                             <h2 className='comments-title'>Photos du circuit</h2>
-                            <Carousel className='carousel-style'>
+                            <Carousel className='carousel-style' autoplay>
                                 {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={`http://www.geoscout.fr:5555${item}`} />)}
                             </Carousel>
                         </>

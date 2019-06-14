@@ -28,6 +28,7 @@ class CommentListItem extends Component {
         const { firstname, lastname } = User;
         const formattedDate = new Date(createdAt).toLocaleDateString();
         const defaultImg = '/img/earth.png';
+        const formattedStar = Math.round(stars * 2) / 2;
 
         return (
             <div className='comment-starts-wrapper'>
@@ -44,7 +45,7 @@ class CommentListItem extends Component {
                         <span>{formattedDate}</span>
                     }
                 />
-                <Rate disabled defaultValue={stars} />
+                <Rate disabled allowHalf defaultValue={0} value={formattedStar} />
                 <p className='version-tag'>{(version && version !== undefined) ? `Version ${version}` : 'Version 1'}</p>
             </div>
         );

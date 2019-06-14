@@ -25,10 +25,9 @@ module.exports =
 	{
 		if(utils.verifToken(req.headers['authorization']))
 		{
-
 			try
 			{
-				res.json(await db.Question.findByPk(req.params.id_question,{attributes : ['id_question','wording','points','response']}));
+				res.json(await db.Question.findByPk(req.params.id_question));
 			}
 
 			catch(err)

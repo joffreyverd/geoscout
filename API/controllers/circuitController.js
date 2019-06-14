@@ -51,7 +51,6 @@ module.exports =
 						[
 							{
 								model : db.Step,
-								attributes : ['id_step','name','latitude','longitude','description','order','instruction','validation','compass'],
 								include : 
 								[
 									{
@@ -147,7 +146,18 @@ module.exports =
 		{
 			try
 			{
-				res.json(await db.Circuit.findAll({where : {id_user : id_user}}));
+				let circuits = await db.Circuit.findAll(
+					{
+						where : {id_user : id_user},
+						include : 
+						[
+							{
+								model : db.Evaluation
+							}
+						]
+					});
+
+				res.json(utils.averageStars(circuits));
 			}
 			
 			catch(err)

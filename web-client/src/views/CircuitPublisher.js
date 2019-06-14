@@ -258,6 +258,43 @@ export default class CircuitPublisher extends Component {
         });
     }
 
+    onChangePicturesList = () => {
+
+    }
+
+    onChangePicturesListStep = () => {
+
+    }
+
+    uploadCircuitPictures = (file) => {
+        const formData = new FormData();
+        const { id_circuit } = this.state.circuit;
+
+        formData.append('id', id_circuit);
+        formData.append('type', 'circuit');
+        formData.append('file', file);
+
+        return fetch('http://154.49.211.218:5555/upload', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+    }
+
+    deleteCircuitPictures = () => {
+        const { id_circuit } = this.state.circuit;
+        api.post('delete', {
+            id: id_circuit,
+            type: 'circuit',
+        }).then(() => {
+            this.setState({ img: [] });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
+    }
+
     render() {
         const { steps, stepFocus, userPosition, circuit, circuitIsDisplayed,
             stepIsDisplayed, viewport, img,
@@ -329,9 +366,13 @@ export default class CircuitPublisher extends Component {
                     updateStep={this.updateStep}
                     show={stepIsDisplayed}
                     displayUpdateStep={this.displayUpdateStep}
+                    onChangePicturesList={this.onChangePicturesList}
                 />
 
                 <UpdateCircuitModal
+                    onChangePicturesList={this.onChangePicturesList}
+                    deleteCircuitPictures={this.deleteCircuitPictures}
+                    uploadCircuitPictures={this.uploadCircuitPictures}
                     circuit={circuit}
                     show={circuitIsDisplayed}
                     displayUpdateCircuit={this.displayUpdateCircuit}

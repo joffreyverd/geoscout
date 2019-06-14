@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { withAlert } from 'react-alert';
 import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
-import { Checkbox, Icon } from 'antd';
+import { Checkbox, Icon, Carousel } from 'antd';
 import 'antd/dist/antd.css';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import MultipleQuestion from './MultipleQuestion';
+import Uploader from '../Uploader';
+
+import api from '../../utils/httpMethods';
 
 class UpdateStepModal extends Component {
 
@@ -18,6 +21,7 @@ class UpdateStepModal extends Component {
         compass: false,
         validation: false,
         Questions: [],
+        files: [],
     };
 
     modules = {
@@ -41,6 +45,7 @@ class UpdateStepModal extends Component {
         const { step } = this.props;
         if (prevProps.step !== step) {
             if (step) {
+                const { id_step } = step;
                 this.setState(Object.assign({}, step, {
                     description: step.description || '',
                     instruction: step.instruction || '',
@@ -68,8 +73,47 @@ class UpdateStepModal extends Component {
                             difficulty: 3,
                         }],
                 }));
+                if (id_step !== null) {
+                    api.post('download', {
+                        id: id_step,
+                        type: 'step',
+                    }).then((imgSteps) => {
+                        this.setState({ imgSteps });
+                    }).catch(() => {
+                        console.log('error');
+                    });
+                }
             }
         }
+    }
+
+    uploadFile = (file) => {
+        const formData = new FormData();
+        const { id_step } = this.props.step;
+
+        formData.append('id', id_step);
+        formData.append('type', 'step');
+        formData.append('file', file);
+
+        return fetch('http://154.49.211.218:5555/upload', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+    }
+
+    deleteStepPictures = () => {
+        const { id_step } = this.props.step;
+        api.post('delete', {
+            id: id_step,
+            type: 'step',
+        }).then(() => {
+            this.setState({ imgSteps: [] });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
     }
 
     /**
@@ -206,8 +250,8 @@ class UpdateStepModal extends Component {
     }
 
     render() {
-        const { id_step, name, description, instruction, validation, compass, Questions } = this.state;
-        const { show, displayUpdateStep, removeStep } = this.props;
+        const { id_step, name, description, instruction, validation, compass, Questions, files, imgSteps } = this.state;
+        const { show, displayUpdateStep, removeStep, circuit, onChangePicturesList } = this.props;
 
         return (
             <>
@@ -264,6 +308,24 @@ class UpdateStepModal extends Component {
                             onChange={this.handleCheckboxCompassChange}
                         >Parcours du transit en mode boussole
                         </Checkbox>
+
+
+                        {imgSteps && imgSteps !== undefined &&
+                            <>
+                                <p className='my-pictures'>Photos de l`étape</p>
+                                <Carousel autoplay>
+                                    {imgSteps.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={imgSteps.keys()} alt={`http://www.geoscout.fr:5555${item}`} />)}
+                                </Carousel>
+                            </>
+                        }
+
+                        <div className='pictures-handler'>
+                            <Uploader id={circuit} files={files} uploadFile={this.uploadFile} onChangePicturesList={onChangePicturesList} />
+                            {(!imgSteps || !imgSteps.length < 1) &&
+                                <Button color='danger' className='delete-pictures-button' onClick={this.deleteStepPictures}>Supprimer photos</Button>
+                            }
+                        </div>
+
 
                         <MultipleQuestion
                             questions={Questions}
