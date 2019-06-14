@@ -12,6 +12,7 @@ import 'react-quill/dist/quill.snow.css';
 
 import PreviewModal from './PreviewModal';
 import Uploader from '../Uploader';
+import api from '../../utils/httpMethods';
 
 class UpdateCircuitModal extends Component {
 
@@ -22,6 +23,7 @@ class UpdateCircuitModal extends Component {
         description: '',
         length: '',
         duration: '',
+        files: [],
     };
 
     modules = {
@@ -123,9 +125,11 @@ class UpdateCircuitModal extends Component {
 
     render() {
         const { name, description, length, duration, real_duration,
-            level, previewIsOpen, difficultyDropdown,
+            level, previewIsOpen, difficultyDropdown, files,
         } = this.state;
-        const { show, displayUpdateCircuit, img, circuit } = this.props;
+        const { show, displayUpdateCircuit, img, circuit,
+            onChangePicturesList, deleteCircuitPictures, uploadCircuitPictures,
+        } = this.props;
 
         const timeHour = Math.floor(duration / 60);
         const timeMinute = duration % 60;
@@ -172,7 +176,8 @@ class UpdateCircuitModal extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup>
+                        <FormGroup className='difficulty-field'>
+                            <Label>Difficulté</Label>
                             <ButtonDropdown
                                 isOpen={difficultyDropdown}
                                 toggle={this.displayDifficultyDropdown}
@@ -232,18 +237,20 @@ class UpdateCircuitModal extends Component {
                             </FormGroup>
                         }
 
-                        <Uploader id={circuit} />
-
-
                         {img && img !== undefined &&
                             <>
                                 <p className='my-pictures'>Photos du circuit</p>
-                                <Carousel>
+                                <Carousel autoplay>
                                     {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={`http://www.geoscout.fr:5555${item}`} />)}
                                 </Carousel>
                             </>
                         }
-
+                        <div className='pictures-handler'>
+                            <Uploader id={circuit} files={files} uploadFile={uploadCircuitPictures} onChangePicturesList={onChangePicturesList} />
+                            {(!img || !img.length < 1) &&
+                                <Button color='danger' className='delete-pictures-button' onClick={id_circuit => deleteCircuitPictures(id_circuit)}>Supprimer photos</Button>
+                            }
+                        </div>
 
                         <div className='update-buttons'>
                             <Button

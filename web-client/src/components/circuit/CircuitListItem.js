@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Tooltip } from 'reactstrap';
-import { Rate } from 'antd';
+import { Rate, Avatar } from 'antd';
 import 'antd/dist/antd.css';
 
 import api from '../../utils/httpMethods';
@@ -63,6 +63,7 @@ class CircuitListItem extends Component {
 
         const nameOverview = (name != null) && name.length <= 20 ? name.substring(0, 20) : `${name.substring(0, 20)}...`;
         const overview = (description != null) && `${description.replace(/<(.|\n)*?>/g, '').substring(0, 50)}...`;
+        const formattedStar = Math.round(avgStars * 2) / 2;
 
         return (
             <>
@@ -87,11 +88,11 @@ class CircuitListItem extends Component {
                         }
                     </div>
 
-                    <Rate disabled defaultValue={avgStars} />
+                    <Rate disabled allowHalf defaultValue={0} value={formattedStar} />
 
                     <img
                         className='picture-circuit-minature'
-                        src={img === undefined || img.length === 0 ? 'https://i.ytimg.com/vi/yWYBIYD4JNo/maxresdefault.jpg' : `http://www.geoscout.fr:5555${img}`}
+                        src={img === undefined || img.length === 0 ? 'https://i.ytimg.com/vi/yWYBIYD4JNo/maxresdefault.jpg' : `http://www.geoscout.fr:5555${img[0]}`}
                         alt={name}
                     />
 
