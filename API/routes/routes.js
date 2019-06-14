@@ -15,6 +15,7 @@ module.exports = function(app)
 {
 	app.route('/upload').post(upload.any('file'),images.upload);
 	app.route('/download').post(images.download);
+	app.route('/delete').delete(images.delete);
 	app.route('/signup').post(user.createUser);
 	app.route('/signup').post(user.createUser);
 	app.route('/signin').post(user.login);
@@ -27,7 +28,7 @@ module.exports = function(app)
 	app.route('/favorites/:id_circuit').delete(user.deleteFavorite);
 	app.route('/evaluations/:id_circuit').get(evaluation.evaluationsCircuit);
 	app.route('/evaluations').post(evaluation.createEvaluation);	
-	app.route('/step/:id_step').get(step.step);
+	//app.route('/step/:id_step').get(step.step);
 	app.route('/step/:id_step').put(step.updateStep);
 	app.route('/step/:id_circuit/:id_step').delete(step.deleteStep);
 	app.route('/steps/:id_circuit').get(step.stepCircuit);
@@ -55,4 +56,5 @@ module.exports = function(app)
 	app.route('/download-user/:id_user').get(user.downloadUser);
 
 	app.route('/circuits-admin').get(admin.circuitsAdmin);
+	app.route('/circuits-admin/:id_circuit').put(admin.blockCircuit);
 };
