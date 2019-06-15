@@ -1,6 +1,8 @@
 import React from 'react';
-import { Header } from 'react-native-elements';
-import { DrawerItems } from 'react-navigation';
+import { Header, Button } from 'react-native-elements';
+import { DrawerItems, SafeAreaView } from 'react-navigation';
+
+import storage from '../config/asyncStorageToken';
 
 export const DrawerContent = ({ items, ...props }) => {
     const drawerItems = [
@@ -12,7 +14,27 @@ export const DrawerContent = ({ items, ...props }) => {
     ];
     const filteredItems = items.filter(item => drawerItems.includes(item.key));
 
-    return <DrawerItems items={filteredItems} {...props} />;
+    return (
+        <SafeAreaView
+            style={{
+                display: 'flex',
+                height: '100%',
+                justifyContent: 'space-between'
+            }}
+        >
+            <DrawerItems items={filteredItems} {...props} />
+            <Button
+                title="Se déconnecter"
+                icon={{ name: 'exit-to-app', color: 'white' }}
+                buttonStyle={{ backgroundColor: '#f44336', borderRadius: 0 }}
+                onPress={() =>
+                    storage.removeTokenAsyncStorage().then(() => {
+                        props.navigation.navigate('Auth');
+                    })
+                }
+            />
+        </SafeAreaView>
+    );
 };
 
 export function NavigationHeader({
@@ -37,7 +59,8 @@ export function NavigationHeader({
             leftComponent={{
                 icon: 'menu',
                 color: 'white',
-                onPress: pressMenu
+                onPress: pressMenu,
+                size: 36
             }}
             centerComponent={{
                 text: titleText,

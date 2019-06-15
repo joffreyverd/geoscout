@@ -20,7 +20,7 @@ export default ({ step, onClickItem, stepFocus }) => (
                 </div>
 
 
-                <span className='order-item'>{step.order}</span>
+                <span className='order-item'>{step.order + 1}</span>
 
             </li>
         )}

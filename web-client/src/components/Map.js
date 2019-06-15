@@ -52,7 +52,7 @@ export default class Map extends React.Component {
                     >
                         <Pin
                             color='#1f7a1f'
-                            index={s.order}
+                            index={s.order + 1}
                             onClick={() => {
                                 onClickMarker(s);
                                 this.centerStep(s);

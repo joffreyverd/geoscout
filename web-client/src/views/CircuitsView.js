@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 
-import '../css/app-minifized.css';
+import '../css/app-minified.css';
 import CreatedCircuitList from '../components/circuit/CircuitList';
 
 import api from '../utils/httpMethods';
@@ -51,7 +51,9 @@ export default class CircuitsView extends Component {
 
         } else if (isAdmin === 'favorites') {
             api.get('favorites').then((data) => {
-                this.setState({ circuits: data });
+                const formattedCircuits = data.map(item => item.Circuit);
+                console.log(formattedCircuits);
+                this.setState({ circuits: formattedCircuits });
             }).catch(() => {
                 console.log('error');
             });
@@ -93,7 +95,7 @@ export default class CircuitsView extends Component {
                 <div className='my-circuits-header'>
                     {isAdmin === 'home' && <h1>Circuits environnants</h1>}
                     {isAdmin === 'created' && <h1>Circuits créés</h1>}
-                    {isAdmin === 'achieved' && <h1>Circuits accomplis</h1>}
+                    {isAdmin === 'achieved' && <h1>Circuits réalisés</h1>}
                     {isAdmin === 'favorites' && <h1>Circuits favoris</h1>}
 
                     {isAdmin === 'achieved' &&

@@ -73,14 +73,19 @@ module.exports =
 		{
 			let user = await db.User.findOne({where : {email : req.body.email}});
 
-			if(await bcrypt.compare(req.body.password,user.password))
+			if(user)
 			{
-				let token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
-				res.status(200).send({ auth: true, token: token,User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}});
+				if(await bcrypt.compare(req.body.password,user.password))
+				{
+					let token = jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400});
+					res.status(200).send({ auth: true, token: token,User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}});
+				}
+				else
+					res.status(401).send(utils.messages.incorrectPassword);
 			}
 
 			else
-				res.status(401).send(utils.messages.incorrectPassword);
+				res.status(401).send(utils.messages.incorrectUserName);
 		}
 
 		catch(err)
@@ -258,26 +263,68 @@ module.exports =
 
 	getFavorites : async (req,res) =>
 	{
-		let id_user = utils.verifToken(req.headers['authorization']);
-		if(id_user)
+		try
 		{
-			let favoris = await db.Circuit.findAll(
+			let id_user = utils.verifToken(req.headers['authorization']);
+			if(id_user)
+			{
+				/*let favoris = await db.Circuit.findAll(
+					{
+						include : 
+						[
+							{
+								model : db.Favorite,
+								where : {id_user : id_user},
+								attributes : [],
+								include :
+								[
+									{
+										model : db.Circuit
+									}
+								]
+							}
+						]
+					}
+				);*/
+
+				let favorites = await db.Favorite.findAll(
+					{
+						where : {id_user : id_user},
+						include : 
+						[
+							{
+								model : db.Circuit,
+								include : 
+								[
+									{
+										model : db.Evaluation
+									}
+								]
+							}
+						]
+					});
+					
+
+				favorites.map(favorite =>
 				{
-					include : 
-					[
-						{
-							model : db.Favorite,
-							where : {id_user : id_user},
-							attributes : []
-						}
-					]
-				}
-			);
-			res.status(200).send(favoris);
+					favorite.Circuit = utils.countStars(favorite.Circuit);
+				});
+				
+				res.status(200).send(favorites);
+			}
+
+			else
+				res.status(401).send(utils.messages.invalidToken);
+		
 		}
 
-		else
-			res.status(401).send(utils.messages.invalidToken);
+		catch(err)
+		{
+			console.log(err);
+			res.status(500).send(utils.messages.serverError);
+		}
+
+		
 	},
 
 	setFavorite : async (req,res) =>

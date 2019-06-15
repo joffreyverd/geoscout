@@ -4,13 +4,15 @@ import {
     Button, Form, FormGroup, Label, Input, ButtonDropdown,
     DropdownMenu, DropdownToggle, DropdownItem,
 } from 'reactstrap';
-import { Icon } from 'antd';
+import { Icon, Carousel } from 'antd';
 import 'antd/dist/antd.css';
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 import PreviewModal from './PreviewModal';
+import Uploader from '../Uploader';
+import api from '../../utils/httpMethods';
 
 class UpdateCircuitModal extends Component {
 
@@ -21,6 +23,7 @@ class UpdateCircuitModal extends Component {
         description: '',
         length: '',
         duration: '',
+        files: [],
     };
 
     modules = {
@@ -28,7 +31,7 @@ class UpdateCircuitModal extends Component {
             [{ header: [1, 2, false] }],
             ['bold', 'italic', 'underline', 'strike', 'blockquote'],
             [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
-            ['link', 'image'],
+            ['link'],
             ['clean'],
         ],
     };
@@ -73,7 +76,7 @@ class UpdateCircuitModal extends Component {
     }
 
     handleSubmit = () => {
-        const { name, description, level, version } = this.state;
+        const { name, description, level, version, real_duration } = this.state;
         const { displayUpdateCircuit, alert, updateCircuit } = this.props;
         const { id_circuit } = this.props.circuit;
         const circuit = {
@@ -81,6 +84,7 @@ class UpdateCircuitModal extends Component {
             name: name || null,
             description: description || null,
             level: level || null,
+            real_duration: real_duration || null,
             version: version + 1,
         };
         updateCircuit(circuit)
@@ -120,10 +124,12 @@ class UpdateCircuitModal extends Component {
     }
 
     render() {
-        const { name, description, length, duration,
-            level, previewIsOpen, difficultyDropdown,
+        const { name, description, length, duration, real_duration,
+            level, previewIsOpen, difficultyDropdown, files,
         } = this.state;
-        const { show, displayUpdateCircuit, img } = this.props;
+        const { show, displayUpdateCircuit, img, circuit,
+            onChangePicturesList, deleteCircuitPictures, uploadCircuitPictures,
+        } = this.props;
 
         const timeHour = Math.floor(duration / 60);
         const timeMinute = duration % 60;
@@ -170,7 +176,8 @@ class UpdateCircuitModal extends Component {
                             />
                         </FormGroup>
 
-                        <FormGroup>
+                        <FormGroup className='difficulty-field'>
+                            <Label>Difficulté</Label>
                             <ButtonDropdown
                                 isOpen={difficultyDropdown}
                                 toggle={this.displayDifficultyDropdown}
@@ -204,6 +211,16 @@ class UpdateCircuitModal extends Component {
                             </ButtonDropdown>
                         </FormGroup>
 
+                        <FormGroup>
+                            <Label>Durée réelle - en minutes</Label>
+                            <Input
+                                type='text'
+                                name='real_duration'
+                                value={!real_duration || real_duration === undefined ? '' : real_duration}
+                                onChange={this.handleChange}
+                            />
+                        </FormGroup>
+
 
                         {duration > 0 &&
                             <FormGroup>
@@ -219,6 +236,21 @@ class UpdateCircuitModal extends Component {
                                 <p>{`${length} km`}</p>
                             </FormGroup>
                         }
+
+                        {img && img !== undefined &&
+                            <>
+                                <p className='my-pictures'>Photos du circuit</p>
+                                <Carousel autoplay>
+                                    {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={`http://www.geoscout.fr:5555${item}`} />)}
+                                </Carousel>
+                            </>
+                        }
+                        <div className='pictures-handler'>
+                            <Uploader id={circuit} files={files} uploadFile={uploadCircuitPictures} onChangePicturesList={onChangePicturesList} />
+                            {(!img || !img.length < 1) &&
+                                <Button color='danger' className='delete-pictures-button' onClick={id_circuit => deleteCircuitPictures(id_circuit)}>Supprimer photos</Button>
+                            }
+                        </div>
 
                         <div className='update-buttons'>
                             <Button

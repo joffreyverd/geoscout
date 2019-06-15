@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     Alert,
+    View,
     ScrollView,
     Dimensions,
     ToastAndroid
@@ -170,46 +171,51 @@ export default class DetailCircuit extends React.Component {
                             </Text>
                         )}
                     </ScrollView>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            api.put('favorites/' + id_circuit)
-                                .then(() =>
-                                    ToastAndroid.show(
-                                        'Circuit Ajouté à vos favoris',
-                                        ToastAndroid.SHORT
+                    <View style={styles.buttonWrapper}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                api.put('favorites/' + id_circuit)
+                                    .then(() =>
+                                        ToastAndroid.show(
+                                            'Circuit Ajouté à vos favoris',
+                                            ToastAndroid.SHORT
+                                        )
                                     )
-                                )
-                                .catch(() =>
-                                    ToastAndroid.show(
-                                        'Circuit déjà présent dans vos favoris',
-                                        ToastAndroid.SHORT
-                                    )
-                                );
-                        }}
-                    >
-                        <Text style={styles.textButton}>
-                            Ajouter au favoris
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.alertUser(isDownload)}
-                    >
-                        {isDownload ? (
-                            <>
-                                <Icon name="play-circle-filled" color="white" />
-                                <Text style={styles.textButton}>Jouer</Text>
-                            </>
-                        ) : (
-                            <>
-                                <Icon name="get-app" color="white" />
-                                <Text style={styles.textButton}>
-                                    Télécharger
-                                </Text>
-                            </>
-                        )}
-                    </TouchableOpacity>
+                                    .catch(() =>
+                                        ToastAndroid.show(
+                                            'Circuit déjà présent dans vos favoris',
+                                            ToastAndroid.SHORT
+                                        )
+                                    );
+                            }}
+                        >
+                            <Text style={styles.textButton}>
+                                Ajouter au favoris
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => this.alertUser(isDownload)}
+                        >
+                            {isDownload ? (
+                                <>
+                                    <Icon
+                                        name="play-circle-filled"
+                                        color="white"
+                                    />
+                                    <Text style={styles.textButton}>Jouer</Text>
+                                </>
+                            ) : (
+                                <>
+                                    <Icon name="get-app" color="white" />
+                                    <Text style={styles.textButton}>
+                                        Télécharger
+                                    </Text>
+                                </>
+                            )}
+                        </TouchableOpacity>
+                    </View>
                 </SafeAreaView>
             </>
         );
@@ -221,31 +227,30 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding: 15,
-        paddingBottom: 25
+        paddingTop: 5,
+        paddingBottom: 0
     },
     title: {
+        textAlign: 'center',
         color: '#1abc9c',
         fontWeight: 'bold',
-        fontSize: 26
+        fontSize: 30
     },
     description: {
         color: '#2c3e50',
         fontSize: 18
     },
     buttonWrapper: {
-        width: '100%',
-        flex: 1,
-        position: 'absolute',
-        bottom: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
+        paddingTop: 10,
+        paddingBottom: 15
     },
     button: {
         backgroundColor: '#2c3e50',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
-        width: '100%',
+        width: '90%',
+        alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'baseline',
         flexDirection: 'row'

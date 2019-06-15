@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Rate, Button, Icon, Carousel } from 'antd';
+import { Rate, Button, Icon, Carousel, Tooltip } from 'antd';
 import 'antd/dist/antd.css';
 
 import Map from '../components/Map';
@@ -81,13 +81,16 @@ export default class DetailedCircuit extends Component {
             console.log('Oups, une erreur s\'est produite');
         });
         api.get(`steps/${id}`).then((steps) => {
-            const { viewport } = this.state;
-            viewport.latitude = steps[0].latitude;
-            viewport.longitude = steps[0].longitude;
-            this.setState({
-                step: steps[0],
-                viewport: viewport,
-            });
+            if (steps[0].latitude || steps[0].longitude) {
+                const { viewport } = this.state;
+                viewport.latitude = steps[0].latitude;
+                viewport.longitude = steps[0].longitude;
+                this.setState({
+                    step: steps[0],
+                    viewport: viewport,
+                });
+            }
+
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
@@ -103,31 +106,35 @@ export default class DetailedCircuit extends Component {
 
     render() {
 
-        const { name, description, Favorites } = this.state.circuit;
+        const { name, description, Favorites, avgStars } = this.state.circuit;
         const { viewport, userPosition, step, comments, img } = this.state;
         const { isConnected } = this.props;
-
+        const formattedStar = Math.round(avgStars * 2) / 2;
         return (
             <>
                 <div className='header-wrapper'>
                     <div className='name-score'>
                         <h1>{name}</h1>
                         <div className='rating-wrapper'>
-                            <Rate disabled defaultValue={4} />
-                            <p>(256)</p>
+                            <Rate disabled allowHalf defaultValue={0} value={formattedStar} />
                         </div>
                     </div>
                     {isConnected &&
-                        <Button
-                            type='primary'
-                            className='favoris-button'
-                            onClick={this.changeFavoriteStatus}
+                        <Tooltip
+                            placement='left'
+                            title={(Favorites && Favorites[0]) ? 'Supprimer de mes favoris' : 'Ajouter à mes favoris'}
                         >
-                            {(Favorites && Favorites[0]) ?
-                                <Icon type='heart' theme='filled' /> :
-                                <Icon type='heart' />
-                            }
-                        </Button>
+                            <Button
+                                type='primary'
+                                className='favoris-button'
+                                onClick={this.changeFavoriteStatus}
+                            >
+                                {(Favorites && Favorites[0]) ?
+                                    <Icon type='heart' theme='filled' /> :
+                                    <Icon type='heart' />
+                                }
+                            </Button>
+                        </Tooltip>
                     }
                 </div>
 
@@ -145,11 +152,11 @@ export default class DetailedCircuit extends Component {
                     </div>
 
                     {img === undefined || img.length === 0 ?
-                        <p>Aucune photo disponible pour ce circuit</p>
+                        <p className='no-pictures'>Aucune photo n`a été ajouté par l`administrateur de ce circuit !</p>
                         :
                         <>
                             <h2 className='comments-title'>Photos du circuit</h2>
-                            <Carousel className='carousel-style'>
+                            <Carousel className='carousel-style' autoplay>
                                 {img.map(item => <img src={`http://www.geoscout.fr:5555${item}`} key={img.keys()} alt={name} />)}
                             </Carousel>
                         </>

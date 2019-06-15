@@ -22,6 +22,7 @@ export default class Navigation extends React.Component {
     render() {
         const { modal } = this.state;
         const { isConnected, login, logout } = this.props;
+        const isThor = true;
 
         const circuitOptions = (
             <Menu>
@@ -29,7 +30,7 @@ export default class Navigation extends React.Component {
                     <Link to='/circuits'>Créés</Link>
                 </Menu.Item>
                 <Menu.Item>
-                    <Link to='/achievements'>Accomplis</Link>
+                    <Link to='/achievements'>Réalisés</Link>
                 </Menu.Item>
                 <Menu.Item>
                     <Link to='/todo'>Favoris</Link>
@@ -56,9 +57,25 @@ export default class Navigation extends React.Component {
                         <Collapse navbar>
                             <Nav className='ml-auto' navbar>
 
-                                <Dropdown overlay={circuitOptions} id='dropdown'>
-                                    <a className='ant-dropdown-link' href='#c'>Mes circuits</a>
-                                </Dropdown>
+                                {isThor ?
+                                    <div>
+                                        <Dropdown overlay={circuitOptions} id='dropdown'>
+                                            <a className='ant-dropdown-link' href='#c'>Mes circuits</a>
+                                        </Dropdown>
+
+
+                                        <Link
+                                            to='/administration'
+                                            className='administration-button'
+                                        >Administration
+                                        </Link>
+                                    </div>
+                                    :
+
+                                    <Dropdown overlay={circuitOptions} id='dropdown'>
+                                        <a className='ant-dropdown-link' href='#c'>Mes circuits</a>
+                                    </Dropdown>
+                                }
 
                                 <Authentication isConnected={isConnected} logout={logout} />
 

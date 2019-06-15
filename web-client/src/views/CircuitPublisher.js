@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Button } from 'reactstrap';
 import { DragDropContext } from 'react-beautiful-dnd';
+import { Icon, Tooltip } from 'antd';
+import 'antd/dist/antd.css';
 
 import Map from '../components/Map';
 import StepList from '../components/step/StepList';
@@ -256,6 +258,43 @@ export default class CircuitPublisher extends Component {
         });
     }
 
+    onChangePicturesList = () => {
+
+    }
+
+    onChangePicturesListStep = () => {
+
+    }
+
+    uploadCircuitPictures = (file) => {
+        const formData = new FormData();
+        const { id_circuit } = this.state.circuit;
+
+        formData.append('id', id_circuit);
+        formData.append('type', 'circuit');
+        formData.append('file', file);
+
+        return fetch('http://154.49.211.218:5555/upload', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        });
+    }
+
+    deleteCircuitPictures = () => {
+        const { id_circuit } = this.state.circuit;
+        api.post('delete', {
+            id: id_circuit,
+            type: 'circuit',
+        }).then(() => {
+            this.setState({ img: [] });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
+    }
+
     render() {
         const { steps, stepFocus, userPosition, circuit, circuitIsDisplayed,
             stepIsDisplayed, viewport, img,
@@ -279,13 +318,17 @@ export default class CircuitPublisher extends Component {
                     <div className='circuit-title'>
                         <h3>{circuit.name}</h3>
                         <div className='circuit-buttons'>
-                            <Button
-                                className='update-circuit-button'
-                                onClick={this.displayUpdateCircuit}
-                                color='info'
-                            >Editer
-                            </Button>
-                            {(circuit.published && circuit.published !== true) &&
+                            <Tooltip
+                                placement='right'
+                                title='Editer les informations du circuit'
+                            >
+                                <Button
+                                    onClick={this.displayUpdateCircuit}
+                                    color='info'
+                                ><Icon type='edit' />
+                                </Button>
+                            </Tooltip>
+                            {(circuit.published !== true) &&
                                 <Button
                                     className='update-circuit-button'
                                     onClick={this.publishCircuit}
@@ -323,9 +366,13 @@ export default class CircuitPublisher extends Component {
                     updateStep={this.updateStep}
                     show={stepIsDisplayed}
                     displayUpdateStep={this.displayUpdateStep}
+                    onChangePicturesList={this.onChangePicturesList}
                 />
 
                 <UpdateCircuitModal
+                    onChangePicturesList={this.onChangePicturesList}
+                    deleteCircuitPictures={this.deleteCircuitPictures}
+                    uploadCircuitPictures={this.uploadCircuitPictures}
                     circuit={circuit}
                     show={circuitIsDisplayed}
                     displayUpdateCircuit={this.displayUpdateCircuit}

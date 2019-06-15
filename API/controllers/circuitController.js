@@ -8,38 +8,27 @@ module.exports =
 	circuit : async (req,res) => 
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
-		console.log(id_user);
 		try
 		{
-			if (id_user) 
-			{
-				let circuit = await db.Circuit.findByPk(req.params.id_circuit,
-					{
-						attributes : ['name','description','duration','need_internet','level'],
-						include : 
-						[
-							{
-								model : db.Favorite,
-								where : {id_user : id_user},
-								attributes : ['id'],
-								required : false
-							}
-						]
-					}
-				);
-				res.json(circuit);
-			}
-			else
-			{
+			let circuit = await db.Circuit.findByPk(req.params.id_circuit,
+				{
+					attributes : ['name','description','duration','need_internet','level'],
+					include : 
+					[
+						{
+							model : db.Favorite,
+							where : {id_user : id_user},
+							attributes : ['id'],
+							required : false
+						},
+						{
+							model : db.Evaluation
+						}
+					]
+				}
+			);
 
-				let circuit = await db.Circuit.findByPk(req.params.id_circuit,
-					{
-						attributes : ['name','description','duration','need_internet','level']
-					}
-				);
-				res.json(circuit);
-			}
-
+			res.json(utils.averageStars(circuit));
 		}
 		
 		catch(err)
@@ -62,19 +51,21 @@ module.exports =
 						[
 							{
 								model : db.Step,
-								attributes : ['id_step','name','latitude','longitude','description','order','instruction','validation'],
 								include : 
 								[
 									{
-										model : db.Question,
-										attributes : ['id_question','wording','response','type_of','points']
+										model : db.Question
 									}
 								]
+							},
+							{
+								model : db.Evaluation
 							}
 						]
 					});
+
 				
-				res.status(200).send(circuit);
+				res.status(200).send(utils.averageStars(circuit));
 			}
 
 			catch(err)
@@ -121,33 +112,7 @@ module.exports =
 					]
 				});
 
-			let c = [];
-			let count = 0;
-			let note = 0;
-			let currentCircuit = null;
-			circuits.map((circuit) => 
-			{
-				if(circuit)
-				{
-					currentCircuit = circuit.toJSON();
-					note = 0;
-					count = 0;
-					currentCircuit.Evaluations.map(evaluation =>
-					{
-						note+= evaluation.stars;
-						count++;
-					});
-					if(count)
-						currentCircuit.note = Math.round( (note / count) * 10 ) / 10;
-					
-					else
-						currentCircuit.note = 0;
-
-					c.push(currentCircuit);
-				}     
-			});
-
-			res.status(201).send(c);
+			res.status(201).send(utils.averageStars(circuits));
 		}
 
 		catch(err)
@@ -168,7 +133,6 @@ module.exports =
 		
 		catch(err)
 		{
-			console.log(err);
 			res.status(500).send(utils.messages.serverError);
 		}
 	},
@@ -182,7 +146,18 @@ module.exports =
 		{
 			try
 			{
-				res.json(await db.Circuit.findAll({where : {id_user : id_user}}));
+				let circuits = await db.Circuit.findAll(
+					{
+						where : {id_user : id_user},
+						include : 
+						[
+							{
+								model : db.Evaluation
+							}
+						]
+					});
+
+				res.json(utils.averageStars(circuits));
 			}
 			
 			catch(err)

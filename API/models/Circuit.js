@@ -8,11 +8,14 @@ module.exports = (sequelize,DataTypes) =>
 			name : {type : DataTypes.STRING, allowNull : true, unique : true},
 			description : {type : DataTypes.STRING, allowNull : true},
 			length : {type : DataTypes.FLOAT, allowNull : true},
-			duration : {type : DataTypes.INTEGER, defaultValue: null, allowNull : true},
-			need_internet : {type : DataTypes.BOOLEAN, allowNull : true},
-			published : {type : DataTypes.BOOLEAN, allowNull : true},
-			version : {type : DataTypes.TINYINT,allowNull : true},
-			level : {type : DataTypes.ENUM('0','1','2'), allowNull : true}
+			duration : {type : DataTypes.INTEGER, defaultValue: 0},
+			need_internet : {type : DataTypes.BOOLEAN,defaultValue : false, allowNull : false},
+			published : {type : DataTypes.BOOLEAN, allowNull : false},
+			version : {type : DataTypes.TINYINT,allowNull : false},
+			level : {type : DataTypes.ENUM('0','1','2'), allowNull : false},
+			avgStars: {type : DataTypes.VIRTUAL, defaultValue : 0},
+			blocked : {type : DataTypes.BOOLEAN, defaultValue : false},
+			real_duration : {type : DataTypes.FLOAT}
 		},
 	);
 

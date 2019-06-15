@@ -34,6 +34,14 @@ export default class Account extends Component {
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
+        api.post('download', {
+            id: user.id_user,
+            type: 'user',
+        }).then((img) => {
+            this.setState({ img });
+        }).catch(() => {
+            console.log('error');
+        });
     }
 
     changeCurrentTab = (data) => {
@@ -43,7 +51,7 @@ export default class Account extends Component {
     }
 
     render() {
-        const { user, currentTab } = this.state;
+        const { user, currentTab, img } = this.state;
         let currentComponent;
         switch (currentTab) {
             case 'opinions':
@@ -65,6 +73,8 @@ export default class Account extends Component {
                 <AccountHeader
                     changeCurrentTab={this.changeCurrentTab}
                     currentTab={currentTab}
+                    user={user}
+                    img={img}
                 />
 
                 <div className='account-body-wrapper'>
