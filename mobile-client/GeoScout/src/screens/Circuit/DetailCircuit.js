@@ -25,7 +25,6 @@ export default class DetailCircuit extends React.Component {
     }
 
     componentDidMount() {
-        fileSystem.deleteFile(37);
         const {
             state: {
                 params: { id_circuit }
@@ -60,12 +59,14 @@ export default class DetailCircuit extends React.Component {
                     text: playOrDownload ? 'Jouer' : 'Oui',
                     onPress: async () => {
                         if (playOrDownload) {
-                            navigate('Transit', {
-                                circuit: await fileSystem.readFile(id_circuit),
-                                step: 0,
-                                score: 0,
-                                maxScore: 0,
-                                time: 0
+                            fileSystem.readFile(id_circuit).then(data => {
+                                navigate('Transit', {
+                                    circuit: data,
+                                    step: 0,
+                                    score: 0,
+                                    maxScore: 0,
+                                    time: 0
+                                });
                             });
                         } else {
                             this.download();
@@ -85,11 +86,11 @@ export default class DetailCircuit extends React.Component {
             }
         } = this.props.navigation;
         api.get('download-circuit/' + id_circuit)
-            .then(async data => {
+            .then(data => {
                 data.Steps.sort((a, b) => a.order - b.order);
-                await fileSystem.writeFile(id_circuit, data);
+                fileSystem.writeFile(id_circuit, data);
                 Alert.alert(
-                    'Circuit télécharger !',
+                    'Circuit téléchargé !',
                     "Partons à l'aventure ?",
                     [
                         {
@@ -150,16 +151,24 @@ export default class DetailCircuit extends React.Component {
                     }
                 />
                 <SafeAreaView style={styles.container}>
-                    <Text style={styles.title}> {name} </Text>
+                    <Text style={styles.title}>{name}</Text>
                     <ScrollView
                         style={{
                             flex: 1
                         }}
                     >
-                        <HTML
-                            html={description}
-                            imagesMaxWidth={Dimensions.get('window').width}
-                        />
+                        {description !== undefined &&
+                        description != null &&
+                        description != '' ? (
+                            <HTML
+                                html={description}
+                                imagesMaxWidth={Dimensions.get('window').width}
+                            />
+                        ) : (
+                            <Text style={styles.description}>
+                                Pas de description disponible sur ce circuit.
+                            </Text>
+                        )}
                     </ScrollView>
                     <TouchableOpacity
                         style={styles.button}
@@ -218,6 +227,10 @@ const styles = StyleSheet.create({
         color: '#1abc9c',
         fontWeight: 'bold',
         fontSize: 26
+    },
+    description: {
+        color: '#2c3e50',
+        fontSize: 18
     },
     buttonWrapper: {
         width: '100%',

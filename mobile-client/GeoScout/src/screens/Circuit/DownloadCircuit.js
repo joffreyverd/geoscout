@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -15,8 +15,8 @@ export default class DownloadCircuit extends React.Component {
         )
     };
 
-    componentDidMount() {
-        console.log('directory have : ' + fileSystem.readDirectory());
+    async deleteCircuits() {
+        fileSystem.deleteAllCircuits();
     }
 
     render() {
@@ -30,8 +30,17 @@ export default class DownloadCircuit extends React.Component {
                     }
                 />
                 <SafeAreaView style={styles.container}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={() => this.deleteCircuits()}
+                    >
+                        <Text style={styles.textButton}>
+                            Supprimer tous mes circuits
+                        </Text>
+                    </TouchableOpacity>
                     <ListCircuit
                         type={'local'}
+                        format={true}
                         navigate={this.props.navigation.navigate}
                     />
                 </SafeAreaView>
@@ -43,13 +52,26 @@ export default class DownloadCircuit extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
-        padding: 15,
-        paddingBottom: 25
+        backgroundColor: '#dedede',
+        padding: 10
     },
     title: {
         color: '#1abc9c',
         fontWeight: 'bold',
         fontSize: 26
+    },
+    button: {
+        backgroundColor: '#2c3e50',
+        borderRadius: 5,
+        padding: 8,
+        marginBottom: 5,
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'baseline',
+        flexDirection: 'row'
+    },
+    textButton: {
+        color: '#fff',
+        fontSize: 18
     }
 });
