@@ -18,14 +18,13 @@ import api from '../../config/httpMethods';
 import fileSystem from '../../config/fileSystem';
 import ListComment from '../../components/ListComment';
 import Carousel from '../../components/Carousel';
-import evaluations from '../../../utils/json/evaluations.json';
 
 export default class DetailCircuit extends React.Component {
     constructor() {
         super();
         this.state = {
             isDownload: false,
-            evaluations: evaluations,
+            evaluations: [],
             images: []
         };
     }
@@ -38,9 +37,8 @@ export default class DetailCircuit extends React.Component {
                 id: id_circuit,
                 type: 'circuit'
             });
-            // const evaluations = await api.get(`evaluation/${id_circuit}`)
-            // this.setState({evaluations});
-            this.setState({ isDownload, images });
+            const evaluations = await api.get(`evaluations/${id_circuit}`);
+            this.setState({ isDownload, images, evaluations });
         } catch (error) {
             console.log('error try/catch detailCircuit');
             console.log(error);
@@ -183,13 +181,15 @@ export default class DetailCircuit extends React.Component {
                                 Pas de description disponible sur ce circuit.
                             </Text>
                         )}
-                        {evaluations && evaluations.length && (
+                        {evaluations && evaluations.length ? (
                             <>
                                 <Text style={styles.commentSection}>
                                     Commentaires :
                                 </Text>
                                 <ListComment evaluations={evaluations} />
                             </>
+                        ) : (
+                            <ActivityIndicator size="large" color="#1abc9c" />
                         )}
                     </ScrollView>
                     <View style={styles.buttonWrapper}>
@@ -284,7 +284,8 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         color: '#1abc9c',
         fontWeight: 'bold',
-        fontSize: 24
+        fontSize: 24,
+        marginBottom: 10
     }
 });
 

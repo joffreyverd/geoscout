@@ -1,27 +1,60 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
 import Rate from './Rate';
 
-export default function Comment(props) {
-    const { nameUser, comment, rate, version, date, styleComment } = props;
-    let dateFormat = new Date(date);
-    let dateSplit = dateFormat.toLocaleDateString().split('/');
-    const dateComment = `${dateSplit[1]}/${dateSplit[0]}/${dateSplit[2]}`;
-    return (
-        <View style={styleComment}>
-            <View style={styles.inline}>
-                <Text style={[styles.name, { marginRight: 10 }]}>
-                    {nameUser}
+export default class Comment extends React.Component {
+    state = {};
+
+    componentDidMount() {
+        const { User } = this.props;
+        try {
+            const img = api.post('download', {
+                id: User.id_user,
+                type: 'user'
+            });
+            this.setState({ img });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    render() {
+        const {
+            User: { lastname, firstname },
+            comment,
+            rate,
+            version,
+            date,
+            styleComment
+        } = this.props;
+        const { img } = this.state;
+        let dateSplit = new Date(date).toLocaleDateString().split('/');
+        const dateComment = `${dateSplit[1]}/${dateSplit[0]}/${dateSplit[2]}`;
+        return (
+            <View style={styleComment}>
+                <View style={[styles.inline, { marginBottom: 5 }]}>
+                    <Image
+                        source={
+                            !img || img.length < 1 || img === undefined
+                                ? require('../../utils/img/userAnonymous.png')
+                                : uri`http://www.geoscout.fr:5555${img}`
+                        }
+                        style={styles.image}
+                    />
+                    <View>
+                        <Text style={[styles.name, { marginRight: 10 }]}>
+                            {lastname} {firstname}
+                        </Text>
+                        <Rate rate={rate} size={14} displayNumber={false} />
+                    </View>
+                </View>
+                <Text style={styles.comment}>{comment}</Text>
+                <Text style={{ color: 'grey', fontSize: 10 }}>
+                    Version: {version} | {dateComment}
                 </Text>
-                <Text style={{ color: 'grey' }}>{dateComment}</Text>
             </View>
-            <Rate rate={rate} size={14} displayNumber={false} />
-            <Text style={styles.comment}>{comment}</Text>
-            <Text style={{ color: 'grey', fontSize: 10 }}>
-                Version: {version}
-            </Text>
-        </View>
-    );
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -38,5 +71,13 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    image: {
+        width: 35,
+        height: 35,
+        borderRadius: 35 / 2,
+        borderColor: '#2c3e50',
+        borderWidth: 1,
+        marginRight: 10
     }
 });
