@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Tile, ListItem, Icon } from 'react-native-elements';
+import {
+    ScrollView,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    View,
+    Image
+} from 'react-native';
+import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 
 import { NavigationHeader } from '../../components/NavigationDrawer';
@@ -21,7 +28,8 @@ export default class Me extends Component {
             user: {
                 lastname: '',
                 firstname: '',
-                email: ''
+                email: '',
+                img: ''
             }
         };
     }
@@ -29,7 +37,14 @@ export default class Me extends Component {
     componentDidMount() {
         storage.getTokenAsyncStorage().then(token => {
             if (token) {
-                api.get('whoami').then(user => this.setState({ user }));
+                api.get('whoami').then(user => {
+                    api.post('download', {
+                        id: user.id_user,
+                        type: 'user'
+                    }).then(img => {
+                        this.setState({ user, img });
+                    });
+                });
             } else {
                 this.props.navigation.navigate('Auth');
             }
@@ -41,7 +56,7 @@ export default class Me extends Component {
     };
 
     render() {
-        const { user } = this.state;
+        const { user, img } = this.state;
 
         return (
             <>
@@ -55,27 +70,40 @@ export default class Me extends Component {
                 {user ? (
                     <SafeAreaView style={styles.container}>
                         <ScrollView>
-                            <Tile
-                                //Faire une condition si il y a une image d'enregistré
-                                //imageSrc={'../../../utils/img/userAnonymous.png'}
-                                featured
-                                title={'Profil'}
-                            />
-                            <ListItem
-                                title="Nom"
-                                rightTitle={user.lastname}
-                                hideChevron
-                            />
-                            <ListItem
-                                title="Prénom"
-                                rightTitle={user.firstname}
-                                hideChevron
-                            />
-                            <ListItem
-                                title="Email"
-                                rightTitle={user.email}
-                                hideChevron
-                            />
+                            <View
+                                style={{
+                                    margin: 20,
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Image
+                                    source={
+                                        !img ||
+                                        img.length < 1 ||
+                                        img === undefined
+                                            ? require('../../../utils/img/userAnonymous.png')
+                                            : uri`http://www.geoscout.fr:5555${img}`
+                                    }
+                                    style={{
+                                        width: 150,
+                                        height: 150,
+                                        borderRadius: 150 / 2,
+                                        borderColor: '#2c3e50',
+                                        borderWidth: 1
+                                    }}
+                                />
+                            </View>
+                            <View
+                                style={{
+                                    alignItems: 'center',
+                                    justifyContent: 'center'
+                                }}
+                            >
+                                <Text style={styles.profilName}>
+                                    {user.lastname} {user.firstname}
+                                </Text>
+                            </View>
                         </ScrollView>
                         <TouchableOpacity
                             style={styles.button}
@@ -96,6 +124,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        justifyContent: 'center',
         backgroundColor: 'white'
     },
     button: {
@@ -109,5 +138,9 @@ const styles = StyleSheet.create({
     textButton: {
         color: '#fff',
         fontSize: 18
+    },
+    profilName: {
+        color: '#2c3e50',
+        fontSize: 28
     }
 });

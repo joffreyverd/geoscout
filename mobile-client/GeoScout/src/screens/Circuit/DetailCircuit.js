@@ -16,24 +16,35 @@ import { Icon } from 'react-native-elements';
 
 import api from '../../config/httpMethods';
 import fileSystem from '../../config/fileSystem';
+import ListComment from '../../components/ListComment';
+import Carousel from '../../components/Carousel';
+import evaluations from '../../../utils/json/evaluations.json';
 
 export default class DetailCircuit extends React.Component {
     constructor() {
         super();
         this.state = {
-            isDownload: null
+            isDownload: false,
+            evaluations: evaluations,
+            images: []
         };
     }
 
-    componentDidMount() {
-        const {
-            state: {
-                params: { id_circuit }
-            }
-        } = this.props.navigation;
-        fileSystem.checkCircuitExist(id_circuit).then(isDownload => {
-            this.setState({ isDownload: isDownload });
-        });
+    async componentDidMount() {
+        const { id_circuit } = this.props.navigation.state.params;
+        try {
+            const isDownload = await fileSystem.checkCircuitExist(id_circuit);
+            const images = await api.post('download', {
+                id: id_circuit,
+                type: 'circuit'
+            });
+            // const evaluations = await api.get(`evaluation/${id_circuit}`)
+            // this.setState({evaluations});
+            this.setState({ isDownload, images });
+        } catch (error) {
+            console.log('error try/catch detailCircuit');
+            console.log(error);
+        }
     }
 
     alertUser(playOrDownload) {
@@ -141,7 +152,7 @@ export default class DetailCircuit extends React.Component {
             description,
             id_circuit
         } = this.props.navigation.state.params;
-        const { isDownload } = this.state;
+        const { isDownload, evaluations, images } = this.state;
         return (
             <>
                 <NavigationHeader
@@ -152,23 +163,33 @@ export default class DetailCircuit extends React.Component {
                     }
                 />
                 <SafeAreaView style={styles.container}>
-                    <Text style={styles.title}>{name}</Text>
                     <ScrollView
+                        showsHorizontalScrollIndicator={false}
                         style={{
                             flex: 1
                         }}
                     >
+                        <Text style={styles.title}>{name}</Text>
+                        <Carousel images={images} />
                         {description !== undefined &&
                         description != null &&
                         description != '' ? (
                             <HTML
-                                html={description}
+                                html={description.replace(/<p><br><\/p>/g, '')}
                                 imagesMaxWidth={Dimensions.get('window').width}
                             />
                         ) : (
                             <Text style={styles.description}>
                                 Pas de description disponible sur ce circuit.
                             </Text>
+                        )}
+                        {evaluations && evaluations.length && (
+                            <>
+                                <Text style={styles.commentSection}>
+                                    Commentaires :
+                                </Text>
+                                <ListComment evaluations={evaluations} />
+                            </>
                         )}
                     </ScrollView>
                     <View style={styles.buttonWrapper}>
@@ -234,7 +255,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#1abc9c',
         fontWeight: 'bold',
-        fontSize: 30
+        fontSize: 24
     },
     description: {
         color: '#2c3e50',
@@ -258,5 +279,13 @@ const styles = StyleSheet.create({
     textButton: {
         color: '#fff',
         fontSize: 18
+    },
+    commentSection: {
+        textAlign: 'left',
+        color: '#1abc9c',
+        fontWeight: 'bold',
+        fontSize: 24
     }
 });
+
+//<h1><strong>Un chouette circuit de présentation du projet Akrobat</strong></h1><p><strong>Pourquoi pas découvrir Strasbourg avec les professeurs de la Licence CDAD ?</strong></p><p><br></p><p><u>Amusement garanti !</u></p><p><br></p><p><s>Interdit aux débutants en randonnée</s></p><p><br></p><blockquote>Derrière la montagne se cache l'horizon.</blockquote><p><br></p><ol><li>Plusieurs étapes</li><li>Enigmes à résoudre</li><li>Classement général</li><li>Une boisson à l'arrivée</li></ol><p class="ql-indent-1"><br></p><p><a href="http://iutrs.unistra.fr/" target="_blank">Le lien vers le site de l'IUT</a></p><p><br></p><p>A bientôt !</p>

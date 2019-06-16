@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-    TouchableWithoutFeedback,
-    ScrollView,
-    View,
-    Dimensions
-} from 'react-native';
+import { TouchableWithoutFeedback, ScrollView, View } from 'react-native';
 import api from '../config/httpMethods';
 import fileSystem from '../config/fileSystem';
 import Callout from './Callout';
@@ -23,7 +18,6 @@ export default class ListCircuit extends React.Component {
         try {
             if (type == 'local') {
                 const circuits = await fileSystem.getCircuitsExist();
-                console.log(circuits);
                 if (
                     circuits != null &&
                     circuits != '' &&
@@ -33,8 +27,6 @@ export default class ListCircuit extends React.Component {
                 }
             } else if (type == 'api') {
                 const circuits = await api.get(root);
-                console.log(circuits);
-                console.log('fin circuits');
                 this.setState({ circuits, isReady: true });
             }
         } catch (error) {
@@ -46,7 +38,7 @@ export default class ListCircuit extends React.Component {
         const { circuits, isReady } = this.state;
         const { navigate, format } = this.props;
         return (
-            <ScrollView>
+            <ScrollView showsHorizontalScrollIndicator={false}>
                 {isReady &&
                     circuits.map(item => (
                         <TouchableWithoutFeedback

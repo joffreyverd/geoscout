@@ -45,6 +45,7 @@ async function checkCircuitExist(fileUri) {
         );
         return jsonInfo.exists;
     } catch (error) {
+        console.log('error try/catch fileSystem => checkCircuitExist');
         console.log(error);
     }
 }
