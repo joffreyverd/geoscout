@@ -9,7 +9,7 @@ module.exports = (sequelize,DataTypes) =>
 			lastname : {type : DataTypes.STRING, allowNull : true},
 			email : {type : DataTypes.STRING, allowNull : true,unique: true},
 			password : {type : DataTypes.STRING, allowNull : true},
-			is_admin : {type : DataTypes.BOOLEAN, allowNull : false}
+			is_admin : {type : DataTypes.BOOLEAN, defaultValue : 0}
 		},
 
 		{createdAt: false, updatedAt: false}

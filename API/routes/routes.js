@@ -15,10 +15,10 @@ module.exports = function(app)
 {
 	app.route('/upload').post(upload.any('file'),images.upload);
 	app.route('/download').post(images.download);
-	app.route('/delete').delete(images.delete);
-	app.route('/signup').post(user.createUser);
+	app.route('/delete').post(images.delete);
 	app.route('/signup').post(user.createUser);
 	app.route('/signin').post(user.login);
+	app.route('/update-user').post(user.updateUser);
 	app.route('/whoami').get(user.whoami);
 	app.route('/relations').get(user.listRelations);
 	app.route('/ask-relation/:id_user').put(user.askRelation);
@@ -28,7 +28,7 @@ module.exports = function(app)
 	app.route('/favorites/:id_circuit').delete(user.deleteFavorite);
 	app.route('/evaluations/:id_circuit').get(evaluation.evaluationsCircuit);
 	app.route('/evaluations').post(evaluation.createEvaluation);	
-	//app.route('/step/:id_step').get(step.step);
+	app.route('/step/:id_step').get(step.step);
 	app.route('/step/:id_step').put(step.updateStep);
 	app.route('/step/:id_circuit/:id_step').delete(step.deleteStep);
 	app.route('/steps/:id_circuit').get(step.stepCircuit);
