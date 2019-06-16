@@ -64,6 +64,21 @@ module.exports =
 						]
 					});
 
+				circuit.images = await utils.getFiles('circuit',circuit.id_circuit);
+
+				let stepImages = [];
+
+				let steps = circuit.Steps.map(async step =>
+				{
+					stepImages = await utils.getFiles('step',step.id_step);
+					if(!stepImages.length)
+						return step.images = [];
+					else
+						return step.images = stepImages;
+				});
+
+
+				circuit.Steps = await Promise.all(steps);
 				
 				res.status(200).send(utils.averageStars(circuit));
 			}

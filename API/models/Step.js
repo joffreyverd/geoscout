@@ -12,7 +12,8 @@ module.exports = (sequelize,DataTypes) =>
 			order : {type : DataTypes.INTEGER, allowNull : true},
 			instruction : {type : DataTypes.STRING, allowNull : true},
 			validation : {type : DataTypes.BOOLEAN, allowNull : true},
-			compass : {type : DataTypes.BOOLEAN,allowNull : true, defaultValue : false}
+			compass : {type : DataTypes.BOOLEAN,allowNull : true, defaultValue : false},
+			images: {type : DataTypes.VIRTUAL}
 		},
 		{createdAt: false, updatedAt: false}
 	);

@@ -18,6 +18,7 @@ module.exports = function(app)
 	app.route('/delete').post(images.delete);
 	app.route('/signup').post(user.createUser);
 	app.route('/signin').post(user.login);
+	app.route('/update-user').post(user.updateUser);
 	app.route('/whoami').get(user.whoami);
 	app.route('/relations').get(user.listRelations);
 	app.route('/ask-relation/:id_user').put(user.askRelation);

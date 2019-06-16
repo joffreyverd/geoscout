@@ -14,6 +14,7 @@ module.exports = (sequelize,DataTypes) =>
 			version : {type : DataTypes.TINYINT,allowNull : false},
 			level : {type : DataTypes.ENUM('0','1','2'), allowNull : false},
 			avgStars: {type : DataTypes.VIRTUAL, defaultValue : 0},
+			images: {type : DataTypes.VIRTUAL, defaultValue : []},
 			blocked : {type : DataTypes.BOOLEAN, defaultValue : false},
 			real_duration : {type : DataTypes.FLOAT}
 		},

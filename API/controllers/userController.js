@@ -21,7 +21,6 @@ module.exports =
 					'password' : await bcrypt.hash(req.body.password, 12),
 					'firstname' : req.body.firstname,
 					'lastname' : req.body.lastname,
-					'picture' : req.body.picture
 				},{transaction : t});
 
 			await t.commit();
@@ -51,7 +50,7 @@ module.exports =
 				user.lastname = req.body.lastname;
 				await user.save({transaction : t});
 				await t.commit();
-				res.sendStatus(204);
+				res.status(200).send({User : {firstname : user.firstname,lastname : user.lastname, id_user : user.id_user}});
 			}
 
 			catch(err)
@@ -106,7 +105,7 @@ module.exports =
 				if (err) 
 					return res.status(401).send(utils.messages.invalidToken);
 				else
-					res.status(200).send(await db.User.findByPk(decoded.id_user));	
+					res.status(200).send(await db.User.findByPk(decoded.id_user,{attributes : ['id_user','firstname','lastname','email']}));	
 			});
 		}
 
