@@ -7,7 +7,8 @@ import {
     View,
     ScrollView,
     Dimensions,
-    ToastAndroid
+    ToastAndroid,
+    ActivityIndicator
 } from 'react-native';
 import { NavigationHeader } from '../../components/NavigationDrawer';
 import { SafeAreaView } from 'react-navigation';
@@ -188,9 +189,7 @@ export default class DetailCircuit extends React.Component {
                                 </Text>
                                 <ListComment evaluations={evaluations} />
                             </>
-                        ) : (
-                            <ActivityIndicator size="large" color="#1abc9c" />
-                        )}
+                        ) : null}
                     </ScrollView>
                     <View style={styles.buttonWrapper}>
                         <TouchableOpacity
