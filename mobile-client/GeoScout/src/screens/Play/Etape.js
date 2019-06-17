@@ -93,6 +93,7 @@ class Etape extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
+        console.log(step.description);
 
         return (
             <AndroidBackHandler onBackPress={this.onBackPress}>
@@ -122,14 +123,14 @@ class Etape extends React.Component {
                     >
                         <Text style={styles.title}>{step.name}</Text>
                         <ScrollView style={{ flex: 1 }}>
-                            {step.description && (
+                            {step.description ? (
                                 <HTML
                                     html={step.description}
                                     imagesMaxWidth={
                                         Dimensions.get('window').width
                                     }
                                 />
-                            )}
+                            ) : null}
                         </ScrollView>
                     </View>
                     <View
@@ -218,8 +219,8 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         color: '#1abc9c',
-        fontSize: 28,
-        marginTop: 30,
+        fontSize: 24,
+        marginTop: 20,
         marginBottom: 30,
         fontWeight: 'bold'
     },

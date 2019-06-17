@@ -167,9 +167,7 @@ export default class DetailCircuit extends React.Component {
                     >
                         <Text style={styles.title}>{name}</Text>
                         <Carousel images={images} />
-                        {description !== undefined &&
-                        description != null &&
-                        description != '' ? (
+                        {description ? (
                             <HTML
                                 html={description.replace(
                                     /<p[^>]*?><br><\/p>/g,
