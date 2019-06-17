@@ -25,7 +25,7 @@ module.exports=
 									model : db.Evaluation
 								}
 							]
-						});
+						}); //datestamp du circuit / firstname et lastname de l'auteur
 					
 					res.json(utils.averageStars(circuits));
 				}

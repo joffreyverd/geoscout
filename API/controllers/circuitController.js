@@ -5,6 +5,8 @@ const db = require('../models');
 const utils = require('./utils');
 module.exports = 
 {
+	// toutes les requetes qui renvoient des circuits (sauf celle pour renvoyer les circuit créer de l'user en cours) ne pas renvoyer les circuits bloqués
+
 	circuit : async (req,res) => 
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
@@ -13,7 +15,7 @@ module.exports =
 			let circuit = await db.Circuit.findByPk(req.params.id_circuit,
 				{
 					attributes : ['name','description','duration','need_internet','level'],
-					include : 
+					include :
 					[
 						{
 							model : db.Favorite,
