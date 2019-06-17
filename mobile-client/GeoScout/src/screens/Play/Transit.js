@@ -6,10 +6,11 @@ import {
     Alert,
     StyleSheet,
     ScrollView,
-    View
+    View,
+    ToastAndroid
     //Dimensions
 } from 'react-native';
-import { Location, TaskManager } from 'expo';
+import * as Location from 'expo-location';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 //import HTML from 'react-native-render-html';
 

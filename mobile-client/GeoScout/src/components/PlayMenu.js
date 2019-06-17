@@ -1,5 +1,5 @@
 import React from 'react';
-import { Location } from 'expo';
+import * as Location from 'expo-location';
 import { Text, StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
 import Drawer from 'react-native-drawer-menu';
