@@ -6,19 +6,21 @@ import {
     Alert,
     StyleSheet,
     ScrollView,
-    View
+    View,
+    ToastAndroid
     //Dimensions
 } from 'react-native';
-import { Location, TaskManager } from 'expo';
+import * as Location from 'expo-location';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 //import HTML from 'react-native-render-html';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
-
-// Nom de la variable dans AsyncStorage
-const DETECTED = 'stepDetected';
-
-const DETECT_STEP = 'step-location-detection_task';
+import {
+    DETECTED,
+    DETECT_STEP,
+    startLocationTask,
+    stopLocationTask
+} from '../../config/LocationTask';
 
 class Transit extends React.Component {
     state = {};
@@ -32,21 +34,14 @@ class Transit extends React.Component {
             startingTime,
             time
         } = this.props.navigation.state.params;
+        // Récupération de l'étape en cours
         const step = circuit.Steps[stepNumber];
+
         if (step) {
             if (step.validation) {
-                console.log('searching geoloc');
-                Location.startGeofencingAsync(DETECT_STEP, [
-                    {
-                        latitude: step.latitude,
-                        longitude: step.longitude,
-                        radius: 50,
-                        notifyOnEnter: true,
-                        notifyOnExit: false
-                    }
-                ]);
+                startLocationTask(step);
                 this.setState({
-                    interval: setInterval(this.enterStepLocation, 1000)
+                    interval: setInterval(this.hasEnteredStepLocation, 1000)
                 });
             }
         } else {
@@ -74,34 +69,41 @@ class Transit extends React.Component {
         this.refMenu = ref;
     };
 
-    enterStepLocation = () => {
-        // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
-        AsyncStorage.getItem(DETECTED).then(x => {
-            if (x === null) return;
-            const { interval } = this.state;
-            // Suppresion de la variable
-            AsyncStorage.removeItem(DETECTED);
-            // Arrêt de l'intervalle
-            clearInterval(interval);
-            Location.stopGeofencingAsync(DETECT_STEP);
-
-            const {
-                navigation: {
-                    state: {
-                        params: { step }
-                    }
-                }
-            } = this.props;
-
-            Alert.alert(
-                'Arrivé',
-                step === 0
-                    ? 'Vous êtes arrivé au point de départ'
-                    : `Vous êtes arrivé à l'étape ${step}`,
-                [{ text: 'Valider', onPress: this.goToStep }],
-                { cancelable: false }
-            );
+    hasEnteredStepLocation = async () => {
+        Location.hasStartedGeofencingAsync(DETECT_STEP).then(x => {
+            ToastAndroid.show(x ? 'true' : 'false', ToastAndroid.SHORT);
         });
+        // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
+        const x = await AsyncStorage.getItem(DETECTED);
+        if (x === null) return;
+
+        const { interval } = this.state;
+        // Suppression de la variable
+        AsyncStorage.removeItem(DETECTED);
+        // Arrêt de l'intervalle
+        clearInterval(interval);
+        stopLocationTask();
+
+        this.arrived();
+    };
+
+    arrived = () => {
+        const {
+            navigation: {
+                state: {
+                    params: { step }
+                }
+            }
+        } = this.props;
+
+        Alert.alert(
+            'Arrivé',
+            step === 0
+                ? 'Vous êtes arrivé au point de départ'
+                : `Vous êtes arrivé à l'étape ${step}`,
+            [{ text: 'Valider', onPress: this.goToStep }],
+            { cancelable: false }
+        );
     };
 
     /**
@@ -155,6 +157,12 @@ class Transit extends React.Component {
         } = this.props;
         const step = circuit.Steps[stepNumber];
 
+        const title =
+            'Transit ' +
+            (step.order === 0
+                ? 'initial'
+                : `${step.order} / ${circuit.Steps.length - 1}`);
+
         if (step) {
             return (
                 <AndroidBackHandler onBackPress={this.onBackPress}>
@@ -173,34 +181,27 @@ class Transit extends React.Component {
                     >
                         <PlayHeader
                             pressMenu={() => this.refMenu.openDrawer()}
+                            title={title}
                         />
                         <View
-                            style={Object.assign(
-                                {},
-                                styles.containerTransit,
-                                styles.container
-                            )}
+                            style={[styles.containerTransit, styles.container]}
                         >
                             <Text style={styles.title}>
-                                Transit vers
+                                Vers
                                 {step.order === 0
                                     ? ' le point de départ'
-                                    : ` l'étape ${step.order} sur ${circuit
-                                          .Steps.length - 1}`}
+                                    : ` l'étape ${step.order}`}
                             </Text>
                             <ScrollView style={{ flex: 1 }}>
-                                {/* <HTML html={step.instruction} imagesMaxWidth={Dimensions.get('window').width} /> */}
-                                <Text style={styles.description}>
-                                    {step.instruction}
-                                </Text>
+                                {step.description ? (
+                                    <Text style={styles.description}>
+                                        {step.instruction}
+                                    </Text>
+                                ) : null}
                             </ScrollView>
                         </View>
                         <View
-                            style={Object.assign(
-                                {},
-                                styles.containerButton,
-                                styles.container
-                            )}
+                            style={[styles.containerButton, styles.container]}
                         >
                             {step.validation ? (
                                 <>
@@ -243,19 +244,6 @@ class Transit extends React.Component {
     }
 }
 
-TaskManager.defineTask(DETECT_STEP, ({ data: { eventType }, error }) => {
-    if (error) {
-        console.log(error);
-        return;
-    }
-    if (eventType === Location.GeofencingEventType.Enter) {
-        console.log('Arrivé');
-        AsyncStorage.setItem(DETECTED, 'true').then(() => {
-            // Notifier l'utilisateur (Vibration ?)
-        });
-    }
-});
-
 export default Transit;
 
 const styles = StyleSheet.create({
@@ -273,8 +261,8 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         color: '#1abc9c',
-        fontSize: 28,
-        marginTop: 30,
+        fontSize: 24,
+        marginTop: 20,
         marginBottom: 30,
         fontWeight: 'bold'
     },
