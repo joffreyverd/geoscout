@@ -5,14 +5,7 @@ import { Header, Icon } from 'react-native-elements';
 import Drawer from 'react-native-drawer-menu';
 
 import api from '../config/httpMethods';
-
-const DETECT_STEP = 'step-location-detection_task';
-
-const stopTask = () => {
-    Location.hasStartedGeofencingAsync(DETECT_STEP).then(x => {
-        if (x) Location.stopGeofencingAsync(DETECT_STEP);
-    });
-};
+import { stopLocationTask } from '../config/LocationTask';
 
 export function PlayDrawerMenu({
     setRefMenu,
@@ -28,7 +21,7 @@ export function PlayDrawerMenu({
      * Fonction de pause d'un circuit
      */
     const pause = () => {
-        stopTask();
+        stopLocationTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
         api.post('achievedcircuit', {
             id_circuit,
@@ -49,7 +42,7 @@ export function PlayDrawerMenu({
      * Fonction d'abandon d'un circuit
      */
     const abandon = () => {
-        stopTask();
+        stopLocationTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
         api.post('achievedcircuit', {
             id_circuit,
