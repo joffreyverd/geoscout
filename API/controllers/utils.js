@@ -68,7 +68,7 @@ module.exports =
 			Math.cos(Math.radians(lat1)) * Math.cos(Math.radians(lat2)) *
 			Math.sin(dLon / 2) * Math.sin(dLon / 2);
 		let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-		return Math.round(R * c);
+		return (R * c);
 	},
 
 	evaluateDistance : async (id_circuit,db) =>
@@ -82,11 +82,12 @@ module.exports =
 			let dist = 0;
 			circuit.Steps.map(step => 
 			{
-				dist+= module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude);
+				dist+= parseFloat(module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude));
+				
 			});
-
-			circuit.length = dist;
-			await circuit.save({transaction: t});
+			console.log(dist.toFixed(1));
+			circuit.length = dist.toFixed(2);
+			//await circuit.save({transaction: t});
 			await t.commit();	
 		}
 

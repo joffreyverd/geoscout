@@ -55,7 +55,7 @@ module.exports = function(app)
 	app.route('/question').post(question.createQuestion);
 	app.route('/question/:id_question').put(question.updateQuestion);
 	app.route('/download-user/:id_user').get(user.downloadUser);
-
+	app.route('/published-circuits').get(circuit.publishedCircuits);
 	app.route('/circuits-admin').get(admin.circuitsAdmin);
 	app.route('/circuits-admin/:id_circuit').put(admin.blockCircuit);
 };
