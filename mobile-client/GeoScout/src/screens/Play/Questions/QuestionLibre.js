@@ -10,7 +10,17 @@ import {
     Alert,
     KeyboardAvoidingView
 } from 'react-native';
-//import HTML from 'react-native-render-html';
+
+/**
+ * Formatage d'une chaîne de réponse pour la comparer à d'autres
+ * @param {String}  : la chaîne a modifié
+ */
+function formatResponse(str) {
+    return str
+        .toLowerCase()
+        .normalize('NFD') // Séparation lettres-accents
+        .replace(/[^a-z0-9%,]/g, ''); // Suppression de tous les caractères spéciaux
+}
 
 export default class QuestionLibre extends React.Component {
     state = {
@@ -22,26 +32,29 @@ export default class QuestionLibre extends React.Component {
         const {
             question: { response: trueResponse, difficulty }
         } = this.props.navigation.state.params;
+
         const { userResponse } = this.state;
+
         let isGood = '',
-            score = 0;
+            score = 0,
+            gain = '';
         let maxScore = 15;
         if (difficulty) maxScore = difficulty * 5;
 
-        if (
-            userResponse &&
-            userResponse.toLowerCase().trim() ===
-                trueResponse.toLowerCase().trim()
-        ) {
-            isGood = 'Bonne réponse';
-            score = 10;
+        const responses = formatResponse(trueResponse).split(',');
+
+        if (userResponse && responses.includes(formatResponse(userResponse))) {
+            isGood = 'bonne réponse';
+            score = maxScore;
+            gain = `vous avez gagnez ${score} points`;
         } else {
-            isGood = 'Mauvaise réponse';
+            isGood = 'mauvaise réponse';
+            gain = 'vous ne gagnez pas de point';
         }
 
         Alert.alert(
-            isGood,
-            `C'est une ${isGood} , vous avez gagnez ${score} point(s)`,
+            isGood[0].toUpperCase() + isGood.slice(1),
+            `C'est une ${isGood} , ${gain}.`,
             [
                 {
                     text: 'Ok',
@@ -67,7 +80,6 @@ export default class QuestionLibre extends React.Component {
             >
                 <View style={[styles.container, styles.containerQuestion]}>
                     <ScrollView>
-                        {/* <HTML html={wording} imagesMaxWidth={Dimensions.get('window').width} /> */}
                         <Text style={styles.description}>{wording}</Text>
                     </ScrollView>
 

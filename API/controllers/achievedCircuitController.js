@@ -83,6 +83,7 @@ module.exports=
 						[
 							{
 								model : db.Circuit,
+								where : {blocked : 0},
 								include : 
 								[
 									{

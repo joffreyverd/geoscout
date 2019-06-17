@@ -8,10 +8,8 @@ import ListCircuit from '../../components/ListCircuit';
 
 export default class FavoriteCircuit extends React.Component {
     static navigationOptions = {
-        drawerLabel: 'Favoris',
-        drawerIcon: () => (
-            <Icon name="favorite" type="material" color="#1abc9c" />
-        )
+        drawerLabel: 'Mes circuits',
+        drawerIcon: () => <Icon name="flag" type="material" color="#1abc9c" />
     };
 
     render() {
@@ -19,7 +17,7 @@ export default class FavoriteCircuit extends React.Component {
             <>
                 <NavigationHeader
                     pressMenu={this.props.navigation.openDrawer}
-                    titleText={'Favoris'}
+                    titleText={'Mes circuits'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
                     }
@@ -27,8 +25,8 @@ export default class FavoriteCircuit extends React.Component {
                 <SafeAreaView style={styles.container}>
                     <ListCircuit
                         type={'api'}
-                        format={false}
-                        root={'favorites'}
+                        root={'my-circuits'}
+                        format={true}
                         navigate={this.props.navigation.navigate}
                     />
                 </SafeAreaView>

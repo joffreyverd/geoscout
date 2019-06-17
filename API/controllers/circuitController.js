@@ -13,7 +13,8 @@ module.exports =
 			let circuit = await db.Circuit.findByPk(req.params.id_circuit,
 				{
 					attributes : ['name','description','duration','need_internet','level'],
-					include : 
+					where: {blocked : 0},
+					include :
 					[
 						{
 							model : db.Favorite,
@@ -46,7 +47,7 @@ module.exports =
 			{
 				let circuit = await db.Circuit.findOne(
 					{
-						where : {id_circuit : req.params.id_circuit},
+						where : {id_circuit : req.params.id_circuit, blocked : 0},
 						include : 
 						[
 							{
@@ -64,6 +65,21 @@ module.exports =
 						]
 					});
 
+				circuit.images = await utils.getFiles('circuit',circuit.id_circuit);
+
+				let stepImages = [];
+
+				let steps = circuit.Steps.map(async step =>
+				{
+					stepImages = await utils.getFiles('step',step.id_step);
+					if(!stepImages.length)
+						return step.images = [];
+					else
+						return step.images = stepImages;
+				});
+
+
+				circuit.Steps = await Promise.all(steps);
 				
 				res.status(200).send(utils.averageStars(circuit));
 			}
@@ -97,7 +113,7 @@ module.exports =
 
 			let circuits = await db.Circuit.findAll(
 				{
-					where : {id_circuit : steps_within_range, published : 1},
+					where : {id_circuit : steps_within_range, published : 1, blocked : 0},
 					attributes : ['id_circuit','name' ,'description','length','duration','need_internet','published','level','version'],
 					include : 
 					[
@@ -128,7 +144,11 @@ module.exports =
 	{
 		try
 		{
-			res.status(200).send(await db.Circuit.findAll());
+			res.status(200).send(await db.Circuit.findAll(
+				{
+					where : {blocked : false}
+				}
+			));
 		}
 		
 		catch(err)
@@ -271,7 +291,7 @@ module.exports =
 		{
 			try
 			{
-				res.json(await db.Circuit.findAll({where : {published : true}}));
+				res.json(await db.Circuit.findAll({where : {published : true, blocked : 0}}));
 			}
 
 			catch(err)

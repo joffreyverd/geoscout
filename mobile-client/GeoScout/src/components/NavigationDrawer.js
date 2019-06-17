@@ -8,6 +8,7 @@ export const DrawerContent = ({ items, ...props }) => {
     const drawerItems = [
         'GeoLocation',
         'Me',
+        'MyCircuits',
         'DownloadCircuit',
         'FavoriteCircuit'
     ];

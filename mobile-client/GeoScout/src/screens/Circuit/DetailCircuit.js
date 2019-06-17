@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     Alert,
+    View,
     ScrollView,
     Dimensions,
     ToastAndroid
@@ -15,34 +16,43 @@ import { Icon } from 'react-native-elements';
 
 import api from '../../config/httpMethods';
 import fileSystem from '../../config/fileSystem';
+import ListComment from '../../components/ListComment';
+import Carousel from '../../components/Carousel';
 
 export default class DetailCircuit extends React.Component {
     constructor() {
         super();
         this.state = {
-            isDownload: null
+            isDownload: false,
+            evaluations: [],
+            images: [],
+            circuit: null
         };
     }
 
-    componentDidMount() {
-        fileSystem.deleteFile(37);
-        const {
-            state: {
-                params: { id_circuit }
+    async componentDidMount() {
+        const { id_circuit } = this.props.navigation.state.params;
+        try {
+            var images = [];
+            var circuit = null;
+            const isDownload = await fileSystem.checkCircuitExist(id_circuit);
+            if (isDownload) {
+                circuit = await fileSystem.readFile(id_circuit);
+            } else {
+                circuit = await api.get('download-circuit/' + id_circuit);
             }
-        } = this.props.navigation;
-        fileSystem.checkCircuitExist(id_circuit).then(isDownload => {
-            this.setState({ isDownload: isDownload });
-        });
+            images = circuit.images;
+            const evaluations = await api.get(`evaluations/${id_circuit}`);
+            this.setState({ isDownload, images, evaluations, circuit });
+        } catch (error) {
+            console.log('error try/catch detailCircuit');
+            console.log(error);
+        }
     }
 
     alertUser(playOrDownload) {
-        const {
-            navigate,
-            state: {
-                params: { id_circuit }
-            }
-        } = this.props.navigation;
+        const { circuit } = this.state;
+        const { navigate } = this.props.navigation;
         Alert.alert(
             playOrDownload ? 'Hopla' : 'Télécharger',
             playOrDownload
@@ -61,7 +71,7 @@ export default class DetailCircuit extends React.Component {
                     onPress: async () => {
                         if (playOrDownload) {
                             navigate('Transit', {
-                                circuit: await fileSystem.readFile(id_circuit),
+                                circuit: circuit,
                                 step: 0,
                                 score: 0,
                                 maxScore: 0,
@@ -84,53 +94,52 @@ export default class DetailCircuit extends React.Component {
                 params: { id_circuit }
             }
         } = this.props.navigation;
-        api.get('download-circuit/' + id_circuit)
-            .then(async data => {
-                data.Steps.sort((a, b) => a.order - b.order);
-                await fileSystem.writeFile(id_circuit, data);
-                Alert.alert(
-                    'Circuit télécharger !',
-                    "Partons à l'aventure ?",
-                    [
-                        {
-                            text: 'Non',
-                            onPress: () => {
-                                navigate('Home');
-                            },
-                            style: 'cancel'
+        const { circuit } = this.state;
+        try {
+            circuit.Steps.sort((a, b) => a.order - b.order);
+            fileSystem.writeFile(id_circuit, circuit);
+            Alert.alert(
+                'Circuit téléchargé !',
+                "Partons à l'aventure ?",
+                [
+                    {
+                        text: 'Non',
+                        onPress: () => {
+                            navigate('Home');
                         },
-                        {
-                            text: 'Oui',
-                            onPress: () => {
-                                navigate('Transit', {
-                                    circuit: data,
-                                    step: 0,
-                                    score: 0,
-                                    maxScore: 0,
-                                    time: 0
-                                });
-                            }
+                        style: 'cancel'
+                    },
+                    {
+                        text: 'Oui',
+                        onPress: () => {
+                            navigate('Transit', {
+                                circuit: circuit,
+                                step: 0,
+                                score: 0,
+                                maxScore: 0,
+                                time: 0
+                            });
                         }
-                    ],
-                    { cancelable: true }
-                );
-            })
-            .catch(() => {
-                Alert.alert(
-                    'Oh mince...',
-                    'Une erreur est survenue, merci de réessayer et de vérifier votre connexion internet.',
-                    [
-                        {
-                            text: 'Ok',
-                            onPress: () => {
-                                navigate('Home');
-                            },
-                            style: 'cancel'
-                        }
-                    ],
-                    { cancelable: false }
-                );
-            });
+                    }
+                ],
+                { cancelable: true }
+            );
+        } catch (error) {
+            Alert.alert(
+                'Oh mince...',
+                'Une erreur est survenue, merci de réessayer et de vérifier votre connexion internet.',
+                [
+                    {
+                        text: 'Ok',
+                        onPress: () => {
+                            navigate('Home');
+                        },
+                        style: 'cancel'
+                    }
+                ],
+                { cancelable: false }
+            );
+        }
     };
 
     render() {
@@ -139,7 +148,7 @@ export default class DetailCircuit extends React.Component {
             description,
             id_circuit
         } = this.props.navigation.state.params;
-        const { isDownload } = this.state;
+        const { isDownload, evaluations, images } = this.state;
         return (
             <>
                 <NavigationHeader
@@ -150,57 +159,87 @@ export default class DetailCircuit extends React.Component {
                     }
                 />
                 <SafeAreaView style={styles.container}>
-                    <Text style={styles.title}> {name} </Text>
                     <ScrollView
+                        showsHorizontalScrollIndicator={false}
                         style={{
                             flex: 1
                         }}
                     >
-                        <HTML
-                            html={description}
-                            imagesMaxWidth={Dimensions.get('window').width}
-                        />
-                    </ScrollView>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            api.put('favorites/' + id_circuit)
-                                .then(() =>
-                                    ToastAndroid.show(
-                                        'Circuit Ajouté à vos favoris',
-                                        ToastAndroid.SHORT
-                                    )
-                                )
-                                .catch(() =>
-                                    ToastAndroid.show(
-                                        'Circuit déjà présent dans vos favoris',
-                                        ToastAndroid.SHORT
-                                    )
-                                );
-                        }}
-                    >
-                        <Text style={styles.textButton}>
-                            Ajouter au favoris
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => this.alertUser(isDownload)}
-                    >
-                        {isDownload ? (
+                        <Text style={styles.title}>{name}</Text>
+                        <Carousel images={images} />
+                        {description !== undefined &&
+                        description != null &&
+                        description != '' ? (
+                            <HTML
+                                html={description.replace(
+                                    /<p[^>]*?><br><\/p>/g,
+                                    ''
+                                )}
+                                imagesMaxWidth={Dimensions.get('window').width}
+                            />
+                        ) : (
+                            <Text style={styles.description}>
+                                Pas de description disponible sur ce circuit.
+                            </Text>
+                        )}
+                        {evaluations && evaluations.length ? (
                             <>
-                                <Icon name="play-circle-filled" color="white" />
-                                <Text style={styles.textButton}>Jouer</Text>
+                                <Text style={styles.commentSection}>
+                                    Commentaires :
+                                </Text>
+                                <ListComment evaluations={evaluations} />
                             </>
                         ) : (
-                            <>
-                                <Icon name="get-app" color="white" />
-                                <Text style={styles.textButton}>
-                                    Télécharger
-                                </Text>
-                            </>
+                            <Text style={styles.description}>
+                                Pas de commentaires disponible.
+                            </Text>
                         )}
-                    </TouchableOpacity>
+                    </ScrollView>
+                    <View style={styles.buttonWrapper}>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => {
+                                api.put('favorites/' + id_circuit)
+                                    .then(() =>
+                                        ToastAndroid.show(
+                                            'Circuit Ajouté à vos favoris',
+                                            ToastAndroid.SHORT
+                                        )
+                                    )
+                                    .catch(() =>
+                                        ToastAndroid.show(
+                                            'Circuit déjà présent dans vos favoris',
+                                            ToastAndroid.SHORT
+                                        )
+                                    );
+                            }}
+                        >
+                            <Text style={styles.textButton}>
+                                Ajouter au favoris
+                            </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.button}
+                            onPress={() => this.alertUser(isDownload)}
+                        >
+                            {isDownload ? (
+                                <>
+                                    <Icon
+                                        name="play-circle-filled"
+                                        color="white"
+                                    />
+                                    <Text style={styles.textButton}>Jouer</Text>
+                                </>
+                            ) : (
+                                <>
+                                    <Icon name="get-app" color="white" />
+                                    <Text style={styles.textButton}>
+                                        Télécharger
+                                    </Text>
+                                </>
+                            )}
+                        </TouchableOpacity>
+                    </View>
                 </SafeAreaView>
             </>
         );
@@ -212,27 +251,31 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: 'white',
         padding: 15,
-        paddingBottom: 25
+        paddingTop: 5,
+        paddingBottom: 0
     },
     title: {
+        textAlign: 'center',
         color: '#1abc9c',
         fontWeight: 'bold',
-        fontSize: 26
+        fontSize: 24
+    },
+    description: {
+        color: '#2c3e50',
+        fontSize: 18,
+        marginTop: 10
     },
     buttonWrapper: {
-        width: '100%',
-        flex: 1,
-        position: 'absolute',
-        bottom: 5,
-        justifyContent: 'center',
-        alignItems: 'center'
+        paddingTop: 10,
+        paddingBottom: 15
     },
     button: {
         backgroundColor: '#2c3e50',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
-        width: '100%',
+        width: '90%',
+        alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'baseline',
         flexDirection: 'row'
@@ -240,5 +283,14 @@ const styles = StyleSheet.create({
     textButton: {
         color: '#fff',
         fontSize: 18
+    },
+    commentSection: {
+        textAlign: 'left',
+        color: '#1abc9c',
+        fontWeight: 'bold',
+        fontSize: 24,
+        marginBottom: 10
     }
 });
+
+//<h1><strong>Un chouette circuit de présentation du projet Akrobat</strong></h1><p><strong>Pourquoi pas découvrir Strasbourg avec les professeurs de la Licence CDAD ?</strong></p><p><br></p><p><u>Amusement garanti !</u></p><p><br></p><p><s>Interdit aux débutants en randonnée</s></p><p><br></p><blockquote>Derrière la montagne se cache l'horizon.</blockquote><p><br></p><ol><li>Plusieurs étapes</li><li>Enigmes à résoudre</li><li>Classement général</li><li>Une boisson à l'arrivée</li></ol><p class="ql-indent-1"><br></p><p><a href="http://iutrs.unistra.fr/" target="_blank">Le lien vers le site de l'IUT</a></p><p><br></p><p>A bientôt !</p>

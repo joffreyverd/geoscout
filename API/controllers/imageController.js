@@ -110,6 +110,7 @@ module.exports =
 		let id_user = utils.verifToken(req.headers['authorization']);
 		if(id_user)
 		{
+			console.log(req.body);
 			try
 			{
 				let dest = '';

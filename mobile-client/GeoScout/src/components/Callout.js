@@ -13,12 +13,15 @@ export default function Callout(props) {
         distance,
         time,
         difficulty,
-        styleCallout
+        styleCallout,
+        callBy
     } = props;
     let descriptionPlanText = '';
-    if (description !== null && description !== undefined) {
+    if (description != null && description !== undefined && description != '') {
         descriptionPlanText = description.replace(/<br\s*[\/]?>/gi, '. ');
         descriptionPlanText = descriptionPlanText.replace(/(<([^>]+)>)/gi, '');
+    } else if (callBy == 'list' && description == null) {
+        descriptionPlanText = 'Pas de description disponible sur ce circuit.';
     }
     const sizeIcon = 12;
     const timeHour = Math.floor(time / 60);

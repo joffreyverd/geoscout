@@ -185,6 +185,7 @@ export default class GeoLocation extends React.Component {
                             distance={item.length}
                             time={150}
                             // difficulty={[1,0,1]}
+                            callBy={'geolocation'}
                         />
                     </MapView.Callout>
                 </MapView.Marker>

@@ -1,55 +1,54 @@
 import React from 'react';
-import {
-    TouchableWithoutFeedback,
-    ScrollView,
-    View,
-    Dimensions
-} from 'react-native';
+import { TouchableWithoutFeedback, ScrollView, View } from 'react-native';
 import api from '../config/httpMethods';
 import fileSystem from '../config/fileSystem';
 import Callout from './Callout';
 
-const { height, width } = Dimensions.get('window');
-
 export default class ListCircuit extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            circuits: null,
-            isReady: false
-        };
-    }
-    componentDidMount() {
+    state = {
+        circuits: null,
+        isReady: false
+    };
+
+    async componentDidMount() {
         const { type, root } = this.props;
-        if (type == 'local') {
-            console.log('local');
-            circuitsJSON = fileSystem.getCircuitsExist();
-            console.log(circuitsJSON);
-            if (circuitsJSON != null || circuitsJSON != '')
-                this.setState({ circuits: circuitsJSON, isReady: true });
-        } else {
-            console.log('api');
-            api.get(root)
-                .then(circuits => {
-                    this.setState({ circuits: circuits, isReady: true });
-                })
-                .catch(error => {
-                    console.log(error);
-                });
+        try {
+            if (type == 'local') {
+                const circuits = await fileSystem.getCircuitsExist();
+                if (
+                    circuits != null &&
+                    circuits != '' &&
+                    circuits !== undefined
+                ) {
+                    this.setState({ circuits, isReady: true });
+                }
+            } else if (type == 'api') {
+                const circuits = await api.get(root);
+                this.setState({ circuits, isReady: true });
+            }
+        } catch (error) {
+            console.log(error);
         }
     }
 
     render() {
         const { circuits, isReady } = this.state;
-        const { navigate } = this.props;
+        const { navigate, format } = this.props;
         return (
-            <ScrollView>
+            <ScrollView showsHorizontalScrollIndicator={false}>
                 {isReady &&
                     circuits.map(item => (
                         <TouchableWithoutFeedback
-                            key={item.id_circuit}
+                            key={
+                                format
+                                    ? item.id_circuit
+                                    : item.Circuit.id_circuit
+                            }
                             onPress={() => {
-                                navigate('DetailCircuit', item);
+                                navigate(
+                                    'DetailCircuit',
+                                    format ? item : item.Circuit
+                                );
                             }}
                         >
                             <View>
@@ -63,11 +62,26 @@ export default class ListCircuit extends React.Component {
                                         marginBottom: 10,
                                         borderRadius: 5
                                     }}
-                                    name={item.name}
-                                    description={item.description}
-                                    distance={item.length}
-                                    time={item.duration}
+                                    name={
+                                        format ? item.name : item.Circuit.name
+                                    }
+                                    description={
+                                        format
+                                            ? item.description
+                                            : item.Circuit.description
+                                    }
+                                    distance={
+                                        format
+                                            ? item.length
+                                            : item.Circuit.distance
+                                    }
+                                    time={
+                                        format
+                                            ? item.duration
+                                            : item.Circuit.time
+                                    }
                                     // difficulty={[1, 0, 1]}
+                                    callBy={'list'}
                                 />
                             </View>
                         </TouchableWithoutFeedback>

@@ -12,8 +12,9 @@ module.exports = (sequelize,DataTypes) =>
 			need_internet : {type : DataTypes.BOOLEAN,defaultValue : false, allowNull : false},
 			published : {type : DataTypes.BOOLEAN, allowNull : false},
 			version : {type : DataTypes.TINYINT,allowNull : false},
-			level : {type : DataTypes.ENUM('0','1','2'), allowNull : false},
+			level : {type : DataTypes.ENUM('0','1','2'), defaultValue : '0'},
 			avgStars: {type : DataTypes.VIRTUAL, defaultValue : 0},
+			images: {type : DataTypes.VIRTUAL, defaultValue : []},
 			blocked : {type : DataTypes.BOOLEAN, defaultValue : false},
 			real_duration : {type : DataTypes.FLOAT}
 		},
