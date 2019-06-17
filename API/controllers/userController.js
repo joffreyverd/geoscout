@@ -260,6 +260,8 @@ module.exports =
 			res.status(401).send(utils.messages.invalidToken); 
 	},
 
+	//////////////////////////////////////////////////////////
+
 	getFavorites : async (req,res) =>
 	{
 		try
@@ -293,6 +295,7 @@ module.exports =
 						[
 							{
 								model : db.Circuit,
+								where: {blocked : 0},
 								include : 
 								[
 									{
@@ -326,6 +329,8 @@ module.exports =
 		
 	},
 
+	//////////////////////////////////////////////////////////
+
 	setFavorite : async (req,res) =>
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
@@ -351,6 +356,8 @@ module.exports =
 			res.status(401).send(utils.messages.invalidToken);
 	},
 
+	//////////////////////////////////////////////////////////
+
 	deleteFavorite : async (req,res) =>
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
@@ -372,6 +379,40 @@ module.exports =
 			}	
 		}
 
+		else
+			res.status(401).send(utils.messages.invalidToken);
+	},
+
+	//////////////////////////////////////////////////////////
+
+	getCount : async(req,res) => 
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
+		{
+			let circuitCount = await db.Circuit.count(
+				{ 
+					where : { id_user : req.params.id_ser}
+				});
+			let circuitPlayed = await db.AchievedCircuit.count(
+				{ 
+					where : { id_user : req.params.id_user, statut_circuit : 1}
+				});
+			let commentPosted = await db.Evaluation.count(
+				{
+					where : { id_user : req.params.id_user}
+				}
+			);
+				
+			let response = 
+			{
+				"circuits_created" : circuitCount,
+				"circuits_played" : circuitPlayed,
+				"comments_posted" : commentPosted,
+			}
+
+			res.status(200).json(response);
+		}
 		else
 			res.status(401).send(utils.messages.invalidToken);
 	}

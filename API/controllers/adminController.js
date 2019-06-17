@@ -18,14 +18,18 @@ module.exports=
 					let circuits = await db.Circuit.findAll(
 						{
 							where : {published : true},
-							attributes : ['id_circuit','name','version','id_user','blocked'],
+							attributes : ['id_circuit','name','version','id_user','blocked','createdAt'],
 							include : 
 							[
 								{
 									model : db.Evaluation
+								},
+								{
+									model : db.User,
+									attributes : ['lastname','firstname']
 								}
 							]
-						});
+						}); //datestamp du circuit / firstname et lastname de l'auteur
 					
 					res.json(utils.averageStars(circuits));
 				}

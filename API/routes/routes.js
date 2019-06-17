@@ -21,6 +21,7 @@ module.exports = function(app)
 	app.route('/update-user').post(user.updateUser);
 	app.route('/whoami').get(user.whoami);
 	app.route('/relations').get(user.listRelations);
+	app.route("/user-info/:id_user").get(user.getCount);
 	app.route('/ask-relation/:id_user').put(user.askRelation);
 	app.route('/answer-relation/:id_user').put(user.answerRelation);
 	app.route('/favorites').get(user.getFavorites);

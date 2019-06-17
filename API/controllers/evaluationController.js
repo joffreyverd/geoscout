@@ -13,7 +13,7 @@ module.exports =
 			let t = await db.sequelize.transaction();
 			try
 			{
-				let circuit = await db.Circuit.findByPk(req.body.id_circuit,{attributes : ['version']});
+				let circuit = await db.Circuit.findByPK(req.body.id_circuit,{attributes : ['version']});
 				let evaluation = await db.Evaluation.create(
 					{
 						comment : req.body.comment,
