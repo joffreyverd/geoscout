@@ -5,7 +5,7 @@
         "privacy": "public",
         "sdkVersion": "32.0.0",
         "platforms": ["ios", "android"],
-        "version": "1.0.1",
+        "version": "0.5.1",
         "orientation": "portrait",
         "icon": "./assets/icon.png",
         "primaryColor": "#1abc9c",
@@ -24,8 +24,8 @@
         "android": {
             "package": "com.geoscout",
             "permissions": [
-                "ACCES_COARSE_LOCATION",
-                "ACCES_FINE_LOCATION",
+                "ACCESS_COARSE_LOCATION",
+                "ACCESS_FINE_LOCATION",
                 "WRITE_EXTERNAL_STORAGE"
             ]
         }

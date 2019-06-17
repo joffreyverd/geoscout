@@ -5,13 +5,10 @@ import fileSystem from '../config/fileSystem';
 import Callout from './Callout';
 
 export default class ListCircuit extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            circuits: null,
-            isReady: false
-        };
-    }
+    state = {
+        circuits: null,
+        isReady: false
+    };
 
     async componentDidMount() {
         const { type, root } = this.props;
