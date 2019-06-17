@@ -7,8 +7,7 @@ import {
     View,
     ScrollView,
     Dimensions,
-    ToastAndroid,
-    ActivityIndicator
+    ToastAndroid
 } from 'react-native';
 import { NavigationHeader } from '../../components/NavigationDrawer';
 import { SafeAreaView } from 'react-navigation';
@@ -26,20 +25,25 @@ export default class DetailCircuit extends React.Component {
         this.state = {
             isDownload: false,
             evaluations: [],
-            images: []
+            images: [],
+            circuit: null
         };
     }
 
     async componentDidMount() {
         const { id_circuit } = this.props.navigation.state.params;
         try {
+            var images = [];
+            var circuit = null;
             const isDownload = await fileSystem.checkCircuitExist(id_circuit);
-            const images = await api.post('download', {
-                id: id_circuit,
-                type: 'circuit'
-            });
+            if (isDownload) {
+                circuit = await fileSystem.readFile(id_circuit);
+            } else {
+                circuit = await api.get('download-circuit/' + id_circuit);
+            }
+            images = circuit.images;
             const evaluations = await api.get(`evaluations/${id_circuit}`);
-            this.setState({ isDownload, images, evaluations });
+            this.setState({ isDownload, images, evaluations, circuit });
         } catch (error) {
             console.log('error try/catch detailCircuit');
             console.log(error);
@@ -47,12 +51,7 @@ export default class DetailCircuit extends React.Component {
     }
 
     alertUser(playOrDownload) {
-        const {
-            navigate,
-            state: {
-                params: { id_circuit }
-            }
-        } = this.props.navigation;
+        const { circuit } = this.state;
         Alert.alert(
             playOrDownload ? 'Hopla' : 'Télécharger',
             playOrDownload
@@ -70,14 +69,12 @@ export default class DetailCircuit extends React.Component {
                     text: playOrDownload ? 'Jouer' : 'Oui',
                     onPress: async () => {
                         if (playOrDownload) {
-                            fileSystem.readFile(id_circuit).then(data => {
-                                navigate('Transit', {
-                                    circuit: data,
-                                    step: 0,
-                                    score: 0,
-                                    maxScore: 0,
-                                    time: 0
-                                });
+                            navigate('Transit', {
+                                circuit: circuit,
+                                step: 0,
+                                score: 0,
+                                maxScore: 0,
+                                time: 0
                             });
                         } else {
                             this.download();
@@ -96,53 +93,52 @@ export default class DetailCircuit extends React.Component {
                 params: { id_circuit }
             }
         } = this.props.navigation;
-        api.get('download-circuit/' + id_circuit)
-            .then(data => {
-                data.Steps.sort((a, b) => a.order - b.order);
-                fileSystem.writeFile(id_circuit, data);
-                Alert.alert(
-                    'Circuit téléchargé !',
-                    "Partons à l'aventure ?",
-                    [
-                        {
-                            text: 'Non',
-                            onPress: () => {
-                                navigate('Home');
-                            },
-                            style: 'cancel'
+        const { circuit } = this.state;
+        try {
+            circuit.Steps.sort((a, b) => a.order - b.order);
+            fileSystem.writeFile(id_circuit, circuit);
+            Alert.alert(
+                'Circuit téléchargé !',
+                "Partons à l'aventure ?",
+                [
+                    {
+                        text: 'Non',
+                        onPress: () => {
+                            navigate('Home');
                         },
-                        {
-                            text: 'Oui',
-                            onPress: () => {
-                                navigate('Transit', {
-                                    circuit: data,
-                                    step: 0,
-                                    score: 0,
-                                    maxScore: 0,
-                                    time: 0
-                                });
-                            }
+                        style: 'cancel'
+                    },
+                    {
+                        text: 'Oui',
+                        onPress: () => {
+                            navigate('Transit', {
+                                circuit: data,
+                                step: 0,
+                                score: 0,
+                                maxScore: 0,
+                                time: 0
+                            });
                         }
-                    ],
-                    { cancelable: true }
-                );
-            })
-            .catch(() => {
-                Alert.alert(
-                    'Oh mince...',
-                    'Une erreur est survenue, merci de réessayer et de vérifier votre connexion internet.',
-                    [
-                        {
-                            text: 'Ok',
-                            onPress: () => {
-                                navigate('Home');
-                            },
-                            style: 'cancel'
-                        }
-                    ],
-                    { cancelable: false }
-                );
-            });
+                    }
+                ],
+                { cancelable: true }
+            );
+        } catch (error) {
+            Alert.alert(
+                'Oh mince...',
+                'Une erreur est survenue, merci de réessayer et de vérifier votre connexion internet.',
+                [
+                    {
+                        text: 'Ok',
+                        onPress: () => {
+                            navigate('Home');
+                        },
+                        style: 'cancel'
+                    }
+                ],
+                { cancelable: false }
+            );
+        }
     };
 
     render() {
@@ -174,7 +170,10 @@ export default class DetailCircuit extends React.Component {
                         description != null &&
                         description != '' ? (
                             <HTML
-                                html={description.replace(/<p><br><\/p>/g, '')}
+                                html={description.replace(
+                                    /<p[^>]*?><br><\/p>/g,
+                                    ''
+                                )}
                                 imagesMaxWidth={Dimensions.get('window').width}
                             />
                         ) : (
@@ -189,7 +188,11 @@ export default class DetailCircuit extends React.Component {
                                 </Text>
                                 <ListComment evaluations={evaluations} />
                             </>
-                        ) : null}
+                        ) : (
+                            <Text style={styles.description}>
+                                Pas de commentaires disponible.
+                            </Text>
+                        )}
                     </ScrollView>
                     <View style={styles.buttonWrapper}>
                         <TouchableOpacity
@@ -258,7 +261,8 @@ const styles = StyleSheet.create({
     },
     description: {
         color: '#2c3e50',
-        fontSize: 18
+        fontSize: 18,
+        marginTop: 10
     },
     buttonWrapper: {
         paddingTop: 10,

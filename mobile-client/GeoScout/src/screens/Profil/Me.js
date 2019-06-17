@@ -79,11 +79,11 @@ export default class Me extends Component {
                             >
                                 <Image
                                     source={
-                                        !img ||
-                                        img.length < 1 ||
-                                        img === undefined
+                                        !img || img.length < 1
                                             ? require('../../../utils/img/userAnonymous.png')
-                                            : uri`http://www.geoscout.fr:5555${img}`
+                                            : {
+                                                  uri: `http://www.geoscout.fr:5555${img}`
+                                              }
                                     }
                                     style={{
                                         width: 150,

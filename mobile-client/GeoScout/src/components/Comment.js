@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import Rate from './Rate';
+import api from '../config/httpMethods';
 
-export default class Comment extends React.Component {
+export default class Comment extends Component {
     state = {};
 
-    componentDidMount() {
-        const { User } = this.props;
+    async componentDidMount() {
         try {
-            const img = api.post('download', {
-                id: User.id_user,
+            const {
+                user: { id_user }
+            } = this.props;
+            const img = await api.post('download', {
+                id: id_user,
                 type: 'user'
             });
             this.setState({ img });
@@ -20,7 +23,7 @@ export default class Comment extends React.Component {
 
     render() {
         const {
-            User: { lastname, firstname },
+            user: { lastname, firstname },
             comment,
             rate,
             version,
@@ -30,14 +33,17 @@ export default class Comment extends React.Component {
         const { img } = this.state;
         let dateSplit = new Date(date).toLocaleDateString().split('/');
         const dateComment = `${dateSplit[1]}/${dateSplit[0]}/${dateSplit[2]}`;
+
         return (
             <View style={styleComment}>
                 <View style={[styles.inline, { marginBottom: 5 }]}>
                     <Image
                         source={
-                            !img || img.length < 1 || img === undefined
+                            !img || img.length < 1
                                 ? require('../../utils/img/userAnonymous.png')
-                                : uri`http://www.geoscout.fr:5555${img}`
+                                : {
+                                      uri: `http://www.geoscout.fr:5555${img}`
+                                  }
                         }
                         style={styles.image}
                     />
@@ -76,8 +82,6 @@ const styles = StyleSheet.create({
         width: 35,
         height: 35,
         borderRadius: 35 / 2,
-        borderColor: '#2c3e50',
-        borderWidth: 1,
         marginRight: 10
     }
 });

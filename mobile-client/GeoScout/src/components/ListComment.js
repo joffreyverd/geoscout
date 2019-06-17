@@ -6,7 +6,7 @@ export default function ListComment(props) {
     return evaluations.map(item => (
         <Comment
             key={item.id}
-            User={item.User}
+            user={item.User}
             comment={item.comment}
             rate={item.stars}
             version={item.version}

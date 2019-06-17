@@ -13,7 +13,7 @@ export default class Carousel extends Component {
                     <ScrollView
                         horizontal
                         pagingEnabled
-                        showsHorizontalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={true}
                     >
                         {images.map((image, index) => (
                             <Image
