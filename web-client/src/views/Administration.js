@@ -1,100 +1,98 @@
 import React, { Component } from 'react';
 import { Table, Icon, Tooltip } from 'antd';
 
+import api from '../utils/httpMethods';
+
 const columns = [
+    {
+        title: 'Id',
+        key: 'id_circuit',
+        dataIndex: 'id_circuit',
+        width: 100,
+    },
     {
         title: 'Nom du circuit',
         dataIndex: 'name',
-        sorter: (a, b) => a.name.length - b.name.length,
-        sortDirections: ['descend'],
+        width: 400,
     },
     {
         title: 'Score',
-        dataIndex: 'stars',
-        defaultSortOrder: 'descend',
-        sorter: (a, b) => a.stars - b.stars,
+        dataIndex: 'avgStars',
+        width: 100,
+        sorter: (a, b) => a.avgStars - b.avgStars,
+        sortDirections: ['descend', 'ascend'],
     },
     {
         title: 'Date de création',
-        dataIndex: 'creationDate',
-        defaultSortOrder: 'descend',
-        sorter: (a, b) => a.creationDate - b.creationDate,
+        dataIndex: 'createdAt',
+        width: 200,
     },
     {
         title: 'Créateur',
         dataIndex: 'creator',
-        sorter: (a, b) => a.creator.length - b.creator.length,
-        sortDirections: ['descend', 'ascend'],
+        width: 300,
     },
     {
         title: 'Action',
+        width: 100,
         dataIndex: 'action',
     },
 ];
 
-const unFroze = 'Cliquez pour dégeler le circuit - il sera de nouveau visible sur Géoscout';
-const froze = 'Cliquez pour geler le circuit - et le cacher des circuits apparents';
-
-function unFrozeCircuit() {
-    alert('Unfroze circuit');
-}
-
-function frozeCircuit() {
-    alert('Froze circuit');
-}
-
-const eye = (
-    <Tooltip placement='top' title={froze}>
-        <Icon type='eye' theme='twoTone' onClick={frozeCircuit} />
-    </Tooltip>
-);
-
-const invisibleEye = (
-    <Tooltip placement='top' title={unFroze}>
-        <Icon type='eye-invisible' theme='twoTone' twoToneColor='#c0392b' onClick={unFrozeCircuit} />
-    </Tooltip>
-);
-
-
 export default class Administration extends Component {
 
     state = {
-        circuits: [
-            {
-                key: '1',
-                name: 'Circuit 1',
-                stars: 1,
-                creationDate: '29/06/2017',
-                creator: 'Joffrey',
-                action: invisibleEye,
-            },
-            {
-                key: '2',
-                name: 'Circuit 2',
-                stars: 1,
-                creationDate: '22/06/2017',
-                creator: 'Stevy',
-                action: invisibleEye,
-            },
-            {
-                key: '3',
-                name: 'Circuit 3',
-                stars: 4,
-                creationDate: '12/11/2018',
-                creator: 'Thomas',
-                action: eye,
-            },
-            {
-                key: '4',
-                name: 'Circuit 4',
-                stars: 5,
-                creationDate: '14/04/2019',
-                creator: 'Quentin',
-                action: eye,
-            },
-        ],
+        circuits: [],
         arrayColumns: columns,
     }
+
+    componentDidMount() {
+        let index = 0;
+        api.get('circuits-admin').then((data) => {
+            data.forEach((element) => {
+                element.creator = `${element.User.firstname} ${element.User.lastname}`;
+                const formattedDate = new Date(element.createdAt).toLocaleDateString();
+                element.createdAt = formattedDate;
+                element.action = (element.blocked && element.blocked === true) ?
+                    this.eye(index, element.id_circuit) :
+                    this.invisibleEye(index, element.id_circuit);
+                element.id_circuit = element.id_circuit.toString();
+                index++;
+            });
+
+            this.setState({
+                circuits: data,
+            });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
+    }
+
+    frozenCircuit = (index, id) => {
+        api.put(`circuits-admin/${id}`).then(() => {
+            this.setState((prevState) => {
+                prevState.circuits[index].blocked = !prevState.circuits[index].blocked;
+                prevState.circuits[index].action = (prevState.circuits[index].blocked && prevState.circuits[index].blocked === true) ?
+                    this.eye(index, id) :
+                    this.invisibleEye(index, id);
+                return { circuits: prevState.circuits };
+            });
+        }).catch(() => {
+            console.log('Oups, une erreur s\'est produite');
+        });
+    }
+
+    eye = (index, id) => (
+        <Tooltip placement='top' title='Dégeler le circuit'>
+            <Icon type='eye' theme='twoTone' onClick={() => this.frozenCircuit(index, id)} />
+        </Tooltip>
+    )
+
+    invisibleEye = (index, id) => (
+        <Tooltip placement='top' title='Geler le circuit'>
+            <Icon type='eye-invisible' theme='twoTone' twoToneColor='#c0392b' onClick={() => this.frozenCircuit(index, id)} />
+        </Tooltip>
+    )
 
     render() {
 
@@ -107,6 +105,7 @@ export default class Administration extends Component {
                     className='administrator-table'
                     columns={arrayColumns}
                     dataSource={circuits}
+                    rowKey='id_circuit'
                 />
             </>
         );

@@ -110,6 +110,7 @@ export default class DetailedCircuit extends Component {
         const { viewport, userPosition, step, comments, img } = this.state;
         const { isConnected } = this.props;
         const formattedStar = Math.round(avgStars * 2) / 2;
+        console.log(comments);
         return (
             <>
                 <div className='header-wrapper'>
@@ -152,7 +153,7 @@ export default class DetailedCircuit extends Component {
                     </div>
 
                     {img === undefined || img.length === 0 ?
-                        <p className='no-pictures'>Aucune photo n`a été ajouté par l`administrateur de ce circuit !</p>
+                        <p className='no-pictures'>Aucune photo n`a été ajouté sur de ce circuit !</p>
                         :
                         <>
                             <h2 className='comments-title'>Photos du circuit</h2>
@@ -162,10 +163,15 @@ export default class DetailedCircuit extends Component {
                         </>
                     }
 
-                    <CommentList
-                        className='circuit-comments'
-                        items={comments}
-                    />
+                    {comments && comments[0] ?
+                        <CommentList
+                            className='circuit-comments'
+                            items={comments}
+                        />
+                        :
+                        <p className='no-pictures'>Aucune commentaire n`a été ajouté sur ce circuit !</p>
+                    }
+
                 </div>
             </>
         );

@@ -21,8 +21,7 @@ export default class Navigation extends React.Component {
 
     render() {
         const { modal } = this.state;
-        const { isConnected, login, logout } = this.props;
-        const isThor = true;
+        const { isConnected, isAdmin, login, logout } = this.props;
 
         const circuitOptions = (
             <Menu>
@@ -57,7 +56,7 @@ export default class Navigation extends React.Component {
                         <Collapse navbar>
                             <Nav className='ml-auto' navbar>
 
-                                {isThor ?
+                                {isAdmin ?
                                     <div>
                                         <Dropdown overlay={circuitOptions} id='dropdown'>
                                             <a className='ant-dropdown-link' href='#c'>Mes circuits</a>
