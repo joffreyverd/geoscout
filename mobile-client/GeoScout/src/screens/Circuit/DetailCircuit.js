@@ -52,6 +52,7 @@ export default class DetailCircuit extends React.Component {
 
     alertUser(playOrDownload) {
         const { circuit } = this.state;
+        const { navigate } = this.props.navigation;
         Alert.alert(
             playOrDownload ? 'Hopla' : 'Télécharger',
             playOrDownload
