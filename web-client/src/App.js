@@ -59,7 +59,12 @@ class App extends Component {
         return (
             <>
                 <div className='menu-wrapper'>
-                    <Navigation isConnected={isConnected} isAdmin={user.is_admin} login={this.login} logout={this.logout} />
+                    <Navigation
+                        isConnected={isConnected}
+                        isAdmin={user && user.is_admin !== undefined && user.is_admin}
+                        login={this.login}
+                        logout={this.logout}
+                    />
                 </div>
 
                 <Route exact path='/' component={Home} />

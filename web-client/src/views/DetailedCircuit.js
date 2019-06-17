@@ -51,20 +51,7 @@ export default class DetailedCircuit extends Component {
         }
     }
 
-    componentDidMount = () => {
-        // eslint-disable-next-line no-undef
-        if (navigator.geolocation) {
-            // eslint-disable-next-line no-undef
-            navigator.geolocation.getCurrentPosition((data) => {
-                const { viewport } = this.state;
-                viewport.latitude = data.coords.latitude;
-                viewport.longitude = data.coords.longitude;
-                this.setState({
-                    viewport: viewport,
-                    userPosition: data.coords,
-                });
-            });
-        }
+    loadData = () => {
         const { id } = this.props.match.params;
         api.get(`circuit/${id}`).then((circuit) => {
             this.setState({
@@ -73,6 +60,7 @@ export default class DetailedCircuit extends Component {
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
+
         api.get(`evaluations/${id}`).then((comments) => {
             this.setState({
                 comments,
@@ -80,6 +68,7 @@ export default class DetailedCircuit extends Component {
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
+
         api.get(`steps/${id}`).then((steps) => {
             if (steps[0].latitude || steps[0].longitude) {
                 const { viewport } = this.state;
@@ -94,6 +83,7 @@ export default class DetailedCircuit extends Component {
         }).catch(() => {
             console.log('Oups, une erreur s\'est produite');
         });
+
         api.post('download', {
             id,
             type: 'circuit',
@@ -104,13 +94,37 @@ export default class DetailedCircuit extends Component {
         });
     }
 
+    componentDidMount = () => {
+        // eslint-disable-next-line no-undef
+        if (navigator.geolocation) {
+            // eslint-disable-next-line no-undef
+            navigator.geolocation.getCurrentPosition((data) => {
+                const { viewport } = this.state;
+                viewport.latitude = data.coords.latitude;
+                viewport.longitude = data.coords.longitude;
+                this.setState({
+                    viewport: viewport,
+                    userPosition: data.coords,
+                });
+            });
+        }
+        this.loadData();
+    }
+
+    componentDidUpdate(prevProps) {
+        const { isConnected } = this.props;
+        if (prevProps.isConnected !== isConnected) {
+            this.loadData();
+        }
+    }
+
     render() {
 
         const { name, description, Favorites, avgStars } = this.state.circuit;
         const { viewport, userPosition, step, comments, img } = this.state;
         const { isConnected } = this.props;
         const formattedStar = Math.round(avgStars * 2) / 2;
-        console.log(comments);
+
         return (
             <>
                 <div className='header-wrapper'>

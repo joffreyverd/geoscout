@@ -607,7 +607,13 @@ h1 {
 
   .ant-carousel div div div div div img {
     width: 100% !important;
-    height: 300px !important;
+    min-height: 100px !important;
+    object-fit: cover !important;
+  }
+
+  .carousel-style div div div div img {
+    width: 100% !important;
+    height: 600px !important;
     min-height: 100px !important;
     object-fit: cover !important;
   }
