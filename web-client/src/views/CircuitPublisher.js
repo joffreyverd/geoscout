@@ -280,6 +280,15 @@ export default class CircuitPublisher extends Component {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`,
             },
+        }).then(() => {
+            api.post('download', {
+                id: id_circuit,
+                type: 'circuit',
+            }).then((img) => {
+                this.setState({ img });
+            }).catch(() => {
+                console.log('error');
+            });
         });
     }
 

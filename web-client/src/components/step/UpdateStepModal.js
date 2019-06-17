@@ -74,17 +74,22 @@ class UpdateStepModal extends Component {
                         }],
                 }));
                 if (id_step !== null) {
-                    api.post('download', {
-                        id: id_step,
-                        type: 'step',
-                    }).then((imgSteps) => {
-                        this.setState({ imgSteps });
-                    }).catch(() => {
-                        console.log('error');
-                    });
+                    this.checkStepPictures();
                 }
             }
         }
+    }
+
+    checkStepPictures = () => {
+        const { id_step } = this.props.step;
+        api.post('download', {
+            id: id_step,
+            type: 'step',
+        }).then((imgSteps) => {
+            this.setState({ imgSteps });
+        }).catch(() => {
+            console.log('error');
+        });
     }
 
     uploadFile = (file) => {
@@ -101,6 +106,8 @@ class UpdateStepModal extends Component {
             headers: {
                 authorization: `Bearer ${localStorage.getItem('token')}`,
             },
+        }).then(() => {
+            this.checkStepPictures();
         });
     }
 
