@@ -112,7 +112,7 @@ export default class DetailCircuit extends React.Component {
                         text: 'Oui',
                         onPress: () => {
                             navigate('Transit', {
-                                circuit: data,
+                                circuit: circuit,
                                 step: 0,
                                 score: 0,
                                 maxScore: 0,
