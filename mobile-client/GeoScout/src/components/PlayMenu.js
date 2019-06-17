@@ -1,9 +1,18 @@
 import React from 'react';
+import { Location } from 'expo';
 import { Text, StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
 import Drawer from 'react-native-drawer-menu';
 
 import api from '../config/httpMethods';
+
+const DETECT_STEP = 'step-location-detection_task';
+
+const stopTask = () => {
+    Location.hasStartedGeofencingAsync(DETECT_STEP).then(x => {
+        if (x) Location.stopGeofencingAsync(DETECT_STEP);
+    });
+};
 
 export function PlayDrawerMenu({
     setRefMenu,
@@ -19,6 +28,7 @@ export function PlayDrawerMenu({
      * Fonction de pause d'un circuit
      */
     const pause = () => {
+        stopTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
         api.post('achievedcircuit', {
             id_circuit,
@@ -39,6 +49,7 @@ export function PlayDrawerMenu({
      * Fonction d'abandon d'un circuit
      */
     const abandon = () => {
+        stopTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
         api.post('achievedcircuit', {
             id_circuit,
@@ -141,7 +152,10 @@ export function PlayHeader({ pressMenu, title }) {
             }}
             centerComponent={{
                 text: title,
-                style: { color: 'white', fontSize: 20 }
+                style: {
+                    color: 'white',
+                    fontSize: 20
+                }
             }}
             backgroundColor="#1abc9c"
         />

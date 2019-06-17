@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import Rate from './Rate';
-import api from '../config/httpMethods';
+import api from './../config/httpMethods';
 
 export default class Comment extends Component {
     state = {};
@@ -41,9 +41,7 @@ export default class Comment extends Component {
                         source={
                             !img || img.length < 1
                                 ? require('../../utils/img/userAnonymous.png')
-                                : {
-                                      uri: `http://www.geoscout.fr:5555${img}`
-                                  }
+                                : { uri: `http://www.geoscout.fr:5555${img}` }
                         }
                         style={styles.image}
                     />
