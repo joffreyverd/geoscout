@@ -406,9 +406,9 @@ module.exports =
 				
 			let response = 
 			{
-				"circuits created" : circuitCount,
-				"circuits played" : circuitPlayed,
-				"comments posted" : commentPosted,
+				"circuits_created" : circuitCount,
+				"circuits_played" : circuitPlayed,
+				"comments_posted" : commentPosted,
 			}
 
 			res.status(200).json(response);
