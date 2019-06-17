@@ -5,8 +5,6 @@ const db = require('../models');
 const utils = require('./utils');
 module.exports = 
 {
-	// toutes les requetes qui renvoient des circuits (sauf celle pour renvoyer les circuit créer de l'user en cours) ne pas renvoyer les circuits bloqués
-
 	circuit : async (req,res) => 
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
@@ -15,6 +13,7 @@ module.exports =
 			let circuit = await db.Circuit.findByPk(req.params.id_circuit,
 				{
 					attributes : ['name','description','duration','need_internet','level'],
+					where: {blocked : 0},
 					include :
 					[
 						{
@@ -48,7 +47,7 @@ module.exports =
 			{
 				let circuit = await db.Circuit.findOne(
 					{
-						where : {id_circuit : req.params.id_circuit},
+						where : {id_circuit : req.params.id_circuit, blocked : 0},
 						include : 
 						[
 							{
@@ -114,7 +113,7 @@ module.exports =
 
 			let circuits = await db.Circuit.findAll(
 				{
-					where : {id_circuit : steps_within_range, published : 1},
+					where : {id_circuit : steps_within_range, published : 1, blocked : 0},
 					attributes : ['id_circuit','name' ,'description','length','duration','need_internet','published','level','version'],
 					include : 
 					[
@@ -145,7 +144,11 @@ module.exports =
 	{
 		try
 		{
-			res.status(200).send(await db.Circuit.findAll());
+			res.status(200).send(await db.Circuit.findAll(
+				{
+					where : {blocked : false}
+				}
+			));
 		}
 		
 		catch(err)
@@ -288,7 +291,7 @@ module.exports =
 		{
 			try
 			{
-				res.json(await db.Circuit.findAll({where : {published : true}}));
+				res.json(await db.Circuit.findAll({where : {published : true, blocked : 0}}));
 			}
 
 			catch(err)
