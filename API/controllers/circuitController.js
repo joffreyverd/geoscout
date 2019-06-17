@@ -207,7 +207,7 @@ module.exports =
 						length : req.body.length,
 						duration : req.body.duration,
 						need_internet : req.body.need_internet,
-						published : 1,
+						published : 0,
 						version : 1,
 						level : req.body.level,
 						id_user : id_user

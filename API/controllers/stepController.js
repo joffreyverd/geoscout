@@ -69,6 +69,7 @@ module.exports =
 					},{transaction : t});
 				await t.commit();
 				await utils.evaluateDistance(req.body.id_circuit,db);
+				await utils.createFolder(step.id_step,2);
 				res.json(step);
 			}
 
