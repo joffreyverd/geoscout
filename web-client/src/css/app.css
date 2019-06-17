@@ -358,12 +358,22 @@ cursor: pointer;
 
 .uploader-wrapper {
     display: block;
-    margin: auto;
+    margin: 20px 0px;
     width: 80%;
 }
 
+.difficulty-field {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-start !important;
+}
+
+.ant-rate-star-zero *, .ant-rate-star-half .ant-rate-star-second {
+  color: #fff !important;
+}
+
 .my-pictures {
-  margin: 35px;
+  margin-left: 35px;
   font-weight: bold;
   color: #1abc9c;
 }
@@ -583,6 +593,30 @@ cursor: pointer;
   border: solid 1px #e1e9ea;
   margin-top: 10px;
   padding: 5px;
+}
+
+.pictures-handler {
+  margin: 20px;
+}
+
+.delete-pictures-button {
+  height: 32px;
+  width: 168px;
+  margin: auto;
+}
+
+.ant-carousel div div div div div img {
+  width: 100% !important;
+  height: 300px;
+  min-height: 200px !important;
+  object-fit: cover !important;
+}
+
+.carousel-style div div div div img {
+  width: 100% !important;
+  height: 600px !important;
+  min-height: 400px !important;
+  object-fit: cover !important;
 }
 
 /************************** DETAILED-CIRCUIT **************************/
@@ -832,4 +866,25 @@ cursor: pointer;
   .user-relation-item {
     margin: auto 10px;
       display: block;
+  }
+
+  /************************** ADMINISTRATOR **************************/
+
+  .administration-button {
+      background-color: white;
+      padding: 3px 10px;
+      color: #2c3e50;
+      border-radius: 3px;
+      transition: .2s;
+      margin-left: 30px;
+  }
+
+  .administration-button:hover {
+      background-color: #c0392b;
+      color: white;
+      transition: .2s;
+  }
+
+  .administrator-table {
+      margin: 0px 20px;
   }
