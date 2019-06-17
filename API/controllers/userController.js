@@ -105,7 +105,7 @@ module.exports =
 				if (err) 
 					return res.status(401).send(utils.messages.invalidToken);
 				else
-					res.status(200).send(await db.User.findByPk(decoded.id_user,{attributes : ['id_user','firstname','lastname','email']}));	
+					res.status(200).send(await db.User.findByPk(decoded.id_user,{attributes : ['id_user','firstname','lastname','email','is_admin']}));	
 			});
 		}
 
