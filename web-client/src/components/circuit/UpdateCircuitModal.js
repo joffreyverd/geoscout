@@ -12,7 +12,6 @@ import 'react-quill/dist/quill.snow.css';
 
 import PreviewModal from './PreviewModal';
 import Uploader from '../Uploader';
-import api from '../../utils/httpMethods';
 
 class UpdateCircuitModal extends Component {
 
