@@ -71,11 +71,22 @@ export default function Callout(props) {
                     </View>
                 ) : null}
                 {order ? (
-                    <View>
-                        <Text style={styles.item}>
-                            {order.orderStep}/{order.maxOrderStep} étapes
-                        </Text>
-                    </View>
+                    order.orderStep != null &&
+                    order.orderStep !== undefined &&
+                    order.maxOrderStep != null &&
+                    order.maxOrderStep !== undefined ? (
+                        <View>
+                            <Text style={styles.item}>
+                                {order.orderStep}/{order.maxOrderStep} étapes
+                            </Text>
+                        </View>
+                    ) : (
+                        <View>
+                            <Text style={styles.error}>
+                                Il y a une erreur sur ce circuit.
+                            </Text>
+                        </View>
+                    )
                 ) : null}
             </View>
         </View>
@@ -102,5 +113,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    error: {
+        color: '#f44336',
+        fontSize: 12
     }
 });

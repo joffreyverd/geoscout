@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Image, StyleSheet, Dimensions } from 'react-native';
+import {
+    View,
+    ScrollView,
+    Image,
+    StyleSheet,
+    Dimensions,
+    Text
+} from 'react-native';
 
 const { width } = Dimensions.get('window');
-const height = width * 0.45;
+const height = width * 0.5;
 
 export default class Carousel extends Component {
     render() {
@@ -25,6 +32,11 @@ export default class Carousel extends Component {
                             />
                         ))}
                     </ScrollView>
+                    <Text style={styles.numberPhoto}>
+                        {images.length > 1
+                            ? `${images.length} photos`
+                            : '1 photo'}
+                    </Text>
                 </View>
             );
         }
@@ -39,5 +51,10 @@ const styles = StyleSheet.create({
     image: {
         width: width - 30,
         height
+    },
+    numberPhoto: {
+        fontSize: 12,
+        color: '#2c3e50',
+        textAlign: 'center'
     }
 });

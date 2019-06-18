@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     loaderMargin: {
-        marginTop: 70
+        marginTop: 40
     },
     errorText: {
         fontSize: 24,

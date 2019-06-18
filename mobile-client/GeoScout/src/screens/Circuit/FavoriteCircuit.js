@@ -8,7 +8,7 @@ import ListCircuit from '../../components/ListCircuit';
 
 export default class FavoriteCircuit extends React.Component {
     static navigationOptions = {
-        drawerLabel: 'Favoris',
+        drawerLabel: 'Circuits favoris',
         drawerIcon: () => (
             <Icon name="favorite" type="material" color="#1abc9c" />
         )
@@ -19,7 +19,7 @@ export default class FavoriteCircuit extends React.Component {
             <>
                 <NavigationHeader
                     pressMenu={this.props.navigation.openDrawer}
-                    titleText={'Favoris'}
+                    titleText={'Circuits favoris'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
                     }

@@ -8,7 +8,7 @@ import ListCircuit from '../../components/ListCircuit';
 
 export default class RunningCircuit extends React.Component {
     static navigationOptions = {
-        drawerLabel: 'En cours',
+        drawerLabel: 'Circuits en cours',
         drawerIcon: () => (
             <Icon name="watch-later" type="material" color="#1abc9c" />
         )
@@ -19,7 +19,7 @@ export default class RunningCircuit extends React.Component {
             <>
                 <NavigationHeader
                     pressMenu={this.props.navigation.openDrawer}
-                    titleText={'En cours'}
+                    titleText={'Circuits en cours'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
                     }

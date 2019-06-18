@@ -24,7 +24,7 @@ export default class DownloadCircuit extends React.Component {
             <>
                 <NavigationHeader
                     pressMenu={this.props.navigation.openDrawer}
-                    titleText={'Téléchargé'}
+                    titleText={'Circuits téléchargés'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
                     }

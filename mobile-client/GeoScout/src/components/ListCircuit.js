@@ -3,6 +3,7 @@ import { TouchableWithoutFeedback, ScrollView, View } from 'react-native';
 import api from '../config/httpMethods';
 import fileSystem from '../config/fileSystem';
 import Callout from './Callout';
+import Loading from './Loading';
 
 export default class ListCircuit extends React.Component {
     state = {
@@ -33,12 +34,21 @@ export default class ListCircuit extends React.Component {
                         if (data.version != item.version) {
                             return null;
                         } else {
-                            var orderStep = 0;
-                            data.Steps.forEach(itemCircuit => {
-                                if (item.id_step == itemCircuit.id_step) {
-                                    orderStep = itemCircuit.order;
+                            var orderStep = null;
+                            let i = 0;
+                            console.log(item.id_step);
+                            do {
+                                console.log(data.Steps[i].id_step);
+                                if (item.id_step == data.Steps[i].id_step) {
+                                    console.log('ok');
+                                    orderStep = data.Steps[i].order;
+                                } else {
+                                    i++;
                                 }
-                            });
+                            } while (
+                                orderStep == null &&
+                                i < data.Steps.length
+                            );
                             return {
                                 id_circuit: data.id_circuit,
                                 name: data.name,
@@ -76,7 +86,7 @@ export default class ListCircuit extends React.Component {
             maxScore,
             startingTime: new Date(),
             time,
-            step,
+            step: step,
             id_ac
         });
     }
@@ -86,7 +96,7 @@ export default class ListCircuit extends React.Component {
         const { navigate, format, type } = this.props;
         return (
             <ScrollView showsHorizontalScrollIndicator={false}>
-                {isReady &&
+                {isReady ? (
                     circuits.map(item => (
                         <TouchableWithoutFeedback
                             key={
@@ -153,7 +163,10 @@ export default class ListCircuit extends React.Component {
                                 />
                             </View>
                         </TouchableWithoutFeedback>
-                    ))}
+                    ))
+                ) : (
+                    <Loading />
+                )}
             </ScrollView>
         );
     }

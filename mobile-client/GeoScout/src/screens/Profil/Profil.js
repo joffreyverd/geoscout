@@ -4,7 +4,6 @@ import { Icon } from 'react-native-elements';
 import { SafeAreaView } from 'react-navigation';
 
 import { NavigationHeader } from '../../components/NavigationDrawer';
-import storage from '../../config/asyncStorageToken';
 import api from '../../config/httpMethods';
 import Loading from '../../components/Loading';
 
@@ -16,46 +15,33 @@ export default class Me extends Component {
         )
     };
 
-    constructor() {
-        super();
-        this.state = {
-            user: {
-                lastname: '',
-                firstname: '',
-                email: '',
-                img: ''
-            },
-            infoUser: null,
-            isReady: false
-        };
-    }
+    state = {
+        user: {
+            lastname: '',
+            firstname: ''
+        },
+        img: null,
+        infoUser: null,
+        isReady: false
+    };
 
     async componentDidMount() {
+        const { user } = this.props.navigation.state.params;
+        console.log(user);
         try {
-            const token = await storage.getTokenAsyncStorage();
-            if (token) {
-                const user = await api.get('whoami');
-                const img = await api.post('download', {
-                    id: user.id_user,
-                    type: 'user'
-                });
-                const infoUser = await api.get(`user-info/${user.id_user}`);
-                this.setState({ user, img, infoUser, isReady: true });
-            } else {
-                this.props.navigation.navigate('Auth');
-            }
+            const img = await api.post('download', {
+                id: user.id_user,
+                type: 'user'
+            });
+            const infoUser = await api.get(`user-info/${user.id_user}`);
+            this.setState({ user, img, infoUser, isReady: true });
         } catch (error) {
             console.log(error);
         }
     }
 
-    handleSettingsPress = () => {
-        this.props.navigation.navigate('Settings');
-    };
-
     render() {
         const { user, img, infoUser, isReady } = this.state;
-        console.log(infoUser);
         return (
             <>
                 <NavigationHeader

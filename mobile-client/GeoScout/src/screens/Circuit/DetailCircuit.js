@@ -18,17 +18,17 @@ import api from '../../config/httpMethods';
 import fileSystem from '../../config/fileSystem';
 import ListComment from '../../components/ListComment';
 import Carousel from '../../components/Carousel';
+import Loading from '../../components/Loading';
 
 export default class DetailCircuit extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            isDownload: false,
-            evaluations: [],
-            images: [],
-            circuit: null
-        };
-    }
+    state = {
+        isDownload: false,
+        evaluations: [],
+        images: [],
+        circuit: null,
+        favorites: false,
+        isReady: false
+    };
 
     async componentDidMount() {
         const { id_circuit } = this.props.navigation.state.params;
@@ -43,12 +43,45 @@ export default class DetailCircuit extends React.Component {
             }
             images = circuit.images;
             const evaluations = await api.get(`evaluations/${id_circuit}`);
-            this.setState({ isDownload, images, evaluations, circuit });
+            this.setState({
+                isDownload,
+                images,
+                evaluations,
+                circuit,
+                favorites: true,
+                isReady: true
+            });
         } catch (error) {
             console.log('error try/catch detailCircuit');
             console.log(error);
         }
     }
+
+    changeFavoriteStatus = () => {
+        const { id_circuit } = this.props.navigation.state.params;
+        const { favorites } = this.state;
+        try {
+            if (favorites) {
+                api.delete(`favorites/${id_circuit}`).then(() => {
+                    this.setState({ favorites: false });
+                    ToastAndroid.show(
+                        'Circuit supprimé de vos favoris',
+                        ToastAndroid.SHORT
+                    );
+                });
+            } else {
+                api.post(`favorites/${id_circuit}`).then(() => {
+                    this.setState({ favorites: true });
+                    ToastAndroid.show(
+                        'Circuit ajouté à vos favoris',
+                        ToastAndroid.SHORT
+                    );
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     alertUser(playOrDownload) {
         const { circuit } = this.state;
@@ -143,96 +176,129 @@ export default class DetailCircuit extends React.Component {
     };
 
     render() {
-        const { circuit, isDownload, evaluations, images } = this.state;
+        const {
+            circuit,
+            isDownload,
+            evaluations,
+            images,
+            favorites,
+            isReady
+        } = this.state;
         return (
             <>
                 <NavigationHeader
                     pressMenu={this.props.navigation.openDrawer}
-                    titleText={'Détail circuit'}
+                    titleText={'Détail du circuit'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
                     }
                 />
                 <SafeAreaView style={styles.container}>
-                    <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        style={{
-                            flex: 1
-                        }}
-                    >
-                        <Text style={styles.title}>{circuit.name}</Text>
-                        <Carousel images={images} />
-                        {circuit.description ? (
-                            <HTML
-                                html={circuit.description.replace(
-                                    /<p[^>]*?><br><\/p>/g,
-                                    ''
-                                )}
-                                imagesMaxWidth={Dimensions.get('window').width}
-                            />
-                        ) : (
-                            <Text style={styles.description}>
-                                Pas de description disponible pour ce circuit.
-                            </Text>
-                        )}
-                        {evaluations && evaluations.length ? (
-                            <>
-                                <Text style={styles.commentSection}>
-                                    Commentaires :
-                                </Text>
-                                <ListComment evaluations={evaluations} />
-                            </>
-                        ) : (
-                            <Text style={styles.description}>
-                                Pas de commentaires disponible pour ce circuit.
-                            </Text>
-                        )}
-                    </ScrollView>
-                    <View style={styles.buttonWrapper}>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => {
-                                api.put('favorites/' + id_circuit)
-                                    .then(() =>
-                                        ToastAndroid.show(
-                                            'Circuit Ajouté à vos favoris',
-                                            ToastAndroid.SHORT
-                                        )
-                                    )
-                                    .catch(() =>
-                                        ToastAndroid.show(
-                                            'Circuit déjà présent dans vos favoris',
-                                            ToastAndroid.SHORT
-                                        )
-                                    );
-                            }}
-                        >
-                            <Text style={styles.textButton}>
-                                Ajouter au favoris
-                            </Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={styles.button}
-                            onPress={() => this.alertUser(isDownload)}
-                        >
-                            {isDownload ? (
-                                <>
-                                    <Icon
-                                        name="play-circle-filled"
-                                        color="white"
-                                    />
-                                    <Text style={styles.textButton}>Jouer</Text>
-                                </>
-                            ) : (
-                                <>
-                                    <Icon name="get-app" color="white" />
-                                    <Text style={styles.textButton}>
-                                        Télécharger
+                    {isReady ? (
+                        <>
+                            <ScrollView
+                                showsHorizontalScrollIndicator={false}
+                                style={{
+                                    flex: 1
+                                }}
+                            >
+                                {circuit.name ? (
+                                    <Text style={styles.title}>
+                                        {circuit.name}
                                     </Text>
-                                </>
-                            )}
-                        </TouchableOpacity>
-                    </View>
+                                ) : null}
+                                {images.length ? (
+                                    <Carousel images={images} />
+                                ) : (
+                                    <Text style={styles.noContent}>
+                                        Pas d'images disponibles sur ce circuit.
+                                    </Text>
+                                )}
+                                {circuit.description ? (
+                                    <HTML
+                                        html={circuit.description.replace(
+                                            /<p[^>]*?><br><\/p>/g,
+                                            ''
+                                        )}
+                                        imagesMaxWidth={
+                                            Dimensions.get('window').width
+                                        }
+                                    />
+                                ) : (
+                                    <Text style={styles.noContent}>
+                                        Pas de description disponible pour ce
+                                        circuit.
+                                    </Text>
+                                )}
+                                {evaluations && evaluations.length ? (
+                                    <>
+                                        <Text style={styles.commentSection}>
+                                            Commentaires :
+                                        </Text>
+                                        <ListComment
+                                            evaluations={evaluations}
+                                            navigate={
+                                                this.props.navigation.navigate
+                                            }
+                                        />
+                                    </>
+                                ) : (
+                                    <Text style={styles.noContent}>
+                                        Pas de commentaires disponible pour ce
+                                        circuit.
+                                    </Text>
+                                )}
+                            </ScrollView>
+                            <View style={styles.buttonWrapper}>
+                                <View style={{ marginRight: 20 }}>
+                                    <Icon
+                                        name={
+                                            favorites
+                                                ? 'favorite'
+                                                : 'favorite-border'
+                                        }
+                                        color="#f44336"
+                                        size={40}
+                                        onPress={() =>
+                                            this.changeFavoriteStatus()
+                                        }
+                                    />
+                                </View>
+                                <View>
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        onPress={() =>
+                                            this.alertUser(isDownload)
+                                        }
+                                    >
+                                        {isDownload ? (
+                                            <>
+                                                <Icon
+                                                    name="play-circle-filled"
+                                                    color="white"
+                                                />
+                                                <Text style={styles.textButton}>
+                                                    Jouer
+                                                </Text>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Icon
+                                                    name="get-app"
+                                                    color="white"
+                                                />
+                                                <Text style={styles.textButton}>
+                                                    Télécharger
+                                                </Text>
+                                            </>
+                                        )}
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </>
+                    ) : (
+                        <Loading />
+                    )}
                 </SafeAreaView>
             </>
         );
@@ -251,7 +317,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#1abc9c',
         fontWeight: 'bold',
-        fontSize: 24
+        fontSize: 26,
+        marginBottom: 10
     },
     description: {
         color: '#2c3e50',
@@ -260,14 +327,18 @@ const styles = StyleSheet.create({
     },
     buttonWrapper: {
         paddingTop: 10,
-        paddingBottom: 15
+        paddingBottom: 15,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     button: {
         backgroundColor: '#2c3e50',
         borderRadius: 5,
         padding: 8,
         marginBottom: 5,
-        width: '90%',
+        width: '100%',
         alignSelf: 'center',
         justifyContent: 'center',
         alignItems: 'baseline',
@@ -283,6 +354,11 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 24,
         marginBottom: 10
+    },
+    noContent: {
+        color: '#2c3e50',
+        fontSize: 16,
+        marginTop: 5
     }
 });
 

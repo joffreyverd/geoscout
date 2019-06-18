@@ -20,6 +20,7 @@ import RunningCircuit from '../screens/Circuit/RunningCircuit';
 import MyCircuits from '../screens/Circuit/MyCircuits';
 import Settings from '../screens/Profil/Settings.js';
 import Me from '../screens/Profil/Me';
+import Profil from '../screens/Profil/Profil';
 
 import Transit from '../screens/Play/Transit';
 import Etape from '../screens/Play/Etape';
@@ -36,7 +37,8 @@ const PrincipalStack = createDrawerNavigator(
         DownloadCircuit: DownloadCircuit,
         FavoriteCircuit: FavoriteCircuit,
         RunningCircuit: RunningCircuit,
-        DetailCircuit: DetailCircuit
+        DetailCircuit: DetailCircuit,
+        Profil: Profil
     },
     {
         drawerWidth: 220,
