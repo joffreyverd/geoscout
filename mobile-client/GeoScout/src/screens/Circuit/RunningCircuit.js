@@ -6,11 +6,11 @@ import { Icon } from 'react-native-elements';
 import { NavigationHeader } from '../../components/NavigationDrawer';
 import ListCircuit from '../../components/ListCircuit';
 
-export default class FavoriteCircuit extends React.Component {
+export default class RunningCircuit extends React.Component {
     static navigationOptions = {
-        drawerLabel: 'Circuits favoris',
+        drawerLabel: 'Circuits en cours',
         drawerIcon: () => (
-            <Icon name="favorite" type="material" color="#1abc9c" />
+            <Icon name="watch-later" type="material" color="#1abc9c" />
         )
     };
 
@@ -19,16 +19,16 @@ export default class FavoriteCircuit extends React.Component {
             <>
                 <NavigationHeader
                     pressMenu={this.props.navigation.openDrawer}
-                    titleText={'Circuits favoris'}
+                    titleText={'Circuits en cours'}
                     pressHome={() =>
                         this.props.navigation.navigate('GeoLocation')
                     }
                 />
                 <SafeAreaView style={styles.container}>
                     <ListCircuit
-                        type={'api'}
+                        type={'achievedCircuit'}
                         format={false}
-                        root={'favorites'}
+                        root={'achievedCircuit'}
                         navigate={this.props.navigation.navigate}
                     />
                 </SafeAreaView>

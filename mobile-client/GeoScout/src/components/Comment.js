@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import {
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableWithoutFeedback
+} from 'react-native';
 import Rate from './Rate';
 import api from './../config/httpMethods';
 
@@ -23,40 +29,51 @@ export default class Comment extends Component {
 
     render() {
         const {
-            user: { lastname, firstname },
+            user,
+            id_comment,
             comment,
             rate,
             version,
             date,
-            styleComment
+            styleComment,
+            navigate
         } = this.props;
         const { img } = this.state;
         let dateSplit = new Date(date).toLocaleDateString().split('/');
         const dateComment = `${dateSplit[1]}/${dateSplit[0]}/${dateSplit[2]}`;
 
         return (
-            <View style={styleComment}>
-                <View style={[styles.inline, { marginBottom: 5 }]}>
-                    <Image
-                        source={
-                            !img || img.length < 1
-                                ? require('../../utils/img/userAnonymous.png')
-                                : { uri: `http://www.geoscout.fr:5555${img}` }
-                        }
-                        style={styles.image}
-                    />
-                    <View>
-                        <Text style={[styles.name, { marginRight: 10 }]}>
-                            {lastname} {firstname}
-                        </Text>
-                        <Rate rate={rate} size={14} displayNumber={false} />
+            <TouchableWithoutFeedback
+                key={id_comment}
+                onPress={() => {
+                    navigate('Profil', { user: user });
+                }}
+            >
+                <View style={styleComment}>
+                    <View style={[styles.inline, { marginBottom: 5 }]}>
+                        <Image
+                            source={
+                                !img || img.length < 1
+                                    ? require('../../utils/img/userAnonymous.png')
+                                    : {
+                                          uri: `http://www.geoscout.fr:5555${img}`
+                                      }
+                            }
+                            style={styles.image}
+                        />
+                        <View>
+                            <Text style={[styles.name, { marginRight: 10 }]}>
+                                {user.lastname} {user.firstname}
+                            </Text>
+                            <Rate rate={rate} size={14} displayNumber={false} />
+                        </View>
                     </View>
+                    <Text style={styles.comment}>{comment}</Text>
+                    <Text style={{ color: 'grey', fontSize: 10 }}>
+                        Version: {version} | {dateComment}
+                    </Text>
                 </View>
-                <Text style={styles.comment}>{comment}</Text>
-                <Text style={{ color: 'grey', fontSize: 10 }}>
-                    Version: {version} | {dateComment}
-                </Text>
-            </View>
+            </TouchableWithoutFeedback>
         );
     }
 }

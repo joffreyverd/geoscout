@@ -4,3 +4,5 @@ Misc/
 \.vscode/settings\.json
 
 mobile-client/GeoScout/\.expo-shared/assets\.json
+
+mobile-client/GeoScout/package-lock\.json

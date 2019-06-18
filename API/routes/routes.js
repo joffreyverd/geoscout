@@ -45,6 +45,7 @@ module.exports = function(app)
 	app.route('/publish-circuit').put(circuit.publicationCircuit);
 	app.route('/circuit/:id_circuit').put(circuit.updateCircuit);
 	app.route('/circuit/patch/:id_circuit').put(circuit.patch);
+	app.route('/circuit/is-favorite/:id_circuit').get(circuit.isFavorite);
 	app.route('/circuit').delete(circuit.deleteCircuit);
 	app.route('/circuit/nearby').post(circuit.nearbyCircuits);
 	app.route('/achievedcircuit').get(achievements.getAchievements);

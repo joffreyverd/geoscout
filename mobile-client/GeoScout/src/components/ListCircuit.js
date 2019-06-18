@@ -3,40 +3,93 @@ import { TouchableWithoutFeedback, ScrollView, View } from 'react-native';
 import api from '../config/httpMethods';
 import fileSystem from '../config/fileSystem';
 import Callout from './Callout';
+import Loading from './Loading';
 
 export default class ListCircuit extends React.Component {
     state = {
-        circuits: null,
+        circuits: [],
+        achievedCircuit: [],
+        orderStep: 0,
         isReady: false
     };
 
     async componentDidMount() {
-        const { type, root } = this.props;
+        const { type, root, format } = this.props;
         try {
             if (type == 'local') {
                 const circuits = await fileSystem.getCircuitsExist();
-                if (
-                    circuits != null &&
-                    circuits != '' &&
-                    circuits !== undefined
-                ) {
+                if (circuits) {
                     this.setState({ circuits, isReady: true });
                 }
             } else if (type == 'api') {
                 const circuits = await api.get(root);
                 this.setState({ circuits, isReady: true });
+            } else if (type == 'achievedCircuit') {
+                const achievedCircuit = await api.get('achievedcircuit');
+                const downloadAchievedCircuit = achievedCircuit.map(
+                    async item => {
+                        const data = await fileSystem.readFile(
+                            format ? item.id_circuit : item.Circuit.id_circuit
+                        );
+                        if (data && data.version == item.version) {
+                            var orderStep = null;
+                            let i = 0;
+                            do {
+                                if (item.id_step == data.Steps[i].id_step) {
+                                    orderStep = data.Steps[i].order;
+                                } else {
+                                    i++;
+                                }
+                            } while (
+                                orderStep == null &&
+                                i < data.Steps.length
+                            );
+                            return {
+                                Circuit: data,
+                                numberStep: data.Steps.length,
+                                id_ac: item.id_achievement,
+                                score: item.score,
+                                maxScore: item.max_score,
+                                time: item.time,
+                                order: orderStep,
+                                time: item.achievedTime
+                            };
+                        } else {
+                            return null;
+                        }
+                    }
+                );
+                const result = await Promise.all(downloadAchievedCircuit);
+                this.setState({
+                    circuits: result,
+                    achievedCircuit,
+                    isReady: true
+                });
             }
         } catch (error) {
             console.log(error);
         }
     }
 
+    navigateAchievedCircuit(circuit, id_ac, stepNumber, score, maxScore, time) {
+        const { navigate } = this.props;
+        navigate('Transit', {
+            circuit,
+            score,
+            maxScore,
+            startingTime: new Date(),
+            time,
+            step: stepNumber,
+            id_ac
+        });
+    }
+
     render() {
         const { circuits, isReady } = this.state;
-        const { navigate, format } = this.props;
+        const { navigate, format, type } = this.props;
         return (
             <ScrollView showsHorizontalScrollIndicator={false}>
-                {isReady &&
+                {isReady ? (
                     circuits.map(item => (
                         <TouchableWithoutFeedback
                             key={
@@ -45,10 +98,20 @@ export default class ListCircuit extends React.Component {
                                     : item.Circuit.id_circuit
                             }
                             onPress={() => {
-                                navigate(
-                                    'DetailCircuit',
-                                    format ? item : item.Circuit
-                                );
+                                type != 'achievedCircuit'
+                                    ? navigate('DetailCircuit', {
+                                          id_circuit: format
+                                              ? item.id_circuit
+                                              : item.Circuit.id_circuit
+                                      })
+                                    : this.navigateAchievedCircuit(
+                                          item.Circuit,
+                                          item.id_ac,
+                                          item.order,
+                                          item.score,
+                                          item.maxScore,
+                                          item.time
+                                      );
                             }}
                         >
                             <View>
@@ -73,19 +136,30 @@ export default class ListCircuit extends React.Component {
                                     distance={
                                         format
                                             ? item.length
-                                            : item.Circuit.distance
+                                            : item.Circuit.length
                                     }
                                     time={
                                         format
-                                            ? item.duration
-                                            : item.Circuit.time
+                                            ? item.real_duration
+                                            : item.Circuit.real_duration
+                                    }
+                                    order={
+                                        type == 'achievedCircuit'
+                                            ? {
+                                                  orderStep: item.order,
+                                                  maxOrderStep: item.numberStep
+                                              }
+                                            : null
                                     }
                                     // difficulty={[1, 0, 1]}
                                     callBy={'list'}
                                 />
                             </View>
                         </TouchableWithoutFeedback>
-                    ))}
+                    ))
+                ) : (
+                    <Loading />
+                )}
             </ScrollView>
         );
     }

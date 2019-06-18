@@ -167,10 +167,9 @@ export default class GeoLocation extends React.Component {
                     <MapView.Callout
                         styles={styles.callout}
                         onPress={() => {
-                            this.props.navigation.navigate(
-                                'DetailCircuit',
-                                item
-                            );
+                            this.props.navigation.navigate('DetailCircuit', {
+                                id_circuit: item.id_circuit
+                            });
                         }}
                     >
                         <Callout
@@ -229,6 +228,7 @@ export default class GeoLocation extends React.Component {
                                 cacheEnabled={true}
                                 zoomEnabled
                                 scrollingEnabled
+                                showsCompass={true}
                             >
                                 <Marker coordinate={this.state.markerPosition}>
                                     <View style={styles.radius}>
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     loaderMargin: {
-        marginTop: 70
+        marginTop: 40
     },
     errorText: {
         fontSize: 24,

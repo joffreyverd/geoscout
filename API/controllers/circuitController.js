@@ -374,6 +374,37 @@ module.exports =
 		}
 		else
 			res.status(401).send(utils.messages.invalidToken);
+	},
+
+	isFavorite : async (req,res) =>
+	{
+		let id_user = utils.verifToken(req.headers['authorization']);
+
+		if(id_user)
+		{
+			try
+			{
+				let favorite = await db.Favorite.findOne(
+					{
+						where : {id_circuit : req.params.id_circuit, id_user : id_user}
+					});
+				
+				if(favorite)
+					res.json({isFavorites : true});
+				else
+					res.json({isFavorites : false});
+					
+			}
+
+			catch(err)
+			{
+				console.log(err);
+				await t.rollback();
+				res.status(500).send(utils.messages.serverError);
+			}
+		}
+		else
+			res.status(401).send(utils.messages.invalidToken);
 	}
 };
 

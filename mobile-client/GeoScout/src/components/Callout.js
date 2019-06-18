@@ -13,6 +13,7 @@ export default function Callout(props) {
         distance,
         time,
         difficulty,
+        order,
         styleCallout,
         callBy
     } = props;
@@ -28,19 +29,19 @@ export default function Callout(props) {
     const timeMinute = time % 60;
     return (
         <View style={styleCallout}>
-            {name !== undefined && (
+            {name ? (
                 <Text style={styles.name} numberOfLines={1}>
                     {name}
                 </Text>
-            )}
-            {descriptionPlanText !== '' && (
+            ) : null}
+            {descriptionPlanText ? (
                 <Text style={styles.description} numberOfLines={2}>
                     {descriptionPlanText}
                 </Text>
-            )}
-            {rate !== undefined && <Rate rate={rate} />}
+            ) : null}
+            {rate ? <Rate rate={rate} /> : null}
             <View style={styles.inline}>
-                {distance !== undefined && (
+                {distance ? (
                     <>
                         <Icon
                             name="directions-walk"
@@ -50,8 +51,8 @@ export default function Callout(props) {
                         />
                         <Text style={styles.item}>{distance}km</Text>
                     </>
-                )}
-                {time !== undefined && (
+                ) : null}
+                {time ? (
                     <>
                         <Icon
                             name="access-time"
@@ -63,12 +64,30 @@ export default function Callout(props) {
                             {timeHour}h{timeMinute}m
                         </Text>
                     </>
-                )}
-                {difficulty !== undefined && (
+                ) : null}
+                {difficulty ? (
                     <View>
                         <Difficulty difficulty={difficulty} />
                     </View>
-                )}
+                ) : null}
+                {order ? (
+                    order.orderStep != null &&
+                    order.orderStep !== undefined &&
+                    order.maxOrderStep != null &&
+                    order.maxOrderStep !== undefined ? (
+                        <View>
+                            <Text style={styles.item}>
+                                {order.orderStep}/{order.maxOrderStep} étapes
+                            </Text>
+                        </View>
+                    ) : (
+                        <View>
+                            <Text style={styles.error}>
+                                Il y a une erreur sur ce circuit.
+                            </Text>
+                        </View>
+                    )
+                ) : null}
             </View>
         </View>
     );
@@ -94,5 +113,9 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    error: {
+        color: '#f44336',
+        fontSize: 12
     }
 });

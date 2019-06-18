@@ -2,12 +2,14 @@ import React from 'react';
 import Comment from './Comment';
 
 export default function ListComment(props) {
-    const { evaluations } = props;
+    const { evaluations, navigate } = props;
     return evaluations.map(item => (
         <Comment
             key={item.id}
+            navigate={navigate}
             user={item.User}
             comment={item.comment}
+            id_comment={item.id}
             rate={item.stars}
             version={item.version}
             date={item.createdAt}

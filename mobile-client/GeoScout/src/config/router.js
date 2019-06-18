@@ -16,9 +16,11 @@ import GeoLocation from '../screens/GeoLocation';
 import DownloadCircuit from '../screens/Circuit/DownloadCircuit';
 import FavoriteCircuit from '../screens/Circuit/FavoriteCircuit';
 import DetailCircuit from '../screens/Circuit/DetailCircuit';
+import RunningCircuit from '../screens/Circuit/RunningCircuit';
 import MyCircuits from '../screens/Circuit/MyCircuits';
 import Settings from '../screens/Profil/Settings.js';
 import Me from '../screens/Profil/Me';
+import Profil from '../screens/Profil/Profil';
 
 import Transit from '../screens/Play/Transit';
 import Etape from '../screens/Play/Etape';
@@ -34,7 +36,9 @@ const PrincipalStack = createDrawerNavigator(
         MyCircuits: MyCircuits,
         DownloadCircuit: DownloadCircuit,
         FavoriteCircuit: FavoriteCircuit,
-        DetailCircuit: DetailCircuit
+        RunningCircuit: RunningCircuit,
+        DetailCircuit: DetailCircuit,
+        Profil: Profil
     },
     {
         drawerWidth: 220,
