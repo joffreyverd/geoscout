@@ -89,7 +89,8 @@ class Etape extends React.Component {
                         score,
                         maxScore,
                         startingTime,
-                        time
+                        time,
+                        id_ac
                     }
                 }
             }
@@ -110,6 +111,7 @@ class Etape extends React.Component {
                     maxScore={maxScore}
                     startingTime={startingTime}
                     time={time}
+                    id_achieved={id_ac}
                 >
                     <PlayHeader
                         pressMenu={() => this.refMenu.openDrawer()}

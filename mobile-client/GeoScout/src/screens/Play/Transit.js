@@ -109,6 +109,7 @@ class Transit extends React.Component {
      */
     goToStep = e => {
         if (e) e.preventDefault();
+        stopLocationTask();
         let {
             navigation: {
                 navigate,
@@ -150,7 +151,8 @@ class Transit extends React.Component {
                         score,
                         maxScore,
                         time,
-                        startingTime
+                        startingTime,
+                        id_ac
                     }
                 }
             }
@@ -178,6 +180,7 @@ class Transit extends React.Component {
                         maxScore={maxScore}
                         time={time || 0}
                         startingTime={startingTime}
+                        id_achieved={id_ac}
                     >
                         <PlayHeader
                             pressMenu={() => this.refMenu.openDrawer()}

@@ -16,6 +16,7 @@ TaskManager.defineTask(DETECT_STEP, ({ data: { locations }, error }) => {
         // TODO: Error handling
         return;
     }
+
     if (locations) {
         if (isPointWithinRadius(locations[0].coords, step, 30)) {
             Vibration.vibrate(1000);

@@ -1,5 +1,4 @@
 import React from 'react';
-import * as Location from 'expo-location';
 import { Text, StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
 import Drawer from 'react-native-drawer-menu';
@@ -15,44 +14,32 @@ export function PlayDrawerMenu({
     score,
     maxScore: max_score,
     startingTime,
-    time
+    time,
+    id_achieved
 }) {
     /**
-     * Fonction de pause d'un circuit
+     * Fonction de pause ou d'abandon d'un circuit
      */
-    const pause = () => {
+    const stop = statut => {
         stopLocationTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
-        api.post('achievedcircuit', {
+        const body = {
             id_circuit,
-            statut_circuit: 0, // Pause
+            statut_circuit: statut,
             version,
             id_step,
             score,
             max_score,
             achievedTime: currentTime
-        })
-            .then(() => navigate('Home'))
-            .catch(error => {
-                Alert.alert('Erreur', error.text);
-            });
-    };
+        };
+        let save = null;
+        if (id_achieved) {
+            save = () => api.put(`achievedcircuit/${id_achieved}`, body);
+        } else {
+            save = () => api.post('achievedcircuit', body);
+        }
 
-    /**
-     * Fonction d'abandon d'un circuit
-     */
-    const abandon = () => {
-        stopLocationTask();
-        const currentTime = time + (new Date() - startingTime) / (1000 * 60);
-        api.post('achievedcircuit', {
-            id_circuit,
-            statut_circuit: 2, // Abandon
-            version,
-            id_step,
-            score,
-            max_score,
-            achievedTime: currentTime
-        })
+        save()
             .then(() => navigate('Home'))
             .catch(error => {
                 Alert.alert('Erreur', error.text);
@@ -63,7 +50,10 @@ export function PlayDrawerMenu({
         Alert.alert(
             'Pauser',
             'Voulez vous vraiment mettre en pause le circuit ?',
-            [{ text: 'Reprendre' }, { text: 'Mettre en pause', onPress: pause }]
+            [
+                { text: 'Reprendre' },
+                { text: 'Mettre en pause', onPress: () => stop(1) }
+            ]
         );
     };
 
@@ -73,10 +63,11 @@ export function PlayDrawerMenu({
             'Voulez vous vraiment abandonner le circuit ?',
             [
                 { text: 'Reprendre' },
-                { text: 'Abandonner', onPress: abandon, style: 'cancel' }
+                { text: 'Abandonner', onPress: () => stop(2), style: 'cancel' }
             ]
         );
     };
+
     return (
         <Drawer
             responderNegotiate={_ => false}
