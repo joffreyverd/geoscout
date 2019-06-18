@@ -9,7 +9,7 @@ import {
     Image,
     Switch
 } from 'react-native';
-import { Location } from 'expo';
+import * as Location from 'expo-location';
 import { Icon } from 'react-native-elements';
 
 import { NavigationHeader } from '../components/NavigationDrawer';

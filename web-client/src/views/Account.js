@@ -9,9 +9,8 @@ import UserFeed from '../components/account/UserFeed';
 import api from '../utils/httpMethods';
 
 const Relations = [
-    { id_user: 1, firstname: 'Stevy', lastname: 'Palarski', profil_picture: 'blablabla' },
-    { id_user: 2, firstname: 'Thomas', lastname: 'Unterfinger', profil_picture: 'blablabla' },
-    { id_user: 3, firstname: 'Joffrey', lastname: 'Verd', profil_picture: 'blablabla' },
+    { id_user: 36, firstname: 'Stevy', lastname: 'Palarski' },
+    { id_user: 2, firstname: 'Thomas', lastname: 'Unterfinger' },
 ];
 
 const Opinions = [
@@ -29,19 +28,28 @@ export default class Account extends Component {
 
     componentDidMount() {
         const { user } = this.props;
-        api.get(`download-user/${user.id_user}`).then((data) => {
-            this.setState({ user: data });
-        }).catch(() => {
-            console.log('Oups, une erreur s\'est produite');
-        });
-        api.post('download', {
-            id: user.id_user,
-            type: 'user',
-        }).then((img) => {
-            this.setState({ img });
-        }).catch(() => {
-            console.log('error');
-        });
+        if (user) {
+            api.get(`download-user/${user.id_user}`).then((data) => {
+                this.setState({ user: data });
+            }).catch(() => {
+                console.log('Oups, une erreur s\'est produite');
+            });
+
+            api.post('download', {
+                id: user.id_user,
+                type: 'user',
+            }).then((img) => {
+                this.setState({ img });
+            }).catch(() => {
+                console.log('error');
+            });
+
+            api.get(`user-info/${user.id_user}`).then((personnalStates) => {
+                this.setState({ personnalStates });
+            }).catch(() => {
+                console.log('error');
+            });
+        }
     }
 
     changeCurrentTab = (data) => {
@@ -51,7 +59,9 @@ export default class Account extends Component {
     }
 
     render() {
-        const { user, currentTab, img } = this.state;
+        const { user, currentTab, img, personnalStates } = this.state;
+        console.log(personnalStates);
+
         let currentComponent;
         switch (currentTab) {
             case 'opinions':
@@ -79,7 +89,10 @@ export default class Account extends Component {
 
                 <div className='account-body-wrapper'>
 
-                    <BasicInformations user={user} />
+                    <BasicInformations
+                        user={user}
+                        personnalStates={personnalStates}
+                    />
 
                     {currentComponent}
 
