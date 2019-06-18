@@ -28,7 +28,8 @@ class Transit extends React.Component {
             score,
             maxScore,
             startingTime,
-            time
+            time,
+            id_ac
         } = this.props.navigation.state.params;
         // Récupération de l'étape en cours
         const step = circuit.Steps[stepNumber];
@@ -41,12 +42,17 @@ class Transit extends React.Component {
                 });
             }
         } else {
+            const {
+                navigation: { navigate }
+            } = this.props;
+
             let finishTime = time + (new Date() - startingTime) / (1000 * 60);
-            this.props.navigation.navigate('Finish', {
+            navigate('Finish', {
                 circuit,
                 score,
                 maxScore,
-                time: finishTime
+                time: finishTime,
+                id_ac
             });
         }
     }
@@ -114,7 +120,8 @@ class Transit extends React.Component {
                         score,
                         maxScore,
                         startingTime,
-                        time
+                        time,
+                        id_ac
                     }
                 }
             }
@@ -128,7 +135,8 @@ class Transit extends React.Component {
             score,
             maxScore,
             startingTime,
-            time
+            time,
+            id_ac
         });
     };
 

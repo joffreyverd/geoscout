@@ -36,7 +36,8 @@ class Etape extends React.Component {
                         score,
                         maxScore,
                         startingTime,
-                        time
+                        time,
+                        id_ac
                     }
                 }
             }
@@ -47,7 +48,8 @@ class Etape extends React.Component {
             score: score + scoreWin,
             maxScore: maxScore + maxScoreWin,
             startingTime,
-            time
+            time,
+            id_ac
         });
     };
 
