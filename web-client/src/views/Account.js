@@ -60,7 +60,6 @@ export default class Account extends Component {
 
     render() {
         const { user, currentTab, img, personnalStates } = this.state;
-        console.log(personnalStates);
 
         let currentComponent;
         switch (currentTab) {
