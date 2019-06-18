@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Tooltip } from 'reactstrap';
-import { Rate, Avatar } from 'antd';
+import { Rate } from 'antd';
 import 'antd/dist/antd.css';
 
 import api from '../../utils/httpMethods';

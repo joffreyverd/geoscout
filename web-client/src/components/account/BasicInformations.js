@@ -7,7 +7,7 @@ class BasicInformations extends Component {
 
     render() {
 
-        const { user } = this.props;
+        const { user, personnalStates } = this.props;
 
         return (
             <>
@@ -16,6 +16,15 @@ class BasicInformations extends Component {
                     <p>{user.email}</p>
                     <p>Strasbourg</p>
                     <p>Inscrit depuis Mai 2017</p>
+
+                    {personnalStates &&
+                        <>
+                            <p>{`Ciruits crées : ${personnalStates.circuits_created}`}</p>
+                            <p>{`Ciruits joués : ${personnalStates.circuits_played}`}</p>
+                            <p>{`Ciruits commentés : ${personnalStates.comments_posted}`}</p>
+                        </>
+                    }
+
                 </div>
 
             </>

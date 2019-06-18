@@ -10,6 +10,10 @@ class ProfilEdition extends Component {
 
     state = {}
 
+    ChangePersonnalInfos = () => {
+
+    }
+
     render() {
 
         const { user } = this.props;
@@ -67,7 +71,7 @@ class ProfilEdition extends Component {
                             <Button
                                 color='primary'
                                 type='submit'
-                                onClick={this.lol}
+                                onClick={this.ChangePersonnalInfos}
                             >Enregistrer
                             </Button>
                         </ModalFooter>

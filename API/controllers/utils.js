@@ -83,11 +83,11 @@ module.exports =
 			circuit.Steps.map(step => 
 			{
 				dist+= parseFloat(module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude));
-				
 			});
-			console.log(dist.toFixed(1));
+			
+
 			circuit.length = dist.toFixed(2);
-			//await circuit.save({transaction: t});
+			await circuit.save({transaction: t});
 			await t.commit();	
 		}
 
