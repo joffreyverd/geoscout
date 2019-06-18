@@ -95,7 +95,6 @@ class Etape extends React.Component {
             }
         } = this.props;
         const step = circuit.Steps[stepNumber];
-        console.log(step.description);
 
         return (
             <AndroidBackHandler onBackPress={this.onBackPress}>

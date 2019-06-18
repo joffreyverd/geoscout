@@ -21,7 +21,7 @@ import {
 class Transit extends React.Component {
     state = {};
 
-    async componentDidMount() {
+    componentDidMount() {
         const {
             circuit,
             step: stepNumber,
@@ -45,7 +45,6 @@ class Transit extends React.Component {
             const {
                 navigation: { navigate }
             } = this.props;
-
             let finishTime = time + (new Date() - startingTime) / (1000 * 60);
             navigate('Finish', {
                 circuit,
@@ -158,13 +157,13 @@ class Transit extends React.Component {
         } = this.props;
         const step = circuit.Steps[stepNumber];
 
-        const title =
-            'Transit ' +
-            (step.order === 0
-                ? 'initial'
-                : `${step.order} / ${circuit.Steps.length - 1}`);
-
         if (step) {
+            const title =
+                'Transit ' +
+                (step.order === 0
+                    ? 'initial'
+                    : `${step.order} / ${circuit.Steps.length - 1}`);
+
             return (
                 <AndroidBackHandler onBackPress={this.onBackPress}>
                     <PlayDrawerMenu
