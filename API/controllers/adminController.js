@@ -44,6 +44,9 @@ module.exports=
 				res.status(500).send(utils.messages.serverError);
 			}
 		}
+
+		else
+			res.status(401).send(utils.messages.invalidToken);
 	},
 
 	blockCircuit : async (req,res) =>
@@ -74,5 +77,8 @@ module.exports=
 				res.status(500).send(utils.messages.serverError);
 			}
 		}
+
+		else
+			res.status(401).send(utils.messages.invalidToken);
 	}
 };
