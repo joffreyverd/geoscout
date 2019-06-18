@@ -3,8 +3,26 @@
 'use strict';
 const db = require('../models');
 const utils = require('./utils');
+
+/** 
+Ce module regroupe toutes les méthodes sur les achievedcircuit, c'est-à-dire les circuits terminés, mais en pause ou abandonné par les utilisateurs
+*/
 module.exports=
-{
+{	
+	/**
+	Cette fonction permet de créer un achievedcircuit. Pour cette fonction et toutes les autres dans ce fichier.
+	On teste d'abord le token envoyé par l'utilisateur pour vérifier s'il est connecté au moment de l'appel.
+	S'il est n'est pas connecté, a renvoit une erreur avec le code 401. en cas d'erreur on renvoit un code 500,
+	sinon on renvoie un code 200 avec l'objet créé.
+
+	@param {int} req.body.score le score actuel de l'utilisateur
+	@param {int} req.body.max.score le score max du circuit
+	@param {Tinyint} req.body.statut_circuit le statut du circuit -> 0 = en pause / 1 = terminé / 2 = abandonnée
+	@param {TinyInt} req.body.version quel est la version du circuit
+	@param {TinyInt} req.body.achievedtime le temps écoulé depuis le début du circuit en minutes
+	@param {int} req.body.id_circuit l'id du circuit
+	@param {int} req.body.id_step en cas de pause, l'id de l'étape à laquelle on s'est arrêté 	
+	*/
 	createAchievement: async (req,res) =>
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
@@ -43,7 +61,11 @@ module.exports=
 	},
 
 	//////////////////////////////////////////////////////////
+	/**
+	Cette fonction supprime un achievedCircuit dont l'id est dans l'url
 
+	@param {int} req.params.id_achievement l'id de l'achieved circuit que l'on veut supprimer
+	*/
 	deleteAchievement: async (req,res) =>
 	{
 		if (utils.verifToken(req.headers['authorization']))
@@ -68,7 +90,9 @@ module.exports=
 	},
 
 	//////////////////////////////////////////////////////////
-
+	/**
+	Cette fonction renvoie tous les achievedCircuits pour l'utilisateur en cours
+	*/
 	getAchievements: async (req,res) =>
 	{
 		let id = utils.verifToken(req.headers['authorization']);
@@ -83,7 +107,7 @@ module.exports=
 						[
 							{
 								model : db.Circuit,
-								where : {blocked : 0},
+								where : {blocked : 0,published : true},
 								include : 
 								[
 									{
@@ -114,7 +138,17 @@ module.exports=
 	},
 
 	//////////////////////////////////////////////////////////
+	/**
+	Cette fonction permet de modifier un AchievedCircuit créé.
 
+	@param {int} req.body.score le score actuel de l'utilisateur
+	@param {int} req.body.max.score le score max du circuit
+	@param {Tinyint} req.body.statut_circuit le statut du circuit -> 0 = en pause / 1 = terminé / 2 = abandonnée
+	@param {TinyInt} req.body.version quel est la version du circuit
+	@param {TinyInt} req.body.achievedtime le temps écoulé depuis le début du circuit en minutes
+	@param {int} req.body.id_circuit l'id du circuit
+	@param {int} req.body.id_step en cas de pause, l'id de l'étape à laquelle on s'est arrêté 	
+	*/
 	updateAchievement: async (req,res) =>
 	{
 		let id_user = utils.verifToken(req.headers['authorization']);
