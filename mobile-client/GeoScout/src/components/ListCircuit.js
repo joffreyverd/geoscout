@@ -31,16 +31,11 @@ export default class ListCircuit extends React.Component {
                         const data = await fileSystem.readFile(
                             format ? item.id_circuit : item.Circuit.id_circuit
                         );
-                        if (data.version != item.version) {
-                            return null;
-                        } else {
+                        if (data && data.version == item.version) {
                             var orderStep = null;
                             let i = 0;
-                            console.log(item.id_step);
                             do {
-                                console.log(data.Steps[i].id_step);
                                 if (item.id_step == data.Steps[i].id_step) {
-                                    console.log('ok');
                                     orderStep = data.Steps[i].order;
                                 } else {
                                     i++;
@@ -50,11 +45,7 @@ export default class ListCircuit extends React.Component {
                                 i < data.Steps.length
                             );
                             return {
-                                id_circuit: data.id_circuit,
-                                name: data.name,
-                                description: data.description,
-                                distance: data.distance,
-                                duration: data.duration,
+                                Circuit: data,
                                 numberStep: data.Steps.length,
                                 id_ac: item.id_achievement,
                                 score: item.score,
@@ -63,6 +54,8 @@ export default class ListCircuit extends React.Component {
                                 order: orderStep,
                                 time: item.achievedTime
                             };
+                        } else {
+                            return null;
                         }
                     }
                 );
@@ -78,7 +71,7 @@ export default class ListCircuit extends React.Component {
         }
     }
 
-    navigateAchievedCircuit(circuit, id_ac, step, score, maxScore, time) {
+    navigateAchievedCircuit(circuit, id_ac, stepNumber, score, maxScore, time) {
         const { navigate } = this.props;
         navigate('Transit', {
             circuit,
@@ -86,7 +79,7 @@ export default class ListCircuit extends React.Component {
             maxScore,
             startingTime: new Date(),
             time,
-            step: step,
+            step: stepNumber,
             id_ac
         });
     }
@@ -112,12 +105,12 @@ export default class ListCircuit extends React.Component {
                                               : item.Circuit.id_circuit
                                       })
                                     : this.navigateAchievedCircuit(
-                                          item,
-                                          item.id_achievement,
+                                          item.Circuit,
+                                          item.id_ac,
                                           item.order,
                                           item.score,
-                                          item.max_score,
-                                          item.achievedTime
+                                          item.maxScore,
+                                          item.time
                                       );
                             }}
                         >
