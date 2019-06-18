@@ -6,18 +6,14 @@ import {
     Alert,
     StyleSheet,
     ScrollView,
-    View,
-    ToastAndroid
+    View
     //Dimensions
 } from 'react-native';
-import * as Location from 'expo-location';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
-//import HTML from 'react-native-render-html';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
 import {
     DETECTED,
-    DETECT_STEP,
     startLocationTask,
     stopLocationTask
 } from '../../config/LocationTask';
@@ -25,7 +21,7 @@ import {
 class Transit extends React.Component {
     state = {};
 
-    componentDidMount() {
+    async componentDidMount() {
         const {
             circuit,
             step: stepNumber,
@@ -70,9 +66,6 @@ class Transit extends React.Component {
     };
 
     hasEnteredStepLocation = async () => {
-        Location.hasStartedGeofencingAsync(DETECT_STEP).then(x => {
-            ToastAndroid.show(x ? 'true' : 'false', ToastAndroid.SHORT);
-        });
         // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
         const x = await AsyncStorage.getItem(DETECTED);
         if (x === null) return;
