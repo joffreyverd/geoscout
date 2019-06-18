@@ -29,7 +29,7 @@ Object.keys(db).forEach(modelName => {
 	}
 });
 
-sequelize.sync(/*{force : true }*/); // ATTENTION !!!
+sequelize.sync({force : true }); // ATTENTION !!!
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
