@@ -11,22 +11,13 @@ async function getCircuitsExist() {
             );
             if (nameCircuits.length > 0) {
                 const circuitsJson = nameCircuits.map(async uriFile => {
-                    const data = await FileSystem.readAsStringAsync(
-                        rootDirectoryPath + '/' + uriFile
+                    const data = await this.readFile(
+                        uriFile.replace('.json', '')
                     );
                     return data;
                 });
                 const result = await Promise.all(circuitsJson);
-                var circuitReturn = '[';
-                for (let i = 0; i < result.length; i++) {
-                    circuitReturn += result[i];
-                    if (i != result.length - 1) {
-                        circuitReturn += ',';
-                    } else {
-                        circuitReturn += ']';
-                    }
-                }
-                return JSON.parse(circuitReturn);
+                return result;
             } else {
                 return null;
             }

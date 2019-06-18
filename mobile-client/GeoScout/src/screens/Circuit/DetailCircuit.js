@@ -113,7 +113,7 @@ export default class DetailCircuit extends React.Component {
                         text: 'Oui',
                         onPress: () => {
                             navigate('Transit', {
-                                circuit: circuit,
+                                circuit,
                                 step: 0,
                                 score: 0,
                                 maxScore: 0,
@@ -143,12 +143,7 @@ export default class DetailCircuit extends React.Component {
     };
 
     render() {
-        const {
-            name,
-            description,
-            id_circuit
-        } = this.props.navigation.state.params;
-        const { isDownload, evaluations, images } = this.state;
+        const { circuit, isDownload, evaluations, images } = this.state;
         return (
             <>
                 <NavigationHeader
@@ -165,13 +160,11 @@ export default class DetailCircuit extends React.Component {
                             flex: 1
                         }}
                     >
-                        <Text style={styles.title}>{name}</Text>
+                        <Text style={styles.title}>{circuit.name}</Text>
                         <Carousel images={images} />
-                        {description !== undefined &&
-                        description != null &&
-                        description != '' ? (
+                        {circuit.description ? (
                             <HTML
-                                html={description.replace(
+                                html={circuit.description.replace(
                                     /<p[^>]*?><br><\/p>/g,
                                     ''
                                 )}
@@ -179,7 +172,7 @@ export default class DetailCircuit extends React.Component {
                             />
                         ) : (
                             <Text style={styles.description}>
-                                Pas de description disponible sur ce circuit.
+                                Pas de description disponible pour ce circuit.
                             </Text>
                         )}
                         {evaluations && evaluations.length ? (
@@ -191,7 +184,7 @@ export default class DetailCircuit extends React.Component {
                             </>
                         ) : (
                             <Text style={styles.description}>
-                                Pas de commentaires disponible.
+                                Pas de commentaires disponible pour ce circuit.
                             </Text>
                         )}
                     </ScrollView>

@@ -105,13 +105,13 @@ export default class Me extends Component {
                                 </Text>
                             </View>
                         </ScrollView>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={styles.button}
                             onPress={this.handleSettingsPress}
                             activeOpacity={0.8}
                         >
                             <Text style={styles.textButton}>Paramètres</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </SafeAreaView>
                 ) : null}
             </>

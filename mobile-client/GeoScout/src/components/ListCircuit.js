@@ -6,34 +6,84 @@ import Callout from './Callout';
 
 export default class ListCircuit extends React.Component {
     state = {
-        circuits: null,
+        circuits: [],
+        achievedCircuit: [],
+        orderStep: 0,
         isReady: false
     };
 
     async componentDidMount() {
-        const { type, root } = this.props;
+        const { type, root, format } = this.props;
         try {
             if (type == 'local') {
                 const circuits = await fileSystem.getCircuitsExist();
-                if (
-                    circuits != null &&
-                    circuits != '' &&
-                    circuits !== undefined
-                ) {
+                if (circuits) {
                     this.setState({ circuits, isReady: true });
                 }
             } else if (type == 'api') {
                 const circuits = await api.get(root);
                 this.setState({ circuits, isReady: true });
+            } else if (type == 'achievedCircuit') {
+                const achievedCircuit = await api.get('achievedcircuit');
+                const downloadAchievedCircuit = achievedCircuit.map(
+                    async item => {
+                        const data = await fileSystem.readFile(
+                            format ? item.id_circuit : item.Circuit.id_circuit
+                        );
+                        if (data.version != item.version) {
+                            return null;
+                        } else {
+                            var orderStep = 0;
+                            data.Steps.forEach(itemCircuit => {
+                                if (item.id_step == itemCircuit.id_step) {
+                                    orderStep = itemCircuit.order;
+                                }
+                            });
+                            return {
+                                id_circuit: data.id_circuit,
+                                name: data.name,
+                                description: data.description,
+                                distance: data.distance,
+                                duration: data.duration,
+                                numberStep: data.Steps.length,
+                                id_ac: item.id_achievement,
+                                score: item.score,
+                                maxScore: item.max_score,
+                                time: item.time,
+                                order: orderStep,
+                                time: item.achievedTime
+                            };
+                        }
+                    }
+                );
+                const result = await Promise.all(downloadAchievedCircuit);
+                this.setState({
+                    circuits: result,
+                    achievedCircuit,
+                    isReady: true
+                });
             }
         } catch (error) {
             console.log(error);
         }
     }
 
+    navigateAchievedCircuit(circuit, id_ac, step, score, maxScore, time) {
+        const { navigate } = this.props;
+        navigate('Transit', {
+            circuit,
+            score,
+            maxScore,
+            startingTime: new Date(),
+            time,
+            step,
+            id_ac
+        });
+    }
+
     render() {
         const { circuits, isReady } = this.state;
-        const { navigate, format } = this.props;
+        const { navigate, format, type } = this.props;
         return (
             <ScrollView showsHorizontalScrollIndicator={false}>
                 {isReady &&
@@ -45,10 +95,20 @@ export default class ListCircuit extends React.Component {
                                     : item.Circuit.id_circuit
                             }
                             onPress={() => {
-                                navigate(
-                                    'DetailCircuit',
-                                    format ? item : item.Circuit
-                                );
+                                type != 'achievedCircuit'
+                                    ? navigate('DetailCircuit', {
+                                          id_circuit: format
+                                              ? item.id_circuit
+                                              : item.Circuit.id_circuit
+                                      })
+                                    : this.navigateAchievedCircuit(
+                                          item,
+                                          item.id_achievement,
+                                          item.order,
+                                          item.score,
+                                          item.max_score,
+                                          item.achievedTime
+                                      );
                             }}
                         >
                             <View>
@@ -73,12 +133,20 @@ export default class ListCircuit extends React.Component {
                                     distance={
                                         format
                                             ? item.length
-                                            : item.Circuit.distance
+                                            : item.Circuit.length
                                     }
                                     time={
                                         format
-                                            ? item.duration
-                                            : item.Circuit.time
+                                            ? item.real_duration
+                                            : item.Circuit.real_duration
+                                    }
+                                    order={
+                                        type == 'achievedCircuit'
+                                            ? {
+                                                  orderStep: item.order,
+                                                  maxOrderStep: item.numberStep
+                                              }
+                                            : null
                                     }
                                     // difficulty={[1, 0, 1]}
                                     callBy={'list'}

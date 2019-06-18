@@ -9,6 +9,7 @@ export const DrawerContent = ({ items, ...props }) => {
         'GeoLocation',
         'Me',
         'MyCircuits',
+        'RunningCircuit',
         'DownloadCircuit',
         'FavoriteCircuit'
     ];
