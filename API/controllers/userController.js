@@ -105,7 +105,7 @@ module.exports =
 				if (err) 
 					return res.status(401).send(utils.messages.invalidToken);
 				else
-					res.status(200).send(await db.User.findByPk(decoded.id_user,{attributes : ['id_user','firstname','lastname','email']}));	
+					res.status(200).send(await db.User.findByPk(decoded.id_user,{attributes : ['id_user','firstname','lastname','email','is_admin']}));	
 			});
 		}
 
@@ -269,24 +269,6 @@ module.exports =
 			let id_user = utils.verifToken(req.headers['authorization']);
 			if(id_user)
 			{
-				/*let favoris = await db.Circuit.findAll(
-					{
-						include : 
-						[
-							{
-								model : db.Favorite,
-								where : {id_user : id_user},
-								attributes : [],
-								include :
-								[
-									{
-										model : db.Circuit
-									}
-								]
-							}
-						]
-					}
-				);*/
 
 				let favorites = await db.Favorite.findAll(
 					{
@@ -295,7 +277,7 @@ module.exports =
 						[
 							{
 								model : db.Circuit,
-								where: {blocked : 0},
+								where: {blocked : 0,published : true},
 								include : 
 								[
 									{
@@ -392,7 +374,7 @@ module.exports =
 		{
 			let circuitCount = await db.Circuit.count(
 				{ 
-					where : { id_user : req.params.id_ser}
+					where : { id_user : req.params.id_user}
 				});
 			let circuitPlayed = await db.AchievedCircuit.count(
 				{ 
@@ -406,12 +388,12 @@ module.exports =
 				
 			let response = 
 			{
-				"circuits_created" : circuitCount,
-				"circuits_played" : circuitPlayed,
-				"comments_posted" : commentPosted,
-			}
+				'circuits_created' : circuitCount,
+				'circuits_played' : circuitPlayed,
+				'comments_posted' : commentPosted,
+			};
 
-			res.status(200).json(response);
+			res.json(response);
 		}
 		else
 			res.status(401).send(utils.messages.invalidToken);

@@ -21,7 +21,7 @@ module.exports = function(app)
 	app.route('/update-user').post(user.updateUser);
 	app.route('/whoami').get(user.whoami);
 	app.route('/relations').get(user.listRelations);
-	app.route("/user-info/:id_user").get(user.getCount);
+	app.route('/user-info/:id_user').get(user.getCount);
 	app.route('/ask-relation/:id_user').put(user.askRelation);
 	app.route('/answer-relation/:id_user').put(user.answerRelation);
 	app.route('/favorites').get(user.getFavorites);
@@ -55,7 +55,7 @@ module.exports = function(app)
 	app.route('/question').post(question.createQuestion);
 	app.route('/question/:id_question').put(question.updateQuestion);
 	app.route('/download-user/:id_user').get(user.downloadUser);
-
+	app.route('/published-circuits').get(circuit.publishedCircuits);
 	app.route('/circuits-admin').get(admin.circuitsAdmin);
 	app.route('/circuits-admin/:id_circuit').put(admin.blockCircuit);
 };

@@ -8,5 +8,7 @@
         "0": "pause",
         "1": "terminé",
         "2": "abandonné"
-    }
+    },
+    "DETECT_STEP": "step-location-detection_task",
+    "DETECTED": "stepDetected"
 }

@@ -20,14 +20,14 @@ export default class Finish extends React.Component {
             navigation: {
                 navigate,
                 state: {
-                    params: { circuit, score, maxScore, time }
+                    params: { circuit, score, maxScore, time, id_ac }
                 }
             }
         } = this.props;
         const { stars, comment } = this.state;
 
         // Envoie de la requete achievedCircuit
-        api.post('achievedcircuit', {
+        const body = {
             id_circuit: circuit.id_circuit,
             statut_circuit: 1,
             version: circuit.version,
@@ -35,7 +35,12 @@ export default class Finish extends React.Component {
             score: score,
             max_score: maxScore,
             achievedTime: time
-        });
+        };
+        if (id_ac) {
+            api.put(`achievedcircuit/${id_ac}`, body);
+        } else {
+            api.post('achievedcircuit', body);
+        }
         if (stars)
             api.post('evaluations', {
                 id_circuit: circuit.id_circuit,

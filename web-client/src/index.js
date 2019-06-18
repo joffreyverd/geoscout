@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { positions, Provider } from 'react-alert';
 import AlertTemplate from 'react-alert-template-basic';
@@ -21,11 +21,11 @@ const options = {
 ReactDOM.render(
 
 
-    <BrowserRouter>
+    <HashRouter>
         <Provider template={AlertTemplate} {...options}>
             <App />
         </Provider>
-    </BrowserRouter>,
+    </HashRouter>,
 
     document.getElementById('root'),
 );

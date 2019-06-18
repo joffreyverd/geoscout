@@ -1,9 +1,11 @@
 import React from 'react';
+import * as Location from 'expo-location';
 import { Text, StyleSheet, TouchableOpacity, Alert, View } from 'react-native';
 import { Header, Icon } from 'react-native-elements';
 import Drawer from 'react-native-drawer-menu';
 
 import api from '../config/httpMethods';
+import { stopLocationTask } from '../config/LocationTask';
 
 export function PlayDrawerMenu({
     setRefMenu,
@@ -19,6 +21,7 @@ export function PlayDrawerMenu({
      * Fonction de pause d'un circuit
      */
     const pause = () => {
+        stopLocationTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
         api.post('achievedcircuit', {
             id_circuit,
@@ -39,6 +42,7 @@ export function PlayDrawerMenu({
      * Fonction d'abandon d'un circuit
      */
     const abandon = () => {
+        stopLocationTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
         api.post('achievedcircuit', {
             id_circuit,
@@ -141,7 +145,10 @@ export function PlayHeader({ pressMenu, title }) {
             }}
             centerComponent={{
                 text: title,
-                style: { color: 'white', fontSize: 20 }
+                style: {
+                    color: 'white',
+                    fontSize: 20
+                }
             }}
             backgroundColor="#1abc9c"
         />

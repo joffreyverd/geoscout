@@ -367,7 +367,7 @@ h1 {
     flex-direction: column;
     justify-content: flex-start !important;
   }
-
+  
   .ant-rate-star-zero *, .ant-rate-star-half .ant-rate-star-second {
     color: #fff !important;
   }
@@ -598,20 +598,27 @@ h1 {
   .pictures-handler {
     margin: 20px;
   }
-
+  
   .delete-pictures-button {
     height: 32px;
     width: 168px;
     margin: auto;
   }
-
+  
   .ant-carousel div div div div div img {
     width: 100% !important;
-    height: 300px !important;
-    min-height: 100px !important;
+    height: 300px;
+    min-height: 200px !important;
     object-fit: cover !important;
   }
-
+  
+  .carousel-style div div div div img {
+    width: 100% !important;
+    height: 600px !important;
+    min-height: 400px !important;
+    object-fit: cover !important;
+  }
+  
   /************************** DETAILED-CIRCUIT **************************/
   
   .header-wrapper {
@@ -816,7 +823,7 @@ h1 {
         margin: 20px;
         border-radius: 3px;
         width: 25%;
-        height: 220px;
+        height: 300px;
         padding: 30px;
     }
   
@@ -828,7 +835,7 @@ h1 {
         border-radius: 3px;
         width: 75%;
         padding: 30px;
-        min-height: 338px;
+        min-height: 415px;
     }
   
     .feed-wrapper > ul {
@@ -862,7 +869,7 @@ h1 {
     }
   
     /************************** ADMINISTRATOR **************************/
-
+  
     .administration-button {
         background-color: white;
         padding: 3px 10px;
@@ -871,13 +878,14 @@ h1 {
         transition: .2s;
         margin-left: 30px;
     }
-
+  
     .administration-button:hover {
         background-color: #c0392b;
         color: white;
         transition: .2s;
     }
-
+  
     .administrator-table {
         margin: 0px 20px;
     }
+  

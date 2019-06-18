@@ -55,10 +55,16 @@ class App extends Component {
 
     render() {
         const { isConnected, user } = this.state;
+
         return (
             <>
                 <div className='menu-wrapper'>
-                    <Navigation isConnected={isConnected} login={this.login} logout={this.logout} />
+                    <Navigation
+                        isConnected={isConnected}
+                        isAdmin={user && user.is_admin !== undefined && user.is_admin}
+                        login={this.login}
+                        logout={this.logout}
+                    />
                 </div>
 
                 <Route exact path='/' component={Home} />

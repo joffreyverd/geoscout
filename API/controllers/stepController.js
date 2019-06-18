@@ -69,6 +69,7 @@ module.exports =
 					},{transaction : t});
 				await t.commit();
 				await utils.evaluateDistance(req.body.id_circuit,db);
+				await utils.createFolder(step.id_step,2);
 				res.json(step);
 			}
 
@@ -197,6 +198,7 @@ module.exports =
 
 				await Promise.all(map);
 				await t.commit();
+				await utils.evaluateDistance(req.params.id_circuit,db);
 				res.sendStatus(204);
 			}
 
@@ -215,8 +217,7 @@ module.exports =
 
 	updateStep : async (req, res) =>
 	{
-		let id_user = utils.verifToken(req.headers['authorization']);
-		if(id_user)
+		if(utils.verifToken(req.headers['authorization']))
 		{
 			let t = await db.sequelize.transaction();
 			try

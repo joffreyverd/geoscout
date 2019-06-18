@@ -36,7 +36,8 @@ class Etape extends React.Component {
                         score,
                         maxScore,
                         startingTime,
-                        time
+                        time,
+                        id_ac
                     }
                 }
             }
@@ -47,7 +48,8 @@ class Etape extends React.Component {
             score: score + scoreWin,
             maxScore: maxScore + maxScoreWin,
             startingTime,
-            time
+            time,
+            id_ac
         });
     };
 
@@ -122,14 +124,14 @@ class Etape extends React.Component {
                     >
                         <Text style={styles.title}>{step.name}</Text>
                         <ScrollView style={{ flex: 1 }}>
-                            {step.description && (
+                            {step.description ? (
                                 <HTML
                                     html={step.description}
                                     imagesMaxWidth={
                                         Dimensions.get('window').width
                                     }
                                 />
-                            )}
+                            ) : null}
                         </ScrollView>
                     </View>
                     <View
@@ -218,8 +220,8 @@ const styles = StyleSheet.create({
     title: {
         textAlign: 'center',
         color: '#1abc9c',
-        fontSize: 28,
-        marginTop: 30,
+        fontSize: 24,
+        marginTop: 20,
         marginBottom: 30,
         fontWeight: 'bold'
     },

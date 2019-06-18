@@ -3,7 +3,7 @@
         "name": "GeoScout",
         "slug": "GeoScout",
         "privacy": "public",
-        "sdkVersion": "32.0.0",
+        "sdkVersion": "33.0.0",
         "platforms": ["ios", "android"],
         "version": "0.5.1",
         "orientation": "portrait",
