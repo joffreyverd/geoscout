@@ -1,7 +1,7 @@
 import React from 'react';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
-import { Vibration, AsyncStorage } from 'react-native';
+import { Vibration, AsyncStorage, ToastAndroid } from 'react-native';
 import { isPointWithinRadius } from 'geolib';
 
 // Nom de la variable dans AsyncStorage
@@ -18,7 +18,12 @@ TaskManager.defineTask(DETECT_STEP, ({ data: { locations }, error }) => {
     }
 
     if (locations) {
-        if (isPointWithinRadius(locations[0].coords, step, 30)) {
+        const arrived = isPointWithinRadius(locations[0].coords, step, 20);
+        ToastAndroid.show(
+            (step ? step.id_step : step) + ' : ' + arrived,
+            ToastAndroid.SHORT
+        );
+        if (arrived) {
             Vibration.vibrate(1000);
             AsyncStorage.setItem(DETECTED, 'true');
         }
