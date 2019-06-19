@@ -59,7 +59,7 @@ export default class Navigation extends React.Component {
                                 {isAdmin ?
                                     <div>
                                         <Dropdown overlay={circuitOptions} id='dropdown'>
-                                            <a className='ant-dropdown-link' href='#c'>Mes circuits</a>
+                                            <span className='ant-dropdown-link'>Mes circuits</span>
                                         </Dropdown>
 
 
@@ -72,7 +72,7 @@ export default class Navigation extends React.Component {
                                     :
 
                                     <Dropdown overlay={circuitOptions} id='dropdown'>
-                                        <a className='ant-dropdown-link' href='#c'>Mes circuits</a>
+                                        <span className='ant-dropdown-link'>Mes circuits</span>
                                     </Dropdown>
                                 }
 

@@ -20,15 +20,18 @@ class CreateCircuitModal extends Component {
     handleSubmit = () => {
         const { name } = this.state;
         const { displayModal } = this.props;
-        api.post('circuit', {
-            name: name,
-        }).then((data) => {
-            displayModal();
-            const { history } = this.props;
-            history.push(`/circuit/${data.id_circuit}`);
-        }).catch(() => {
-            console.log('Oups, une erreur s\'est produite');
-        });
+        if (name.length > 1) {
+            api.post('circuit', {
+                name: name,
+            }).then((data) => {
+                displayModal();
+                this.setState({ name: null });
+                const { history } = this.props;
+                history.push(`/circuit/${data.id_circuit}`);
+            }).catch(() => {
+                console.log('Oups, une erreur s\'est produite');
+            });
+        }
     }
 
     render() {

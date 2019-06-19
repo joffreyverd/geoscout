@@ -64,6 +64,7 @@ h1 {
   
   .ant-dropdown-link {
     color: white !important;
+    cursor: pointer !important;
   }
   
   /************************** AUTHENTIFICATION **************************/
@@ -671,6 +672,10 @@ h1 {
     border-radius: 3px;
     padding: 15px;
     margin: 20px;
+  }
+
+  .circuit-infos > div {
+    padding: 0px 20px;
   }
   
   .detailed-circuit-map {

@@ -168,10 +168,19 @@ export default class CircuitPublisher extends Component {
      */
     updateStep = step => api.put(`step/${step.id_step}`, { step }).then(() => {
         const { circuit } = this.state;
+        const { published, version } = circuit;
+
+        let publication = 0;
+        if (published === 0) {
+            publication = version;
+        } else {
+            publication = version + 1;
+        }
+
         this.setState((prev) => {
             const index = prev.steps.findIndex(s => s.id_step === step.id_step);
             prev.steps[index] = step;
-            circuit.version += 1;
+            circuit.version = publication;
         });
         this.updateCircuit(circuit);
     })
