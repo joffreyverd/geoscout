@@ -23,10 +23,7 @@ TaskManager.defineTask(DETECT_STEP, ({ data: { locations }, error }) => {
             (step ? step.id_step : step) + ' : ' + arrived,
             ToastAndroid.SHORT
         );
-        if (arrived) {
-            Vibration.vibrate(1000);
-            AsyncStorage.setItem(DETECTED, 'true');
-        }
+        if (arrived) AsyncStorage.setItem(DETECTED, 'true');
     }
 });
 
