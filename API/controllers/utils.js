@@ -82,11 +82,16 @@ module.exports =
 			let dist = 0;
 			circuit.Steps.map(step => 
 			{
+				console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////');
+				console.log(dist)
+				console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////');
 				dist+= parseFloat(module.exports.distanceBetweenPoints(lat,step.latitude,lon,step.longitude));
+				console.log(dist)
 			});
 			
 
 			circuit.length = dist.toFixed(2);
+			circuit.duration = Math.round((dist / 5) * 60);
 			await circuit.save({transaction: t});
 			await t.commit();	
 		}
@@ -192,6 +197,7 @@ module.exports =
 		catch(err)
 		{
 			console.log(err);
+			return [];
 		}
 
 	},
