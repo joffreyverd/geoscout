@@ -237,25 +237,14 @@ class Transit extends React.Component {
                             style={[styles.containerButton, styles.container]}
                         >
                             {step.validation ? (
-                                <>
-                                    <Text
-                                        style={[
-                                            styles.description,
-                                            styles.detection
-                                        ]}
-                                    >
-                                        Détection automatique de votre position
-                                    </Text>
-                                    <TouchableOpacity
-                                        onPress={this.goToStep}
-                                        activeOpacity={0.8}
-                                        style={styles.button}
-                                    >
-                                        <Text style={styles.textButton}>
-                                            Je suis arrivé
-                                        </Text>
-                                    </TouchableOpacity>
-                                </>
+                                <Text
+                                    style={[
+                                        styles.description,
+                                        styles.detection
+                                    ]}
+                                >
+                                    Détection automatique de votre position
+                                </Text>
                             ) : (
                                 <TouchableOpacity
                                     onPress={this.goToStep}

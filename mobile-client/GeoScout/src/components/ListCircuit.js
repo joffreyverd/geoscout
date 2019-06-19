@@ -25,7 +25,7 @@ export default class ListCircuit extends React.Component {
                 const circuits = await api.get(root);
                 this.setState({ circuits, isReady: true });
             } else if (type == 'achievedCircuit') {
-                const achievedCircuit = await api.get('achievedcircuit');
+                const achievedCircuit = await api.get(root);
                 const downloadAchievedCircuit = achievedCircuit.map(
                     async item => {
                         const data = await fileSystem.readFile(
