@@ -8,8 +8,7 @@ import {
     StyleSheet,
     ScrollView,
     View,
-    ToastAndroid,
-    Vibration
+    ToastAndroid
 } from 'react-native';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 import { isPointWithinRadius } from 'geolib';
@@ -93,7 +92,6 @@ class Transit extends React.Component {
         if (arrived) {
             const { subscription } = this.state;
             subscription.remove();
-            Vibration.vibrate(1000);
             this.arrived();
         }
     };
