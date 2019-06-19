@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-    Text,
     View,
     StyleSheet,
     Image,
@@ -8,8 +7,6 @@ import {
     Easing,
     Dimensions
 } from 'react-native';
-import * as Location from 'expo-location';
-import getCompassDirection from 'geolib';
 
 export default class Compass extends Component {
     constructor() {
@@ -18,48 +15,57 @@ export default class Compass extends Component {
         this.state = {
             location: null,
             errorMessage: null,
-            heading: null,
+            direction: null,
             truenoth: null
         };
     }
 
     componentDidMount() {
-        this._getLocationAsync();
+        this.setState({ interval: setInterval(this.getDirection, 1000) });
+    }
+
+    componentWillUnmount() {
+        const { interval } = this.state;
+        if (interval) {
+            clearInterval(interval);
+        }
     }
 
     componentDidUpdate() {
         this.spin();
     }
 
-    _getLocationAsync = async () => {
-        const {
-            userPostion: { latitude, longitude }
-        } = this.props;
+    getDirection = () => {
+        const { userPosition, step } = this.props;
+        let lat1 = userPosition.coords.latitude;
+        let lat2 = step.latitude;
+        let lon1 = userPosition.coords.longitude;
+        let lon2 = step.longitude;
 
-        getCompassDirection(user => {
-            let heading = obj.magHeading;
-            this.setState({ heading: heading });
-        });
+        dLat = ((lat2 - lat1) * Math.PI) / 180;
+        dLon = ((lon2 - lon1) * Math.PI) / 180;
+        bearing = (Math.atan2(dLon, dLat) * 180) / Math.PI;
+        this.setState({ direction: userPosition.coords.heading - bearing });
     };
 
-    spin() {
+    spin = () => {
         let start = JSON.stringify(this.spinValue);
-        let heading = Math.round(this.state.heading);
+        let direction = Math.round(this.state.direction);
 
         let rot = +start;
         let rotM = rot % 360;
 
-        if (rotM < 180 && heading > rotM + 180) rot -= 360;
-        if (rotM >= 180 && heading <= rotM - 180) rot += 360;
+        if (rotM < 180 && direction > rotM + 180) rot -= 360;
+        if (rotM >= 180 && direction <= rotM - 180) rot += 360;
 
-        rot += heading - rotM;
+        rot += direction - rotM;
 
         Animated.timing(this.spinValue, {
             toValue: rot,
             duration: 300,
             easing: Easing.easeInOut
         }).start();
-    }
+    };
 
     render() {
         let LoadingText = 'Loading...';
