@@ -25,7 +25,19 @@ export default class Me extends Component {
         isReady: false
     };
 
-    async componentDidMount() {
+    componentDidUpdate(prevProps) {
+        const { user } = this.props.navigation.state.params;
+        if (user != prevProps.navigation.state.params.user) {
+            this.setState({ isReady: false });
+            this.getProfil();
+        }
+    }
+
+    componentDidMount() {
+        this.getProfil();
+    }
+
+    async getProfil() {
         const { user } = this.props.navigation.state.params;
         console.log(user);
         try {

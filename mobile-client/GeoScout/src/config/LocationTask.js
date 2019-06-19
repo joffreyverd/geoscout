@@ -1,7 +1,7 @@
 import React from 'react';
 import * as TaskManager from 'expo-task-manager';
 import * as Location from 'expo-location';
-import { Vibration, AsyncStorage, ToastAndroid } from 'react-native';
+import { AsyncStorage, ToastAndroid } from 'react-native';
 import { isPointWithinRadius } from 'geolib';
 
 // Nom de la variable dans AsyncStorage

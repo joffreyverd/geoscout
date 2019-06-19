@@ -7,8 +7,7 @@ import {
     Alert,
     StyleSheet,
     ScrollView,
-    View,
-    ToastAndroid
+    View
 } from 'react-native';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 import { isPointWithinRadius } from 'geolib';
@@ -84,12 +83,7 @@ class Transit extends React.Component {
     };
 
     testIsArrived = (location, step) => {
-        const arrived = isPointWithinRadius(location.coords, step, 20);
-        ToastAndroid.show(
-            (step ? step.id_step : step) + ' : ' + arrived,
-            ToastAndroid.SHORT
-        );
-        if (arrived) {
+        if (isPointWithinRadius(location.coords, step, 20)) {
             const { subscription } = this.state;
             subscription.remove();
             this.arrived();
@@ -225,37 +219,30 @@ class Transit extends React.Component {
                                     ? ' le point de départ'
                                     : ` l'étape ${step.order}`}
                             </Text>
-                            <ScrollView style={{ flex: 1 }}>
-                                {step.description ? (
-                                    <Text style={styles.description}>
-                                        {step.instruction}
-                                    </Text>
-                                ) : null}
-                            </ScrollView>
+                            {step.compass ? (
+                                <Compass />
+                            ) : (
+                                <ScrollView style={{ flex: 1 }}>
+                                    {step.description ? (
+                                        <Text style={styles.description}>
+                                            {step.instruction}
+                                        </Text>
+                                    ) : null}
+                                </ScrollView>
+                            )}
                         </View>
                         <View
                             style={[styles.containerButton, styles.container]}
                         >
                             {step.validation ? (
-                                <>
-                                    <Text
-                                        style={[
-                                            styles.description,
-                                            styles.detection
-                                        ]}
-                                    >
-                                        Détection automatique de votre position
-                                    </Text>
-                                    <TouchableOpacity
-                                        onPress={this.goToStep}
-                                        activeOpacity={0.8}
-                                        style={styles.button}
-                                    >
-                                        <Text style={styles.textButton}>
-                                            Je suis arrivé
-                                        </Text>
-                                    </TouchableOpacity>
-                                </>
+                                <Text
+                                    style={[
+                                        styles.description,
+                                        styles.detection
+                                    ]}
+                                >
+                                    Détection automatique de votre position
+                                </Text>
                             ) : (
                                 <TouchableOpacity
                                     onPress={this.goToStep}

@@ -28,7 +28,7 @@ export default class RunningCircuit extends React.Component {
                     <ListCircuit
                         type={'achievedCircuit'}
                         format={false}
-                        root={'achievedCircuit'}
+                        root={'achievedCircuit?statut=0'}
                         navigate={this.props.navigation.navigate}
                     />
                 </SafeAreaView>
