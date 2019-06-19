@@ -5,19 +5,47 @@ import {
     StyleSheet,
     View,
     Dimensions,
-    Image
+    Image,
+    NetInfo
 } from 'react-native';
+
 import api from '../../config/httpMethods';
 import storage from '../../config/asyncStorageToken';
 
 const { width, height } = Dimensions.get('window');
 
 class Authentication extends React.Component {
-    //Vérification de la présence d'un token dans le storage du mobile.
-    //Si le token est présent, on lance un whoami à l'api.
-    //Si la requête abouti, alors l'utilisateur est rediriger sur la map.
-    //Si la requête n'abouti pas, alors on supprime le token qui n'est plus valide.
-    componentDidMount() {
+    state = {
+        button: false
+    };
+    async componentDidMount() {
+        const connected = await NetInfo.isConnected.fetch();
+        if (connected) {
+            this.signinWithToken();
+        } else {
+            this.setState({
+                error: 'Veuillez activer internet',
+                interval: setInterval(this.hasInternet, 1000)
+            });
+        }
+    }
+
+    componentWillUnmount() {
+        const { interval } = this.state;
+        if (interval) clearInterval(interval);
+    }
+
+    hasInternet = () => {
+        NetInfo.isConnected.fetch().then(connected => {
+            if (connected) {
+                const { interval } = this.state;
+                clearInterval(interval);
+                this.signinWithToken();
+            }
+        });
+    };
+
+    signinWithToken = () => {
         storage.getTokenAsyncStorage().then(token => {
             if (token) {
                 api.get('whoami')
@@ -29,9 +57,9 @@ class Authentication extends React.Component {
                         //GESTION DES ERREURS
                         storage.removeTokenAsyncStorage();
                     });
-            }
+            } else this.setState({ button: true });
         });
-    }
+    };
 
     signin = credentials =>
         api.post('signin', credentials).then(this.stockageUser);
@@ -46,6 +74,7 @@ class Authentication extends React.Component {
 
     render() {
         const { navigation } = this.props;
+        const { button, error } = this.state;
 
         return (
             <View style={styles.container}>
@@ -55,29 +84,37 @@ class Authentication extends React.Component {
                 />
 
                 <View style={styles.wrapperBottom}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            navigation.navigate('Signin', {
-                                signin: this.signin
-                            });
-                        }}
-                        activeOpacity={0.8}
-                    >
-                        <Text style={styles.textButton}>Connexion</Text>
-                    </TouchableOpacity>
+                    {button ? (
+                        <>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    navigation.navigate('Signin', {
+                                        signin: this.signin
+                                    });
+                                }}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={styles.textButton}>Connexion</Text>
+                            </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            navigation.navigate('Signup', {
-                                signup: this.signup
-                            });
-                        }}
-                        activeOpacity={0.8}
-                    >
-                        <Text style={styles.textButton}>Inscription</Text>
-                    </TouchableOpacity>
+                            <TouchableOpacity
+                                style={styles.button}
+                                onPress={() => {
+                                    navigation.navigate('Signup', {
+                                        signup: this.signup
+                                    });
+                                }}
+                                activeOpacity={0.8}
+                            >
+                                <Text style={styles.textButton}>
+                                    Inscription
+                                </Text>
+                            </TouchableOpacity>
+                        </>
+                    ) : (
+                        <Text style={styles.errorText}>{error}</Text>
+                    )}
                 </View>
             </View>
         );
@@ -100,9 +137,11 @@ const styles = StyleSheet.create({
         fontSize: 36
     },
     errorText: {
+        width: '100%',
         fontSize: 24,
         textAlign: 'center',
-        color: '#006A55'
+        color: '#e74c3c',
+        fontWeight: 'bold'
     },
     wrapperBottom: {
         width: '100%',
@@ -110,7 +149,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        bottom: 0
+        bottom: 10
     },
     button: {
         backgroundColor: '#006A55',

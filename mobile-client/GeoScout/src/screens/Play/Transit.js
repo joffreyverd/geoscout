@@ -7,8 +7,7 @@ import {
     Alert,
     StyleSheet,
     ScrollView,
-    View,
-    ToastAndroid
+    View
 } from 'react-native';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 import { isPointWithinRadius } from 'geolib';
@@ -84,12 +83,7 @@ class Transit extends React.Component {
     };
 
     testIsArrived = (location, step) => {
-        const arrived = isPointWithinRadius(location.coords, step, 20);
-        ToastAndroid.show(
-            (step ? step.id_step : step) + ' : ' + arrived,
-            ToastAndroid.SHORT
-        );
-        if (arrived) {
+        if (isPointWithinRadius(location.coords, step, 20)) {
             const { subscription } = this.state;
             subscription.remove();
             this.arrived();

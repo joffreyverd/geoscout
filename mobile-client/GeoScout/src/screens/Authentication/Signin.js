@@ -34,7 +34,8 @@ export default class Signin extends React.Component {
                 <Input
                     value={this.state.email}
                     onChangeText={email => this.setState({ email })}
-                    placeholder={'Email'}
+                    placeholder="Email"
+                    autoCapitalize="none"
                     inputContainerStyle={styles.input}
                     containerStyle={styles.width}
                     inputStyle={styles.textInput}
@@ -45,7 +46,8 @@ export default class Signin extends React.Component {
                 <Input
                     value={this.state.password}
                     onChangeText={password => this.setState({ password })}
-                    placeholder={'Mot de passe'}
+                    placeholder="Mot de passe"
+                    autoCapitalize="none"
                     inputContainerStyle={styles.input}
                     containerStyle={styles.width}
                     inputStyle={styles.textInput}
