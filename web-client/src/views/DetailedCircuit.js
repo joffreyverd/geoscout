@@ -181,6 +181,7 @@ export default class DetailedCircuit extends Component {
                         <CommentList
                             className='circuit-comments'
                             items={comments}
+                            isConnected={isConnected}
                         />
                         :
                         <p className='no-pictures'>Aucune commentaire n`a été ajouté sur ce circuit !</p>
