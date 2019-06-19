@@ -65,7 +65,7 @@ export default class Comment extends Component {
                             <Text style={[styles.name, { marginRight: 10 }]}>
                                 {user.lastname} {user.firstname}
                             </Text>
-                            <Rate rate={rate} size={14} displayNumber={false} />
+                            <Rate rate={rate} size={14} />
                         </View>
                     </View>
                     <Text style={styles.comment}>{comment}</Text>

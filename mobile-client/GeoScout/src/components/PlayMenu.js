@@ -4,7 +4,7 @@ import { Header, Icon } from 'react-native-elements';
 import Drawer from 'react-native-drawer-menu';
 
 import api from '../config/httpMethods';
-import { stopLocationTask } from '../config/LocationTask';
+// import { stopLocationTask } from '../config/LocationTask';
 
 export function PlayDrawerMenu({
     setRefMenu,
@@ -21,7 +21,7 @@ export function PlayDrawerMenu({
      * Fonction de pause ou d'abandon d'un circuit
      */
     const stop = statut => {
-        stopLocationTask();
+        // stopLocationTask();
         const currentTime = time + (new Date() - startingTime) / (1000 * 60);
         const body = {
             id_circuit,

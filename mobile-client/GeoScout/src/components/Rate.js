@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 export default function Rate(props) {
-    const { rate, size, displayNumber } = props;
+    const { rate, size } = props;
     const sizeIcon = size !== undefined ? size : 10;
-    const dn = displayNumber !== undefined ? displayNumber : true;
 
     let rows = [];
     for (let i = 1; i < 6; i++) {
@@ -31,12 +30,7 @@ export default function Rate(props) {
             );
         }
     }
-    return (
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-            {rows}
-            {dn && <Text style={styles.rateText}> ({rate})</Text>}
-        </View>
-    );
+    return <View style={{ flex: 1, flexDirection: 'row' }}>{rows}</View>;
 }
 
 const styles = StyleSheet.create({

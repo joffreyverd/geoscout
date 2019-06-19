@@ -116,7 +116,11 @@ class Etape extends React.Component {
                 >
                     <PlayHeader
                         pressMenu={() => this.refMenu.openDrawer()}
-                        title={`Etape ${stepNumber}`}
+                        title={
+                            stepNumber === 0
+                                ? 'Point de départ'
+                                : `Etape ${stepNumber}`
+                        }
                     />
                     <View
                         style={Object.assign(

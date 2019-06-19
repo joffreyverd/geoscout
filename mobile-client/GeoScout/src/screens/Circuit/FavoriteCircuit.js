@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView, withNavigationFocus } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import { NavigationHeader } from '../../components/NavigationDrawer';
 import ListCircuit from '../../components/ListCircuit';
 
-export default class FavoriteCircuit extends React.Component {
+class FavoriteCircuit extends React.Component {
     static navigationOptions = {
         drawerLabel: 'Circuits favoris',
         drawerIcon: () => (
@@ -15,6 +15,7 @@ export default class FavoriteCircuit extends React.Component {
     };
 
     render() {
+        const { isFocused } = this.props;
         return (
             <>
                 <NavigationHeader
@@ -25,12 +26,14 @@ export default class FavoriteCircuit extends React.Component {
                     }
                 />
                 <SafeAreaView style={styles.container}>
-                    <ListCircuit
-                        type={'api'}
-                        format={false}
-                        root={'favorites'}
-                        navigate={this.props.navigation.navigate}
-                    />
+                    {isFocused && (
+                        <ListCircuit
+                            type={'api'}
+                            format={false}
+                            root={'favorites'}
+                            navigate={this.props.navigation.navigate}
+                        />
+                    )}
                 </SafeAreaView>
             </>
         );
@@ -49,3 +52,5 @@ const styles = StyleSheet.create({
         fontSize: 26
     }
 });
+
+export default withNavigationFocus(FavoriteCircuit);

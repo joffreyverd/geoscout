@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView, withNavigationFocus } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 import { NavigationHeader } from '../../components/NavigationDrawer';
 import ListCircuit from '../../components/ListCircuit';
 import fileSystem from '../../config/fileSystem';
 
-export default class DownloadCircuit extends React.Component {
+class DownloadCircuit extends React.Component {
     static navigationOptions = {
         drawerLabel: 'Circuits téléchargés',
         drawerIcon: ({ tintColor }) => (
@@ -20,6 +20,7 @@ export default class DownloadCircuit extends React.Component {
     }
 
     render() {
+        const { isFocused } = this.props;
         return (
             <>
                 <NavigationHeader
@@ -38,11 +39,13 @@ export default class DownloadCircuit extends React.Component {
                             Supprimer tous mes circuits
                         </Text>
                     </TouchableOpacity>
-                    <ListCircuit
-                        type={'local'}
-                        format={true}
-                        navigate={this.props.navigation.navigate}
-                    />
+                    {isFocused && (
+                        <ListCircuit
+                            type={'local'}
+                            format={true}
+                            navigate={this.props.navigation.navigate}
+                        />
+                    )}
                 </SafeAreaView>
             </>
         );
@@ -75,3 +78,5 @@ const styles = StyleSheet.create({
         fontSize: 18
     }
 });
+
+export default withNavigationFocus(DownloadCircuit);

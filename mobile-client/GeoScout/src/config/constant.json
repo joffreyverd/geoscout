@@ -1,8 +1,8 @@
 {
     "difficulty": {
-        "0": "facile",
-        "1": "intermédiaire",
-        "2": "difficile"
+        "1": "facile",
+        "2": "intermédiaire",
+        "3": "difficile"
     },
     "statut_circuit": {
         "0": "pause",

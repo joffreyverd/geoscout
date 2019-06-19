@@ -185,7 +185,6 @@ class Transit extends React.Component {
         const { location } = this.state;
         // Récupération de l'étape
         const step = circuit.Steps[stepNumber];
-
         if (step) {
             const title =
                 'Transit ' +
