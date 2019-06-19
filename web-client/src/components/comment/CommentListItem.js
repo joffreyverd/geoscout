@@ -23,9 +23,9 @@ class CommentListItem extends Component {
 
     render() {
 
-        const { comment, stars, User, createdAt, version } = this.props;
+        const { comment, stars, User, createdAt, version, history } = this.props;
         const { img } = this.state;
-        const { firstname, lastname } = User;
+        const { firstname, lastname, id_user } = User;
         const formattedDate = new Date(createdAt).toLocaleDateString();
         const defaultImg = '/img/earth.png';
         const formattedStar = Math.round(stars * 2) / 2;
@@ -38,6 +38,10 @@ class CommentListItem extends Component {
                         <Avatar
                             src={!img || img.length < 1 || img === undefined ? defaultImg : `http://www.geoscout.fr:5555${img}`}
                             alt={`${firstname} ${lastname}`}
+                            onClick={() => {
+                                history.location.pathname = '';
+                                history.push(`account/${id_user}`);
+                            }}
                         />
                     )}
                     content={comment}
