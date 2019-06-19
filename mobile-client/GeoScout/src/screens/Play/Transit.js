@@ -1,22 +1,25 @@
 import React from 'react';
+import * as Location from 'expo-location';
 import {
     Text,
     TouchableOpacity,
-    AsyncStorage,
+    // AsyncStorage,
     Alert,
     StyleSheet,
     ScrollView,
-    View
-    //Dimensions
+    View,
+    ToastAndroid,
+    Vibration
 } from 'react-native';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
+import { isPointWithinRadius } from 'geolib';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
-import {
-    DETECTED,
-    startLocationTask,
-    stopLocationTask
-} from '../../config/LocationTask';
+// import {
+//     DETECTED,
+//     startLocationTask,
+//     stopLocationTask
+// } from '../../config/LocationTask';
 
 class Transit extends React.Component {
     state = {};
@@ -36,10 +39,19 @@ class Transit extends React.Component {
 
         if (step) {
             if (step.validation) {
-                startLocationTask(step);
-                this.setState({
-                    interval: setInterval(this.hasEnteredStepLocation, 1000)
-                });
+                // NOT IMPLEMENTED : détection en background de la position
+                // startLocationTask(step);
+                // this.setState({
+                //     interval: setInterval(this.hasEnteredStepLocation, 1000)
+                // });
+
+                Location.watchPositionAsync(
+                    {
+                        accuracy: Location.Accuracy.BestForNavigation,
+                        timeInterval: 500
+                    },
+                    location => this.testIsArrived(location, step)
+                ).then(subscription => this.setState({ subscription }));
             }
         } else {
             const {
@@ -57,8 +69,10 @@ class Transit extends React.Component {
     }
 
     componentWillUnmount() {
-        const { interval } = this.state;
-        if (interval) clearInterval(interval);
+        // const { interval } = this.state;
+        // if (interval) clearInterval(interval);
+        const { subscription } = this.state;
+        if (subscription) subscription.remove();
     }
 
     onBackPress = () => {
@@ -70,20 +84,38 @@ class Transit extends React.Component {
         this.refMenu = ref;
     };
 
-    hasEnteredStepLocation = async () => {
-        // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
-        const x = await AsyncStorage.getItem(DETECTED);
-        if (x === null) return;
-
-        const { interval } = this.state;
-        // Suppression de la variable
-        AsyncStorage.removeItem(DETECTED);
-        // Arrêt de l'intervalle
-        clearInterval(interval);
-        stopLocationTask();
-
-        this.arrived();
+    testIsArrived = (location, step) => {
+        const arrived = isPointWithinRadius(location.coords, step, 20);
+        ToastAndroid.show(
+            (step ? step.id_step : step) + ' : ' + arrived,
+            ToastAndroid.SHORT
+        );
+        if (arrived) {
+            const { subscription } = this.state;
+            subscription.remove();
+            Vibration.vibrate(1000);
+            this.arrived();
+        }
     };
+
+    /**
+     * NOT IMPLEMENTED
+     * Fonction de vérification pour la détection en background
+     */
+    // hasEnteredStepLocation = async () => {
+    //     // Vérification que l'utilisateur est arrivé par une variable dans l'AsyncStorage
+    //     const x = await AsyncStorage.getItem(DETECTED);
+    //     if (x === null) return;
+
+    //     const { interval } = this.state;
+    //     // Suppression de la variable
+    //     AsyncStorage.removeItem(DETECTED);
+    //     // Arrêt de l'intervalle
+    //     clearInterval(interval);
+    //     stopLocationTask();
+
+    //     this.arrived();
+    // };
 
     arrived = () => {
         const {
@@ -109,7 +141,7 @@ class Transit extends React.Component {
      */
     goToStep = e => {
         if (e) e.preventDefault();
-        stopLocationTask();
+        //stopLocationTask();
         let {
             navigation: {
                 navigate,
@@ -157,7 +189,6 @@ class Transit extends React.Component {
                 }
             }
         } = this.props;
-        console.log(this.props);
         const step = circuit.Steps[stepNumber];
 
         if (step) {

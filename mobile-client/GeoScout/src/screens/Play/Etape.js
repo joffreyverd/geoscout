@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import HTML from 'react-native-render-html';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
+import Carousel from '../../components/Carousel';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
 
@@ -125,6 +126,13 @@ class Etape extends React.Component {
                         )}
                     >
                         <Text style={styles.title}>{step.name}</Text>
+                        {step.images.length ? (
+                            <Carousel images={step.images} />
+                        ) : (
+                            <Text style={styles.noContent}>
+                                Pas d'images disponibles sur cette étape.
+                            </Text>
+                        )}
                         <ScrollView style={{ flex: 1 }}>
                             {step.description ? (
                                 <HTML
@@ -243,5 +251,12 @@ const styles = StyleSheet.create({
     textButton: {
         color: '#fff',
         fontSize: 18
+    },
+    noContent: {
+        color: '#2c3e50',
+        fontSize: 16,
+        marginTop: 5,
+        marginBottom: 10,
+        textAlign: 'center'
     }
 });

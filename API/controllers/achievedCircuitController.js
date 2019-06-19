@@ -96,28 +96,126 @@ module.exports=
 	getAchievements: async (req,res) =>
 	{
 		let id = utils.verifToken(req.headers['authorization']);
+		let achieved = null;
 		if (id)
 		{
 			try
 			{
-				let achieved = await db.AchievedCircuit.findAll(
-					{
-						where : {id_user : id},
-						include : 
-						[
-							{
-								model : db.Circuit,
-								where : {blocked : 0,published : true},
-								include : 
-								[
-									{
-										model : db.Evaluation
-									}
-								]
-							}
-						]
-					}
-				);
+				if (req.query.statut == null || req.query.statut == "")
+				{
+					achieved = await db.AchievedCircuit.findAll(
+						{
+							where : {id_user : id},
+							include : 
+							[
+								{
+									model : db.Circuit,
+									where : {blocked : 0,published : true},
+									include : 
+									[
+										{
+											model : db.Evaluation
+										}
+									]
+								}
+							]
+						}
+					);
+				}
+				else
+				{
+					achieved = await db.AchievedCircuit.findAll(
+						{
+							where : {id_user : id, statut_circuit : req.query.statut},
+							include : 
+							[
+								{
+									model : db.Circuit,
+									where : {blocked : 0,published : true},
+									include : 
+									[
+										{
+											model : db.Evaluation
+										}
+									]
+								}
+							]
+						}
+					);
+				}
+
+				achieved.map(item => 
+				{
+					return item.Circuit = utils.averageStars(item.Circuit);
+				});
+
+				res.status(200).send(achieved);
+			}
+
+			catch(err)
+			{
+				res.status(500).send(utils.messages.serverError);
+				console.log(err);
+			}
+		}
+		else
+			res.status(401).send(utils.messages.invalidToken);
+	},
+
+	//////////////////////////////////////////////////////////
+	/**
+	Cette fonction renvoie tous les achievedCircuits pour l'utilisateur en cours et le circuit renseigné
+	*/
+	getAchievementsByCircuit: async (req,res) =>
+	{
+		let id = utils.verifToken(req.headers['authorization']);
+		let achieved = null;
+		if (id)
+		{
+			try
+			{
+				if (req.query.statut == null || req.query.statut == "")
+				{
+					achieved = await db.AchievedCircuit.findAll(
+						{
+							where : {id_user : id, statut_circuit : 0},
+							include : 
+							[
+								{
+									model : db.Circuit,
+									where : {blocked : 0, published : true, id_circuit : req.params.id_circuit},
+									include : 
+									[
+										{
+											model : db.Evaluation
+										}
+									]
+								}
+							]
+						}
+					);
+				}
+				else
+				{
+					achieved = await db.AchievedCircuit.findAll(
+						{
+							where : {id_user : id, statut_circuit : req.query.statut},
+							include : 
+							[
+								{
+									model : db.Circuit,
+									where : {blocked : 0, published : true, id_circuit : req.params.id_circuit},
+									include : 
+									[
+										{
+											model : db.Evaluation
+										}
+									]
+								}
+							]
+						}
+					);
+				}
 
 				achieved.map(item => 
 				{
@@ -148,6 +246,7 @@ module.exports=
 	@param {TinyInt} req.body.achievedtime le temps écoulé depuis le début du circuit en minutes
 	@param {int} req.body.id_circuit l'id du circuit
 	@param {int} req.body.id_step en cas de pause, l'id de l'étape à laquelle on s'est arrêté 	
+
 	*/
 	updateAchievement: async (req,res) =>
 	{
