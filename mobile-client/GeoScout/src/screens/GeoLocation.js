@@ -31,27 +31,24 @@ export default class GeoLocation extends React.Component {
         )
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            ready: false,
-            error: null,
-            region: {
-                latitude: 0,
-                longitude: 0,
-                latitudeDelta: 0,
-                longitudeDelta: 0
-            },
-            markerPosition: {
-                latitude: 0,
-                longitude: 0
-            },
-            mapType: 'standard',
-            circuits: null,
-            circuitReady: false,
-            switchValue: false
-        };
-    }
+    state = {
+        ready: false,
+        error: null,
+        region: {
+            latitude: 0,
+            longitude: 0,
+            latitudeDelta: 0,
+            longitudeDelta: 0
+        },
+        markerPosition: {
+            latitude: 0,
+            longitude: 0
+        },
+        mapType: 'standard',
+        circuits: null,
+        circuitReady: false,
+        switchValue: false
+    };
 
     componentDidMount() {
         this.checkLocation();
@@ -111,25 +108,38 @@ export default class GeoLocation extends React.Component {
     checkLocation = async () => {
         return Location.requestPermissionsAsync()
             .then(async () => {
-                let locationEnabled = await Location.hasServicesEnabledAsync();
+                const locationEnabled = await Location.hasServicesEnabledAsync();
                 if (locationEnabled) {
-                    let location = await Location.getCurrentPositionAsync({
-                        accuracy: 5
+                    const location = await Location.getCurrentPositionAsync({
+                        accuracy: 6
                     });
                     this.updateLocation(location);
                 } else {
                     this.setState({
+                        interval: setInterval(this.checkServicesEnabled, 1000),
                         error:
                             "La localisation n'est pas activée sur le périphérique."
                     });
                 }
             })
-            .catch(() => {
+            .catch(error => {
                 this.setState({
                     error:
                         "La localisation n'est pas autorisée sur le périphérique."
                 });
             });
+    };
+
+    checkServicesEnabled = async () => {
+        const locationEnabled = await Location.hasServicesEnabledAsync();
+        if (locationEnabled) {
+            const { interval } = this.state;
+            if (interval) clearInterval(interval);
+            const location = await Location.getCurrentPositionAsync({
+                accuracy: 6
+            });
+            this.updateLocation(location);
+        }
     };
 
     toggleSwitch = value => {

@@ -9,7 +9,7 @@ class AccountHeader extends Component {
 
     render() {
 
-        const { changeCurrentTab, currentTab, user, img } = this.props;
+        const { changeCurrentTab, currentTab, user, img, myPage } = this.props;
         const defaultImg = '/img/earth.png';
 
         return (
@@ -43,14 +43,19 @@ class AccountHeader extends Component {
                         >
                             <p>Relations</p>
                         </div>
-                        <div className='edit-profil'>
-                            <Button
-                                type='primary'
-                                color='info'
-                                onClick={() => changeCurrentTab('edition')}
-                            >Editer profil
-                            </Button>
-                        </div>
+
+                        {myPage &&
+                            <div className='edit-profil'>
+                                <Button
+                                    type='primary'
+                                    color='info'
+                                    onClick={() => changeCurrentTab('edition')}
+                                >Editer profil
+                                </Button>
+                            </div>
+                        }
+
+
                     </div>
 
                 </div>

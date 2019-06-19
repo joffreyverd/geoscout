@@ -28,15 +28,26 @@ export default class Account extends Component {
 
     componentDidMount() {
         const { user } = this.props;
+        const { id } = this.props.match.params;
         if (user) {
-            api.get(`download-user/${user.id_user}`).then((data) => {
+
+            let idAccount;
+            switch (id) {
+                case undefined:
+                    idAccount = user.id_user;
+                    break;
+                default:
+                    idAccount = id;
+            }
+
+            api.get(`download-user/${idAccount}`).then((data) => {
                 this.setState({ user: data });
             }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
 
             api.post('download', {
-                id: user.id_user,
+                id: idAccount,
                 type: 'user',
             }).then((img) => {
                 this.setState({ img });
@@ -44,7 +55,7 @@ export default class Account extends Component {
                 console.log('error');
             });
 
-            api.get(`user-info/${user.id_user}`).then((personnalStates) => {
+            api.get(`user-info/${idAccount}`).then((personnalStates) => {
                 this.setState({ personnalStates });
             }).catch(() => {
                 console.log('error');
@@ -60,6 +71,7 @@ export default class Account extends Component {
 
     render() {
         const { user, currentTab, img, personnalStates } = this.state;
+        const { myPage } = this.props;
 
         let currentComponent;
         switch (currentTab) {
@@ -84,6 +96,7 @@ export default class Account extends Component {
                     currentTab={currentTab}
                     user={user}
                     img={img}
+                    myPage={myPage}
                 />
 
                 <div className='account-body-wrapper'>

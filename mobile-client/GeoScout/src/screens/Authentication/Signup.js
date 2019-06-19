@@ -76,6 +76,7 @@ export default class Signup extends React.Component {
                     value={this.state.email}
                     onChangeText={email => this.setState({ email })}
                     placeholder={'Email'}
+                    autoCapitalize="none"
                     inputContainerStyle={styles.input}
                     containerStyle={styles.width}
                     inputStyle={styles.textInput}
@@ -88,6 +89,7 @@ export default class Signup extends React.Component {
                     value={this.state.password}
                     onChangeText={password => this.setState({ password })}
                     placeholder={'Mot de passe'}
+                    autoCapitalize="none"
                     inputContainerStyle={styles.input}
                     containerStyle={styles.width}
                     inputStyle={styles.textInput}
@@ -101,6 +103,7 @@ export default class Signup extends React.Component {
                     value={this.state.repassword}
                     onChangeText={rePassword => this.setState({ rePassword })}
                     placeholder={'Répétez votre mot de passe'}
+                    autoCapitalize="none"
                     inputContainerStyle={styles.input}
                     containerStyle={styles.width}
                     inputStyle={styles.textInput}
