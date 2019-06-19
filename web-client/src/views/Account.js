@@ -28,7 +28,15 @@ export default class Account extends Component {
 
     componentDidMount() {
         const { user } = this.props;
+        const { id } = this.props.match.params;
         if (user) {
+
+            // if (id !== undefined) {
+            //     const idAccount = id;
+            // } else {
+            //     const idAccount = user.id_user;
+            // }
+
             api.get(`download-user/${user.id_user}`).then((data) => {
                 this.setState({ user: data });
             }).catch(() => {
@@ -60,6 +68,7 @@ export default class Account extends Component {
 
     render() {
         const { user, currentTab, img, personnalStates } = this.state;
+        const { myPage } = this.props;
 
         let currentComponent;
         switch (currentTab) {

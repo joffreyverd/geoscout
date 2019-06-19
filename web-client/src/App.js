@@ -71,7 +71,7 @@ class App extends Component {
                 {isConnected ?
                     <>
                         <Route exact path='/administration' component={Administration} />
-                        <Route exact path='/account' render={props => <Account {...props} user={user} />} />
+                        <Route exact path='/account' render={props => <Account {...props} user={user} myPage />} />
                         <Route exact path='/circuits' component={Circuits} />
                         <Route exact path='/circuit/:id' component={CircuitPublisher} />
                         <Route exact path='/achievements' component={Achievement} />
@@ -79,6 +79,7 @@ class App extends Component {
                     </>
                     : null}
                 <Route exact path='/detail/:id' render={props => <DetailedCircuit {...props} isConnected={isConnected} />} />
+                <Route exact path='/account/:id' render={props => <Account {...props} user={user} myPage={false} />} />
             </>
         );
     }

@@ -100,7 +100,9 @@ class UpdateStepModal extends Component {
         formData.append('type', 'step');
         formData.append('file', file);
 
-        return fetch('http://154.49.211.218:5555/upload', {
+        const adress = process.env.REACT_APP_API_URL;
+
+        return fetch(`${adress}upload`, {
             method: 'POST',
             body: formData,
             headers: {
