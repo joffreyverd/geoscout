@@ -3,7 +3,6 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { Icon } from 'react-native-elements';
 import Rate from './Rate';
-import Difficulty from './Difficulty';
 
 export default function Callout(props) {
     const {
@@ -39,7 +38,11 @@ export default function Callout(props) {
                     {descriptionPlanText}
                 </Text>
             ) : null}
-            {rate ? <Rate rate={rate} /> : null}
+            {rate ? (
+                <Rate rate={rate} />
+            ) : (
+                <Text style={{ fontSize: 12, color: '#95a5a6' }}>Non noté</Text>
+            )}
             <View style={styles.inline}>
                 {distance ? (
                     <>
@@ -51,7 +54,17 @@ export default function Callout(props) {
                         />
                         <Text style={styles.item}>{distance}km</Text>
                     </>
-                ) : null}
+                ) : (
+                    <>
+                        <Icon
+                            name="directions-walk"
+                            type="material"
+                            size={sizeIcon}
+                            color="#2c3e50"
+                        />
+                        <Text style={styles.item}>{'<1 km'}</Text>
+                    </>
+                )}
                 {time ? (
                     <>
                         <Icon
@@ -66,9 +79,23 @@ export default function Callout(props) {
                     </>
                 ) : null}
                 {difficulty ? (
-                    <View>
-                        <Difficulty difficulty={difficulty} />
-                    </View>
+                    <>
+                        {difficulty == '0' ? (
+                            <Text style={{ color: '#4CAF50', fontSize: 12 }}>
+                                Facile
+                            </Text>
+                        ) : null}
+                        {difficulty == '1' ? (
+                            <Text style={{ color: '#2196F3', fontSize: 12 }}>
+                                Moyen
+                            </Text>
+                        ) : null}
+                        {difficulty == '2' ? (
+                            <Text style={{ color: '#F44336', fontSize: 12 }}>
+                                Difficile
+                            </Text>
+                        ) : null}
+                    </>
                 ) : null}
                 {order ? (
                     order.orderStep != null &&
@@ -108,6 +135,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginRight: 8,
         marginLeft: 1
+    },
+    circle: {
+        width: 10,
+        height: 10,
+        borderRadius: 10 / 2,
+        marginRight: 2
     },
     inline: {
         flex: 1,

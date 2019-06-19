@@ -180,10 +180,10 @@ export default class GeoLocation extends React.Component {
                                 height: height * 0.09
                             }}
                             name={item.name}
-                            rate={2}
+                            rate={item.avgStars}
                             distance={item.length}
-                            time={150}
-                            // difficulty={[1,0,1]}
+                            time={item.real_duration}
+                            difficulty={item.level}
                             callBy={'geolocation'}
                         />
                     </MapView.Callout>

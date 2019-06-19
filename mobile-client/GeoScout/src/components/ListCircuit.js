@@ -1,5 +1,5 @@
 import React from 'react';
-import { TouchableWithoutFeedback, ScrollView, View } from 'react-native';
+import { TouchableWithoutFeedback, ScrollView, View, Text } from 'react-native';
 import api from '../config/httpMethods';
 import fileSystem from '../config/fileSystem';
 import Callout from './Callout';
@@ -20,12 +20,14 @@ export default class ListCircuit extends React.Component {
                 const circuits = await fileSystem.getCircuitsExist();
                 if (circuits) {
                     this.setState({ circuits, isReady: true });
+                } else {
+                    this.setState({ isReady: true });
                 }
             } else if (type == 'api') {
                 const circuits = await api.get(root);
                 this.setState({ circuits, isReady: true });
             } else if (type == 'achievedCircuit') {
-                const achievedCircuit = await api.get('achievedcircuit');
+                const achievedCircuit = await api.get(root);
                 const downloadAchievedCircuit = achievedCircuit.map(
                     async item => {
                         const data = await fileSystem.readFile(
@@ -90,73 +92,89 @@ export default class ListCircuit extends React.Component {
         return (
             <ScrollView showsHorizontalScrollIndicator={false}>
                 {isReady ? (
-                    circuits.map(item => (
-                        <TouchableWithoutFeedback
-                            key={
-                                format
-                                    ? item.id_circuit
-                                    : item.Circuit.id_circuit
-                            }
-                            onPress={() => {
-                                type != 'achievedCircuit'
-                                    ? navigate('DetailCircuit', {
-                                          id_circuit: format
-                                              ? item.id_circuit
-                                              : item.Circuit.id_circuit
-                                      })
-                                    : this.navigateAchievedCircuit(
-                                          item.Circuit,
-                                          item.id_ac,
-                                          item.order,
-                                          item.score,
-                                          item.maxScore,
-                                          item.time
-                                      );
+                    circuits.length > 0 ? (
+                        circuits.map(item => (
+                            <TouchableWithoutFeedback
+                                key={
+                                    format
+                                        ? item.id_circuit
+                                        : item.Circuit.id_circuit
+                                }
+                                onPress={() => {
+                                    type != 'achievedCircuit'
+                                        ? navigate('DetailCircuit', {
+                                              id_circuit: format
+                                                  ? item.id_circuit
+                                                  : item.Circuit.id_circuit
+                                          })
+                                        : this.navigateAchievedCircuit(
+                                              item.Circuit,
+                                              item.id_ac,
+                                              item.order,
+                                              item.score,
+                                              item.maxScore,
+                                              item.time
+                                          );
+                                }}
+                            >
+                                <View>
+                                    <Callout
+                                        styleCallout={{
+                                            flexDirection: 'column',
+                                            alignSelf: 'flex-start',
+                                            width: '100%',
+                                            padding: 10,
+                                            backgroundColor: '#fff',
+                                            marginBottom: 10,
+                                            borderRadius: 5
+                                        }}
+                                        name={
+                                            format
+                                                ? item.name
+                                                : item.Circuit.name
+                                        }
+                                        description={
+                                            format
+                                                ? item.description
+                                                : item.Circuit.description
+                                        }
+                                        distance={
+                                            format
+                                                ? item.length
+                                                : item.Circuit.length
+                                        }
+                                        time={
+                                            format
+                                                ? item.real_duration
+                                                : item.Circuit.real_duration
+                                        }
+                                        order={
+                                            type == 'achievedCircuit'
+                                                ? {
+                                                      orderStep: item.order,
+                                                      maxOrderStep:
+                                                          item.numberStep
+                                                  }
+                                                : null
+                                        }
+                                        // difficulty={[1, 0, 1]}
+                                        callBy={'list'}
+                                    />
+                                </View>
+                            </TouchableWithoutFeedback>
+                        ))
+                    ) : (
+                        <Text
+                            style={{
+                                fontSize: 18,
+                                color: '#2c3e50',
+                                textAlign: 'center',
+                                marginTop: 10
                             }}
                         >
-                            <View>
-                                <Callout
-                                    styleCallout={{
-                                        flexDirection: 'column',
-                                        alignSelf: 'flex-start',
-                                        width: '100%',
-                                        padding: 10,
-                                        backgroundColor: '#fff',
-                                        marginBottom: 10,
-                                        borderRadius: 5
-                                    }}
-                                    name={
-                                        format ? item.name : item.Circuit.name
-                                    }
-                                    description={
-                                        format
-                                            ? item.description
-                                            : item.Circuit.description
-                                    }
-                                    distance={
-                                        format
-                                            ? item.length
-                                            : item.Circuit.length
-                                    }
-                                    time={
-                                        format
-                                            ? item.real_duration
-                                            : item.Circuit.real_duration
-                                    }
-                                    order={
-                                        type == 'achievedCircuit'
-                                            ? {
-                                                  orderStep: item.order,
-                                                  maxOrderStep: item.numberStep
-                                              }
-                                            : null
-                                    }
-                                    // difficulty={[1, 0, 1]}
-                                    callBy={'list'}
-                                />
-                            </View>
-                        </TouchableWithoutFeedback>
-                    ))
+                            Pas de circuit disponible.
+                        </Text>
+                    )
                 ) : (
                     <Loading />
                 )}

@@ -128,11 +128,7 @@ class Etape extends React.Component {
                         <Text style={styles.title}>{step.name}</Text>
                         {step.images.length ? (
                             <Carousel images={step.images} />
-                        ) : (
-                            <Text style={styles.noContent}>
-                                Pas d'images disponibles sur cette étape.
-                            </Text>
-                        )}
+                        ) : null}
                         <ScrollView style={{ flex: 1 }}>
                             {step.description ? (
                                 <HTML

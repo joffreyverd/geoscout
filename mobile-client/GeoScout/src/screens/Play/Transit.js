@@ -17,6 +17,7 @@ import {
     startLocationTask,
     stopLocationTask
 } from '../../config/LocationTask';
+import Compass from '../../components/Compass';
 
 class Transit extends React.Component {
     state = {};
@@ -195,13 +196,17 @@ class Transit extends React.Component {
                                     ? ' le point de départ'
                                     : ` l'étape ${step.order}`}
                             </Text>
-                            <ScrollView style={{ flex: 1 }}>
-                                {step.description ? (
-                                    <Text style={styles.description}>
-                                        {step.instruction}
-                                    </Text>
-                                ) : null}
-                            </ScrollView>
+                            {step.compass ? (
+                                <Compass />
+                            ) : (
+                                <ScrollView style={{ flex: 1 }}>
+                                    {step.description ? (
+                                        <Text style={styles.description}>
+                                            {step.instruction}
+                                        </Text>
+                                    ) : null}
+                                </ScrollView>
+                            )}
                         </View>
                         <View
                             style={[styles.containerButton, styles.container]}
