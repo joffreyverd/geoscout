@@ -52,7 +52,7 @@ export function PlayDrawerMenu({
             'Voulez vous vraiment mettre en pause le circuit ?',
             [
                 { text: 'Reprendre' },
-                { text: 'Mettre en pause', onPress: () => stop(1) }
+                { text: 'Mettre en pause', onPress: () => stop(0) }
             ]
         );
     };

@@ -157,7 +157,6 @@ class Transit extends React.Component {
                 }
             }
         } = this.props;
-        console.log(this.props);
         const step = circuit.Steps[stepNumber];
 
         if (step) {
