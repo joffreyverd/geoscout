@@ -1,4 +1,28 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+## Organisation du code
+
+Le code de l'application web est structuré en vues principales, appelant elles-mêmes des composantes impriqués les uns dans les autres.
+L'objectif est ici de diminuer la duplication de code et d'utiliser un maxium de fois chaque composantes sur un maximum de vues.
+
+Lorsqu'un jeu de données est récupéré avec pour objectif de les afficher à la suite les unes des autres, nous utilisons un pattern d'embrication des éléments les uns dans les autres.
+
+Exemple : 
+Le composant de commentaires contient -> un map qui itère sur tous les commentaires -> qui contient lui-même un un composant par commentaire.
+
+Chacun de ses composants fait l'objet d'un fichier séparé.
+
+## Normes de nommage
+
+Avant toute chose, nous avons implémenté eslint, et les normes de nommage proposées par Airbnb. De ce fait, un certain nombre de contraintes sont appliquées lors de l'ajout de nouvelles fonctionnalités :
+* Utilisation de camelCase
+* Destructuration des objets avant leur appel
+* Non-utilisation de classes si les states sont vides
+* Utilisation de const ou let et non de var (portée des variables)
+* Appel de variables d'environnement afin d'éviter le code écrit en dur
+* Utilisation de bind, et non de constructeurs
+* Utilisation d'arrow functions
+* Indentation par bloc de 4 espaces
+* Autres règles syntaxiques à respecter, qui sont automatiquement corrigées
 
 ## Available Scripts
 
@@ -36,33 +60,3 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
 You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

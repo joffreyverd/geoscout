@@ -6,7 +6,7 @@ module.exports = (sequelize,DataTypes) =>
 		{
 			id_circuit : {type : DataTypes.INTEGER, autoIncrement : true, allowNull : false, primaryKey : true},
 			name : {type : DataTypes.STRING, allowNull : true, unique : true},
-			description : {type : DataTypes.STRING, allowNull : true},
+			description : {type : DataTypes.TEXT, allowNull : true},
 			length : {type : DataTypes.FLOAT, allowNull : true},
 			duration : {type : DataTypes.INTEGER, defaultValue: 0},
 			need_internet : {type : DataTypes.BOOLEAN,defaultValue : false, allowNull : false},

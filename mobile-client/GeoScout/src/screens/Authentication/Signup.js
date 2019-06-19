@@ -9,25 +9,52 @@ import {
 import { Input, Icon } from 'react-native-elements';
 
 export default class Signup extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            firstname: '',
-            lastname: '',
-            email: '',
-            password: '',
-            rePassword: ''
-        };
-    }
+    state = {
+        firstname: '',
+        errorFirstname: ' ',
+        lastname: '',
+        errorLastname: ' ',
+        email: '',
+        errorEmail: ' ',
+        password: '',
+        errorPassword: ' ',
+        rePassword: ''
+    };
 
     handleSubmit = e => {
         e.preventDefault();
+        const { firstname, lastname, email, password, rePassword } = this.state;
 
-        //FAIRE LES VERIF
+        let badForm = false;
+        if (firstname === '') {
+            badForm = true;
+            this.setState({ errorFirstname: 'Renseignez votre prénom' });
+        }
+        if (lastname === '') {
+            badForm = true;
+            this.setState({ errorLastname: 'Renseignez votre nom' });
+        }
+        if (email === '') {
+            badForm = true;
+            this.setState({ errorEmail: 'Renseignez votre adresse mail' });
+        } else if (!email.includes('@')) {
+            badForm = true;
+            this.setState({ errorEmail: 'Renseignez une adresse mail valide' });
+        }
 
-        // Copie du state dans un nouvel objet pour pouvoir supprimer des propriétés
-        const user = Object.assign({}, this.state);
-        delete user.rePassword;
+        if (password === '') {
+            badForm = true;
+            this.setState({ errorPassword: 'Renseignez un mot de passe' });
+        } else if (password !== rePassword) {
+            badForm = true;
+            this.setState({
+                errorPassword: 'Les deux mots de passe ne correspondent pas'
+            });
+        }
+
+        if (badForm) return;
+
+        const user = { firstname, lastname, email, password };
 
         this.props.navigation.state.params
             .signup(user)
@@ -42,6 +69,21 @@ export default class Signup extends React.Component {
     };
 
     render() {
+        const {
+            errorPassword,
+            errorFirstname,
+            errorLastname,
+            errorEmail
+        } = this.state;
+
+        const inputProps = {
+            errorStyle: { color: '#c0392b', fontWeight: 'bold' },
+            inputContainerStyle: styles.input,
+            containerStyle: styles.width,
+            inputStyle: styles.textInput,
+            shake: true,
+            leftIconContainerStyle: styles.iconInput
+        };
         return (
             <KeyboardAvoidingView
                 style={styles.container}
@@ -50,67 +92,62 @@ export default class Signup extends React.Component {
             >
                 <Input
                     value={this.state.firstname}
-                    onChangeText={firstname => this.setState({ firstname })}
+                    onChangeText={firstname =>
+                        this.setState({ firstname, errorFirstname: ' ' })
+                    }
                     placeholder={'Prénom'}
-                    inputContainerStyle={styles.input}
-                    containerStyle={styles.width}
-                    inputStyle={styles.textInput}
-                    shake={true}
+                    errorMessage={errorFirstname}
                     leftIcon={<Icon name="person" size={24} color="white" />}
-                    leftIconContainerStyle={styles.iconInput}
+                    {...inputProps}
                 />
 
                 <Input
                     value={this.state.lastname}
-                    onChangeText={lastname => this.setState({ lastname })}
+                    onChangeText={lastname =>
+                        this.setState({ lastname, errorLastname: ' ' })
+                    }
                     placeholder={'Nom'}
-                    inputContainerStyle={styles.input}
-                    containerStyle={styles.width}
-                    inputStyle={styles.textInput}
-                    shake={true}
+                    errorMessage={errorLastname}
                     leftIcon={<Icon name="person" size={24} color="white" />}
-                    leftIconContainerStyle={styles.iconInput}
+                    {...inputProps}
                 />
 
                 <Input
                     value={this.state.email}
-                    onChangeText={email => this.setState({ email })}
+                    onChangeText={email =>
+                        this.setState({ email, errorEmail: ' ' })
+                    }
                     placeholder={'Email'}
+                    errorMessage={errorEmail}
                     autoCapitalize="none"
-                    inputContainerStyle={styles.input}
-                    containerStyle={styles.width}
-                    inputStyle={styles.textInput}
-                    shake={true}
                     leftIcon={<Icon name="email" size={24} color="white" />}
-                    leftIconContainerStyle={styles.iconInput}
+                    {...inputProps}
                 />
 
                 <Input
                     value={this.state.password}
-                    onChangeText={password => this.setState({ password })}
+                    onChangeText={password =>
+                        this.setState({ password, errorPassword: ' ' })
+                    }
                     placeholder={'Mot de passe'}
                     autoCapitalize="none"
-                    inputContainerStyle={styles.input}
-                    containerStyle={styles.width}
-                    inputStyle={styles.textInput}
+                    errorMessage={errorPassword}
                     secureTextEntry={true}
-                    shake={true}
                     leftIcon={<Icon name="lock" size={24} color="white" />}
-                    leftIconContainerStyle={styles.iconInput}
+                    {...inputProps}
                 />
 
                 <Input
                     value={this.state.repassword}
-                    onChangeText={rePassword => this.setState({ rePassword })}
+                    onChangeText={rePassword =>
+                        this.setState({ rePassword, errorPassword: ' ' })
+                    }
                     placeholder={'Répétez votre mot de passe'}
                     autoCapitalize="none"
-                    inputContainerStyle={styles.input}
-                    containerStyle={styles.width}
-                    inputStyle={styles.textInput}
+                    errorMessage={errorPassword}
                     secureTextEntry={true}
-                    shake={true}
                     leftIcon={<Icon name="lock" size={24} color="white" />}
-                    leftIconContainerStyle={styles.iconInput}
+                    {...inputProps}
                 />
 
                 <TouchableOpacity
@@ -151,7 +188,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: '#006A55',
         borderRadius: 5,
-        marginBottom: 15,
         backgroundColor: '#03876D'
     },
     iconInput: {
