@@ -31,20 +31,23 @@ export default class Account extends Component {
         const { id } = this.props.match.params;
         if (user) {
 
-            // if (id !== undefined) {
-            //     const idAccount = id;
-            // } else {
-            //     const idAccount = user.id_user;
-            // }
+            let idAccount;
+            switch (id) {
+                case undefined:
+                    idAccount = user.id_user;
+                    break;
+                default:
+                    idAccount = id;
+            }
 
-            api.get(`download-user/${user.id_user}`).then((data) => {
+            api.get(`download-user/${idAccount}`).then((data) => {
                 this.setState({ user: data });
             }).catch(() => {
                 console.log('Oups, une erreur s\'est produite');
             });
 
             api.post('download', {
-                id: user.id_user,
+                id: idAccount,
                 type: 'user',
             }).then((img) => {
                 this.setState({ img });
@@ -52,7 +55,7 @@ export default class Account extends Component {
                 console.log('error');
             });
 
-            api.get(`user-info/${user.id_user}`).then((personnalStates) => {
+            api.get(`user-info/${idAccount}`).then((personnalStates) => {
                 this.setState({ personnalStates });
             }).catch(() => {
                 console.log('error');
@@ -93,6 +96,7 @@ export default class Account extends Component {
                     currentTab={currentTab}
                     user={user}
                     img={img}
+                    myPage={myPage}
                 />
 
                 <div className='account-body-wrapper'>

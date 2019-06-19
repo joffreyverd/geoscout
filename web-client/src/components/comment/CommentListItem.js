@@ -21,14 +21,26 @@ class CommentListItem extends Component {
         });
     }
 
+    handleUserConfidentiality = () => {
+        const { isConnected } = this.props;
+
+        if (isConnected) {
+            const { User, history } = this.props;
+            const { id_user } = User;
+            history.location.pathname = '';
+            history.push(`account/${id_user}`);
+        }
+    }
+
     render() {
 
-        const { comment, stars, User, createdAt, version, history } = this.props;
+        const { comment, stars, User, createdAt, version, isConnected } = this.props;
         const { img } = this.state;
-        const { firstname, lastname, id_user } = User;
+        const { firstname, lastname } = User;
         const formattedDate = new Date(createdAt).toLocaleDateString();
         const defaultImg = '/img/earth.png';
         const formattedStar = Math.round(stars * 2) / 2;
+        console.log(isConnected);
 
         return (
             <div className='comment-starts-wrapper'>
@@ -38,10 +50,7 @@ class CommentListItem extends Component {
                         <Avatar
                             src={!img || img.length < 1 || img === undefined ? defaultImg : `http://www.geoscout.fr:5555${img}`}
                             alt={`${firstname} ${lastname}`}
-                            onClick={() => {
-                                history.location.pathname = '';
-                                history.push(`account/${id_user}`);
-                            }}
+                            onClick={this.handleUserConfidentiality}
                         />
                     )}
                     content={comment}
