@@ -34,13 +34,12 @@ class CommentListItem extends Component {
 
     render() {
 
-        const { comment, stars, User, createdAt, version, isConnected } = this.props;
+        const { comment, stars, User, createdAt, version } = this.props;
         const { img } = this.state;
         const { firstname, lastname } = User;
         const formattedDate = new Date(createdAt).toLocaleDateString();
         const defaultImg = '/img/earth.png';
         const formattedStar = Math.round(stars * 2) / 2;
-        console.log(isConnected);
 
         return (
             <div className='comment-starts-wrapper'>
