@@ -37,7 +37,6 @@ export default class Compass extends Component {
 
     getDirection = () => {
         const { userPosition, step } = this.props;
-        console.log(this.props);
         let lat1 = userPosition.coords.latitude;
         let lat2 = step.latitude;
         let lon1 = userPosition.coords.longitude;
@@ -50,7 +49,6 @@ export default class Compass extends Component {
     };
 
     spin = () => {
-        console.log('spin start');
         let start = JSON.stringify(this.spinValue);
         let direction = Math.round(this.state.direction);
 
@@ -61,7 +59,6 @@ export default class Compass extends Component {
         if (rotM >= 180 && direction <= rotM - 180) rot += 360;
 
         rot += direction - rotM;
-        console.log(direction);
 
         Animated.timing(this.spinValue, {
             toValue: rot,
