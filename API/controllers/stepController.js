@@ -217,7 +217,8 @@ module.exports =
 
 	updateStep : async (req, res) =>
 	{
-		if(utils.verifToken(req.headers['authorization']))
+		let id_user = utils.verifToken(req.headers['authorization']);
+		if(id_user)
 		{
 			let t = await db.sequelize.transaction();
 			try
