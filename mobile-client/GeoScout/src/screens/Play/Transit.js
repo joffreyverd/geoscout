@@ -83,6 +83,7 @@ class Transit extends React.Component {
     };
 
     testIsArrived = (location, step) => {
+        if (step.compass) this.setState({ location });
         if (isPointWithinRadius(location.coords, step, 20)) {
             const { subscription } = this.state;
             subscription.remove();
@@ -181,6 +182,8 @@ class Transit extends React.Component {
                 }
             }
         } = this.props;
+        const { location } = this.state;
+        // Récupération de l'étape
         const step = circuit.Steps[stepNumber];
 
         if (step) {
@@ -220,7 +223,7 @@ class Transit extends React.Component {
                                     : ` l'étape ${step.order}`}
                             </Text>
                             {step.compass ? (
-                                <Compass />
+                                <Compass step={step} userPosition={location} />
                             ) : (
                                 <ScrollView style={{ flex: 1 }}>
                                     {step.description ? (
