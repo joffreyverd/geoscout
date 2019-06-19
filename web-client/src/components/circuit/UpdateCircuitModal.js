@@ -75,16 +75,22 @@ class UpdateCircuitModal extends Component {
     }
 
     handleSubmit = () => {
-        const { name, description, level, version, real_duration } = this.state;
+        const { name, description, level, version, real_duration, published } = this.state;
         const { displayUpdateCircuit, alert, updateCircuit } = this.props;
         const { id_circuit } = this.props.circuit;
+        let publication = 0;
+        if (published === 0) {
+            publication = version;
+        } else {
+            publication = version + 1;
+        }
         const circuit = {
             id_circuit: id_circuit,
             name: name || null,
             description: description || null,
             level: level || null,
             real_duration: real_duration || null,
-            version: version + 1,
+            version: publication,
         };
         updateCircuit(circuit)
             .then(() => {
@@ -223,7 +229,7 @@ class UpdateCircuitModal extends Component {
 
                         {duration > 0 &&
                             <FormGroup>
-                                <Label>Durée estimée</Label>
+                                <Label>Durée estimée (marche à 5km/h)</Label>
                                 <p>{`${timeHour}h${timeMinute}m`}</p>
                             </FormGroup>
                         }

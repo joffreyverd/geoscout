@@ -43,9 +43,9 @@ export default class Authentication extends React.Component {
                 {isConnected ?
 
                     <Dropdown overlay={userOptions} id='dropdown'>
-                        <a className='ant-dropdown-link' href='#g'>
+                        <span className='ant-dropdown-link'>
                             <FontAwesomeIcon icon='user' className='user-icon' />
-                        </a>
+                        </span>
                     </Dropdown>
 
                     :

@@ -17,9 +17,9 @@ class BasicInformations extends Component {
 
                     {personnalStates &&
                         <>
-                            <p>{`Ciruits crées : ${personnalStates.circuits_created}`}</p>
-                            <p>{`Ciruits joués : ${personnalStates.circuits_played}`}</p>
-                            <p>{`Ciruits commentés : ${personnalStates.comments_posted}`}</p>
+                            <p>{`Circuits créés : ${personnalStates.circuits_created}`}</p>
+                            <p>{`Circuits joués : ${personnalStates.circuits_played}`}</p>
+                            <p>{`Circuits commentés : ${personnalStates.comments_posted}`}</p>
                         </>
                     }
 
