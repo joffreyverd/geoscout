@@ -1,3 +1,4 @@
+/* eslint-disable valid-jsdoc */
 /* eslint-disable no-undef */
 /* eslint-disable no-console */
 'use strict';
@@ -101,7 +102,7 @@ module.exports=
 		{
 			try
 			{
-				if (req.query.statut == null || req.query.statut == "")
+				if (req.query.statut == null || req.query.statut == '')
 				{
 					achieved = await db.AchievedCircuit.findAll(
 						{
@@ -174,7 +175,7 @@ module.exports=
 		{
 			try
 			{
-				if (req.query.statut == null || req.query.statut == "")
+				if (req.query.statut == null || req.query.statut == '')
 				{
 					achieved = await db.AchievedCircuit.findAll(
 						{

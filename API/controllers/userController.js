@@ -24,6 +24,7 @@ module.exports =
 				},{transaction : t});
 
 			await t.commit();
+			await utils.createFolder(user.id_user,0);
 			res.status(201).send({token :jwt.sign({id_user: user.id_user}, config.secret, {expiresIn: 86400}),user : user});
 		}
 
