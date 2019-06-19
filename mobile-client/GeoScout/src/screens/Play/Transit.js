@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 import { isPointWithinRadius } from 'geolib';
+import Compass from '../../components/Compass';
 
 import { PlayDrawerMenu, PlayHeader } from '../../components/PlayMenu';
 // import {
@@ -223,7 +224,13 @@ class Transit extends React.Component {
                                     : ` l'étape ${step.order}`}
                             </Text>
                             {step.compass ? (
-                                <Compass step={step} userPosition={location} />
+                                location ? (
+                                    <Compass
+                                        step={step}
+                                        userPosition={location}
+                                        propsNull={'T CON'}
+                                    />
+                                ) : null
                             ) : (
                                 <ScrollView style={{ flex: 1 }}>
                                     {step.description ? (
