@@ -23,6 +23,7 @@ import Loading from '../../components/Loading';
 export default class DetailCircuit extends React.Component {
     state = {
         isDownload: false,
+        id_circuit: null,
         evaluations: [],
         images: [],
         circuit: null,
@@ -30,7 +31,15 @@ export default class DetailCircuit extends React.Component {
         isReady: false
     };
 
-    async componentDidMount() {
+    componentDidUpdate(prevProps) {
+        const { id_circuit } = this.props.navigation.state.params;
+        if (id_circuit != prevProps.navigation.state.params.id_circuit) {
+            this.getDataCircuit();
+            this.setState({ isReady: false });
+        }
+    }
+
+    async getDataCircuit() {
         const { id_circuit } = this.props.navigation.state.params;
         try {
             var images = [];
@@ -43,12 +52,14 @@ export default class DetailCircuit extends React.Component {
             }
             images = circuit.images;
             const evaluations = await api.get(`evaluations/${id_circuit}`);
+            const favorite = await api.get(`circuit/is-favorite/${id_circuit}`);
             this.setState({
                 isDownload,
+                id_circuit,
                 images,
                 evaluations,
                 circuit,
-                favorites: true,
+                favorite: favorite.isFavorites,
                 isReady: true
             });
         } catch (error) {
@@ -57,13 +68,17 @@ export default class DetailCircuit extends React.Component {
         }
     }
 
+    componentDidMount() {
+        this.getDataCircuit();
+    }
+
     changeFavoriteStatus = () => {
         const { id_circuit } = this.props.navigation.state.params;
-        const { favorites } = this.state;
+        const { favorite } = this.state;
         try {
-            if (favorites) {
+            if (favorite) {
                 api.delete(`favorites/${id_circuit}`).then(() => {
-                    this.setState({ favorites: false });
+                    this.setState({ favorite: false });
                     ToastAndroid.show(
                         'Circuit supprimé de vos favoris',
                         ToastAndroid.SHORT
@@ -71,7 +86,7 @@ export default class DetailCircuit extends React.Component {
                 });
             } else {
                 api.post(`favorites/${id_circuit}`).then(() => {
-                    this.setState({ favorites: true });
+                    this.setState({ favorite: true });
                     ToastAndroid.show(
                         'Circuit ajouté à vos favoris',
                         ToastAndroid.SHORT
@@ -181,7 +196,7 @@ export default class DetailCircuit extends React.Component {
             isDownload,
             evaluations,
             images,
-            favorites,
+            favorite,
             isReady
         } = this.state;
         return (
@@ -253,7 +268,7 @@ export default class DetailCircuit extends React.Component {
                                 <View style={{ marginRight: 20 }}>
                                     <Icon
                                         name={
-                                            favorites
+                                            favorite
                                                 ? 'favorite'
                                                 : 'favorite-border'
                                         }
@@ -358,8 +373,8 @@ const styles = StyleSheet.create({
     noContent: {
         color: '#2c3e50',
         fontSize: 16,
-        marginTop: 5
+        marginTop: 5,
+        marginBottom: 10,
+        textAlign: 'center'
     }
 });
-
-//<h1><strong>Un chouette circuit de présentation du projet Akrobat</strong></h1><p><strong>Pourquoi pas découvrir Strasbourg avec les professeurs de la Licence CDAD ?</strong></p><p><br></p><p><u>Amusement garanti !</u></p><p><br></p><p><s>Interdit aux débutants en randonnée</s></p><p><br></p><blockquote>Derrière la montagne se cache l'horizon.</blockquote><p><br></p><ol><li>Plusieurs étapes</li><li>Enigmes à résoudre</li><li>Classement général</li><li>Une boisson à l'arrivée</li></ol><p class="ql-indent-1"><br></p><p><a href="http://iutrs.unistra.fr/" target="_blank">Le lien vers le site de l'IUT</a></p><p><br></p><p>A bientôt !</p>
