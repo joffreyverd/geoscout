@@ -225,11 +225,17 @@ class Transit extends React.Component {
                             </Text>
                             {step.compass ? (
                                 location ? (
-                                    <Compass
-                                        step={step}
-                                        userPosition={location}
-                                        propsNull={'T CON'}
-                                    />
+                                    <>
+                                        <Compass
+                                            step={step}
+                                            userPosition={location}
+                                        />
+                                        <Text style={styles.infoCompass}>
+                                            Pour le calibrage de la boussole, il
+                                            est nécessaire de marcher quelques
+                                            pas.
+                                        </Text>
+                                    </>
                                 ) : null
                             ) : (
                                 <ScrollView style={{ flex: 1 }}>
@@ -317,5 +323,10 @@ const styles = StyleSheet.create({
     textButton: {
         color: '#fff',
         fontSize: 18
+    },
+    infoCompass: {
+        fontSize: 10,
+        color: '#2c3e50',
+        textAlign: 'center'
     }
 });
