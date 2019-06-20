@@ -34,10 +34,10 @@ Dossier qui comprend l'icône de l'application et l'image de lancement.
 Dossier qui comprend le code source de l'application.
 
 Components : dossier qui comprend les components principaux de l'application.
-Config : dossier qui comprend les fonctions sur le Token pour identification,
-fileSystem (fonction qui permette d'écrire dans le téléphone),
-les méthodes pour faire les requêtes API et le fichier router qui définit les routes de l'application.
-Screens : Dossier qui comprend toutes les pages de l'application.
+
+Config : dossier qui comprend les fonctions sur le Token pour identification, fileSystem (fonction qui permette d'écrire dans le téléphone), les méthodes pour faire les requêtes API et le fichier router qui définit les routes de l'application.
+
+Screens : dossier qui comprend toutes les pages de l'application.
 
 ### utils
 Dossier qui comprend les choses qui sont publiques et utiles dans le cadre de l'application.
