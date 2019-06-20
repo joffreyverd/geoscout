@@ -2,7 +2,7 @@
 
 ## Couleur principale de l'application:
 
-Utilisation de https://flatuicolors.com/palette/defo
+Utilisation de https://flatuicolors.com/palette/defo.
 
 ### Thème
 
@@ -23,30 +23,60 @@ _Difficultés :_
 -   Medium ![#2196F3](https://placehold.it/15/2196F3/000000?text=+) `#2196F3`
 -   Difficile ![#F44336](https://placehold.it/15/F44336/000000?text=+) `#F44336`
 
-# JSON
+# Documentation concernant le développement
 
-## JSON Circuits
+## Modèle de fichier
 
-nom : ??
-description : ??
-version : ??
-note : ??
+### assets
+Dossier qui comprend l'icône de l'application et l'image de lancement.
 
-# Reste à faire
+### src
+Dossier qui comprend le code source de l'application.
 
-## Mobile
+Components : dossier qui comprend les components principaux de l'application.
+Config : dossier qui comprend les fonctions sur le Token pour identification,
+fileSystem (fonction qui permette d'écrire dans le téléphone),
+les méthodes pour faire les requêtes API et le fichier router qui définit les routes de l'application.
+Screens : Dossier qui comprend toutes les pages de l'application.
 
--   [ ] Télécharger le circuit **(Stevy => En cours)**
--   [x] Attribution d'un score pour une bonne réponse **(Thomas)**
--   [ ] Liste de circuit en cours ou fini **(Stevy => En cours)**
--   [ ] Reprendre un circuit en pause **(Thomas)**
--   [x] Gestion du chronomètre pour le temps de réalisation d'un circuit **(Thomas => En cours)**
--   [x] Liste de circuit favoris de l'utilisateur **(Stevy => En cours)**
--   [ ] Pouvoir commenter un circuit et attribuer un score **(Stevy & Thomas => Last)**
--   [x] Charger les circuits selon le zoom et l'emplacement de l'utilisateur **(Stevy)**
--   [x] Changer le type de map **(Stevy)**
--   [ ] Si la localisation n'est pas activée faire une boucle jusqu'à activation **(Stevy & Thomas => Last)**
+### utils
+Dossier qui comprend les choses qui sont publiques et utiles dans le cadre de l'application.
 
-### Jeudi 16 Mai :
+style : comprend le style de la map Google.
+img : comprend les logos GéoScout et l'image user par défaut.
 
--   Liste des circuits téléchargés.
+### app.json
+Fichier qui définit les permissions sur l'application, la couleur par défaut, les chemins icône et splash, les plateformes supportées... 
+
+
+## Components principales:
+
+### ListCircuit
+Permets de lister tous les circuits via le component Callout qui lui définie un circuit avec ses informations.
+
+### ListComment
+Permets de lister tous les commentaires de circuit via le component Comment qui renvoie un avatar, commentaires, notes...
+
+### Carousel
+Liste les images selon un array de lien d'image (les images sont récupérées sur le serveur).
+
+### Compass
+Reçois la localisation de l'utilisateur, du point de l'étape et la direction de l'utilisateur et transforme ces coordonnées en une direction qui pointe vers le point.
+
+### PlayMenu
+Comprend les fonctionnalités pour abondonner un circuit et le mettre en pause.
+
+### NavigationDrawer
+Comprend les routes pour naviguer sur les screens circuit en cours, télécharger, mes circuits, profil...
+
+### Rate
+Prend une note et renvoie une liste d'étoiles qui correspond à la note du circuit.
+
+# Documentation concernant le déploiement de l'application
+Nous utilisons Expo qui est une surcouche react native pour pouvoir déployer vite sur IOS et ANDROID. Expo nécessite d'installer Node et d'installer Expo sur mobile via le PlayStore et pc via la commande : 'npm install -g expo-cli'.
+
+Une fois Expo installée, il vous suffit de rentrer la commande 'npm start' pour lancer Expo et 'npm build' pour construire l'apk. Attention, il faut avoir un compte Expo pour pouvoir construire l'application.
+
+Pour la commande 'npm start', vous accédez à 3 modes de fonctionnement, 'LOCAL' qui permet de build l'application via un câble USB.
+'TUNNEL' qui permet de scanner le QR CODE sur l'application Expo et de pouvoir lancer l'application mobile.
+
